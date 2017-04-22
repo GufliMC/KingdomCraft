@@ -1,0 +1,19 @@
+#                  [IMPORTANT]
+# Shut down your server before editing this file
+# ----------------------------------------------
+#
+prefix: '&e[Jenava]'
+suffix: ''
+ranks:
+  king:
+    prefix: '&6[King]'
+    suffix: ''
+    permissions:
+    - kingdom.kick
+    - kingdom.setspawn
+  member:
+    prefix: '&b[Member]'
+    suffix: ''
+    default: true
+    permissions:
+    - kingdom.leave

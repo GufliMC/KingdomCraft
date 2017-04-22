@@ -1,0 +1,83 @@
+######################################################################
+#                                                                    #
+#                            KINGDOMCRAFT                            #
+#                   Created by iGufGuf, Copyrighted                  #
+#                          ----------------                          #
+#                 Credits would really be apreciated                 #
+#                                                                    #
+######################################################################
+
+#DONT CHANGE THIS, IT WILL BE USED TO AUTO-UPDATE THE CONFIG
+version: {VERSION}
+
+#Prefix when you are not in a kingdom
+default-prefix: '&f[&6New&f] &7'
+
+#Enable the plugin for only some single worlds (case sensitive)
+worlds: false
+world-list:
+- world
+
+#Make players in the same kingdom not damage eachother, override with kingdom.friendlyfire.bypass
+friendlyfire: false
+
+#Make player use /spawn when he leaves or get kicked from a kingdom.
+spawn-on-kingdom-leave: true
+
+#Make players teleport to the kingdom spawn when joining a kingdom.
+spawn-on-kingdom-join: true
+
+#Cooldown in seconds for teleporting to kingdom spawn (0 = default), no waiting with kindom.teleport.bypass
+tp-delay: 5
+
+#true = use the below channel system, DON'T USE ANY OTHER CHAT PLUGIN!
+#false = use another chat plugin.
+chat-system: true
+
+#the chat format when the channels are not used
+nochannels-format: '&7{RANK}{KINGDOM}{KINGDOMRANK} &b{NAME} &8\u00BB &7{MESSAGE}'
+
+# The channel where you talk in when not in a kingdom, can't be a kingdom only channel!
+# Remove this to make players not able to talk when not in a kingdom!
+# possible chat format variables:
+# kingdom: KINGDOM_NAME, KINGDOM, KINGDOM_PREFIX, KINGDOM_SUFFIX, KINGDOM_TABPREFIX, KINGDOM_TABSUFFIX
+# kingdomrank: KINGDOMRANK_NAME, KINGDOMRANK_PREFIX, KINGDOMRANK_SUFFIX, KINGDOMRANK_TABPREFIX, KINGDOMRANK_TABSUFFIX
+# vault support (pex, groupmanager, zperms...): PREFIX, SUFFIX
+nokingdom-channel: 'public'
+channels:
+    enabled: true
+    
+    #Default channel for kingdom, cannot be removed or replaced
+    kingdom:
+        format: '&8[K]&7{RANK}{KINGDOMRANK} &7{NAME} &8\u00BB &7{MESSAGE}'
+
+        #Only members of your kingdom will see this
+        kingdom-only: true
+
+        #The channel where you talk in without a message prefix
+        default: true
+
+    public:
+
+        #make players not able to toggle this channel!
+        alwayson: true
+
+        #the format that will display when the player is talking in this channel
+        format: '&8[P]&7{RANK}{KINGDOM}{KINGDOMRANK} &7{NAME} &8\u00BB &7{MESSAGE}'
+
+        #Prefix before message to send a message in this channel
+        message-prefix: '!'
+        
+    roleplay:
+        format: '&8[R]&7{RANK} &7{NAME} &8\u00BB &7{MESSAGE}&7'
+        message-prefix: '#'
+        
+    trade:
+        format: '&8[T]&7{RANK} &7{NAME} &8\u00BB &7{MESSAGE}'
+        message-prefix: '$'
+
+    admin:
+        format: '&4[A]{RANK} &7{NAME} &8\u00BB &7{MESSAGE}'
+        #Permission to watch & talk in this channel: kingdom.channel.<channelname>
+        permission: true
+        message-prefix: '@'
