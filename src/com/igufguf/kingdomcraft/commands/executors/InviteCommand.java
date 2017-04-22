@@ -83,7 +83,7 @@ public class InviteCommand extends CommandBase {
 			KingdomCraft.getPlugin().save(user);
 		}
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInviteSender", p.getName(), kingdom));
+		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInviteSender", user.getName(), kingdom));
 
 		return false;
 	}
