@@ -15,6 +15,7 @@ public class KingdomRank extends KingdomData {
         for ( String key : section.getKeys(false) ) {
             if ( section.getConfigurationSection(key) == null ) {
                 setData(key, section.get(key));
+                delInLocalList("changes", key);
             }
         }
     }

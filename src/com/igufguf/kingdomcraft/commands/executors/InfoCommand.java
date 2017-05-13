@@ -9,6 +9,7 @@ import com.igufguf.kingdomcraft.objects.KingdomUser;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -119,10 +120,18 @@ public class InfoCommand extends CommandBase {
 		
 		String members = "";
 		for ( Player p : kingdom.getOnlineMembers() ) {
-			members = members + ", " + p.getName();
+			members += ", " + p.getName();
 		}
 		members = members.replaceFirst(", ", ""); if ( members.equals("") ) members = "none";
 		sender.sendMessage(ChatColor.GRAY + "Online Members: " + ChatColor.GREEN + members);
+
+		members = "";
+		for ( KingdomUser p : kingdom.getMembers() ) {
+			if ( p.getPlayer() != null ) continue;
+			members += ", " + p.getName();
+		}
+		members = members.replaceFirst(", ", ""); if ( members.equals("") ) members = "none";
+		sender.sendMessage(ChatColor.GRAY + "Offline Members: " + ChatColor.RED + members);
 		sender.sendMessage(" ");
 		
 	}

@@ -2,6 +2,7 @@ package com.igufguf.kingdomcraft.objects;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -67,6 +68,10 @@ public class KingdomUser extends KingdomData {
 		Player p = Bukkit.getPlayer(UUID.fromString(uuid));
 		if ( p == null ) Bukkit.getPlayerExact(name);
 		return p;
+	}
+
+	public OfflinePlayer getOfflinePlayer() {
+		return Bukkit.getOfflinePlayer(UUID.fromString(uuid));
 	}
 
 	public void save(FileConfiguration file) {

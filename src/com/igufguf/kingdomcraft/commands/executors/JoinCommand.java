@@ -80,6 +80,11 @@ public class JoinCommand extends CommandBase {
 			}
 		}
 
+		if ( kingdom.hasData("max-members") && kingdom.getMembers().size() >= (int) kingdom.getData("max-members") ) {
+			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinFull", kingdom.getName()));
+			return false;
+		}
+
 		for ( Player member : kingdom.getOnlineMembers() ) {
 			member.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinSuccessMembers", p.getName()));
 		}
