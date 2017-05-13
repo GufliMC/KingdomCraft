@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.objects;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -42,6 +43,7 @@ public class KingdomObject extends KingdomData {
 		for ( String key : file.getKeys(false) ) {
 			if ( file.getConfigurationSection(key) == null ) {
 				setData(key, file.get(key));
+				delInLocalList("changes", key);
 			} else if ( key.equalsIgnoreCase("ranks") ) {
 				for ( String rank : file.getConfigurationSection("ranks").getKeys(false) ) {
 					ConfigurationSection cs = file.getConfigurationSection("ranks." + rank);
@@ -75,6 +77,19 @@ public class KingdomObject extends KingdomData {
 		}
 		
 		return online;
+	}
+
+	public ArrayList<KingdomUser> getMembers() {
+		ArrayList<KingdomUser> members = new ArrayList<>();
+
+		List<KingdomUser> users = KingdomCraft.getApi().getAllUsers();
+		for ( KingdomUser user : users) {
+			if ( user.getKingdom() == this ) {
+				members.add(user);
+			}
+		}
+
+		return members;
 	}
 	
 	public Location getSpawn() {
@@ -113,7 +128,7 @@ public class KingdomObject extends KingdomData {
 
 	public void save(FileConfiguration file) {
 		for ( String key : this.data.keySet() ) {
-			if ( !file.contains(key) ) {
+			if ( file.get(key) == null ) {
 				file.set(key, this.data.get(key));
 			} else if ( hasInLocalList("changes", key) ) {
 				file.set(key, this.data.get(key));

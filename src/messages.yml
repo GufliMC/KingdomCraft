@@ -31,6 +31,7 @@ cmdJoinSuccess: '&7You successfully joined &8{0}&7!'
 cmdJoinSuccessMembers: '&8{0} &7has joined your kingdom!'
 cmdJoinClosed: '&7The kingdom &8{0} &7is &8closed&7!'
 cmdJoinClosedMembers: '&8{0} &7tried to join your kingdom but it is &8closed&7!'
+cmdJoinFull: '&7The kingdom &8{0} &7is full!'
 
 cmdLeaveSuccess: '&7You successfully left &8{0}&7!'
 cmdLeaveSuccessMembers: '&8{0} &7has left your kingdom!'

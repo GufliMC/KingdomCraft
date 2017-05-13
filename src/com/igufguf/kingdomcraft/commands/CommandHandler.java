@@ -38,7 +38,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	private static ArrayList<CommandBase> commands = new ArrayList<>();
 	
 	public static void register(CommandBase base) {
-		commands.add(base);
+		commands.add(0, base);
 	}
 
 	@Override

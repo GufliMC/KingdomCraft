@@ -77,7 +77,7 @@ public class SetspawnCommand extends CommandBase {
 
 			KingdomObject kingdom = KingdomCraft.getApi().getKingdom(args[0]);
 			kingdom.setSpawn(p.getLocation());
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetspawnSuccess",
+			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetspawnSuccess", kingdom.getName(),
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY()) + ", "
 							+ ((int) p.getLocation().getZ())));
 			

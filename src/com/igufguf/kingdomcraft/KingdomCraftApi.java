@@ -145,13 +145,34 @@ public class KingdomCraftApi {
         for ( String key : usersconfig.getConfigurationSection(uuid.toString()).getKeys(false) ) {
             if ( key.equalsIgnoreCase("name") ) continue;
             ku.setData(key, usersconfig.get(uuid.toString() + "." + key));
+            ku.delInLocalList("changes", key);
         }
 
         return ku;
     }
 
+    public List<KingdomUser> getAllUsers() {
+        File usersfile = new File(KingdomCraft.getPlugin().getDataFolder(), "users.yml");
+        FileConfiguration usersconfig = YamlConfiguration.loadConfiguration(usersfile);
+
+        List<KingdomUser> users = new ArrayList<>();
+        
+        for ( String uuid : usersconfig.getKeys(false) ) {
+            KingdomUser user = new KingdomUser(usersconfig.getString(uuid + ".name"), uuid);
+
+            for ( String key : usersconfig.getConfigurationSection(uuid).getKeys(false) ) {
+                if ( key.equalsIgnoreCase("name") ) continue;
+                user.setData(key, usersconfig.get(uuid + "." + key));
+            }
+
+            users.add(user);
+        }
+        
+        return users;
+    }
+
     public void refreshPermissions(KingdomUser user) {
-        PermissionAttachment pa = user.hasData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
+        PermissionAttachment pa = user.hasLocalData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
         if ( pa != null ) pa.remove();
 
         KingdomRank rank = user.getRank();
@@ -161,9 +182,9 @@ public class KingdomCraftApi {
 
         for ( String perm : rank.getPermissions() ) {
             if ( perm.startsWith("-") ) {
-                pa.setPermission(perm.replaceFirst(Pattern.quote("- "), ""), false);
+                pa.setPermission(perm.replaceFirst(Pattern.quote("-"), "").trim(), false);
             } else {
-                pa.setPermission(perm, true);
+                pa.setPermission(perm.trim(), true);
             }
         }
 
