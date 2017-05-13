@@ -1,6 +1,6 @@
 name: 'KingdomCraft'
 author: iGufGuf
-version: 4.0.4
+version: 4.1
 description: 'The Ultimate Kingdom Plugin'
 softdepend: [Vault, WorldEdit, WorldGuard]
 main: com.igufguf.kingdomcraft.KingdomCraft
