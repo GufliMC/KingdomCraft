@@ -28,18 +28,21 @@ public abstract class KingdomData {
         if ( hasData(list) && getData(list) instanceof List) {
             List l = (List) getData(list);
             l.add(value);
-        } else {
+        } else if ( !hasData(list) ){
             List<Object> objects = new ArrayList<>();
             objects.add(value);
 
             setData(list, objects);
-        }
+        } else return;
+        if ( !hasInLocalList("changes", list) ) addInLocalList("changes", list);
     }
 
     public final void delInList(String list, Object value) {
         if ( hasData(list) && getData(list) instanceof List) {
             List l = (List) getData(list);
             l.remove(value);
+
+            if ( !hasInLocalList("changes", list) ) addInLocalList("changes", list);
         }
     }
 

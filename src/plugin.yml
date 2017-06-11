@@ -6,4 +6,4 @@ softdepend: [Vault, WorldEdit, WorldGuard]
 main: com.igufguf.kingdomcraft.KingdomCraft
 commands:
     kingdom:
-      aliases: [k, kdc, kingdoms]
+      aliases: [k, kd, kdc, kingdoms]
