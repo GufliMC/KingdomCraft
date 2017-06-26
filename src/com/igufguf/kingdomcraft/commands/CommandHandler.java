@@ -60,7 +60,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 						return true;
 					} else {
 						if ( cb.permission != null && player && !sender.hasPermission(cb.permission)) {
-							sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("noPermissionCmd"));
+							KingdomCraft.getMsg().send(sender, "noPermissionCmd");
 							return true;
 						} else {
 							ArrayList<String> argslist = new ArrayList<>(Arrays.asList(args));
@@ -77,7 +77,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			sender.sendMessage(prefix + ChatColor.GREEN + "For help type /k help");
 			return true;
 		}
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("noCommand", args[0]));
+		KingdomCraft.getMsg().send(sender, "noCommand", args[0]);
 		return true;
 	}
 

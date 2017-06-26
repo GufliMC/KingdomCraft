@@ -58,24 +58,24 @@ public class SpawnCommand extends CommandBase {
 		final Player p = (Player) sender;
 		
 		if ( args.length > 1 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if (KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		
 		if ( args.length == 1 && p.hasPermission(this.permission + ".other")) {
 			if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+				KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 				return false;
 			}
 			KingdomObject kingdom = KingdomCraft.getApi().getKingdom(args[0]);
 			p.teleport(kingdom.getSpawn());
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSpawnTeleported",
+			KingdomCraft.getMsg().send(sender, "cmdSpawnTeleported",
 					((int) kingdom.getSpawn().getX()) + ", " + ((int) kingdom.getSpawn().getY()) + ", "
-							+ ((int) kingdom.getSpawn().getZ())));
+							+ ((int) kingdom.getSpawn().getZ()));
 		} else {
 			final KingdomObject kingdom = KingdomCraft.getApi().getUser(p).getKingdom();
 			
@@ -83,7 +83,7 @@ public class SpawnCommand extends CommandBase {
 				int tpdelay = KingdomCraft.getConfg().has("tp-delay") ? KingdomCraft.getConfg().getInt("tp-delay") : 0;
 				
 				if ( tpdelay > 0 ) {
-					sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSpawnTeleportStarting", tpdelay + ""));
+					KingdomCraft.getMsg().send(sender, "cmdSpawnTeleportStarting", tpdelay + "");
 				}
 				
 				teleporting.add(p.getName());
@@ -91,16 +91,16 @@ public class SpawnCommand extends CommandBase {
 		            @Override
 		            public void run() {
 		            	if ( p.isOnline() && teleporting.contains(p.getName())) {
-		            		p.teleport(kingdom.getSpawn());
-							p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSpawnTeleported",
+							p.teleport(kingdom.getSpawn());
+							KingdomCraft.getMsg().send(p, "cmdSpawnTeleported",
 									((int) kingdom.getSpawn().getX()) + ", " + ((int) kingdom.getSpawn().getY()) + ", "
-											+ ((int) kingdom.getSpawn().getZ())));
-			            	teleporting.remove(p.getName());
-		            	}
+											+ ((int) kingdom.getSpawn().getZ()));
+							teleporting.remove(p.getName());
+						}
 		            }
 		        }, tpdelay * 20);
 			} else {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSpawnNotExists", kingdom.getName()));
+				KingdomCraft.getMsg().send(sender, "cmdSpawnNotExists", kingdom.getName());
 			}
 		}
 		

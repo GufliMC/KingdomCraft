@@ -47,11 +47,11 @@ public class InviteCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		
@@ -59,31 +59,31 @@ public class InviteCommand extends CommandBase {
 		KingdomUser user = KingdomCraft.getApi().getUser(username);
 		
 		if ( user == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultNoPlayer", username));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer", username);
 			return false;
 		}
 
 		if ( user.getKingdom() == KingdomCraft.getApi().getUser(p).getKingdom() ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInviteAlready", user.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdInviteAlready", user.getName());
 			return false;
 		}
 
 
 		String kingdom = KingdomCraft.getApi().getUser(p).getKingdom().getName();
 		if ( user.hasInList("invites", kingdom) ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInviteAlready", user.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdInviteAlready", user.getName());
 			return false;
 		}
 
 		user.addInList("invites", kingdom);
 
 		if ( user.getPlayer() != null ) {
-			user.getPlayer().sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInviteTarget", kingdom));
+			KingdomCraft.getMsg().send(user.getPlayer(), "cmdInviteTarget", kingdom);
 		} else {
 			KingdomCraft.getPlugin().save(user);
 		}
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInviteSender", user.getName(), kingdom));
+		KingdomCraft.getMsg().send(sender, "cmdInviteSender", user.getName(), kingdom);
 
 		return false;
 	}

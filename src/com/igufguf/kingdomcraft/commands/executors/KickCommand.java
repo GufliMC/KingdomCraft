@@ -49,18 +49,18 @@ public class KickCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		String username = args[0];
 		KingdomUser user = KingdomCraft.getApi().getUser(username);
 		
 		if ( user == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultNoPlayer", username));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer", username);
 			return false;
 		}
 		if ( user.getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultTargetNoKingdom", user.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom", user.getName());
 			return false;
 		}
 		
@@ -70,20 +70,20 @@ public class KickCommand extends CommandBase {
 			KingdomCraft.getApi().setKingdom(user, null);
 
 			for ( Player member : kingdom.getOnlineMembers() ) {
-				member.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdLeaveSuccessMembers", user.getName()));
+				KingdomCraft.getMsg().send(member, "cmdLeaveSuccessMembers", user.getName());
 			}
 
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdKickSender", user.getName(), kingdom.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdKickSender", user.getName(), kingdom.getName());
 
 			if ( user.getPlayer() != null ) {
-				user.getPlayer().sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdKickTarget", kingdom.getName()));
+				KingdomCraft.getMsg().send(user.getPlayer(), "cmdKickTarget", kingdom.getName());
 			}
 			
 			if ( KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-leave") && user.getPlayer() != null ) {
 				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + user.getName());
 			}
 		} else {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("noPermissionCmd"));
+			KingdomCraft.getMsg().send(sender, "noPermissionCmd");
 		}
 		
 		//save user when player is not online

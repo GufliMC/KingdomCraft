@@ -55,15 +55,15 @@ public class JoinCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 		if ( KingdomCraft.getApi().getUser(p).getKingdom() != null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinAlready"));
+			KingdomCraft.getMsg().send(sender, "cmdJoinAlready");
 			return false;
 		}
 		
@@ -72,26 +72,26 @@ public class JoinCommand extends CommandBase {
 		
 		if ( kingdom.hasInList("flags", "closed") ) {
 			if ( !user.hasInList("invites", kingdom.getName()) && !p.hasPermission("kingdom.join." + kingdom.getName()) ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinClosed", kingdom.getName()));
+				KingdomCraft.getMsg().send(sender, "cmdJoinClosed", kingdom.getName());
 				for ( Player member : kingdom.getOnlineMembers() ) {
-					member.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinClosedMembers", p.getName()));
+					KingdomCraft.getMsg().send(member, "cmdJoinClosedMembers", p.getName());
 				}
 				return false;
 			}
 		}
 
 		if ( kingdom.hasData("max-members") && kingdom.getMembers().size() >= (int) kingdom.getData("max-members") ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinFull", kingdom.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdJoinFull", kingdom.getName());
 			return false;
 		}
 
 		for ( Player member : kingdom.getOnlineMembers() ) {
-			member.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinSuccessMembers", p.getName()));
+			KingdomCraft.getMsg().send(member, "cmdJoinSuccessMembers", p.getName());
 		}
 
 		KingdomCraft.getApi().setKingdom(user, kingdom);
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdJoinSuccess", kingdom.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdJoinSuccess", kingdom.getName());
 
 		if ( kingdom.getSpawn() != null && KingdomCraft.getConfg().has("spawn-on-kingdom-join")
 				&& KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-join") ) {

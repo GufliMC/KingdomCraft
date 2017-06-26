@@ -46,7 +46,7 @@ public class SocialSpyCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
@@ -56,10 +56,10 @@ public class SocialSpyCommand extends CommandBase {
 
 		if ( result ) {
 			user.setData("socialspy", false);
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSocialspyDisable"));
+			KingdomCraft.getMsg().send(sender, "cmdSocialspyDisable");
 		} else {
 			user.setData("socialspy", true);
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSocialspyEnable"));
+			KingdomCraft.getMsg().send(sender, "cmdSocialspyEnable");
 		}
 		
 		return false;

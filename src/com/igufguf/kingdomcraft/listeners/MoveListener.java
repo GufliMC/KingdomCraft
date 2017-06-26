@@ -39,7 +39,7 @@ public class MoveListener extends EventListener {
 		if ( SpawnCommand.teleporting.contains(e.getPlayer().getName()) ) {
 			if ( !e.getFrom().getBlock().equals(e.getTo().getBlock()) ) {
 				SpawnCommand.teleporting.remove(e.getPlayer().getName());
-				e.getPlayer().sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("teleportCancel"));
+				KingdomCraft.getMsg().send(e.getPlayer(), "teleportCancel");
 			}
 		}
 	}

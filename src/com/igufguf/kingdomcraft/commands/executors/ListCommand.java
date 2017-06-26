@@ -46,7 +46,7 @@ public class ListCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		

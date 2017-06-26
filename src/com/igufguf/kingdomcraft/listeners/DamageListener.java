@@ -30,10 +30,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
  **/
 public class DamageListener extends com.igufguf.kingdomcraft.listeners.EventListener {
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
 		if ( !enabledWorld(e.getEntity().getWorld()) ) return;
-		if ( e.isCancelled() ) return;
 		if ( KingdomCraft.getConfg().getBoolean("friendlyfire") ) return;
 		if ( !(e.getEntity() instanceof Player)) return;
 
@@ -57,7 +56,7 @@ public class DamageListener extends com.igufguf.kingdomcraft.listeners.EventList
 
 		if ( u2.getKingdom() != null ) {
 			if ( u1.getKingdom() == u2.getKingdom() ) {
-				d.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("damageKingdom"));
+				KingdomCraft.getMsg().send(d, "damageKingdom");
 				e.setCancelled(true);
 			}
 		}
