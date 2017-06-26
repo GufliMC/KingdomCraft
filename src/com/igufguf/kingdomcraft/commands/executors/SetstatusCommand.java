@@ -56,7 +56,7 @@ public class SetstatusCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 && args.length != 2 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		
@@ -64,7 +64,7 @@ public class SetstatusCommand extends CommandBase {
 		if (args.length == 2) {
 			kingdom = KingdomCraft.getApi().getKingdom(args[0]);
 			if ( kingdom == null ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+				KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 				return false;
 			}
 		} else {
@@ -72,7 +72,7 @@ public class SetstatusCommand extends CommandBase {
 		}
 
 		if ( kingdom == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultTargetNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
 			return false;
 		}
 
@@ -83,12 +83,12 @@ public class SetstatusCommand extends CommandBase {
 
 		if ( type.equalsIgnoreCase("closed") ) {
 			kingdom.addInList("flags", "closed");
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetstatusClosed", kingdom.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdSetstatusClosed", kingdom.getName());
 		} else if ( type.equalsIgnoreCase("open") ) {
 			kingdom.delInList("flags", "closed");
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetstatusOpen", kingdom.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdSetstatusOpen", kingdom.getName());
 		} else {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 

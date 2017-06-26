@@ -3,13 +3,14 @@ package com.igufguf.kingdomcraft;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
@@ -40,7 +41,7 @@ public class KingdomCraftMessages {
 		InputStream in = plugin.getResource("messages.yml");
 
 		try {
-			messages = YamlConfiguration.loadConfiguration(in);
+			messages = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
 		} catch (Exception ex) {
 			System.out.println("!!! ERROR !!! \nCouldn't retrieve default language! This can cause wrong message display!\n\n");
 		}
@@ -60,5 +61,15 @@ public class KingdomCraftMessages {
 		}
 
 		return message;
+	}
+
+	public boolean isEmpty(String name) {
+		return messages.get(name) == null || messages.getString(name).replaceAll(Pattern.quote(" "), "").equals("");
+	}
+
+	public void send(CommandSender p, String name, String... placeholders) {
+		if ( isEmpty(name) ) return;
+
+		p.sendMessage(KingdomCraft.prefix + getMessage(name, placeholders));
 	}
 }

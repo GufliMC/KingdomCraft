@@ -55,34 +55,34 @@ public class SetspawnCommand extends CommandBase {
 		
 		if ( args.length == 0 ) {
 			if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+				KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 				return false;
 			}
 			
 			KingdomObject kingdom = KingdomCraft.getApi().getUser(p).getKingdom();
 			kingdom.setSpawn(p.getLocation());
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetspawnSuccess",
+			KingdomCraft.getMsg().send(sender, "cmdSetspawnSuccess",
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY())
-							+ ", " + ((int) p.getLocation().getZ())));
+							+ ", " + ((int) p.getLocation().getZ()));
 			
 		} else if ( args.length == 1 ) {
 			if ( !p.hasPermission(this.permission + ".other") ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("noPermissionCmd"));
+				KingdomCraft.getMsg().send(sender, "noPermissionCmd");
 				return false;
 			}
 			if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+				KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 				return false;
 			}
 
 			KingdomObject kingdom = KingdomCraft.getApi().getKingdom(args[0]);
 			kingdom.setSpawn(p.getLocation());
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetspawnSuccess", kingdom.getName(),
+			KingdomCraft.getMsg().send(sender, "cmdSetspawnSuccess", kingdom.getName(),
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY()) + ", "
-							+ ((int) p.getLocation().getZ())));
+							+ ((int) p.getLocation().getZ()));
 			
 		} else {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 		}
 		return false;
 	}

@@ -1,9 +1,9 @@
 name: 'KingdomCraft'
 author: iGufGuf
-version: 4.1
+version: 4.1.1
 description: 'The Ultimate Kingdom Plugin'
 softdepend: [Vault, WorldEdit, WorldGuard]
 main: com.igufguf.kingdomcraft.KingdomCraft
 commands:
     kingdom:
-      aliases: [k, kd, kdc, kingdoms]
+      aliases: [k, kd, kdc, kingdoms, kingdomcraft]

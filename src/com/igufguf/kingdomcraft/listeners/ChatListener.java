@@ -170,7 +170,7 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 			if ( channel.getVisibilityType() != VisibilityType.PUBLIC && user.getKingdom() == null ) {
 				channel = getChannel(nokingdomchannel);
 				if ( channel == null || channel.getVisibilityType() != VisibilityType.PUBLIC ) {
-					p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("chatNoKingdom"));
+					KingdomCraft.getMsg().send(p, "chatNoKingdom");
 					e.setCancelled(true);
 					return;
 				}
@@ -220,7 +220,7 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 			p.sendMessage(format);
 			for ( Player on : Bukkit.getOnlinePlayers() ) {
 				if ( on.hasPermission("kingdom.chat.advertise.notify") ) {
-					on.sendMessage(KingdomCraft.getMsg().getMessage("chatAdvertising", p.getName(), rawmessage));
+					KingdomCraft.getMsg().send(on, "chatAdvertising", p.getName(), rawmessage);
 				}
 			}
 			return;

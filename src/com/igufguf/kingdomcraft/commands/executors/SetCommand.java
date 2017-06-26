@@ -52,18 +52,18 @@ public class SetCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 2 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getKingdom(args[1]) == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[1]));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[1]);
 			return false;
 		}
 		String username = args[0];
 		KingdomUser user = KingdomCraft.getApi().getUser(username);
 		
 		if ( user == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultNoPlayer", username));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer", username);
 			return false;
 		}
 		
@@ -72,9 +72,9 @@ public class SetCommand extends CommandBase {
 		KingdomCraft.getApi().setKingdom(user, kingdom);
 		
 		if ( user.getPlayer() != null ) {
-			user.getPlayer().sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetTarget", kingdom.getName()));
+			KingdomCraft.getMsg().send(user.getPlayer(), "cmdSetTarget", kingdom.getName());
 		}
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdSetSender", user.getName(), kingdom.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdSetSender", user.getName(), kingdom.getName());
 
 		if ( user.getPlayer() != null && kingdom.getSpawn() != null && KingdomCraft.getConfg().has("spawn-on-kingdom-join")
 				&& KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-join") ) {

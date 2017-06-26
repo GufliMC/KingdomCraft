@@ -49,7 +49,7 @@ public class LeaveCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 0 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
@@ -57,16 +57,16 @@ public class LeaveCommand extends CommandBase {
 		KingdomObject kingdom = user.getKingdom();
 
 		if ( kingdom == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 
 		KingdomCraft.getApi().setKingdom(user, null);
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdLeaveSuccess", kingdom.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdLeaveSuccess", kingdom.getName());
 
 		for ( Player member : kingdom.getOnlineMembers() ) {
-			member.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdLeaveSuccessMembers", p.getName()));
+			KingdomCraft.getMsg().send(member, "cmdLeaveSuccessMembers", p.getName());
 		}
 
 		if ( KingdomCraft.getConfg().has("spawn-on-kingdom-leave") && KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-leave") ) {

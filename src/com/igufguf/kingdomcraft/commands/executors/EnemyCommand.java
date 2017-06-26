@@ -57,15 +57,15 @@ public class EnemyCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 		
@@ -73,21 +73,21 @@ public class EnemyCommand extends CommandBase {
 		KingdomObject targetkd = KingdomCraft.getApi().getKingdom(args[0]);
 
 		if ( KingdomCraft.getApi().getRelation(senderkd, targetkd) == KingdomRelation.ENEMY ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdEnemyAlready", targetkd.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdEnemyAlready", targetkd.getName());
 			return false;
 		}
 
 		KingdomCraft.getApi().setRelation(senderkd, targetkd, KingdomRelation.ENEMY);
 		KingdomCraft.getApi().setRelation(targetkd, senderkd, KingdomRelation.ENEMY);
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdEnemySuccess", targetkd.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdEnemySuccess", targetkd.getName());
 
 		for ( Player on : Bukkit.getOnlinePlayers() ) {
 			KingdomUser ku = KingdomCraft.getApi().getUser(on);
 			if ( ku.getKingdom() == senderkd && on != p) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdEnemySuccessMembers", targetkd.getName()));
+				KingdomCraft.getMsg().send(sender, "cmdEnemySuccessMembers", targetkd.getName());
 			} else if ( ku.getKingdom() == targetkd ) {
-				sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdEnemySuccessTarget", senderkd.getName()));
+				KingdomCraft.getMsg().send(sender, "cmdEnemySuccessTarget", senderkd.getName());
 			}
 		}
 

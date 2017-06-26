@@ -69,7 +69,7 @@ public class KingdomCraft extends JavaPlugin {
 
 		//loading the commands
 		PluginCommand cmd = getCommand("kingdom");
-		cmd.setAliases(Arrays.asList("k", "kingdoms", "kingdomcraft", "kdc"));
+		cmd.setAliases(Arrays.asList("k", "kd", "kingdoms", "kingdomcraft", "kdc"));
 		
 		CommandHandler cmdhandler = new CommandHandler();
 		cmd.setExecutor(cmdhandler);

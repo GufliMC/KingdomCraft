@@ -55,15 +55,15 @@ public class NeutralCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, ("cmdDefaultUsage"));
 			return false;
 		}
 		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 		
@@ -71,13 +71,13 @@ public class NeutralCommand extends CommandBase {
 		KingdomObject targetkd = KingdomCraft.getApi().getKingdom(args[0]);
 
 		if ( KingdomCraft.getApi().getRelation(senderkd, targetkd) == KingdomRelation.NEUTRAL ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdNeutralAlready", targetkd.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdNeutralAlready", targetkd.getName());
 			return false;
 		}
 
 		KingdomCraft.getApi().setRelation(senderkd, targetkd, KingdomRelation.NEUTRAL);
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdNeutralSuccess", targetkd.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdNeutralSuccess", targetkd.getName());
 
 		return false;
 	}

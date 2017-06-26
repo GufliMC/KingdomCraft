@@ -55,15 +55,15 @@ public class FriendlyCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultSenderNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 		
@@ -71,13 +71,13 @@ public class FriendlyCommand extends CommandBase {
 		KingdomObject targetkd = KingdomCraft.getApi().getKingdom(args[0]);
 
 		if ( KingdomCraft.getApi().getRelation(senderkd, targetkd) == KingdomRelation.FRIENDLY ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdFriendlyAlready", targetkd.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdFriendlyAlready", targetkd.getName());
 			return false;
 		}
 
 		KingdomCraft.getApi().setRelation(senderkd, targetkd, KingdomRelation.FRIENDLY);
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdFriendlySuccess", targetkd.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdFriendlySuccess", targetkd.getName());
 
 		return false;
 	}

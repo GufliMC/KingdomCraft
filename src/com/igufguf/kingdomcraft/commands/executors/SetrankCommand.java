@@ -58,18 +58,18 @@ public class SetrankCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 2 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		String username = args[0];
 		KingdomUser user = KingdomCraft.getApi().getUser(username);
 		
 		if ( user == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultNoPlayer"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer");
 			return false;
 		}
 		if ( user.getKingdom() == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultTargetNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
 			return false;
 		}
 
@@ -79,21 +79,21 @@ public class SetrankCommand extends CommandBase {
 		}
 
 		if ( rank == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdRankNotExist"));
+			KingdomCraft.getMsg().send(sender, "cmdRankNotExist");
 			return false;
 		}
 
 		if ( (sender instanceof Player) && user.getKingdom() != KingdomCraft.getApi().getUser((Player) sender).getKingdom()
 				&& !sender.hasPermission(this.permission + ".other") ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdNoPermissionCmd"));
+			KingdomCraft.getMsg().send(sender, "cmdNoPermissionCmd");
 			return false;
 		}
 
 		user.setData("rank", rank.getName());
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdRankSenderChange", user.getName(), rank.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdRankSenderChange", user.getName(), rank.getName());
 
 		if ( user.getPlayer() != null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdRankTargetChange", rank.getName()));
+			KingdomCraft.getMsg().send(sender, "cmdRankTargetChange", rank.getName());
 		}
 		
 		//save new rank because user is offline

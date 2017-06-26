@@ -64,7 +64,7 @@ public class InfoCommand extends CommandBase {
 	public boolean execute(CommandSender sender, String[] args) {
 		
 		if ( args.length > 1 || (args.length == 0 && !(sender instanceof Player))) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( args.length == 1 && KingdomCraft.getApi().getKingdom(args[0]) == null ) {
@@ -74,7 +74,7 @@ public class InfoCommand extends CommandBase {
 				showPlayerInfo(sender, target);
 				return false;
 			}
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultKingdomNotExist", args[0]));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 		KingdomObject kingdom;
@@ -86,7 +86,7 @@ public class InfoCommand extends CommandBase {
 		}
 		
 		if ( kingdom == null ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultTargetNoKingdom"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
 			return false;
 		}
 		
@@ -96,7 +96,7 @@ public class InfoCommand extends CommandBase {
 	}
 	
 	private void showKingdomInfo(CommandSender sender, KingdomObject kingdom) {
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInfoKingdom", kingdom.getName()));
+		KingdomCraft.getMsg().send(sender, "cmdInfoKingdom", kingdom.getName());
 		
 		if ( kingdom.hasData("prefix") ) {
 			String prefix = ChatColor.translateAlternateColorCodes('&', (String) kingdom.getData("prefix"));
@@ -113,10 +113,10 @@ public class InfoCommand extends CommandBase {
 		}
 
 		allys = allys.replaceFirst(", ", ""); if ( allys.equals("") ) allys = "none";
-		sender.sendMessage(ChatColor.GRAY + KingdomCraft.getMsg().getMessage("cmdInfoFriendly") + ": " + ChatColor.GREEN + allys);
+		if ( !KingdomCraft.getMsg().isEmpty("cmdInfoFriendly") ) sender.sendMessage(ChatColor.GRAY + KingdomCraft.getMsg().getMessage("cmdInfoFriendly") + ": " + ChatColor.GREEN + allys);
 		
 		enemys = enemys.replaceFirst(", ", ""); if ( enemys.equals("") ) enemys = "none";
-		sender.sendMessage(ChatColor.GRAY + KingdomCraft.getMsg().getMessage("cmdInfoEnemy") + ": " + ChatColor.RED + enemys);
+		if ( !KingdomCraft.getMsg().isEmpty("cmdInfoEnemy") ) sender.sendMessage(ChatColor.GRAY + KingdomCraft.getMsg().getMessage("cmdInfoEnemy") + ": " + ChatColor.RED + enemys);
 		
 		String members = "";
 		for ( Player p : kingdom.getOnlineMembers() ) {
@@ -139,7 +139,7 @@ public class InfoCommand extends CommandBase {
 	private void showPlayerInfo(CommandSender sender, Player player) {
 		KingdomUser user = KingdomCraft.getApi().getUser(player);
 		
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInfoPlayer", player.getName()));
+		if ( !KingdomCraft.getMsg().isEmpty("cmdInfoPlayer") ) sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInfoPlayer", player.getName()));
 		
 		if ( user.getKingdom() != null ) sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + user.getKingdom().getName());
 		else sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + "none");

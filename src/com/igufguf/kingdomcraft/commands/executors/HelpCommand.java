@@ -1,5 +1,6 @@
 package com.igufguf.kingdomcraft.commands.executors;
 
+import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandBase;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
 import org.bukkit.ChatColor;
@@ -54,49 +55,49 @@ public class HelpCommand extends CommandBase {
 	}
 	
 	public static void page1(CommandSender sender) {
-		sender.sendMessage(ChatColor.YELLOW + "--------------- §6Kingdom §e---------------");
+		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k join <kingdom> §fJoin a kingdom");
-		sender.sendMessage(ChatColor.YELLOW + "/k list §fGet a list of all kingdoms");
-		sender.sendMessage(ChatColor.YELLOW + "/k spawn §fTeleport to the kingdom spawn");
-		sender.sendMessage(ChatColor.YELLOW + "/k info §fGet your kingdom information");
+		sender.sendMessage(ChatColor.YELLOW + "/k join <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpJoin"));
+		sender.sendMessage(ChatColor.YELLOW + "/k list "  + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpList"));
+		sender.sendMessage(ChatColor.YELLOW + "/k spawn " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSpawn"));
+		sender.sendMessage(ChatColor.YELLOW + "/k info " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpInfo"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 1/4");
 	}
 	
 	public static void page2(CommandSender sender) {
-		sender.sendMessage(ChatColor.YELLOW + "--------------- §6Kingdom §e---------------");
+		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k leave §fLeave your kingdom");
-		sender.sendMessage(ChatColor.YELLOW + "/k channel <channel> §fToggle a channel to see and talk in!");
-		sender.sendMessage(ChatColor.YELLOW + "/k info <kingdom> §fSee the info of a kingdom or a player");
-		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> §fChange a players rank");
+		sender.sendMessage(ChatColor.YELLOW + "/k leave " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpLeave"));
+		sender.sendMessage(ChatColor.YELLOW + "/k channel <channel> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpChannel"));
+		sender.sendMessage(ChatColor.YELLOW + "/k info <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpInfo"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSetrank"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 2/4");
 	}
 	
 	public static void page3(CommandSender sender) {
-		sender.sendMessage(ChatColor.YELLOW + "--------------- §6Kingdom §e---------------");
+		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k enemy <kingdom> §fDeclare war with a kingdom");
-		sender.sendMessage(ChatColor.YELLOW + "/k friendly <kingdom> §fSet a kingdom to friendly");
-		sender.sendMessage(ChatColor.YELLOW + "/k neutral <kingdom> §fDisband an alliance");
-		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> §fSet your kingdom spawn");
+		sender.sendMessage(ChatColor.YELLOW + "/k enemy <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpEnemy"));
+		sender.sendMessage(ChatColor.YELLOW + "/k friendly <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpFriendly"));
+		sender.sendMessage(ChatColor.YELLOW + "/k neutral <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpNeutral"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSetspawn"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 3/4");
 	}
 	
 	public static void page4(CommandSender sender) {
-		sender.sendMessage(ChatColor.YELLOW + "--------------- §6Kingdom §e---------------");
+		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k settype [open/closed] §fSet your kingdom to private or public");
-		sender.sendMessage(ChatColor.YELLOW + "/k spawn <kingdom> §fTeleport to another kingdoms spawn");
-		sender.sendMessage(ChatColor.YELLOW + "/k kick <player> §fKick a player out of his kingdom");
-		sender.sendMessage(ChatColor.YELLOW + "/k set <player> <kingdom> §fMove a player to a kingdom");
+		sender.sendMessage(ChatColor.YELLOW + "/k setstatus [open/closed] " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSetstatus"));
+		sender.sendMessage(ChatColor.YELLOW + "/k spawn <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSpawn"));
+		sender.sendMessage(ChatColor.YELLOW + "/k kick <player> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpKick"));
+		sender.sendMessage(ChatColor.YELLOW + "/k set <player> <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSet"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 4/4");
 	}

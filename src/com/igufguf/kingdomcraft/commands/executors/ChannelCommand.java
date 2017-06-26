@@ -60,7 +60,7 @@ public class ChannelCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdDefaultUsage"));
+			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
@@ -74,27 +74,27 @@ public class ChannelCommand extends CommandBase {
 		}
 
 		if ( channel == null ) {
-			p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdChannelNotExist", args[0]));
+			KingdomCraft.getMsg().send(p, "cmdChannelNotExist", args[0]);
 			return false;
 		}
 
 		if ( channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) ) {
-			p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdChannelNoPerm", channel.getName()));
+			KingdomCraft.getMsg().send(p, "cmdChannelNoPerm", channel.getName());
 			return false;
 		}
 
 		if ( channel.isAlwayson() || (KingdomCraft.getChat().defaultchannel != null && KingdomCraft.getChat().defaultchannel.equals(channel.getName())) ) {
-			p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdChannelToggle", channel.getName()));
+			KingdomCraft.getMsg().send(p, "cmdChannelToggle", channel.getName());
 			return false;
 		}
 
 		KingdomUser user = KingdomCraft.getApi().getUser(p);
 		if ( !user.hasInList("channels", channel.getName()) ) {
 			user.addInList("channels", channel.getName());
-			p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdChannelEnable", channel.getName()));
+			KingdomCraft.getMsg().send(p, "cmdChannelEnable", channel.getName());
 		} else {
 			user.delInList("channels", channel.getName());
-			p.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdChannelDisable", channel.getName()));
+			KingdomCraft.getMsg().send(p, "cmdChannelDisable", channel.getName());
 		}
 
 		return false;
