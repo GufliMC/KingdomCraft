@@ -53,8 +53,8 @@ public class HelpCommand extends CommandBase {
 
 		return false;
 	}
-	
-	public static void page1(CommandSender sender) {
+
+	private void page1(CommandSender sender) {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
@@ -65,8 +65,8 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 1/4");
 	}
-	
-	public static void page2(CommandSender sender) {
+
+	private void page2(CommandSender sender) {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
@@ -77,8 +77,8 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 2/4");
 	}
-	
-	public static void page3(CommandSender sender) {
+
+	private void page3(CommandSender sender) {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
@@ -89,8 +89,8 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 3/4");
 	}
-	
-	public static void page4(CommandSender sender) {
+
+	private void page4(CommandSender sender) {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");

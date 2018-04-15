@@ -50,10 +50,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		}
 		
 		if ( args.length >= 1 ) {
-			List<CommandBase> cmds = new ArrayList<>(commands);
-			Collections.reverse(cmds);
 
-			for ( CommandBase cb : cmds ) {
+			for ( CommandBase cb : commands ) {
 				if ( args[0].equalsIgnoreCase(cb.cmd) || cb.hasAlias(args[0]) ) {
 					if ( !player && cb.playeronly ) {
 						sender.sendMessage(KingdomCraft.prefix + ChatColor.RED + "This command can only be executed by players!");
@@ -70,13 +68,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					}
 				}
 			}
-		} else if ( args.length == 0 ) {
+
+		} else {
 			String prefix = ChatColor.RED + ChatColor.BOLD.toString() + "KingdomCraft" + ChatColor.DARK_GRAY + ChatColor.BOLD + " > " + ChatColor.GRAY;
 			sender.sendMessage(prefix + "v" + KingdomCraft.getPlugin(KingdomCraft.class).getDescription().getVersion() + " | Created by iGufGuf");
 			sender.sendMessage(prefix + "http://www.igufguf.com");
 			sender.sendMessage(prefix + ChatColor.GREEN + "For help type /k help");
 			return true;
 		}
+
 		KingdomCraft.getMsg().send(sender, "noCommand", args[0]);
 		return true;
 	}

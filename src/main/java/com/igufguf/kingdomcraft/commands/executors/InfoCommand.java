@@ -125,15 +125,16 @@ public class InfoCommand extends CommandBase {
 		members = members.replaceFirst(", ", ""); if ( members.equals("") ) members = "none";
 		sender.sendMessage(ChatColor.GRAY + "Online Members: " + ChatColor.GREEN + members);
 
-		members = "";
-		for ( KingdomUser p : kingdom.getMembers() ) {
-			if ( p.getPlayer() != null ) continue;
-			members += ", " + p.getName();
+		if ( KingdomCraft.getConfg().getBoolean("info-offline-players") ) {
+			members = "";
+			for (KingdomUser p : kingdom.getMembers()) {
+				if (p.getPlayer() != null) continue;
+				members += ", " + p.getName();
+			}
+			members = members.replaceFirst(", ", "");
+			if (members.equals("")) members = "none";
+			sender.sendMessage(ChatColor.GRAY + "Offline Members: " + ChatColor.RED + members);
 		}
-		members = members.replaceFirst(", ", ""); if ( members.equals("") ) members = "none";
-		sender.sendMessage(ChatColor.GRAY + "Offline Members: " + ChatColor.RED + members);
-		sender.sendMessage(" ");
-		
 	}
 	
 	private void showPlayerInfo(CommandSender sender, Player player) {
