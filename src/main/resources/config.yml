@@ -18,6 +18,9 @@ worlds: false
 world-list:
 - world
 
+#Show Offline players in /k info
+info-offline-players: true
+
 #Make players in the same kingdom not damage eachother, override with kingdom.friendlyfire.bypass
 friendlyfire: false
 

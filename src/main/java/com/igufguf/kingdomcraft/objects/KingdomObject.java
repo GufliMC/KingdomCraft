@@ -1,7 +1,9 @@
 package com.igufguf.kingdomcraft.objects;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -58,6 +60,10 @@ public class KingdomObject extends KingdomData {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDisplay() {
+		return hasData("display") ? ChatColor.translateAlternateColorCodes('&', StringEscapeUtils.unescapeJava((String) getData("display"))) : getName();
 	}
 
 	public KingdomRank getDefaultRank() {

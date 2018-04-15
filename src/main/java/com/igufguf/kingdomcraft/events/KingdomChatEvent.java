@@ -3,7 +3,6 @@ package com.igufguf.kingdomcraft.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class KingdomChatEvent extends KingdomEvent implements Cancellable {
@@ -15,7 +14,7 @@ public class KingdomChatEvent extends KingdomEvent implements Cancellable {
     private String message;
     private List<Player> receivers;
 
-    public KingdomChatEvent(@Nonnull Player p, @Nonnull String format, @Nonnull String message, @Nonnull List<Player> receivers) {
+    public KingdomChatEvent(Player p, String format, String message, List<Player> receivers) {
         this.p = p;
         this.format = format;
         this.message = message;

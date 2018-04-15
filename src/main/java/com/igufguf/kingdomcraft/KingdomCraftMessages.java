@@ -1,6 +1,5 @@
 package com.igufguf.kingdomcraft;
 
-import com.igufguf.kingdomcraft.KingdomCraft;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -11,7 +10,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
 /**

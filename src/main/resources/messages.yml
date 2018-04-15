@@ -7,7 +7,7 @@
 noPermissionCmd: '&cYou don''t have permission to use that command!'
 noPermission: '&cYou don''t have permission to do that!'
 noWorld: '&4KingdomCraft &cis not enabled in this world!'
-noCommand: '&7We couldn''t recognize &8{0} &7 as a command, use &8/k help &7for a list of commands!'
+noCommand: '&7We couldn''t recognize &8{0} &7as a command, use &8/k help &7for a list of commands!'
 
 cmdDefaultSenderNoKingdom: '&7You''re not in a kingdom!'
 cmdDefaultTargetNoKingodm: '&8{0} &7is not in a kingdom!'
