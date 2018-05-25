@@ -148,6 +148,10 @@ public class KingdomCraftApi {
             ku.delInLocalList("changes", key);
         }
 
+        if ( ku.getRank() == null && ku.getKingdom() != null ) {
+            setRank(ku, ku.getKingdom().getDefaultRank());
+        }
+
         return ku;
     }
 
