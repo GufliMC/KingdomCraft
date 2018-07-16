@@ -1,6 +1,7 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
+import com.igufguf.kingdomcraft.managers.ChatManager;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.events.KingdomChatEvent;
@@ -41,102 +42,35 @@ import java.util.regex.Pattern;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListener {
+public class ChatListener extends EventListener {
 
-	public boolean hasvaultchat = false;
-	public net.milkbowl.vault.chat.Chat chat;
-
-	private boolean chatsystem = false;
-
-	private boolean antiadvertise = false;
-	private boolean anticaps = false;
-
-	private boolean channelsenabled = false;
-
-	private String nokingdomchannel;
-	public String defaultchannel;
-	private ArrayList<Channel> channels;
-
-	private String defaultformat;
+	private final ChatManager cm;
 
 	public ChatListener(KingdomCraft plugin) {
-		if ( plugin.getServer().getPluginManager().getPlugin("Vault") != null ) {
-	        RegisteredServiceProvider<net.milkbowl.vault.chat.Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-	        if (chatProvider != null) {
-	            chat = chatProvider.getProvider();
-	            hasvaultchat = true;
-	        }
-		}
-
-		KingdomCraftConfig config = KingdomCraft.getConfg();
-
-		chatsystem = config.getBoolean("chat-system");
-		antiadvertise = config.getBoolean("anti-advertise");
-		anticaps = config.getBoolean("anti-caps");
-
-		if ( channelsenabled = config.getBoolean("channels.enabled") ) {
-			channels = new ArrayList<>();
-
-			for ( String name : config.getSection("channels").getKeys(false) ) {
-				if ( name.equalsIgnoreCase("enabled") ) continue;
-				if ( !config.has("channels." + name + ".format") ) continue;
-
-				if ( config.getBoolean("channels." + name + ".default") ) {
-					defaultchannel = name;
-				}
-
-				VisibilityType type = VisibilityType.PUBLIC;
-
-				if ( config.has("channels." + name + ".visibility") ) {
-
-					String s = config.getString("channels." + name + ".visibility");
-					if ( s.equalsIgnoreCase("kingdom") ) type = VisibilityType.KINGDOM;
-					else if ( s.equalsIgnoreCase("public") ) type = VisibilityType.PUBLIC;
-
-				} else if ( config.getBoolean("channels." + name + ".kingdom-only") ) {
-					type = VisibilityType.KINGDOM;
-				}
-
-				String format = config.getString("channels." + name + ".format");
-
-				String mprefix = config.getString("channels." + name + ".message-prefix");
-
-				boolean alwayson = config.has("channels." + name + ".alwayson") && config.getBoolean("channels." + name + ".alwayson");
-				boolean permission = config.has("channels." + name + ".permission") && config.getBoolean("channels." + name + ".permission");
-
-				Channel c = new Channel(name, format, mprefix, type, alwayson, permission);
-				addChannel(c);
-			}
-		}
-
-		if ( config.has("nokingdom-channel") ) nokingdomchannel = config.getString("nokingdom-channel");
-
-		if ( config.has("defaultformat") ) defaultformat = config.getString("defaultformat");
-		else if ( config.has("nochannels-format") ) defaultformat = config.getString("nochannels-format");
+		super(plugin);
+		this.cm = plugin.getApi().getChatManager();
 	}
 
-	public void addChannel(Channel c) {
-		if ( !channels.contains(c) ) channels.add(c);
-	}
 
 	@EventHandler(ignoreCancelled=true, priority=EventPriority.HIGHEST)
 	public void onChat(AsyncPlayerChatEvent e) {
-		if ( !chatsystem ) return;
-		if ( !enabledWorld(e.getPlayer().getWorld()) ) return;
+		if ( !isWorldEnabled(e.getPlayer().getWorld()) ) return;
 
 		Player p = e.getPlayer();
-		KingdomUser user = KingdomCraft.getApi().getUser(p);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 
 		String message = e.getMessage();
 
-		if ( anticaps ) {
+		// anti caps
+		if ( cm.isAntiCapsEnabled() ) {
 			if ( isCaps(message) && !p.hasPermission("kingdom.chat.bypass.caps") && !p.hasPermission("kingdom.chat.caps.bypass")) {
 				message = message.toLowerCase();
 			}
 		}
 
+		// anti advertise
 		boolean advertise = false;
-		if ( antiadvertise ) {
+		if ( cm.isAntiAdvertiseEnabled() ) {
 			if ( isAdvertising(message) && !p.hasPermission("kingdom.chat.bypass.advertise") && !p.hasPermission("kingdom.chat.advertise.bypass")) {
 				advertise = true;
 			}
@@ -145,10 +79,23 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 		String format;
 		List<Player> receivers = new ArrayList<>();
 
-		if ( channelsenabled ) {
-			Channel channel = null;
+		if ( !cm.areChannelsEnabled() ) {
+			format = cm.getDefaultFormat();
 
-			for ( Channel c : channels ) {
+			// format is null? well thats not good
+			if ( format == null ) return;
+
+			for ( Player online : Bukkit.getOnlinePlayers() ) {
+				if ( online != p && isWorldEnabled(online.getWorld()) ) {
+					receivers.add(online);
+				}
+			}
+		}
+		else {
+			ChatManager.Channel channel = null;
+
+			// check which channel he is talking in
+			for ( ChatManager.Channel c : cm.getChannels() ) {
 				if ( ( user.hasInList("channels", c.getName()) || c.isAlwayson() )
 						&& c.getMessagePrefix() != null
 						&& ChatColor.stripColor(message).startsWith(c.getMessagePrefix())
@@ -157,40 +104,53 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 				}
 			}
 
+			// if no channel is detected, he is talking in the default channel
 			if ( channel == null ) {
-				channel = getChannel(defaultchannel);
+				channel = cm.getChannel(cm.getDefaultChannel());
 				if ( channel == null ) return;
+			} else {
+
+				// if player has no permission for this channel, talk in default channel
+				if (channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) && !p.isOp()) {
+					channel = cm.getChannel(cm.getDefaultChannel());
+					if (channel == null) return;
+				}
 			}
 
-			if ( channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) && !p.isOp() ) {
-				channel = getChannel(defaultchannel);
-				if ( channel == null ) return;
-			}
+			// if the type is not public and he is not in a kingdom, he cant talk there so fallback to no kingdom channel
+			if ( channel.getVisibilityType() != ChatManager.VisibilityType.PUBLIC && user.getKingdom() == null ) {
+				channel = cm.getChannel(cm.getNoKingdomChannel());
 
-			if ( channel.getVisibilityType() != VisibilityType.PUBLIC && user.getKingdom() == null ) {
-				channel = getChannel(nokingdomchannel);
-				if ( channel == null || channel.getVisibilityType() != VisibilityType.PUBLIC ) {
-					KingdomCraft.getMsg().send(p, "chatNoKingdom");
+				// if channel is null or type is not public (which is weird) alert player that he cant talk
+				if ( channel == null || channel.getVisibilityType() != ChatManager.VisibilityType.PUBLIC ) {
+					plugin.getMsg().send(p, "chatNoKingdom");
 					e.setCancelled(true);
 					return;
 				}
 			}
 
 			format = channel.getFormat();
+
+			// format is null? well thats not good
+			if ( format == null ) return;
+
+			// remove the message prefix from the message
 			if ( channel.getMessagePrefix() != null ) {
 				message = message.replaceFirst(Pattern.quote(channel.getMessagePrefix()), "");
 			}
 
-			for ( KingdomUser u : KingdomCraft.getApi().getUsers() ) {
+			// set the receivers
+			for ( KingdomUser u : plugin.getApi().getUserManager().getUsers() ) {
 				if ( u == user ) continue;
 				Player up = u.getPlayer();
 
 				if ( !up.isOnline() ) continue;
-				if ( !enabledWorld(up.getWorld()) ) continue;
+				if ( !isWorldEnabled(up.getWorld()) ) continue;
 				if ( channel.isPermission() && !up.hasPermission("kingdom.channel." + channel.getName()) && !up.isOp() ) continue;
-				if ( !u.hasInList("channels", channel.getName()) && !channel.isAlwayson() && (defaultchannel == null || !channel.getName().equalsIgnoreCase(defaultchannel))) continue;
+				if ( !u.hasInList("channels", channel.getName()) && !channel.isAlwayson() && (cm.getDefaultChannel() == null || !channel.getName().equalsIgnoreCase(cm.getDefaultChannel()))) continue;
 
-				if ( channel.getVisibilityType() == VisibilityType.KINGDOM ) {
+				if ( channel.getVisibilityType() == ChatManager.VisibilityType.KINGDOM ) {
+					// player must be in same kingdom for this visibility
 					if ( u.getKingdom() != null && u.getKingdom() == user.getKingdom() ) {
 						receivers.add(up);
 					}
@@ -198,57 +158,59 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 					receivers.add(up);
 				}
 			}
-		} else {
-			format = defaultformat;
-
-			for ( Player online : Bukkit.getOnlinePlayers() ) {
-				if ( online != p && enabledWorld(online.getWorld()) ) {
-					receivers.add(online);
-				}
-			}
 		}
 
-		if ( format == null ) return;
+		// cancel original chat event
 		e.setCancelled(true);
 
-		while ( message.startsWith(" ") ) message = message.replaceFirst(" ", "");
+		// remove leading & trailing spaces
+		message = message.trim();
 
+		// check if people dont send empty messages by entering a color code
 		String rawmessage = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', message));
 		if ( rawmessage.replaceAll(" ", "").equals("") ) return;
 
+		// if message is advertise, fool player that msg is sent and alert staff
 		if ( advertise ) {
 			p.sendMessage(format);
+
 			for ( Player on : Bukkit.getOnlinePlayers() ) {
 				if ( on.hasPermission("kingdom.chat.advertise.notify") ) {
-					KingdomCraft.getMsg().send(on, "chatAdvertising", p.getName(), rawmessage);
+					plugin.getMsg().send(on, "chatAdvertising", p.getName(), rawmessage);
 				}
 			}
 			return;
 		}
 
+		// call chat event
 		KingdomChatEvent event = new KingdomChatEvent(p, format, message, receivers);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
 		if ( event.isCancelled() ) return;
 
-		String newprefix = user.getKingdom() == null && KingdomCraft.getConfg().has("default-prefix") ? KingdomCraft.getConfg().getString("default-prefix") : "";
+		String newprefix = user.getKingdom() == null && plugin.getCfg().has("default-prefix") ? plugin.getCfg().getString("default-prefix") : "";
 		newprefix = ChatColor.translateAlternateColorCodes('&', newprefix);
 
-
+		// do the formatting & replace variables
 		format = event.getFormat();
 		format = format.replace("{NAME}", newprefix + p.getDisplayName());
 		format = format.replace("{USERNAME}",  newprefix + p.getName());
 		format = ChatColor.translateAlternateColorCodes('&', format);
 
 		message = event.getMessage();
+
+		// only translate chat colors if player has permission
 		if ( p.hasPermission("kingdom.chat.colors") ) {
 			message = ChatColor.translateAlternateColorCodes('&', message);
 		}
+
 		format = format.replace("{MESSAGE}", message);
 
+		// send message to self
 		p.sendMessage(format);
 
-		for ( KingdomUser u : KingdomCraft.getApi().getUsers() ) {
+		// send message to receivers
+		for ( KingdomUser u : plugin.getApi().getUserManager().getUsers() ) {
 			if ( u == user) continue;
 
 			Player up = u.getPlayer();
@@ -262,14 +224,15 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 		System.out.println(ChatColor.stripColor(format));
 	}
 
+	// listen to kingdom chat event, replace variables with corresponding values
 	@EventHandler
 	public void onKingdomChat(KingdomChatEvent e) {
 		String format = e.getFormat();
 		Player p = e.getPlayer();
-		KingdomUser user = KingdomCraft.getApi().getUser(p);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 
 		if ( user.getKingdom() != null ) {
-			KingdomObject kd = user.getKingdom();
+			KingdomObject kd = plugin.getApi().getUserManager().getKingdom(user);
 
 			format = format.replace("{KINGDOM_NAME}", kd.getName());
 
@@ -289,7 +252,7 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 				format = format.replace("{KINGDOM_TABSUFFIX}", ChatColor.translateAlternateColorCodes('&', (String) kd.getData("tabsuffix")));
 			}
 
-			KingdomRank rank = user.getRank();
+			KingdomRank rank = plugin.getApi().getUserManager().getRank(user);
 			if ( rank != null ) {
 				format = format.replace("{KINGDOMRANK_NAME}", rank.getName());
 
@@ -311,15 +274,12 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 			}
 		}
 
-		if ( hasvaultchat ) {
-			if ( chat.getPlayerPrefix(p) != null ) {
-				format = format.replace("{RANK}",  chat.getPlayerPrefix(p)); //old one
+		if ( cm.hasVault() ) {
+			if ( cm.getVault().getPlayerPrefix(p) != null ) {
+				format = format.replace("{PREFIX}",  cm.getVault().getPlayerPrefix(p));
 			}
-			if ( chat.getPlayerPrefix(p) != null ) {
-				format = format.replace("{PREFIX}",  chat.getPlayerPrefix(p));
-			}
-			if ( chat.getPlayerSuffix(p) != null ) {
-				format = format.replace("{SUFFIX}", chat.getPlayerSuffix(p));
+			if ( cm.getVault().getPlayerSuffix(p) != null ) {
+				format = format.replace("{SUFFIX}", cm.getVault().getPlayerSuffix(p));
 			}
 		}
 
@@ -330,17 +290,6 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 		}
 
 		e.setFormat(format);
-	}
-	
-	public Channel getChannel(String name) {
-		for ( Channel c : channels ) {
-			if ( c.getName().equalsIgnoreCase(name) ) return c;
-		}
-		return null;
-	}
-
-	public List<Channel> getChannels() {
-		return new ArrayList<>(channels);
 	}
 
 	// CHAT MANAGEMENT
@@ -400,59 +349,5 @@ public class ChatListener extends com.igufguf.kingdomcraft.listeners.EventListen
 	    return false;
 	}
 
-	public class Channel {
-
-		private final String name;
-
-		private final String format;
-		private final String mprefix;
-
-		private final VisibilityType vtype;
-		private final boolean alwayson;
-		private final boolean permission;
-
-		public Channel(String name, String format, String mprefix, VisibilityType vtype, boolean alwayson, boolean permission) {
-			this.name = name;
-			this.format = StringEscapeUtils.unescapeJava(format);
-			this.mprefix = mprefix;
-			this.vtype = vtype;
-			this.alwayson = alwayson;
-			this.permission = permission;
-		}
-
-		public Channel(String name, String format, String mprefix) {
-			this(name, format, mprefix, VisibilityType.PUBLIC, false, false);
-		}
-
-
-		public String getName() {
-			return name;
-		}
-
-		public String getFormat() {
-			return format;
-		}
-
-		public String getMessagePrefix() {
-			return mprefix;
-		}
-
-		public VisibilityType getVisibilityType() {
-			return vtype;
-		}
-
-		public boolean isAlwayson() {
-			return alwayson;
-		}
-
-		public boolean isPermission() {
-			return permission;
-		}
-
-	}
-
-	public enum VisibilityType {
-		PUBLIC, KINGDOM;
-	}
 
 }

@@ -6,10 +6,8 @@ import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomRelation;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,18 +35,22 @@ import java.util.HashMap;
  **/
 public class InfoCommand extends CommandBase {
 
-	public InfoCommand() {
+	private final KingdomCraft plugin;
+
+	public InfoCommand(KingdomCraft plugin) {
 		super("info", null, false);
 		addAliasses("i");
+
+		this.plugin = plugin;
 		
-		CommandHandler.register(this);
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 2 ) {
 			ArrayList<String> kingdoms = new ArrayList<>();
-			for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			for ( Player p : Bukkit.getOnlinePlayers() ) {
@@ -64,29 +66,30 @@ public class InfoCommand extends CommandBase {
 	public boolean execute(CommandSender sender, String[] args) {
 		
 		if ( args.length > 1 || (args.length == 0 && !(sender instanceof Player))) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		if ( args.length == 1 && KingdomCraft.getApi().getKingdom(args[0]) == null ) {
+		if ( args.length == 1 && plugin.getApi().getKingdomManager().getKingdom(args[0]) == null ) {
 			if ( Bukkit.getPlayerExact(args[0]) != null ) {
 				Player target = Bukkit.getPlayer(args[0]);
 				
 				showPlayerInfo(sender, target);
 				return false;
 			}
-			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 		KingdomObject kingdom;
 		
 		if ( args.length == 1 ) {
-			kingdom = KingdomCraft.getApi().getKingdom(args[0]);
+			kingdom = plugin.getApi().getKingdomManager().getKingdom(args[0]);
 		} else {
-			kingdom = KingdomCraft.getApi().getUser((Player) sender).getKingdom();
+			KingdomUser user = plugin.getApi().getUserManager().getUser((Player) sender);
+			kingdom = plugin.getApi().getUserManager().getKingdom(user);
 		}
 		
 		if ( kingdom == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
+			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
 			return false;
 		}
 		
@@ -96,7 +99,7 @@ public class InfoCommand extends CommandBase {
 	}
 	
 	private void showKingdomInfo(CommandSender sender, KingdomObject kingdom) {
-		KingdomCraft.getMsg().send(sender, "cmdInfoKingdom", kingdom.getName());
+		plugin.getMsg().send(sender, "cmdInfoKingdom", kingdom.getName());
 		
 		if ( kingdom.hasData("prefix") ) {
 			String prefix = ChatColor.translateAlternateColorCodes('&', (String) kingdom.getData("prefix"));
@@ -106,28 +109,28 @@ public class InfoCommand extends CommandBase {
 		String allys = "";
 		String enemys = "";
 
-		HashMap<KingdomObject, KingdomRelation> relations = KingdomCraft.getApi().getRelations(kingdom);
+		HashMap<KingdomObject, KingdomRelation> relations = plugin.getApi().getRelationManager().getRelations(kingdom);
 		for ( KingdomObject ko : relations.keySet() ) {
 			if ( relations.get(ko) == KingdomRelation.FRIENDLY ) allys += ", " + ko.getName();
 			else if ( relations.get(ko) == KingdomRelation.ENEMY) enemys += ", " + ko.getName();
 		}
 
 		allys = allys.replaceFirst(", ", ""); if ( allys.equals("") ) allys = "none";
-		if ( !KingdomCraft.getMsg().isEmpty("cmdInfoFriendly") ) sender.sendMessage(ChatColor.GRAY + KingdomCraft.getMsg().getMessage("cmdInfoFriendly") + ": " + ChatColor.GREEN + allys);
+		if ( !plugin.getMsg().isEmpty("cmdInfoFriendly") ) sender.sendMessage(ChatColor.GRAY + plugin.getMsg().getMessage("cmdInfoFriendly") + ": " + ChatColor.GREEN + allys);
 		
 		enemys = enemys.replaceFirst(", ", ""); if ( enemys.equals("") ) enemys = "none";
-		if ( !KingdomCraft.getMsg().isEmpty("cmdInfoEnemy") ) sender.sendMessage(ChatColor.GRAY + KingdomCraft.getMsg().getMessage("cmdInfoEnemy") + ": " + ChatColor.RED + enemys);
+		if ( !plugin.getMsg().isEmpty("cmdInfoEnemy") ) sender.sendMessage(ChatColor.GRAY + plugin.getMsg().getMessage("cmdInfoEnemy") + ": " + ChatColor.RED + enemys);
 		
 		String members = "";
-		for ( Player p : kingdom.getOnlineMembers() ) {
+		for ( Player p : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
 			members += ", " + p.getName();
 		}
 		members = members.replaceFirst(", ", ""); if ( members.equals("") ) members = "none";
 		sender.sendMessage(ChatColor.GRAY + "Online Members: " + ChatColor.GREEN + members);
 
-		if ( KingdomCraft.getConfg().getBoolean("info-offline-players") ) {
+		if ( plugin.getCfg().getBoolean("info-offline-players") ) {
 			members = "";
-			for (KingdomUser p : kingdom.getMembers()) {
+			for (KingdomUser p : plugin.getApi().getKingdomManager().getMembers(kingdom)) {
 				if (p.getPlayer() != null) continue;
 				members += ", " + p.getName();
 			}
@@ -138,14 +141,16 @@ public class InfoCommand extends CommandBase {
 	}
 	
 	private void showPlayerInfo(CommandSender sender, Player player) {
-		KingdomUser user = KingdomCraft.getApi().getUser(player);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(player);
 		
-		if ( !KingdomCraft.getMsg().isEmpty("cmdInfoPlayer") ) sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdInfoPlayer", player.getName()));
+		if ( !plugin.getMsg().isEmpty("cmdInfoPlayer") ) {
+			plugin.getMsg().send(sender, "cmdInfoPlayer", player.getName());
+		}
 		
-		if ( user.getKingdom() != null ) sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + user.getKingdom().getName());
+		if ( user.getKingdom() != null ) sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + plugin.getApi().getUserManager().getKingdom(user).getDisplay());
 		else sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + "none");
 		
-		if ( user.getKingdom() != null && user.getRank() != null ) sender.sendMessage(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + user.getRank().getName());
+		if ( user.getKingdom() != null && user.getRank() != null ) sender.sendMessage(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + user.getRank());
 		
 		sender.sendMessage(" ");
 	}

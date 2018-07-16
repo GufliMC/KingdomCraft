@@ -32,29 +32,31 @@ import org.bukkit.permissions.PermissionAttachment;
  **/
 public class ConnectionListener extends EventListener {
 
+	public ConnectionListener(KingdomCraft plugin) {
+		super(plugin);
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 
-		KingdomUser user = KingdomCraft.getApi().getOfflineUser(p.getUniqueId());
-		KingdomCraft.getApi().registerUser(user);
+		KingdomUser user = plugin.getApi().getUserManager().getOfflineUser(p.getUniqueId());
+		plugin.getApi().getUserManager().registerUser(user);
 
-		KingdomCraft.getApi().refreshPermissions(user);
+		plugin.getApi().getPermissionManager().refreshPermissions(user);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 
-		KingdomUser user = KingdomCraft.getApi().getUser(p);
-		KingdomCraft.getApi().unregisterUser(user);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		plugin.getApi().getUserManager().unregisterUser(user);
 
-		KingdomCraft.getPlugin().save(user);
+		plugin.getApi().getUserManager().save(user);
 
 		PermissionAttachment pa = user.hasData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
 		if ( pa != null ) pa.remove();
-
-		SpawnCommand.teleporting.remove(p.getName());
 	}
 	
 }

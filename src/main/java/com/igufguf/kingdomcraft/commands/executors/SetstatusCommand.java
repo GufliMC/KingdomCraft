@@ -5,6 +5,7 @@ import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
+import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,12 +34,15 @@ import java.util.Collections;
  **/
 public class SetstatusCommand extends CommandBase {
 
+	private final KingdomCraft plugin;
 	
-	public SetstatusCommand() {
+	public SetstatusCommand(KingdomCraft plugin) {
 		super("setstatus", "kingdom.setstatus", true);
 		addAliasses("settype");
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -56,23 +60,25 @@ public class SetstatusCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 && args.length != 2 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		
+
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+
 		KingdomObject kingdom;
 		if (args.length == 2) {
-			kingdom = KingdomCraft.getApi().getKingdom(args[0]);
+			kingdom = plugin.getApi().getKingdomManager().getKingdom(args[0]);
 			if ( kingdom == null ) {
-				KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+				plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 				return false;
 			}
 		} else {
-			kingdom = KingdomCraft.getApi().getUser(p).getKingdom();
+			kingdom = plugin.getApi().getUserManager().getKingdom(user);
 		}
 
 		if ( kingdom == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
+			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
 			return false;
 		}
 
@@ -83,12 +89,12 @@ public class SetstatusCommand extends CommandBase {
 
 		if ( type.equalsIgnoreCase("closed") ) {
 			kingdom.addInList("flags", "closed");
-			KingdomCraft.getMsg().send(sender, "cmdSetstatusClosed", kingdom.getName());
+			plugin.getMsg().send(sender, "cmdSetstatusClosed", kingdom.getName());
 		} else if ( type.equalsIgnoreCase("open") ) {
 			kingdom.delInList("flags", "closed");
-			KingdomCraft.getMsg().send(sender, "cmdSetstatusOpen", kingdom.getName());
+			plugin.getMsg().send(sender, "cmdSetstatusOpen", kingdom.getName());
 		} else {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 

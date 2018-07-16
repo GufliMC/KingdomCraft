@@ -5,7 +5,6 @@ import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,17 +31,21 @@ import java.util.ArrayList;
  **/
 public class JoinCommand extends CommandBase {
 
-	public JoinCommand() {
+	private final KingdomCraft plugin;
+
+	public JoinCommand(KingdomCraft plugin) {
 		super("join", "kingdom.join", true);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 2 ) {
 			ArrayList<String> kingdoms = new ArrayList<>();
-			for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			return kingdoms;
@@ -55,46 +58,46 @@ public class JoinCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+		if ( plugin.getApi().getKingdomManager().getKingdom(args[0]) == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
-		if ( KingdomCraft.getApi().getUser(p).getKingdom() != null ) {
-			KingdomCraft.getMsg().send(sender, "cmdJoinAlready");
+		if ( plugin.getApi().getUserManager().getUser(p).getKingdom() != null ) {
+			plugin.getMsg().send(sender, "cmdJoinAlready");
 			return false;
 		}
 		
-		KingdomObject kingdom = KingdomCraft.getApi().getKingdom(args[0]);
-		KingdomUser user = KingdomCraft.getApi().getUser(p);
+		KingdomObject kingdom = plugin.getApi().getKingdomManager().getKingdom(args[0]);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 		
 		if ( kingdom.hasInList("flags", "closed") ) {
 			if ( !user.hasInList("invites", kingdom.getName()) && !p.hasPermission("kingdom.join." + kingdom.getName()) ) {
-				KingdomCraft.getMsg().send(sender, "cmdJoinClosed", kingdom.getName());
-				for ( Player member : kingdom.getOnlineMembers() ) {
-					KingdomCraft.getMsg().send(member, "cmdJoinClosedMembers", p.getName());
+				plugin.getMsg().send(sender, "cmdJoinClosed", kingdom.getName());
+				for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
+					plugin.getMsg().send(member, "cmdJoinClosedMembers", p.getName());
 				}
 				return false;
 			}
 		}
 
-		if ( kingdom.hasData("max-members") && kingdom.getMembers().size() >= (int) kingdom.getData("max-members") ) {
-			KingdomCraft.getMsg().send(sender, "cmdJoinFull", kingdom.getName());
+		if ( kingdom.hasData("max-members") && plugin.getApi().getKingdomManager().getMembers(kingdom).size() >= (int) kingdom.getData("max-members") ) {
+			plugin.getMsg().send(sender, "cmdJoinFull", kingdom.getName());
 			return false;
 		}
 
-		for ( Player member : kingdom.getOnlineMembers() ) {
-			KingdomCraft.getMsg().send(member, "cmdJoinSuccessMembers", p.getName());
+		for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
+			plugin.getMsg().send(member, "cmdJoinSuccessMembers", p.getName());
 		}
 
-		KingdomCraft.getApi().setKingdom(user, kingdom);
+		plugin.getApi().getUserManager().setKingdom(user, kingdom);
 
-		KingdomCraft.getMsg().send(sender, "cmdJoinSuccess", kingdom.getName());
+		plugin.getMsg().send(sender, "cmdJoinSuccess", kingdom.getName());
 
-		if ( kingdom.getSpawn() != null && KingdomCraft.getConfg().has("spawn-on-kingdom-join")
-				&& KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-join") ) {
+		if ( kingdom.getSpawn() != null && plugin.getCfg().has("spawn-on-kingdom-join")
+				&& plugin.getCfg().getBoolean("spawn-on-kingdom-join") ) {
 			p.teleport(kingdom.getSpawn());
 		}
 

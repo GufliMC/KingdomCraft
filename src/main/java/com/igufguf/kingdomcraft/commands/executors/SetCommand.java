@@ -5,7 +5,6 @@ import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -31,17 +30,21 @@ import java.util.ArrayList;
  **/
 public class SetCommand extends CommandBase {
 
-	public SetCommand() {
+	private final KingdomCraft plugin;
+
+	public SetCommand(KingdomCraft plugin) {
 		super("set", "kingdom.set", false);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 3 ) {
 			ArrayList<String> kingdoms = new ArrayList<>();
-			for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[2].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			return kingdoms;
@@ -52,32 +55,32 @@ public class SetCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 2 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		if ( KingdomCraft.getApi().getKingdom(args[1]) == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[1]);
+		if ( plugin.getApi().getKingdomManager().getKingdom(args[1]) == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[1]);
 			return false;
 		}
 		String username = args[0];
-		KingdomUser user = KingdomCraft.getApi().getUser(username);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(username);
 		
 		if ( user == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer", username);
+			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
 			return false;
 		}
 		
-		KingdomObject kingdom = KingdomCraft.getApi().getKingdom(args[1]);
+		KingdomObject kingdom = plugin.getApi().getKingdomManager().getKingdom(args[1]);
 
-		KingdomCraft.getApi().setKingdom(user, kingdom);
+		plugin.getApi().getUserManager().setKingdom(user, kingdom);
 		
 		if ( user.getPlayer() != null ) {
-			KingdomCraft.getMsg().send(user.getPlayer(), "cmdSetTarget", kingdom.getName());
+			plugin.getMsg().send(user.getPlayer(), "cmdSetTarget", kingdom.getName());
 		}
-		KingdomCraft.getMsg().send(sender, "cmdSetSender", user.getName(), kingdom.getName());
+		plugin.getMsg().send(sender, "cmdSetSender", user.getName(), kingdom.getName());
 
-		if ( user.getPlayer() != null && kingdom.getSpawn() != null && KingdomCraft.getConfg().has("spawn-on-kingdom-join")
-				&& KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-join") ) {
+		if ( user.getPlayer() != null && kingdom.getSpawn() != null && plugin.getCfg().has("spawn-on-kingdom-join")
+				&& plugin.getCfg().getBoolean("spawn-on-kingdom-join") ) {
 			user.getPlayer().teleport(kingdom.getSpawn());
 		}
 

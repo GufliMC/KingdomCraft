@@ -1,9 +1,7 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.objects.KingdomRelation;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -28,12 +26,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class DamageListener extends com.igufguf.kingdomcraft.listeners.EventListener {
+public class DamageListener extends EventListener {
+
+	public DamageListener(KingdomCraft plugin) {
+		super(plugin);
+	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
-		if ( !enabledWorld(e.getEntity().getWorld()) ) return;
-		if ( KingdomCraft.getConfg().getBoolean("friendlyfire") ) return;
+		if ( !isWorldEnabled(e.getEntity().getWorld()) ) return;
+		if ( plugin.getCfg().getBoolean("friendlyfire") ) return;
 		if ( !(e.getEntity() instanceof Player)) return;
 
 		Player p = (Player) e.getEntity();
@@ -49,14 +51,14 @@ public class DamageListener extends com.igufguf.kingdomcraft.listeners.EventList
 
 		if ( d.hasPermission("kingdom.friendlyfire.bypass") ) return;
 
-		KingdomUser u1 = KingdomCraft.getApi().getUser(p);
-		KingdomUser u2 = KingdomCraft.getApi().getUser(d);
+		KingdomUser u1 = plugin.getApi().getUserManager().getUser(p);
+		KingdomUser u2 = plugin.getApi().getUserManager().getUser(d);
 
 		if ( u1.getKingdom() == null ) return;
 
 		if ( u2.getKingdom() != null ) {
-			if ( u1.getKingdom() == u2.getKingdom() ) {
-				KingdomCraft.getMsg().send(d, "damageKingdom");
+			if ( u1.getKingdom().equals(u2.getKingdom()) ) {
+				plugin.getMsg().send(d, "damageKingdom");
 				e.setCancelled(true);
 			}
 		}

@@ -6,6 +6,7 @@ import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.objects.KingdomRelation;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
+import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,17 +33,21 @@ import java.util.ArrayList;
  **/
 public class NeutralCommand extends CommandBase {
 
-	public NeutralCommand() {
+	private final KingdomCraft plugin;
+
+	public NeutralCommand(KingdomCraft plugin) {
 		super("neutral", "kingdom.neutral", true);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 2 ) {
 			ArrayList<String> kingdoms = new ArrayList<>();
-			for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			return kingdoms;
@@ -55,29 +60,30 @@ public class NeutralCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			KingdomCraft.getMsg().send(sender, ("cmdDefaultUsage"));
+			plugin.getMsg().send(sender, ("cmdDefaultUsage"));
 			return false;
 		}
-		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
+		if ( plugin.getApi().getUserManager().getUser(p).getKingdom() == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
-		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
-		}
-		
-		KingdomObject senderkd = KingdomCraft.getApi().getUser(p).getKingdom();
-		KingdomObject targetkd = KingdomCraft.getApi().getKingdom(args[0]);
-
-		if ( KingdomCraft.getApi().getRelation(senderkd, targetkd) == KingdomRelation.NEUTRAL ) {
-			KingdomCraft.getMsg().send(sender, "cmdNeutralAlready", targetkd.getName());
+		if ( plugin.getApi().getKingdomManager().getKingdom(args[0]) == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 
-		KingdomCraft.getApi().setRelation(senderkd, targetkd, KingdomRelation.NEUTRAL);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		KingdomObject senderkd = plugin.getApi().getUserManager().getKingdom(user);
+		KingdomObject targetkd = plugin.getApi().getKingdomManager().getKingdom(args[0]);
 
-		KingdomCraft.getMsg().send(sender, "cmdNeutralSuccess", targetkd.getName());
+		if ( plugin.getApi().getRelationManager().getRelation(senderkd, targetkd) == KingdomRelation.NEUTRAL ) {
+			plugin.getMsg().send(sender, "cmdNeutralAlready", targetkd.getName());
+			return false;
+		}
+
+		plugin.getApi().getRelationManager().setRelation(senderkd, targetkd, KingdomRelation.NEUTRAL);
+
+		plugin.getMsg().send(sender, "cmdNeutralSuccess", targetkd.getName());
 
 		return false;
 	}

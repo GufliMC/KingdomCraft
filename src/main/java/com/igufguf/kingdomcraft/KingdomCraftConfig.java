@@ -29,12 +29,12 @@ import java.util.List;
  **/
 public class KingdomCraftConfig {
 
-	public static final double configversion = 1.1;
+	private static final double configversion = 1.2;
 
 	private File file;
 	private YamlConfiguration config;
 
-	public KingdomCraftConfig(com.igufguf.kingdomcraft.KingdomCraft plugin) {
+	public KingdomCraftConfig(KingdomCraft plugin) {
 		file = new File(plugin.getDataFolder(), "config.yml");
 
 		if ( !file.exists() ) {

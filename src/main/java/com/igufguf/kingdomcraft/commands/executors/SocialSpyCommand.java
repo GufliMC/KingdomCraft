@@ -31,11 +31,15 @@ import java.util.ArrayList;
  **/
 public class SocialSpyCommand extends CommandBase {
 
-	public SocialSpyCommand() {
+	private final KingdomCraft plugin;
+
+	public SocialSpyCommand(KingdomCraft plugin) {
 		super("socialspy", "kingdom.socialspy", true);
 		addAliasses("ss", "spy");
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -46,20 +50,20 @@ public class SocialSpyCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
-		KingdomUser user = KingdomCraft.getApi().getUser((Player) sender);
+		KingdomUser user = plugin.getApi().getUserManager().getUser((Player) sender);
 
 		boolean result = user.hasData("socialspy") && (boolean) user.getData("socialspy");
 
 		if ( result ) {
 			user.setData("socialspy", false);
-			KingdomCraft.getMsg().send(sender, "cmdSocialspyDisable");
+			plugin.getMsg().send(sender, "cmdSocialspyDisable");
 		} else {
 			user.setData("socialspy", true);
-			KingdomCraft.getMsg().send(sender, "cmdSocialspyEnable");
+			plugin.getMsg().send(sender, "cmdSocialspyEnable");
 		}
 		
 		return false;

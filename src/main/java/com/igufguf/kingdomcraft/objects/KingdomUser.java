@@ -46,22 +46,12 @@ public class KingdomUser extends KingdomData {
 		return uuid;
 	}
 	
-	public KingdomObject getKingdom() {
-		return hasData("kingdom") && getData("kingdom") instanceof String ? KingdomCraft.getApi().getKingdom((String) getData("kingdom")) : null;
+	public String getKingdom() {
+		return hasData("kingdom") ? getString("kingdom") : null;
 	}
 
-	public KingdomRank getRank() {
-		KingdomObject ko = getKingdom();
-		if ( ko == null ) return null;
-
-		KingdomRank rank = null;
-
-		if ( hasData("rank") ) {
-			String rankname = (String) getData("rank");
-			rank = ko.getRank(rankname);
-		}
-
-		return rank == null ? ko.getDefaultRank() : rank;
+	public String getRank() {
+		return hasData("rank") ? getString("rank") : null;
 	}
 
 	public Player getPlayer() {

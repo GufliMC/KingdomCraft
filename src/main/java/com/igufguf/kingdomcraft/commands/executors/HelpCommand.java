@@ -29,10 +29,14 @@ import java.util.ArrayList;
  **/
 public class HelpCommand extends CommandBase {
 
-	public HelpCommand() {
+	private final KingdomCraft plugin;
+
+	public HelpCommand(KingdomCraft plugin) {
 		super("help", null, false);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -58,10 +62,10 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k join <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpJoin"));
-		sender.sendMessage(ChatColor.YELLOW + "/k list "  + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpList"));
-		sender.sendMessage(ChatColor.YELLOW + "/k spawn " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSpawn"));
-		sender.sendMessage(ChatColor.YELLOW + "/k info " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpInfo"));
+		sender.sendMessage(ChatColor.YELLOW + "/k join <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpJoin"));
+		sender.sendMessage(ChatColor.YELLOW + "/k list "  + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpList"));
+		sender.sendMessage(ChatColor.YELLOW + "/k spawn " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSpawn"));
+		sender.sendMessage(ChatColor.YELLOW + "/k info " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpInfo"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 1/4");
 	}
@@ -70,10 +74,10 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k leave " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpLeave"));
-		sender.sendMessage(ChatColor.YELLOW + "/k channel <channel> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpChannel"));
-		sender.sendMessage(ChatColor.YELLOW + "/k info <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpInfo"));
-		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSetrank"));
+		sender.sendMessage(ChatColor.YELLOW + "/k leave " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpLeave"));
+		sender.sendMessage(ChatColor.YELLOW + "/k channel <channel> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpChannel"));
+		sender.sendMessage(ChatColor.YELLOW + "/k info <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpInfo"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetrank"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 2/4");
 	}
@@ -82,10 +86,10 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k enemy <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpEnemy"));
-		sender.sendMessage(ChatColor.YELLOW + "/k friendly <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpFriendly"));
-		sender.sendMessage(ChatColor.YELLOW + "/k neutral <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpNeutral"));
-		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSetspawn"));
+		sender.sendMessage(ChatColor.YELLOW + "/k enemy <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpEnemy"));
+		sender.sendMessage(ChatColor.YELLOW + "/k friendly <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFriendly"));
+		sender.sendMessage(ChatColor.YELLOW + "/k neutral <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpNeutral"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetspawn"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 3/4");
 	}
@@ -94,10 +98,10 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(ChatColor.YELLOW + "--------------- " + ChatColor.GOLD + "Kingdom " + ChatColor.YELLOW + "---------------");
 		sender.sendMessage(ChatColor.GREEN + "     Aliasses: kingdom - kingdoms - k");
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "/k setstatus [open/closed] " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSetstatus"));
-		sender.sendMessage(ChatColor.YELLOW + "/k spawn <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSpawn"));
-		sender.sendMessage(ChatColor.YELLOW + "/k kick <player> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpKick"));
-		sender.sendMessage(ChatColor.YELLOW + "/k set <player> <kingdom> " + ChatColor.WHITE + KingdomCraft.getMsg().getMessage("cmdHelpSet"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setstatus [open/closed] " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetstatus"));
+		sender.sendMessage(ChatColor.YELLOW + "/k spawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSpawn"));
+		sender.sendMessage(ChatColor.YELLOW + "/k kick <player> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpKick"));
+		sender.sendMessage(ChatColor.YELLOW + "/k set <player> <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSet"));
 		sender.sendMessage(" ");
 		sender.sendMessage(ChatColor.YELLOW + "Page 4/4");
 	}

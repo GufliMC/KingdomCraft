@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.listeners;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.executors.SpawnCommand;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
+import com.igufguf.kingdomcraft.managers.TeleportManager;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -32,24 +33,31 @@ import org.bukkit.event.player.PlayerTeleportEvent;
  **/
 public class MoveListener extends EventListener {
 
+	public MoveListener(KingdomCraft plugin) {
+		super(plugin);
+	}
+
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
-		if ( !enabledWorld(e.getPlayer().getWorld()) ) return;
-		
-		if ( SpawnCommand.teleporting.contains(e.getPlayer().getName()) ) {
-			if ( !e.getFrom().getBlock().equals(e.getTo().getBlock()) ) {
-				SpawnCommand.teleporting.remove(e.getPlayer().getName());
-				KingdomCraft.getMsg().send(e.getPlayer(), "teleportCancel");
-			}
-		}
+		if ( !isWorldEnabled(e.getPlayer().getWorld()) ) return;
+
+		Player p = e.getPlayer();
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		if ( user == null ) return;
+
+		TeleportManager tm = plugin.getApi().getTeleportManager();
+		if ( !tm.isTeleporting(user) ) return;
+
+		tm.cancelTaleporter(user);
 	}
 
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent e) {
-		if ( (!enabledWorld(e.getFrom().getWorld()) && enabledWorld(e.getTo().getWorld()))
-				|| ( !enabledWorld(e.getTo().getWorld()) && enabledWorld(e.getFrom().getWorld()))) {
-			KingdomUser user = KingdomCraft.getApi().getUser(e.getPlayer());
-			KingdomCraft.getApi().refreshPermissions(user);
+
+		// if 1 of the worlds is enabled and the other disabled, a change in permissions has to happen
+		if ( isWorldEnabled(e.getFrom().getWorld()) ^ isWorldEnabled(e.getTo().getWorld()) ) {
+			KingdomUser user = plugin.getApi().getUserManager().getUser(e.getPlayer());
+			plugin.getApi().getPermissionManager().refreshPermissions(user);
 		}
 	}
 }

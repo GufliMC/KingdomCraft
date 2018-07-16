@@ -1,14 +1,9 @@
 package com.igufguf.kingdomcraft.objects;
 
-import com.igufguf.kingdomcraft.KingdomCraft;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,23 +34,8 @@ public class KingdomObject extends KingdomData {
 
 	private final String name;
 
-	public KingdomObject(String name, FileConfiguration file) {
+	public KingdomObject(String name) {
 		this.name = name;
-
-		for ( String key : file.getKeys(false) ) {
-			if ( file.getConfigurationSection(key) == null ) {
-				setData(key, file.get(key));
-				delInLocalList("changes", key);
-			} else if ( key.equalsIgnoreCase("ranks") ) {
-				for ( String rank : file.getConfigurationSection("ranks").getKeys(false) ) {
-					ConfigurationSection cs = file.getConfigurationSection("ranks." + rank);
-					if ( cs != null ) {
-						KingdomRank kr = new KingdomRank(rank, cs);
-						this.ranks.add(kr);
-					}
-				}
-			}
-		}
 	}
 
 	public String getName() {
@@ -73,31 +53,6 @@ public class KingdomObject extends KingdomData {
 		return this.ranks.size() != 0 ? this.ranks.get(0) : null;
 	}
 
-	public ArrayList<Player> getOnlineMembers() {
-		ArrayList<Player> online = new ArrayList<>();
-		
-		for ( KingdomUser user : KingdomCraft.getApi().getUsers() ) {
-			if ( user.getKingdom() == this && user.getPlayer() != null ) {
-				online.add(user.getPlayer());
-			}
-		}
-		
-		return online;
-	}
-
-	public ArrayList<KingdomUser> getMembers() {
-		ArrayList<KingdomUser> members = new ArrayList<>();
-
-		List<KingdomUser> users = KingdomCraft.getApi().getAllUsers();
-		for ( KingdomUser user : users) {
-			if ( user.getKingdom() == this ) {
-				members.add(user);
-			}
-		}
-
-		return members;
-	}
-	
 	public Location getSpawn() {
 		if ( !hasData("spawn") ) return null;
 		String[] split = ((String) getData("spawn")).split(" , ");
@@ -121,8 +76,8 @@ public class KingdomObject extends KingdomData {
 		return this.ranks.contains(rank);
 	}
 
-	public ArrayList<KingdomRank> getRanks() {
-		return new ArrayList<>(this.ranks);
+	public List<KingdomRank> getRanks() {
+		return this.ranks;
 	}
 
 	public KingdomRank getRank(String name) {
@@ -132,63 +87,4 @@ public class KingdomObject extends KingdomData {
 		return null;
 	}
 
-	public void save(FileConfiguration file) {
-		for ( String key : this.data.keySet() ) {
-			if ( file.get(key) == null ) {
-				file.set(key, this.data.get(key));
-			} else if ( hasInLocalList("changes", key) ) {
-				file.set(key, this.data.get(key));
-			}
-		}
-
-		for ( KingdomRank kr : this.ranks ) {
-			kr.save(file, "ranks." + kr.getName());
-		}
-	}
-
-	// PERMISSIONS
-
-	/*
-	public static final HashMap<String, PermissionAttachment> playerperms = new HashMap<String, PermissionAttachment>();
-	
-	public void givePerms(Player p, String rank) {
-		if ( rank == null || p == null) return;
-		ArrayList<String> perms;
-		
-		File file = new File(KingdomCraft.getPlugin(KingdomCraft.class).getDataFolder() + "/kingdoms/", name + ".yml");
-		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-		String path = "ranks." + rank + ".permissions";
-		if ( config.get(path) == null ) return;
-		
-		perms = new ArrayList<String>(config.getStringList(path));
-		
-		ArrayList<String> applyperms = new ArrayList<String>();
-		
-		PermissionAttachment attachment = p.addAttachment(KingdomCraft.getPlugin(KingdomCraft.class));
-		
-		for ( String perm : perms ) {
-			if ( hasRank(perm) ) {
-				ArrayList<String> extrarankperms = new ArrayList<String>(config.getStringList("ranks." + perm + ".permissions"));
-				for ( String extraperm : extrarankperms ) {
-					if ( !hasRank(extraperm) ) {
-						if ( !applyperms.contains(extraperm) ) applyperms.add(extraperm);
-					}
-				}
-			} else {
-				if ( !applyperms.contains(perm) ) applyperms.add(perm);
-			}
-		}
-		
-		for ( String perm : applyperms ) {
-			try {
-				if (perm.startsWith("-")) attachment.setPermission(perm.replaceFirst("-", ""), false);
-				else if (!attachment.getPermissions().containsKey(perm)) attachment.setPermission(perm, true);
-			} catch (Exception e) {
-				System.out.println("Could not give player " + p.getName() + " with rank " + rank + " the permission '" + perm + "'!");
-			}
-		}
-		
-		playerperms.put(p.getName(), attachment);
-	}
-	*/
 }

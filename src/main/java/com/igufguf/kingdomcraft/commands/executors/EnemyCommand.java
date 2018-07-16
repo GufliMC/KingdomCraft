@@ -34,17 +34,21 @@ import java.util.ArrayList;
  **/
 public class EnemyCommand extends CommandBase {
 
-	public EnemyCommand() {
+	private final KingdomCraft plugin;
+
+	public EnemyCommand(KingdomCraft plugin) {
 		super("enemy", "kingdom.enemy", true);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 2 ) {
 			ArrayList<String> kingdoms = new ArrayList<>();
-			for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			return kingdoms;
@@ -57,37 +61,38 @@ public class EnemyCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
+		if ( plugin.getApi().getUserManager().getUser(p).getKingdom() == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
-		if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
-		}
-		
-		KingdomObject senderkd = KingdomCraft.getApi().getUser(p).getKingdom();
-		KingdomObject targetkd = KingdomCraft.getApi().getKingdom(args[0]);
-
-		if ( KingdomCraft.getApi().getRelation(senderkd, targetkd) == KingdomRelation.ENEMY ) {
-			KingdomCraft.getMsg().send(sender, "cmdEnemyAlready", targetkd.getName());
+		if ( plugin.getApi().getKingdomManager().getKingdom(args[0]) == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 			return false;
 		}
 
-		KingdomCraft.getApi().setRelation(senderkd, targetkd, KingdomRelation.ENEMY);
-		KingdomCraft.getApi().setRelation(targetkd, senderkd, KingdomRelation.ENEMY);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		KingdomObject senderkd = plugin.getApi().getUserManager().getKingdom(user);
+		KingdomObject targetkd = plugin.getApi().getKingdomManager().getKingdom(args[0]);
 
-		KingdomCraft.getMsg().send(sender, "cmdEnemySuccess", targetkd.getName());
+		if ( plugin.getApi().getRelationManager().getRelation(senderkd, targetkd) == KingdomRelation.ENEMY ) {
+			plugin.getMsg().send(sender, "cmdEnemyAlready", targetkd.getName());
+			return false;
+		}
+
+		plugin.getApi().getRelationManager().setRelation(senderkd, targetkd, KingdomRelation.ENEMY);
+		plugin.getApi().getRelationManager().setRelation(targetkd, senderkd, KingdomRelation.ENEMY);
+
+		plugin.getMsg().send(sender, "cmdEnemySuccess", targetkd.getName());
 
 		for ( Player on : Bukkit.getOnlinePlayers() ) {
-			KingdomUser ku = KingdomCraft.getApi().getUser(on);
-			if ( ku.getKingdom() == senderkd && on != p) {
-				KingdomCraft.getMsg().send(sender, "cmdEnemySuccessMembers", targetkd.getName());
-			} else if ( ku.getKingdom() == targetkd ) {
-				KingdomCraft.getMsg().send(sender, "cmdEnemySuccessTarget", senderkd.getName());
+			KingdomUser ku = plugin.getApi().getUserManager().getUser(on);
+			if ( ku.getKingdom().equals(senderkd.getName()) && on != p) {
+				plugin.getMsg().send(sender, "cmdEnemySuccessMembers", targetkd.getName());
+			} else if ( ku.getKingdom().equals(targetkd.getName()) ) {
+				plugin.getMsg().send(sender, "cmdEnemySuccessTarget", senderkd.getName());
 			}
 		}
 

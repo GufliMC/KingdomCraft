@@ -5,7 +5,6 @@ import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,10 +32,14 @@ import java.util.ArrayList;
  **/
 public class LeaveCommand extends CommandBase {
 
-	public LeaveCommand() {
+	private final KingdomCraft plugin;
+
+	public LeaveCommand(KingdomCraft plugin) {
 		super("leave", "kingdom.leave", true);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -49,27 +52,27 @@ public class LeaveCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 0 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
-		KingdomUser user = KingdomCraft.getApi().getUser(p);
-		KingdomObject kingdom = user.getKingdom();
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
 
 		if ( kingdom == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
+			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 
-		KingdomCraft.getApi().setKingdom(user, null);
+		plugin.getApi().getUserManager().setKingdom(user, null);
 
-		KingdomCraft.getMsg().send(sender, "cmdLeaveSuccess", kingdom.getName());
+		plugin.getMsg().send(sender, "cmdLeaveSuccess", kingdom.getName());
 
-		for ( Player member : kingdom.getOnlineMembers() ) {
-			KingdomCraft.getMsg().send(member, "cmdLeaveSuccessMembers", p.getName());
+		for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
+			plugin.getMsg().send(member, "cmdLeaveSuccessMembers", p.getName());
 		}
 
-		if ( KingdomCraft.getConfg().has("spawn-on-kingdom-leave") && KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-leave") ) {
+		if ( plugin.getCfg().has("spawn-on-kingdom-leave") && plugin.getCfg().getBoolean("spawn-on-kingdom-leave") ) {
 			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + p.getName());
 		}
 		return false;

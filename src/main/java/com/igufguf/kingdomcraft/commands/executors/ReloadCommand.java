@@ -30,10 +30,14 @@ import java.util.ArrayList;
  **/
 public class ReloadCommand extends CommandBase {
 
-	public ReloadCommand() {
+	private final KingdomCraft plugin;
+
+	public ReloadCommand(KingdomCraft plugin) {
 		super("reload", "kingdom.reload", false);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -44,13 +48,13 @@ public class ReloadCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		
-		sender.sendMessage(KingdomCraft.prefix + "Reloading kingdomcraft...");
+		sender.sendMessage(plugin.getPrefix() + "Reloading kingdomcraft...");
 		
-		KingdomCraft kdc = KingdomCraft.getPlugin(KingdomCraft.class);
+		KingdomCraft kdc = plugin;
 
 		Bukkit.getServer().getPluginManager().disablePlugin(kdc);
 		Bukkit.getServer().getPluginManager().enablePlugin(kdc);

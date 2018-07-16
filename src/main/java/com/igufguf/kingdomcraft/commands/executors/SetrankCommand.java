@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.commands.executors;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandBase;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
+import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
@@ -32,21 +33,26 @@ import java.util.ArrayList;
  **/
 public class SetrankCommand extends CommandBase {
 
-	public SetrankCommand() {
+	private KingdomCraft plugin;
+
+	public SetrankCommand(KingdomCraft plugin) {
 		super("setrank", "kingdom.setrank", false);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 3 ) {
 			String username = args[1];
-			KingdomUser user = KingdomCraft.getApi().getUser(username);
+			KingdomUser user = plugin.getApi().getUserManager().getUser(username);
+			KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
 
 			if ( user != null && user.getKingdom() != null ) {
 				ArrayList<String> ranks = new ArrayList<>();
-				for ( KingdomRank rank : user.getKingdom().getRanks() ) {
+				for ( KingdomRank rank : kingdom.getRanks() ) {
                     if ( rank.getName().toLowerCase().startsWith(args[3].toLowerCase()) ) ranks.add(rank.getName());
                 }
 				return ranks;
@@ -58,47 +64,49 @@ public class SetrankCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 2 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		String username = args[0];
-		KingdomUser user = KingdomCraft.getApi().getUser(username);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(username);
 		
 		if ( user == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer");
+			plugin.getMsg().send(sender, "cmdDefaultNoPlayer");
 			return false;
 		}
 		if ( user.getKingdom() == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
+			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
 			return false;
 		}
 
+		KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
+
 		KingdomRank rank = null;
-		for ( KingdomRank r : user.getKingdom().getRanks() ) {
+		for ( KingdomRank r : kingdom.getRanks() ) {
 			if ( r.getName().equalsIgnoreCase(args[1]) ) rank = r;
 		}
 
 		if ( rank == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdRankNotExist");
+			plugin.getMsg().send(sender, "cmdRankNotExist");
 			return false;
 		}
 
-		if ( (sender instanceof Player) && user.getKingdom() != KingdomCraft.getApi().getUser((Player) sender).getKingdom()
+		if ( (sender instanceof Player) && !user.getKingdom().equals(plugin.getApi().getUserManager().getUser((Player) sender).getKingdom())
 				&& !sender.hasPermission(this.permission + ".other") ) {
-			KingdomCraft.getMsg().send(sender, "cmdNoPermissionCmd");
+			plugin.getMsg().send(sender, "cmdNoPermissionCmd");
 			return false;
 		}
 
 		user.setData("rank", rank.getName());
-		KingdomCraft.getMsg().send(sender, "cmdRankSenderChange", user.getName(), rank.getName());
+		plugin.getMsg().send(sender, "cmdRankSenderChange", user.getName(), rank.getName());
 
 		if ( user.getPlayer() != null ) {
-			KingdomCraft.getMsg().send(sender, "cmdRankTargetChange", rank.getName());
+			plugin.getMsg().send(sender, "cmdRankTargetChange", rank.getName());
 		}
 		
 		//save new rank because user is offline
-		if ( KingdomCraft.getApi().getUser(username) == null ) {
-			KingdomCraft.getPlugin().save(user);
+		if ( plugin.getApi().getUserManager().getUser(username) == null ) {
+			plugin.getApi().getUserManager().save(user);
 		}
 		
 		return false;

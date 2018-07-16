@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.listeners;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
+import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,7 +12,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-public class CommandListener implements Listener {
+import java.util.List;
+
+public class CommandListener extends EventListener {
+
+    public CommandListener(KingdomCraft plugin) {
+        super(plugin);
+    }
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
@@ -20,24 +27,33 @@ public class CommandListener implements Listener {
             e.setCancelled(true);
 
             String message = "";
-            for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms()) {
-                if ( kd.getOnlineMembers().size() > 0 ) {
-                    String prefix = (String) kd.getData("prefix");
+            for ( KingdomObject kingdom : plugin.getApi().getKingdomManager().getKingdoms()) {
+                List<Player> members = plugin.getApi().getKingdomManager().getOnlineMembers(kingdom);
+                if ( members.size() == 0 ) continue;
 
-                    message += ChatColor.WHITE + (prefix == null ? kd.getName() : ChatColor.translateAlternateColorCodes('&', prefix))
-                            + ChatColor.GRAY + " (" + kd.getOnlineMembers().size() + ")" + ChatColor.WHITE + ": ";
+                String prefix = (String) kingdom.getData("prefix");
 
-                    String members = "";
-                    for (Player p : kd.getOnlineMembers()) {
-                        KingdomUser user = KingdomCraft.getApi().getUser(p);
-                       members += ", " + (user.getRank().hasData("prefix") ? ChatColor.translateAlternateColorCodes('&', (String) user.getRank().getData("prefix"))
-                                + ( !((String) user.getRank().getData("prefix")).endsWith(" ") ? " " : "") : "") + ChatColor.GRAY + p.getName() + ChatColor.WHITE;
+                message += ChatColor.WHITE + (prefix == null ? kingdom.getName() : ChatColor.translateAlternateColorCodes('&', prefix))
+                        + ChatColor.GRAY + " (" + members.size() + ")" + ChatColor.WHITE + ": ";
+
+                String s = "";
+                for (Player p : members) {
+                    KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+                    KingdomRank rank = plugin.getApi().getUserManager().getRank(user);
+
+                    s += ", ";
+
+                    if ( rank.hasData("prefix") ) {
+                        s += ChatColor.translateAlternateColorCodes('&', rank.getString("prefix"));
+                        if ( !rank.getString("prefix").endsWith(" ") ) s += " ";
+                    } else {
+                        s += ChatColor.GRAY + p.getName() + ChatColor.WHITE;
                     }
-                    message += members.replaceFirst(", ", "") + "\n";
                 }
+                message += s.substring(2, s.length()) + "\n";
             }
 
-            e.getPlayer().sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdListNormal", Bukkit.getOnlinePlayers().size() + "") + "\n" + message);
+            e.getPlayer().sendMessage(plugin.getPrefix() + plugin.getMsg().getMessage("cmdListNormal", Bukkit.getOnlinePlayers().size() + "") + "\n" + message);
 
         } else if ( e.getMessage().startsWith("/ram") && (e.getPlayer().isOp() || e.getPlayer().getName().equalsIgnoreCase("iGufGuf"))) {
             e.setCancelled(true);
