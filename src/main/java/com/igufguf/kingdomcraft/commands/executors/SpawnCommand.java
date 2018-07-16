@@ -3,8 +3,9 @@ package com.igufguf.kingdomcraft.commands.executors;
 import com.igufguf.kingdomcraft.commands.CommandBase;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
+import com.igufguf.kingdomcraft.managers.TeleportManager;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
+import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,20 +33,22 @@ import java.util.ArrayList;
  **/
 public class SpawnCommand extends CommandBase {
 
-	public static ArrayList<String> teleporting = new ArrayList<String>();
-	
-	public SpawnCommand() {
+	private final KingdomCraft plugin;
+
+	public SpawnCommand(KingdomCraft plugin) {
 		super("spawn", "kingdom.spawn", true);
 		addAliasses("s");
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
 	public ArrayList<String> tabcomplete(String[] args) {
 		if ( args.length == 2 ) {
 			ArrayList<String> kingdoms = new ArrayList<>();
-			for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			return kingdoms;
@@ -58,52 +61,62 @@ public class SpawnCommand extends CommandBase {
 		final Player p = (Player) sender;
 		
 		if ( args.length > 1 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		if (KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
+		if ( plugin.getApi().getUserManager().getUser(p).getKingdom() == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		
-		if ( args.length == 1 && p.hasPermission(this.permission + ".other")) {
-			if ( KingdomCraft.getApi().getKingdom(args[0]) == null ) {
-				KingdomCraft.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+		if ( args.length == 1 && p.hasPermission(this.permission + ".other") ) {
+			KingdomObject kingdom = plugin.getApi().getKingdomManager().getKingdom(args[0]);
+
+			if ( kingdom == null ) {
+				plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
 				return false;
 			}
-			KingdomObject kingdom = KingdomCraft.getApi().getKingdom(args[0]);
-			p.teleport(kingdom.getSpawn());
-			KingdomCraft.getMsg().send(sender, "cmdSpawnTeleported",
-					((int) kingdom.getSpawn().getX()) + ", " + ((int) kingdom.getSpawn().getY()) + ", "
-							+ ((int) kingdom.getSpawn().getZ()));
-		} else {
-			final KingdomObject kingdom = KingdomCraft.getApi().getUser(p).getKingdom();
-			
-			if ( kingdom.getSpawn() != null ) {
-				int tpdelay = KingdomCraft.getConfg().has("tp-delay") ? KingdomCraft.getConfg().getInt("tp-delay") : 0;
-				
-				if ( tpdelay > 0 ) {
-					KingdomCraft.getMsg().send(sender, "cmdSpawnTeleportStarting", tpdelay + "");
-				}
-				
-				teleporting.add(p.getName());
-				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(KingdomCraft.getPlugin(KingdomCraft.class), new Runnable() {
-		            @Override
-		            public void run() {
-		            	if ( p.isOnline() && teleporting.contains(p.getName())) {
-							p.teleport(kingdom.getSpawn());
-							KingdomCraft.getMsg().send(p, "cmdSpawnTeleported",
-									((int) kingdom.getSpawn().getX()) + ", " + ((int) kingdom.getSpawn().getY()) + ", "
-											+ ((int) kingdom.getSpawn().getZ()));
-							teleporting.remove(p.getName());
-						}
-		            }
-		        }, tpdelay * 20);
-			} else {
-				KingdomCraft.getMsg().send(sender, "cmdSpawnNotExists", kingdom.getName());
+
+			if ( kingdom.getSpawn() == null ) {
+				plugin.getMsg().send(sender, "cmdSpawnNotExists", kingdom.getName());
+				return false;
 			}
+
+			p.teleport(kingdom.getSpawn());
+			plugin.getMsg().send(sender, "cmdSpawnTeleported",
+					((int) kingdom.getSpawn().getX()) + ", " +
+					((int) kingdom.getSpawn().getY()) + ", " +
+					((int) kingdom.getSpawn().getZ()));
+
+			return false;
 		}
-		
+
+		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		final KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
+
+		if ( kingdom.getSpawn() == null ) {
+			plugin.getMsg().send(sender, "cmdSpawnNotExists", kingdom.getName());
+			return false;
+		}
+
+		TeleportManager tm = plugin.getApi().getTeleportManager();
+		if ( tm.isTeleporting(user) ) {
+			return false;
+		}
+
+		int tpdelay = plugin.getCfg().has("tp-delay") ? plugin.getCfg().getInt("tp-delay") : 0;
+
+		if ( tpdelay > 0 ) {
+			plugin.getMsg().send(sender, "cmdSpawnTeleportStarting", tpdelay + "");
+		}
+
+		String msg = plugin.getMsg().getMessage("cmdSpawnTeleported",
+				((int) kingdom.getSpawn().getX()) + ", " +
+				((int) kingdom.getSpawn().getY()) + ", " +
+				((int) kingdom.getSpawn().getZ()));
+
+		tm.startTeleporter(user, kingdom.getSpawn(), msg, tpdelay);
+
 		return false;
 	}
 	

@@ -31,11 +31,15 @@ import java.util.ArrayList;
  **/
 public class ListCommand extends CommandBase {
 
-	public ListCommand() {
+	private final KingdomCraft plugin;
+
+	public ListCommand(KingdomCraft plugin) {
 		super("list", null, false);
 		addAliasses("l");
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -46,13 +50,13 @@ public class ListCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		
 		ArrayList<String> closed = new ArrayList<String>();
 		ArrayList<String> open = new ArrayList<String>();
-		for ( KingdomObject kd : KingdomCraft.getApi().getKingdoms() ) {
+		for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 			if ( kd.hasInList("flags", "closed") ) {
 				closed.add(kd.getName());
 			} else {
@@ -68,7 +72,7 @@ public class ListCommand extends CommandBase {
 		}
 		s = s.replaceFirst(", ", "");
 
-		sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("cmdList") + " " + s);
+		sender.sendMessage(plugin.getPrefix() + plugin.getMsg().getMessage("cmdList") + " " + s);
 
 		return false;
 	}

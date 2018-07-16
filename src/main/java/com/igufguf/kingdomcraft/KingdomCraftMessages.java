@@ -33,15 +33,19 @@ import java.util.regex.Pattern;
  **/
 public class KingdomCraftMessages {
 
-	private FileConfiguration messages;
+	private final KingdomCraft plugin;
+	private final FileConfiguration messages;
 
 	public KingdomCraftMessages(KingdomCraft plugin) {
+		this.plugin = plugin;
+
 		InputStream in = plugin.getResource("messages.yml");
 
 		try {
 			messages = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
 		} catch (Exception ex) {
 			System.out.println("!!! ERROR !!! \nCouldn't retrieve default language! This can cause wrong message display!\n\n");
+			throw ex;
 		}
 	}
 
@@ -68,6 +72,6 @@ public class KingdomCraftMessages {
 	public void send(CommandSender p, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 
-		p.sendMessage(KingdomCraft.prefix + getMessage(name, placeholders));
+		p.sendMessage(plugin.getPrefix() + getMessage(name, placeholders));
 	}
 }

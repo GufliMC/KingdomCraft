@@ -5,7 +5,6 @@ import com.igufguf.kingdomcraft.commands.CommandBase;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,10 +32,14 @@ import java.util.ArrayList;
  **/
 public class KickCommand extends CommandBase {
 
-	public KickCommand() {
+	private final KingdomCraft plugin;
+
+	public KickCommand(KingdomCraft plugin) {
 		super("kick", "kingdom.kick", true);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -49,46 +52,46 @@ public class KickCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		String username = args[0];
-		KingdomUser user = KingdomCraft.getApi().getUser(username);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(username);
 		
 		if ( user == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer", username);
+			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
 			return false;
 		}
 		if ( user.getKingdom() == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultTargetNoKingdom", user.getName());
+			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom", user.getName());
 			return false;
 		}
 		
-		if ( p.hasPermission(this.permission + ".other") || (KingdomCraft.getApi().getUser(p) != null && KingdomCraft.getApi().getUser(p).getKingdom() == user.getKingdom()) ) {
-			KingdomObject kingdom = user.getKingdom();
+		if ( p.hasPermission(this.permission + ".other") || (plugin.getApi().getUserManager().getUser(p) != null && plugin.getApi().getUserManager().getUser(p).getKingdom() == user.getKingdom()) ) {
+			KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
 
-			KingdomCraft.getApi().setKingdom(user, null);
+			plugin.getApi().getUserManager().setKingdom(user, null);
 
-			for ( Player member : kingdom.getOnlineMembers() ) {
-				KingdomCraft.getMsg().send(member, "cmdLeaveSuccessMembers", user.getName());
+			for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
+				plugin.getMsg().send(member, "cmdLeaveSuccessMembers", user.getName());
 			}
 
-			KingdomCraft.getMsg().send(sender, "cmdKickSender", user.getName(), kingdom.getName());
+			plugin.getMsg().send(sender, "cmdKickSender", user.getName(), kingdom.getName());
 
 			if ( user.getPlayer() != null ) {
-				KingdomCraft.getMsg().send(user.getPlayer(), "cmdKickTarget", kingdom.getName());
+				plugin.getMsg().send(user.getPlayer(), "cmdKickTarget", kingdom.getName());
 			}
 			
-			if ( KingdomCraft.getConfg().getBoolean("spawn-on-kingdom-leave") && user.getPlayer() != null ) {
+			if ( plugin.getCfg().getBoolean("spawn-on-kingdom-leave") && user.getPlayer() != null ) {
 				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + user.getName());
 			}
 		} else {
-			KingdomCraft.getMsg().send(sender, "noPermissionCmd");
+			plugin.getMsg().send(sender, "noPermissionCmd");
 		}
 		
 		//save user when player is not online
 		if ( user.getPlayer() == null ) {
-			KingdomCraft.getPlugin().save(user);
+			plugin.getApi().getUserManager().save(user);
 		}
 		
 		return true;

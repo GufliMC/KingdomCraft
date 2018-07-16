@@ -3,13 +3,34 @@ package com.igufguf.kingdomcraft.objects;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class KingdomData {
 
-    protected final HashMap<String, Object> data = new HashMap<>();
+    protected final Map<String, Object> data = new HashMap<>();
 
     public final Object getData(String key) {
         return data.get(key);
+    }
+
+    public final int getInt(String key) {
+        return (int) getData(key);
+    }
+
+    public final long getLong(String key) {
+        return (long) getData(key);
+    }
+
+    public final String getString(String key) {
+        return (String) getData(key);
+    }
+
+    public final boolean getBoolean(String key) {
+        return (boolean) getData(key);
+    }
+
+    public final double getDouble(String key) {
+        return (double) getData(key);
     }
 
     public final void setData(String key, Object value) {
@@ -21,6 +42,9 @@ public abstract class KingdomData {
         return data.containsKey(key);
     }
 
+    public final Map<String, Object> getDataMap() {
+        return data;
+    }
 
     /** Easy adding / removing things from a list **/
 
@@ -63,6 +87,26 @@ public abstract class KingdomData {
         return localdata.get(key);
     }
 
+    public final int getLocalInt(String key) {
+        return (int) getLocalData(key);
+    }
+
+    public final long getLocalLong(String key) {
+        return (long) getLocalData(key);
+    }
+
+    public final String getLocalString(String key) {
+        return (String) getLocalData(key);
+    }
+
+    public final boolean getLocalBoolean(String key) {
+        return (boolean) getLocalData(key);
+    }
+
+    public final double getLocalDouble(String key) {
+        return (double) getLocalData(key);
+    }
+
     public boolean hasLocalData(String key) {
         return localdata.containsKey(key);
     }
@@ -96,5 +140,9 @@ public abstract class KingdomData {
             List l = (List) getLocalData(list);
             l.remove(value);
         }
+    }
+
+    public final Map<String, Object> getLocalDataMap() {
+        return localdata;
     }
 }

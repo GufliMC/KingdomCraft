@@ -31,10 +31,14 @@ import java.util.ArrayList;
  **/
 public class InviteCommand extends CommandBase {
 
-	public InviteCommand() {
+	private final KingdomCraft plugin;
+
+	public InviteCommand(KingdomCraft plugin) {
 		super("invite", "kingdom.invite", true);
-		
-		CommandHandler.register(this);
+
+		this.plugin = plugin;
+
+		plugin.getCmdHandler().register(this);
 	}
 	
 	@Override
@@ -47,43 +51,43 @@ public class InviteCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultUsage");
+			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
-		if ( KingdomCraft.getApi().getUser(p).getKingdom() == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
+		if ( plugin.getApi().getUserManager().getUser(p).getKingdom() == null ) {
+			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
 			return false;
 		}
 		
 		String username = args[0];
-		KingdomUser user = KingdomCraft.getApi().getUser(username);
+		KingdomUser user = plugin.getApi().getUserManager().getUser(username);
 		
 		if ( user == null ) {
-			KingdomCraft.getMsg().send(sender, "cmdDefaultNoPlayer", username);
+			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
 			return false;
 		}
 
-		if ( user.getKingdom() == KingdomCraft.getApi().getUser(p).getKingdom() ) {
-			KingdomCraft.getMsg().send(sender, "cmdInviteAlready", user.getName());
+		if ( user.getKingdom().equals(plugin.getApi().getUserManager().getUser(p).getKingdom()) ) {
+			plugin.getMsg().send(sender, "cmdInviteAlready", user.getName());
 			return false;
 		}
 
 
-		String kingdom = KingdomCraft.getApi().getUser(p).getKingdom().getName();
+		String kingdom = plugin.getApi().getUserManager().getUser(p).getKingdom();
 		if ( user.hasInList("invites", kingdom) ) {
-			KingdomCraft.getMsg().send(sender, "cmdInviteAlready", user.getName());
+			plugin.getMsg().send(sender, "cmdInviteAlready", user.getName());
 			return false;
 		}
 
 		user.addInList("invites", kingdom);
 
 		if ( user.getPlayer() != null ) {
-			KingdomCraft.getMsg().send(user.getPlayer(), "cmdInviteTarget", kingdom);
+			plugin.getMsg().send(user.getPlayer(), "cmdInviteTarget", kingdom);
 		} else {
-			KingdomCraft.getPlugin().save(user);
+			plugin.getApi().getUserManager().save(user);
 		}
 
-		KingdomCraft.getMsg().send(sender, "cmdInviteSender", user.getName(), kingdom);
+		plugin.getMsg().send(sender, "cmdInviteSender", user.getName(), kingdom);
 
 		return false;
 	}

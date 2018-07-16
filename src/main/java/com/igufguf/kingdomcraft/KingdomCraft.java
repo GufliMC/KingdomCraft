@@ -2,24 +2,19 @@ package com.igufguf.kingdomcraft;
 
 import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.commands.executors.*;
-import com.igufguf.kingdomcraft.listeners.CommandListener;
-import com.igufguf.kingdomcraft.objects.KingdomData;
+import com.igufguf.kingdomcraft.listeners.*;
+import com.igufguf.kingdomcraft.managers.ChatManager;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.listeners.*;
-import com.igufguf.kingdomcraft.commands.executors.ListCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.*;
-import java.util.Arrays;
+import java.io.IOException;
 
 /**
  * Copyrighted 2017 iGufGuf
@@ -42,51 +37,57 @@ import java.util.Arrays;
  **/
 public class KingdomCraft extends JavaPlugin {
 
-	public static String prefix = ChatColor.RED + ChatColor.BOLD.toString() + "KingdomCraft" + ChatColor.DARK_GRAY + ChatColor.BOLD + " > " + ChatColor.GRAY;
+	private String prefix = ChatColor.RED + ChatColor.BOLD.toString() + "KingdomCraft" + ChatColor.DARK_GRAY + ChatColor.BOLD + " > " + ChatColor.GRAY;
 
-	private static com.igufguf.kingdomcraft.KingdomCraft plugin;
+	private KingdomCraft plugin;
 
-	private static KingdomCraftApi api;
-	private static KingdomCraftConfig config;
-	private static KingdomCraftMessages messages;
-	private static ChatListener chat;
-	
+	private KingdomCraftApi api;
+	private KingdomCraftConfig config;
+	private KingdomCraftMessages messages;
+
+	private CommandHandler cmdHandler;
+
 	public void onEnable() {
 		plugin = this;
 
 		//load defaults
-		config = new KingdomCraftConfig(this);
-		api = new KingdomCraftApi(this);
-		messages = new KingdomCraftMessages(this);
+		try {
+			config = new KingdomCraftConfig(this);
+			messages = new KingdomCraftMessages(this);
+			api = new KingdomCraftApi(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new ConnectionListener(), this);
-		pm.registerEvents(chat = new ChatListener(this), this);
-		pm.registerEvents(new MoveListener(), this);
-		pm.registerEvents(new DamageListener(), this);
-		pm.registerEvents(new RespawnListener(), this);
-		pm.registerEvents(new CommandListener(), this);
+		pm.registerEvents(new ConnectionListener(this), this);
+		pm.registerEvents(new MoveListener(this), this);
+		pm.registerEvents(new DamageListener(this), this);
+		pm.registerEvents(new RespawnListener(this), this);
+		pm.registerEvents(new CommandListener(this), this);
+
+		if ( api.getChatManager().isChatSystemEnabled() )
+			pm.registerEvents(new ChatListener(this), this);
 
 		//loading the commands
+		this.cmdHandler = new CommandHandler(this);
+
 		PluginCommand cmd = getCommand("kingdom");
-		cmd.setAliases(Arrays.asList("k", "kd", "kingdoms", "kingdomcraft", "kdc"));
-		
-		CommandHandler cmdhandler = new CommandHandler();
-		cmd.setExecutor(cmdhandler);
-		cmd.setTabCompleter(cmdhandler);
+		cmd.setExecutor(cmdHandler);
+		cmd.setTabCompleter(cmdHandler);
 		
 		loadCommands();
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
-			KingdomUser user = KingdomCraft.getApi().getOfflineUser(p.getUniqueId());
-			KingdomCraft.getApi().registerUser(user);
+			KingdomUser user = api.getUserManager().getOfflineUser(p.getUniqueId());
+			api.getUserManager().registerUser(user);
 		}
 
 		new BukkitRunnable() {
 			public void run() {
 				save();
 			}
-		}.runTaskTimer(this, 60 * 20L, 60 * 20L);
+		}.runTaskTimer(this, 60 * 20L, 60 * 20L); // every minute
 	}
 	
 	public void onDisable() {
@@ -94,99 +95,57 @@ public class KingdomCraft extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
-		new InfoCommand();
-		new InviteCommand();
-		new JoinCommand();
-		new KickCommand();
-		new LeaveCommand();
-		new ListCommand();
-		new ReloadCommand();
-		new SetrankCommand();
-		new SetspawnCommand();
-		new SetstatusCommand();
-		new SpawnCommand();
-		new FriendlyCommand();
-		new EnemyCommand();
-		new NeutralCommand();
-		new ChannelCommand();
-		new HelpCommand();
-		new SetCommand();
-		new SocialSpyCommand();
+		new InfoCommand(this);
+		new InviteCommand(this);
+		new JoinCommand(this);
+		new KickCommand(this);
+		new LeaveCommand(this);
+		new ListCommand(this);
+		new ReloadCommand(this);
+		new SetrankCommand(this);
+		new SetspawnCommand(this);
+		new SetstatusCommand(this);
+		new SpawnCommand(this);
+		new FriendlyCommand(this);
+		new EnemyCommand(this);
+		new NeutralCommand(this);
+		new ChannelCommand(this);
+		new HelpCommand(this);
+		new SetCommand(this);
+		new SocialSpyCommand(this);
 	}
 
 	public void save() {
-		for ( KingdomObject kd : api.getKingdoms() ) {
-			try {
-				File kingdomfile = new File(getDataFolder(), "/kingdoms/" + kd.getName() + ".yml");
-				FileConfiguration kingdomcfg = YamlConfiguration.loadConfiguration(kingdomfile);
-				kd.save(kingdomcfg);
-
-				kingdomcfg.save(kingdomfile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for ( KingdomObject ko : api.getKingdomManager().getKingdoms() ) {
+			api.getKingdomManager().saveKingdom(ko);
 		}
 
-		File usersfile = new File(getDataFolder(), "users.yml");
-		FileConfiguration userscfg = YamlConfiguration.loadConfiguration(usersfile);
-		for ( KingdomUser user : api.getUsers() ) {
-			user.save(userscfg);
-		}
-
-		try {
-			userscfg.save(usersfile);
-		} catch (IOException e) {
-			e.printStackTrace();
+		for ( KingdomUser user : api.getUserManager().getUsers() ) {
+			api.getUserManager().save(user);
 		}
 	}
 
-	public void save(KingdomData object) {
-		if ( object instanceof KingdomObject ) {
-			KingdomObject kd = (KingdomObject) object;
-
-			File kingdomfile = new File(getDataFolder(), "/kingdoms/" + kd.getName() + ".yml");
-			FileConfiguration kingdomcfg = YamlConfiguration.loadConfiguration(kingdomfile);
-			kd.save(kingdomcfg);
-
-			try {
-				kingdomcfg.save(kingdomfile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if ( object instanceof KingdomUser ) {
-			KingdomUser user = (KingdomUser) object;
-
-			File usersfile = new File(getDataFolder(), "users.yml");
-			FileConfiguration userscfg = YamlConfiguration.loadConfiguration(usersfile);
-
-			user.save(userscfg);
-
-			try {
-				userscfg.save(usersfile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public String getPrefix() {
+		return prefix;
 	}
 
-	public static KingdomCraftApi getApi() {
+	public KingdomCraftApi getApi() {
 		return api;
 	}
 
-	public static KingdomCraftConfig getConfg() {
+	public KingdomCraftConfig getCfg() {
 		return config;
 	}
 
-	public static ChatListener getChat() {
-		return chat;
-	}
-
-	public static com.igufguf.kingdomcraft.KingdomCraft getPlugin() {
+	public KingdomCraft getPlugin() {
 		return plugin;
 	}
 
-	public static KingdomCraftMessages getMsg() {
+	public KingdomCraftMessages getMsg() {
 		return messages;
 	}
 
+	public CommandHandler getCmdHandler() {
+		return cmdHandler;
+	}
 }

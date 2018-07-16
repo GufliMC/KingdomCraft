@@ -1,51 +1,57 @@
 # KingdomCraft
 The #1 minecraft kingdom plugin for easily managing your kingdoms!
 
-**__Before using the api be sure to add "KingdomCraft" to your dependencies!__**
+Current version: **v4.3** (untested)
 
-##### Retrieving the **KingdomCraftApi** Object:
-```java
-KingdomCraftApi api = KingdomCraft.getApi();
-```
+*Before using the api be sure to add "KingdomCraft" to your dependencies!*
 
 ##### Retrieving the **KingdomCraft** plugin:
 ```java
-KingdomCraft plugin = KingdomCraft.getPlugin();
+KingdomCraft kdc = (KingdomCraft) Bukkit.getPluginManager().getPlugin("KingdomCraft");
+```
+
+##### Retrieving the **KingdomCraftApi** Object:
+```java
+KingdomCraftApi api = kdc.getApi();
 ```
 
 ##### Using the api to retrieve data from an online user:
 ```java
-KingdomUser user = api.getUser(Player);
-KingdomUser user = api.getUser("iGufGuf");
+KingdomUser user = api.getUserManager().getUser(Player);
+KingdomUser user = api.getUserManager().getUser("iGufGuf");
 ```
 > Retrieving a user with the username will also return if the user is not online
 
 
 ##### Using the api to retrieve data from an offline user:
 ```java
-KingdomUser user = api.getOfflineUser(UUID);
+KingdomUser user = api.getUserManager().getOfflineUser(UUID);
 ```
 > After modifying offline userdata make sure to save the data!
 
 
 ##### Saving a user object:
 ```java
-plugin.save(user);
+api.getUserManager().save(user);
 ```
 
 ##### Using the api to retrieve data from a kingdom:
 ```java
-KingdomObject kd = api.getKingdom("kingdomname");
+KingdomObject kd = api.getKingdomManager().getKingdom("kingdomname");
 ```
 
 ##### Saving the kingdom object:
 ```java
-plugin.save(kd);
+api.getKingdomManager().save(kd);
 ```
 
 ##### Manipulating data of kingdom objects:
 KingdomUser, KingdomObject & KingdomRank all extends on KingdomData
 ```java
+KingdomObject object;
+KingdomUser object;
+KingdomRank object;
+
 if ( object.hasData(key) ) {
     if ( object.getData(key) != value ) {
         object.setData(key, value);
@@ -56,7 +62,7 @@ if ( object.hasData(key) ) {
 
 ##### Getting the relation of a kingdom:
 ```java
-KingdomRelation rel = api.getRelation(kingdom, targetkingdom);
+KingdomRelation rel = api.getRelationManager().getRelation(kingdom, targetkingdom);
 ```
 
 ##### Retrieving a kingdomrank from a kingdom
@@ -66,8 +72,8 @@ KingdomRank rank = kd.getRank("rankname");
 
 ##### Changing the rank/kingdom of a user:
 ```java
-api.setRank(user, rank);
-api.setKingdom(user, kingdom);
+api.getUserManager().setRank(user, rank);
+api.getUserManager().setKingdom(user, kingdom);
 ```
 
 KingdomCraft Custom events
@@ -77,7 +83,7 @@ KingdomCraft Custom events
 Called when a player sends a message that is manipulated with kingdomcraft
 
 **Methods**: 
-getPlayer, getFormat, setFormat, getMessage, setMessage, getReceivers, isCancelled, setCancelled
+getPlayer, getFormat, setFormat(String), getMessage, setMessage(String), getReceivers, isCancelled, setCancelled(boolean)
 
 ### KingdomJoinEvent
 Called when a player joins a kingdom

@@ -25,22 +25,28 @@ import org.bukkit.event.Listener;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class EventListener implements Listener {
+class EventListener implements Listener {
+
+	public final KingdomCraft plugin;
+
+	public EventListener(KingdomCraft plugin) {
+		this.plugin = plugin;
+	}
 
 	public KingdomObject getKingdom(String kdname) {
-		return KingdomCraft.getApi().getKingdom(kdname);
+		return plugin.getApi().getKingdomManager().getKingdom(kdname);
 	}
 	
-	public boolean exists(String kdname) {
-		return KingdomCraft.getApi().getKingdom(kdname) != null;
+	public boolean kingdomExists(String kdname) {
+		return plugin.getApi().getKingdomManager().getKingdom(kdname) != null;
 	}
 	
 	public KingdomObject getKingdom(Player p) {
-		return KingdomCraft.getApi().getUser(p).getKingdom();
+		return plugin.getApi().getUserManager().getKingdom(plugin.getApi().getUserManager().getUser(p));
 	}
 
-	public boolean enabledWorld(World world) {
-		return KingdomCraft.getApi().enabledWorld(world);
+	public boolean isWorldEnabled(World world) {
+		return plugin.getApi().isWorldEnabled(world);
 	}
 	
 }

@@ -3,6 +3,8 @@ package com.igufguf.kingdomcraft.commands;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Copyrighted 2017 iGufGuf
@@ -28,7 +30,7 @@ public abstract class CommandBase {
 	public String permission;
 	public boolean playeronly;
 	public String cmd;
-	public ArrayList<String> aliases = new ArrayList<String>();
+	public List<String> aliases = new ArrayList<String>();
 	
 	public CommandBase(String cmd, String permission, boolean playeronly) {
 		this.cmd = cmd;
@@ -37,9 +39,7 @@ public abstract class CommandBase {
 	}
 	
 	public void addAliasses(String... aliases) {
-		for ( String alias : aliases ) {
-			this.aliases.add(alias);
-		}
+		this.aliases.addAll(Arrays.asList(aliases));
 	}
 	
 	public boolean hasAlias(String alias) {

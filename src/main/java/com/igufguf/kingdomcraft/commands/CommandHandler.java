@@ -1,7 +1,6 @@
 package com.igufguf.kingdomcraft.commands;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,17 +34,26 @@ import java.util.List;
  **/
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
-	private static ArrayList<CommandBase> commands = new ArrayList<>();
+	private final KingdomCraft plugin;
+	private List<CommandBase> commands = new ArrayList<>();
 	
-	public static void register(CommandBase base) {
+	public CommandHandler(KingdomCraft plugin) {
+		this.plugin = plugin;
+	}
+
+	public void register(CommandBase base) {
 		commands.add(0, base);
+	}
+
+	public void unregister(CommandBase base) {
+		commands.remove(base);
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		boolean player = sender instanceof Player;
-		if ( player && !KingdomCraft.getApi().enabledWorld(((Player) sender).getWorld()) ) {
-			sender.sendMessage(KingdomCraft.prefix + KingdomCraft.getMsg().getMessage("noWorld"));
+		if ( player && !plugin.getApi().isWorldEnabled(((Player) sender).getWorld()) ) {
+			plugin.getMsg().send(sender, "noWorld");
 			return false;
 		}
 		
@@ -54,11 +62,11 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			for ( CommandBase cb : commands ) {
 				if ( args[0].equalsIgnoreCase(cb.cmd) || cb.hasAlias(args[0]) ) {
 					if ( !player && cb.playeronly ) {
-						sender.sendMessage(KingdomCraft.prefix + ChatColor.RED + "This command can only be executed by players!");
+						sender.sendMessage(plugin.getPrefix() + ChatColor.RED + "This command can only be executed by players!");
 						return true;
 					} else {
 						if ( cb.permission != null && player && !sender.hasPermission(cb.permission)) {
-							KingdomCraft.getMsg().send(sender, "noPermissionCmd");
+							plugin.getMsg().send(sender, "noPermissionCmd");
 							return true;
 						} else {
 							ArrayList<String> argslist = new ArrayList<>(Arrays.asList(args));
@@ -71,19 +79,19 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 		} else {
 			String prefix = ChatColor.RED + ChatColor.BOLD.toString() + "KingdomCraft" + ChatColor.DARK_GRAY + ChatColor.BOLD + " > " + ChatColor.GRAY;
-			sender.sendMessage(prefix + "v" + KingdomCraft.getPlugin(KingdomCraft.class).getDescription().getVersion() + " | Created by iGufGuf");
-			sender.sendMessage(prefix + "http://www.igufguf.com");
+			sender.sendMessage(prefix + "v" + plugin.getDescription().getVersion() + " | Created by iGufGuf");
+			sender.sendMessage(prefix + "https://www.igufguf.com");
 			sender.sendMessage(prefix + ChatColor.GREEN + "For help type /k help");
 			return true;
 		}
 
-		KingdomCraft.getMsg().send(sender, "noCommand", args[0]);
+		plugin.getMsg().send(sender, "noCommand", args[0]);
 		return true;
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		if ( !KingdomCraft.getApi().enabledWorld(((Player) sender).getWorld()) ) {
+		if ( !plugin.getApi().isWorldEnabled(((Player) sender).getWorld()) ) {
 			return null;
 		}
 		List<CommandBase> cmds = new ArrayList<>(commands);
