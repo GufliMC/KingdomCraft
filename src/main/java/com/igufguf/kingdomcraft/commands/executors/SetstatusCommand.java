@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Copyrighted 2017 iGufGuf
+ * Copyrighted 2018 iGufGuf
  *
  * This file is part of KingdomCraft.
  *

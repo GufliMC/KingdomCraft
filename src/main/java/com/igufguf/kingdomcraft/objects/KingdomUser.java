@@ -1,15 +1,14 @@
 package com.igufguf.kingdomcraft.objects;
 
-import com.igufguf.kingdomcraft.KingdomCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.UUID;
 
 /**
- * Copyrighted 2017 iGufGuf
+ * Copyrighted 2018 iGufGuf
  *
  * This file is part of KingdomCraft.
  *

@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.IOException;
 
 /**
- * Copyrighted 2017 iGufGuf
+ * Copyrighted 2018 iGufGuf
  *
  * This file is part of KingdomCraft.
  *
