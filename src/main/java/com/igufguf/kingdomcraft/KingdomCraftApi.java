@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Copyrighted 2017 iGufGuf
+ * Copyrighted 2018 iGufGuf
  *
  * This file is part of KingdomCraft.
  *

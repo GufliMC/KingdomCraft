@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
- * Copyrighted 2017 iGufGuf
+ * Copyrighted 2018 iGufGuf
  *
  * This file is part of KingdomCraft.
  *

@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 /**
- * Copyrighted 2017 iGufGuf
+ * Copyrighted 2018 iGufGuf
  *
  * This file is part of KingdomCraft.
  *
