@@ -40,6 +40,9 @@ public class MoveListener extends EventListener {
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
 		if ( !isWorldEnabled(e.getPlayer().getWorld()) ) return;
+		if ( e.getTo().getBlockX() == e.getFrom().getBlockX()
+				&& e.getTo().getBlockY() == e.getFrom().getBlockY()
+				&& e.getTo().getBlockZ() == e.getFrom().getBlockZ() ) return;
 
 		Player p = e.getPlayer();
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);

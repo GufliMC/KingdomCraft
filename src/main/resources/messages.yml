@@ -99,3 +99,6 @@ teleportCancel: '&cTeleportation cancelled!'
 chatNoKingdom: '&cYou need a kingdom to start chatting!'
 
 chatAdvertising: '&7The player &8{0} &7is advertising: {1}'
+
+errorInvalidNumber: '&4{0} &cis not a valid number!'
+errorInvalidString: '&4{0} &cis not a valid string!'

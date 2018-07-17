@@ -102,6 +102,16 @@ public class UserManager {
             ku.delInLocalList("changes", key);
         }
 
+        // failsaves on removed kingdoms / ranks while user was offline
+        if ( ku.getKingdom() != null && getKingdom(ku) == null ) {
+            ku.setData("kingdom", null);
+        }
+
+        if ( ku.getRank() != null && getRank(ku) == null ) {
+            ku.setData("rank", null);
+        }
+
+        // set user in default rank if no rank was set and he is in a kingdom
         if ( getKingdom(ku) != null && ku.getRank() == null ) {
             setDefaultRank(ku);
         }

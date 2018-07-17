@@ -63,7 +63,7 @@ public class KingdomObject extends KingdomData {
 		Location loc = new Location(Bukkit.getWorld(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]), Double.valueOf(split[3]));
 		if ( split.length == 6 ) {
 			loc.setYaw(Float.valueOf(split[4]));
-			loc.setYaw(Float.valueOf(split[5]));
+			loc.setPitch(Float.valueOf(split[5]));
 		}
 		
 		return loc;

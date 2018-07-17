@@ -70,7 +70,7 @@ public class SetSpawnCommand extends CommandBase {
 			KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
 
 			kingdom.setSpawn(p.getLocation());
-			plugin.getMsg().send(sender, "cmdSetSpawnSuccess",
+			plugin.getMsg().send(sender, "cmdSetSpawnSuccess", kingdom.getName(),
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY())
 							+ ", " + ((int) p.getLocation().getZ()));
 			

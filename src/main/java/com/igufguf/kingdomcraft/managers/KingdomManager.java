@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -46,9 +47,11 @@ public class KingdomManager {
         directory = new File(api.getPlugin().getDataFolder(), "/kingdoms/");
         if ( !directory.exists() ) directory.mkdirs();
 
+        System.out.println(directory.listFiles().length);
+
         // create kingdom if none exists
         if ( directory.listFiles().length == 0 ) {
-            createKingdom("jenava");
+            createKingdom("Gufland");
         }
 
         // load kingdom
@@ -162,7 +165,7 @@ public class KingdomManager {
 
         // save kingdom data
         for ( String key : ko.getDataMap().keySet() ) {
-            if ( data.get(key) == null ) {
+            if ( !data.contains(key) ) {
                 data.set(key, ko.getData(key));
             } else if ( ko.hasInLocalList("changes", key) ) {
                 data.set(key, ko.getData(key));
@@ -174,13 +177,19 @@ public class KingdomManager {
             String path = "ranks." + kr.getName();
 
             //save rank data
-            for ( String key : ko.getDataMap().keySet() ) {
+            for ( String key : kr.getDataMap().keySet() ) {
                 if ( !data.contains(path + "." + key) ) {
                     data.set(path + "." + key, kr.getData(key));
                 } else if ( kr.hasInLocalList("changes", key) ) {
                     data.set(path + "." + key, kr.getData(key));
                 }
             }
+        }
+
+        try {
+            data.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -190,7 +199,7 @@ public class KingdomManager {
 
         ChatColor color = ChatColor.values()[new Random().nextInt(ChatColor.values().length)];
 
-        ko.setData("prefix", "&7[" + color.toString() + name + "&7]");
+        ko.setData("prefix", "&7[&" + color.getChar() + name + "&7]");
 
         KingdomRank member = new KingdomRank("member");
         member.setData("default", true);
@@ -204,6 +213,15 @@ public class KingdomManager {
         ko.getRanks().add(king);
 
         kingdoms.add(ko);
+
+        File file = new File(directory, name + ".yml");
+        if ( file.exists() ) file.delete();
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         saveKingdom(name);
 
         return ko;
