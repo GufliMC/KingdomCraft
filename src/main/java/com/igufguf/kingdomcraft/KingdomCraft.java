@@ -49,6 +49,11 @@ public class KingdomCraft extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 
+		// create data folder
+		if ( !getDataFolder().exists() ) {
+			getDataFolder().mkdirs();
+		}
+
 		//load defaults
 		try {
 			config = new KingdomCraftConfig(this);
@@ -87,6 +92,8 @@ public class KingdomCraft extends JavaPlugin {
 				save();
 			}
 		}.runTaskTimer(this, 60 * 20L, 60 * 20L); // every minute
+
+		getLogger().info("Enabled " + this.getDescription().getFullName());
 	}
 	
 	public void onDisable() {

@@ -1,13 +1,9 @@
 package com.igufguf.kingdomcraft.commands.executors;
 
-import com.igufguf.kingdomcraft.commands.CommandBase;
-import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
-import org.bukkit.Bukkit;
+import com.igufguf.kingdomcraft.commands.CommandBase;
 import org.bukkit.command.CommandSender;
-
-import java.util.ArrayList;
+import org.bukkit.plugin.PluginManager;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -48,11 +44,11 @@ public class ReloadCommand extends CommandBase {
 		}
 		
 		sender.sendMessage(plugin.getPrefix() + "Reloading kingdomcraft...");
-		
-		KingdomCraft kdc = plugin;
 
-		Bukkit.getServer().getPluginManager().disablePlugin(kdc);
-		Bukkit.getServer().getPluginManager().enablePlugin(kdc);
+		PluginManager pm = plugin.getServer().getPluginManager();
+
+		pm.disablePlugin(plugin);
+		pm.enablePlugin(plugin);
 
 		return false;
 	}

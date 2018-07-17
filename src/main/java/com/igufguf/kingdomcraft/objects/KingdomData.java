@@ -53,12 +53,15 @@ public abstract class KingdomData {
     }
 
     public final void setData(String key, Object value) {
-        this.data.put(key, value);
-        if ( !hasInLocalList("changes", key) ) addInLocalList("changes", key); //only changed data will be saved so users can edit files while server is running
+        if ( value == null ) this.data.remove(key);
+        else this.data.put(key, value);
+
+        //only changed data will be saved so users can edit files while server is running
+        if ( !hasInLocalList("changes", key) ) addInLocalList("changes", key);
     }
 
     public final boolean hasData(String key) {
-        return data.containsKey(key);
+        return data.containsKey(key) && data.get(key) != null;
     }
 
     public final Map<String, Object> getDataMap() {
@@ -130,11 +133,12 @@ public abstract class KingdomData {
     }
 
     public boolean hasLocalData(String key) {
-        return localdata.containsKey(key);
+        return localdata.containsKey(key) && localdata.get(key) != null;
     }
 
     public void setLocalData(String key, Object value) {
-        this.localdata.put(key, value);
+        if ( value == null ) this.localdata.remove(key);
+        else this.localdata.put(key, value);
     }
 
     public final boolean hasInLocalList(String list, Object value) {
