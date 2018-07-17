@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -32,11 +33,11 @@ import java.util.Collections;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class SetstatusCommand extends CommandBase {
+public class SetStatusCommand extends CommandBase {
 
 	private final KingdomCraft plugin;
 	
-	public SetstatusCommand(KingdomCraft plugin) {
+	public SetStatusCommand(KingdomCraft plugin) {
 		super("setstatus", "kingdom.setstatus", true);
 		addAliasses("settype");
 
@@ -46,7 +47,7 @@ public class SetstatusCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( args.length == 2 ) {
 			if ( args[1].startsWith("c") ) return new ArrayList<>(Collections.singletonList("closed"));
 			else if ( args[1].startsWith("o") ) return new ArrayList<>(Collections.singletonList("open"));
@@ -89,10 +90,10 @@ public class SetstatusCommand extends CommandBase {
 
 		if ( type.equalsIgnoreCase("closed") ) {
 			kingdom.addInList("flags", "closed");
-			plugin.getMsg().send(sender, "cmdSetstatusClosed", kingdom.getName());
+			plugin.getMsg().send(sender, "cmdSetStatusClosed", kingdom.getName());
 		} else if ( type.equalsIgnoreCase("open") ) {
 			kingdom.delInList("flags", "closed");
-			plugin.getMsg().send(sender, "cmdSetstatusOpen", kingdom.getName());
+			plugin.getMsg().send(sender, "cmdSetStatusOpen", kingdom.getName());
 		} else {
 			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;

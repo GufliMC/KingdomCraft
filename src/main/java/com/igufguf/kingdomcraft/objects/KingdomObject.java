@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -55,8 +56,8 @@ public class KingdomObject extends KingdomData {
 
 	public Location getSpawn() {
 		if ( !hasData("spawn") ) return null;
-		String[] split = ((String) getData("spawn")).split(" , ");
-		
+		String[] split = getString("spawn").replace(" ", "").split(Pattern.quote(","));
+
 		if ( split.length < 4 && Bukkit.getWorld(split[0]) == null ) return null;
 		
 		Location loc = new Location(Bukkit.getWorld(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]), Double.valueOf(split[3]));

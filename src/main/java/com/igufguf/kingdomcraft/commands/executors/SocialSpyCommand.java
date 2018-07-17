@@ -43,11 +43,6 @@ public class SocialSpyCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
-		return null;
-	}
-	
-	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
 			plugin.getMsg().send(sender, "cmdDefaultUsage");

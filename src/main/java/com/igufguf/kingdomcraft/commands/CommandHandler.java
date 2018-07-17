@@ -100,8 +100,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if ( args.length >= 1 ) {
 			for ( CommandBase cb : cmds ) {
 				if ( args[0].equalsIgnoreCase(cb.cmd) || cb.hasAlias(args[0]) ) {
-					ArrayList<String> argslist = new ArrayList<>(Arrays.asList(args));
-					return cb.tabcomplete(argslist.toArray(new String[argslist.size()]));
+					return cb.tabcomplete(sender, args);
 				}
 			}
 		} 

@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -45,9 +46,10 @@ public class SpawnCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
+		if ( !sender.hasPermission("kingdom.spawn.other") ) return null;
 		if ( args.length == 2 ) {
-			ArrayList<String> kingdoms = new ArrayList<>();
+			List<String> kingdoms = new ArrayList<>();
 			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
 			}

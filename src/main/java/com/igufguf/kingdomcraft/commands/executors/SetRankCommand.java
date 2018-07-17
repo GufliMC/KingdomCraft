@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -31,11 +32,11 @@ import java.util.ArrayList;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class SetrankCommand extends CommandBase {
+public class SetRankCommand extends CommandBase {
 
 	private KingdomCraft plugin;
 
-	public SetrankCommand(KingdomCraft plugin) {
+	public SetRankCommand(KingdomCraft plugin) {
 		super("setrank", "kingdom.setrank", false);
 
 		this.plugin = plugin;
@@ -44,19 +45,24 @@ public class SetrankCommand extends CommandBase {
 	}
 
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( args.length == 3 ) {
 			String username = args[1];
 			KingdomUser user = plugin.getApi().getUserManager().getUser(username);
+			if ( user == null ) return null;
+
 			KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
 
-			if ( user != null && user.getKingdom() != null ) {
-				ArrayList<String> ranks = new ArrayList<>();
-				for ( KingdomRank rank : kingdom.getRanks() ) {
-                    if ( rank.getName().toLowerCase().startsWith(args[3].toLowerCase()) ) ranks.add(rank.getName());
-                }
-				return ranks;
+			if ( user.getKingdom() == null ) return null;
+
+			List<String> ranks = new ArrayList<>();
+			for ( KingdomRank rank : kingdom.getRanks() ) {
+				if ( !rank.getName().toLowerCase().startsWith(args[2].toLowerCase()) ) continue;
+				if ( user.getRank() != null && user.getRank().equals(rank.getName()) ) continue;
+
+				ranks.add(rank.getName());
 			}
+			return ranks;
 		}
 		return null;
 	}

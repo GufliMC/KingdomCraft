@@ -7,9 +7,12 @@ import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -43,8 +46,16 @@ public class KickCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
-		return null;
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
+		if ( sender.hasPermission("kingdom.kick.other") ) {
+			return Bukkit.getOnlinePlayers().stream().filter(p -> p != sender).filter(p -> p.getName().startsWith(args[0])).map(HumanEntity::getName).collect(Collectors.toList());
+		}
+
+		KingdomUser user = plugin.getApi().getUserManager().getUser((Player) sender);
+		KingdomObject ko = plugin.getApi().getUserManager().getKingdom(user);
+		if ( ko == null ) return null;
+
+		return plugin.getApi().getKingdomManager().getOnlineMembers(ko).stream().filter(p -> p != sender).filter(p -> p.getName().startsWith(args[0])).map(HumanEntity::getName).collect(Collectors.toList());
 	}
 	
 	@Override

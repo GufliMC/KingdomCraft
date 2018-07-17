@@ -5,10 +5,14 @@ import com.igufguf.kingdomcraft.commands.CommandHandler;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import com.igufguf.kingdomcraft.KingdomCraftMessages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -42,8 +46,8 @@ public class InviteCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
-		return null;
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
+		return Bukkit.getOnlinePlayers().stream().filter(p -> p != sender).map(HumanEntity::getName).collect(Collectors.toList());
 	}
 	
 	@Override

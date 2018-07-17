@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -42,11 +43,16 @@ public class JoinCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( args.length == 2 ) {
-			ArrayList<String> kingdoms = new ArrayList<>();
+			KingdomUser user = plugin.getApi().getUserManager().getUser((Player) sender);
+
+			List<String> kingdoms = new ArrayList<>();
 			for ( KingdomObject kd : plugin.getApi().getKingdomManager().getKingdoms() ) {
-				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
+				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
+					if ( user.getKingdom() != null && kd.getName().equals(user.getKingdom()) ) continue;
+					kingdoms.add(kd.getName());
+				}
 			}
 			return kingdoms;
 		}
