@@ -97,6 +97,9 @@ public abstract class KingdomData {
         return false;
     }
 
+    public final <T> List<T> getList(String key, Class<T> type) {
+        return (List<T>) getData(key);
+    }
 
     /** Local Data, this data will notbe queried by the plugin to save in a file **/
 
@@ -159,6 +162,10 @@ public abstract class KingdomData {
             List l = (List) getLocalData(list);
             l.remove(value);
         }
+    }
+
+    public final <T> List<T> getLocalList(String key, Class<T> type) {
+        return (List<T>) getData(key);
     }
 
     public final Map<String, Object> getLocalDataMap() {

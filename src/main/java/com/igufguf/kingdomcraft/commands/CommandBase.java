@@ -48,6 +48,8 @@ public abstract class CommandBase {
 	
 	public abstract boolean execute(CommandSender sender, String[] args);
 	
-	public abstract ArrayList<String> tabcomplete(String[] args);
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
+		return null;
+	}
 	
 }

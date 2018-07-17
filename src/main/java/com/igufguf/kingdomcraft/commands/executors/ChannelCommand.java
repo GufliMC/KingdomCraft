@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -50,11 +51,14 @@ public class ChannelCommand extends CommandBase {
 	}
 
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( args.length == 2 ) {
-			ArrayList<String> channels = new ArrayList<>();
+			List<String> channels = new ArrayList<>();
 			for ( ChatManager.Channel c : cm.getChannels() ) {
-				if ( c.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) channels.add(c.getName());
+				if ( c.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
+					if ( c.isPermission() && !sender.hasPermission("kingdom.channel." + c.getName())) continue;
+					channels.add(c.getName());
+				}
 			}
 			return channels;
 		}

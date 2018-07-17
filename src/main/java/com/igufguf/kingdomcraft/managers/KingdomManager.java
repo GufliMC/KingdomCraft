@@ -44,8 +44,10 @@ public class KingdomManager {
         this.api = api;
 
         directory = new File(api.getPlugin().getDataFolder(), "/kingdoms/");
-        if ( !directory.exists() ) {
-            directory.mkdirs();
+        if ( !directory.exists() ) directory.mkdirs();
+
+        // create kingdom if none exists
+        if ( directory.listFiles().length == 0 ) {
             createKingdom("jenava");
         }
 
@@ -111,6 +113,11 @@ public class KingdomManager {
                 ko.setData(key, data.get(key));
                 ko.delInLocalList("changes", key);
             }
+        }
+
+        if ( !data.contains("ranks") ) {
+            api.getPlugin().getLogger().warning("Ranks are not configured for kingdom '" + name + "', kingdom will not be loaded!");
+            return;
         }
 
         // load ranks

@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -40,11 +41,6 @@ public class LeaveCommand extends CommandBase {
 		this.plugin = plugin;
 
 		plugin.getCmdHandler().register(this);
-	}
-	
-	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
-		return null;
 	}
 	
 	@Override

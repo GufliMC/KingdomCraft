@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -40,7 +41,7 @@ public class HelpCommand extends CommandBase {
 	}
 	
 	@Override
-	public ArrayList<String> tabcomplete(String[] args) {
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		return null;
 	}
 	

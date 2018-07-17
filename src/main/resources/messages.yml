@@ -42,8 +42,8 @@ cmdKickSender: '&7You kicked &8{0} &7out of &8{1}&7!'
 cmdSetTarget: '&7You have been placed in &8{0}&7!'
 cmdSetSender: '&7You placed &8{0} &7in &8{1}&7!'
 
-cmdSetstatusOpen: '&7You changed the status of &8{0} &7to &8open&7!'
-cmdSetstatusClosed: '&7You changed the status of &8{0} &7to &8closed&7!'
+cmdSetStatusOpen: '&7You changed the status of &8{0} &7to &8open&7!'
+cmdSetStatusClosed: '&7You changed the status of &8{0} &7to &8closed&7!'
 
 cmdInviteAlready: '&7The player &8{0} &7is already invited for your kingdom!'
 cmdInviteTarget: '&7You have been invited to join &8{0}&7!'
@@ -53,7 +53,7 @@ cmdSpawnNotExists: '&7The spawn of &8{0} &7has not been setup yet!'
 cmdSpawnTeleported: '&7You have been teleported to &8{0}&7!'
 cmdSpawnTeleportStarting: '&7Teleportation will start in &8{0} &7seconds, don''t move!'
 
-cmdSetspawnSuccess: '&7You changed the spawn of &8{0} &7to &8{1}&7!'
+cmdSetSpawnSuccess: '&7You changed the spawn of &8{0} &7to &8{1}&7!'
 
 cmdEnemySuccess: '&7You declared war with &8{0}&7!'
 cmdEnemySuccessMembers: '&7Your kingdom is now enemys with &8{0}&7!'
