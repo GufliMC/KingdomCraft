@@ -16,9 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -193,8 +191,8 @@ public class ChatListener extends EventListener {
 
 		// do the formatting & replace variables
 		format = event.getFormat();
-		format = format.replace("{NAME}", newprefix + p.getDisplayName());
-		format = format.replace("{USERNAME}",  newprefix + p.getName());
+		format = format.replace("{player}", newprefix + p.getDisplayName());
+		format = format.replace("{username}",  newprefix + p.getName());
 		format = ChatColor.translateAlternateColorCodes('&', format);
 
 		message = event.getMessage();
@@ -204,7 +202,7 @@ public class ChatListener extends EventListener {
 			message = ChatColor.translateAlternateColorCodes('&', message);
 		}
 
-		format = format.replace("{MESSAGE}", message);
+		format = format.replace("{message}", message);
 
 		// send message to self
 		p.sendMessage(format);
@@ -231,61 +229,39 @@ public class ChatListener extends EventListener {
 		Player p = e.getPlayer();
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 
-		if ( user.getKingdom() != null ) {
-			KingdomObject kd = plugin.getApi().getUserManager().getKingdom(user);
 
-			format = format.replace("{KINGDOM_NAME}", kd.getName());
+		String[] placeholders = {
+				"kingdom", "kingdomprefix", "kingdomsuffix",
+				"kingdomrank", "kingdomrankprefix", "kingdomranksuffix",
+				"prefix", "suffix"};
 
-			if ( kd.hasData("prefix") && format.contains("{KINGDOM}")) {
-				format = format.replace("{KINGDOM}", ChatColor.translateAlternateColorCodes('&', (String) kd.getData("prefix"))); //The old one
-			}
-			if ( kd.hasData("prefix") && format.contains("{KINGDOM_PREFIX}")) {
-				format = format.replace("{KINGDOM_PREFIX}", ChatColor.translateAlternateColorCodes('&', (String) kd.getData("prefix")));
-			}
-			if ( kd.hasData("suffix") && format.contains("{KINGDOM_SUFFIX}")) {
-				format = format.replace("{KINGDOM_SUFFIX}", ChatColor.translateAlternateColorCodes('&', (String) kd.getData("suffix")));
-			}
-			if ( kd.hasData("tabprefix") && format.contains("{KINGDOM_TABPREFIX}")) {
-				format = format.replace("{KINGDOM_TABPREFIX}", ChatColor.translateAlternateColorCodes('&', (String) kd.getData("tabprefix")));
-			}
-			if ( kd.hasData("tabsuffix") && format.contains("{KINGDOM_TABSUFFIX}")) {
-				format = format.replace("{KINGDOM_TABSUFFIX}", ChatColor.translateAlternateColorCodes('&', (String) kd.getData("tabsuffix")));
-			}
+		Map<String, String> values = new HashMap<>();
+		for ( String placeholder : placeholders ) values.put(placeholder, "");
+
+		KingdomObject kd = plugin.getApi().getUserManager().getKingdom(user);
+		if ( kd != null ) {
+			values.put("kingdom", kd.getDisplay());
+			values.put("kingdomname", kd.getName());
+
+			if ( kd.hasData("prefix") ) values.put("kingdomprefix", formatColors(kd.getString("prefix")));
+			if ( kd.hasData("suffix") ) values.put("kingdomsuffix", formatColors(kd.getString("suffix")));
 
 			KingdomRank rank = plugin.getApi().getUserManager().getRank(user);
 			if ( rank != null ) {
-				format = format.replace("{KINGDOMRANK_NAME}", rank.getName());
+				values.put("kingdomrank", formatColors(rank.getName()));
 
-				if (rank.hasData("prefix") && format.contains("{KINGDOMRANK}")) {
-					format = format.replace("{KINGDOMRANK}", ChatColor.translateAlternateColorCodes('&', (String) rank.getData("prefix"))); //The old one
-				}
-				if (rank.hasData("prefix") && format.contains("{KINGDOMRANK_PREFIX}")) {
-					format = format.replace("{KINGDOMRANK_PREFIX}", ChatColor.translateAlternateColorCodes('&', (String) rank.getData("prefix")));
-				}
-				if (rank.hasData("suffix") && format.contains("{KINGDOMRANK_SUFFIX}")) {
-					format = format.replace("{KINGDOMRANK_SUFFIX}", ChatColor.translateAlternateColorCodes('&', (String) rank.getData("suffix")));
-				}
-				if (rank.hasData("tabprefix") && format.contains("{KINGDOMRANK_TABPREFIX}")) {
-					format = format.replace("{KINGDOMRANK_TABPREFIX}", ChatColor.translateAlternateColorCodes('&', (String) rank.getData("tabprefix")));
-				}
-				if (rank.hasData("tabsuffix") && format.contains("{KINGDOMRANK_TABSUFFIX}")) {
-					format = format.replace("{KINGDOMRANK_TABSUFFIX}", ChatColor.translateAlternateColorCodes('&', (String) rank.getData("tabsuffix")));
-				}
+				if (rank.hasData("prefix") ) values.put("kingdomrankprefix", formatColors(rank.getString("prefix")));
+				if (rank.hasData("suffix") ) values.put("kingdomranksuffix", formatColors(rank.getString("suffix")));
 			}
 		}
 
 		if ( cm.hasVault() ) {
-			if ( cm.getVault().getPlayerPrefix(p) != null ) {
-				format = format.replace("{PREFIX}",  cm.getVault().getPlayerPrefix(p));
-			}
-			if ( cm.getVault().getPlayerSuffix(p) != null ) {
-				format = format.replace("{SUFFIX}", cm.getVault().getPlayerSuffix(p));
-			}
+			if ( cm.getVault().getPlayerPrefix(p) != null ) values.put("prefix", cm.getVault().getPlayerPrefix(p));
+			if ( cm.getVault().getPlayerSuffix(p) != null ) values.put("suffix", cm.getVault().getPlayerSuffix(p));
 		}
 
-		String[] placeholders = {"RANK", "PREFIX", "SUFFIX", "KINGDOM", "KINGDOM_PREFIX", "KINGDOM_SUFFIX", "KINGDOM_TABPREFIX", "KINGDOM_TABSUFFIX",
-			"KINGDOMRANK", "KINGDOMRANK_PREFIX", "KINGDOMRANK_SUFFIX", "KINGDOMRANK_TABPREFIX", "KINGDOMRANK_TABSUFFIX"};
 		for ( String placeholder : placeholders ) {
+			if ( values.containsKey(placeholder) ) continue;
 			if ( format.contains("{" + placeholder + "}") ) format = format.replace("{" + placeholder + "}", "");
 		}
 
@@ -293,7 +269,11 @@ public class ChatListener extends EventListener {
 	}
 
 	// CHAT MANAGEMENT
-	
+
+	private String formatColors(String msg) {
+		return ChatColor.translateAlternateColorCodes('&', msg);
+	}
+
 	private boolean isCaps(String message) {
 		List<String> list = Arrays.asList("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
 		

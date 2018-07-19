@@ -47,8 +47,6 @@ public class KingdomManager {
         directory = new File(api.getPlugin().getDataFolder(), "/kingdoms/");
         if ( !directory.exists() ) directory.mkdirs();
 
-        System.out.println(directory.listFiles().length);
-
         // create kingdom if none exists
         if ( directory.listFiles().length == 0 ) {
             createKingdom("Gufland");
@@ -94,7 +92,7 @@ public class KingdomManager {
 
         List<KingdomUser> users = api.getUserManager().getAllUsers();
         for ( KingdomUser user : users) {
-            if ( user.getKingdom().equals(kingdom.getName()) ) {
+            if ( user.getKingdom() != null && user.getKingdom().equals(kingdom.getName()) ) {
                 members.add(user);
             }
         }
