@@ -7,16 +7,14 @@ import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -49,12 +47,49 @@ public class UserManager {
     public UserManager(KingdomCraftApi api) throws IOException {
         this.api = api;
 
-        file = new File(api.getPlugin().getDataFolder() + "/data", "users.yml");
+        data = new YamlConfiguration();
+        file = new File(api.getPlugin().getDataFolder() + "/data", "users.data");
         if ( !file.exists() ) {
             file.createNewFile();
+
+            File oldFile = new File(api.getPlugin().getDataFolder(), "users.yml");
+
+            // TODO remove, only applicable for beta testers
+            if ( !oldFile.exists() ) {
+                oldFile = new File(api.getPlugin().getDataFolder() + "/data", "users.yml");
+            }
+
+            if ( oldFile.exists() ) {
+                try (
+                    FileInputStream fis = new FileInputStream(oldFile);
+                    FileOutputStream fos = new FileOutputStream(file)
+                ) {
+                    int length = fis.available();
+                    if ( length != 0 ) {
+                        byte[] data = new byte[length];
+                        fis.read(data);
+                        fos.write(Base64.getEncoder().encode(data));
+                    }
+                }
+                oldFile.delete();
+            }
+            return;
         }
 
-        data = YamlConfiguration.loadConfiguration(file);
+        try (
+            FileInputStream fis = new FileInputStream(file)
+        ) {
+            int length = fis.available();
+            if ( length != 0 ) {
+                byte[] data = new byte[length];
+                fis.read(data);
+
+                String yaml = new String(Base64.getDecoder().decode(data));
+                this.data.loadFromString(yaml);
+            }
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<KingdomUser> getUsers() {
@@ -203,8 +238,13 @@ public class UserManager {
             data.set(user.getUuid() + "." + key, user.getData(key));
         }
 
-        try {
-            data.save(file);
+        String yaml = this.data.saveToString();
+        byte[] base64 = Base64.getEncoder().encode(yaml.getBytes());
+
+        try (
+            FileOutputStream fos = new FileOutputStream(file)
+        ) {
+            fos.write(base64);
         } catch (IOException e) {
             e.printStackTrace();
         }
