@@ -1,11 +1,15 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
+import com.igufguf.kingdomcraft.events.KingdomPlayerAttackEvent;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -32,10 +36,9 @@ public class DamageListener extends EventListener {
 		super(plugin);
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
 		if ( !isWorldEnabled(e.getEntity().getWorld()) ) return;
-		if ( plugin.getCfg().getBoolean("friendlyfire") ) return;
 		if ( !(e.getEntity() instanceof Player)) return;
 
 		Player p = (Player) e.getEntity();
@@ -49,19 +52,26 @@ public class DamageListener extends EventListener {
 			return;
 		}
 
-		if ( d.hasPermission("kingdom.friendlyfire.bypass") ) return;
-
 		KingdomUser u1 = plugin.getApi().getUserManager().getUser(p);
 		KingdomUser u2 = plugin.getApi().getUserManager().getUser(d);
 
-		if ( u1.getKingdom() == null ) return;
+        KingdomPlayerAttackEvent event = new KingdomPlayerAttackEvent(e, u1, u2);
 
-		if ( u2.getKingdom() != null ) {
-			if ( u1.getKingdom().equals(u2.getKingdom()) ) {
-				plugin.getMsg().send(d, "damageKingdom");
-				e.setCancelled(true);
-			}
-		}
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        e.setCancelled(event.isCancelled());
+
+        // event was cancelled
+		if ( e.isCancelled() ) return;
+
+        // only players from a different kingdom can pvp
+        if ( plugin.getCfg().getBoolean("friendlyfire") && !d.hasPermission("kingdom.friendlyfire.bypass") ) {
+
+            // players are in the same kingdom
+            if ( u1.getKingdom() != null && u2.getKingdom() != null && u1.getKingdom().equals(u2.getKingdom()) ) {
+                e.setCancelled(true);
+                plugin.getMsg().send(d, "damageKingdom");
+            }
+        }
 	}
 	
 }
