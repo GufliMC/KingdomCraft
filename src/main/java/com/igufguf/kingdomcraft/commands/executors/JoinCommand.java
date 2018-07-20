@@ -79,14 +79,15 @@ public class JoinCommand extends CommandBase {
 		KingdomObject kingdom = plugin.getApi().getKingdomManager().getKingdom(args[0]);
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 		
-		if ( kingdom.hasInList("flags", "closed") ) {
-			if ( !user.hasInList("invites", kingdom.getName()) && !p.hasPermission("kingdom.join." + kingdom.getName()) ) {
-				plugin.getMsg().send(sender, "cmdJoinClosed", kingdom.getName());
-				for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
-					plugin.getMsg().send(member, "cmdJoinClosedMembers", p.getName());
-				}
-				return false;
+		if ( kingdom.hasInList("flags", "closed") &&
+				!user.hasInList("invites", kingdom.getName()) && !p.hasPermission("kingdom.join." + kingdom.getName()) ) {
+			plugin.getMsg().send(sender, "cmdJoinClosed", kingdom.getName());
+
+			for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
+				plugin.getMsg().send(member, "cmdJoinClosedMembers", p.getName());
 			}
+
+			return false;
 		}
 
 		if ( kingdom.hasData("max-members") && plugin.getApi().getKingdomManager().getMembers(kingdom).size() >= (int) kingdom.getData("max-members") ) {
@@ -102,8 +103,7 @@ public class JoinCommand extends CommandBase {
 
 		plugin.getMsg().send(sender, "cmdJoinSuccess", kingdom.getName());
 
-		if ( kingdom.getSpawn() != null && plugin.getCfg().has("spawn-on-kingdom-join")
-				&& plugin.getCfg().getBoolean("spawn-on-kingdom-join") ) {
+		if ( kingdom.getSpawn() != null && plugin.getCfg().getBoolean("spawn-on-kingdom-join") ) {
 			p.teleport(kingdom.getSpawn());
 		}
 
