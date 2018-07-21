@@ -21,9 +21,6 @@ world-list:
 #Show Offline players in /k info
 info-offline-players: true
 
-#Make players in the same kingdom not damage eachother, override with kingdom.friendlyfire.bypass
-friendlyfire: false
-
 #Make player use /spawn when he leaves or get kicked from a kingdom.
 spawn-on-kingdom-leave: true
 

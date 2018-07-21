@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.commands.executors;
 import com.igufguf.kingdomcraft.commands.CommandBase;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.commands.CommandHandler;
+import com.igufguf.kingdomcraft.managers.FlagManager;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.command.CommandSender;
@@ -79,12 +80,13 @@ public class JoinCommand extends CommandBase {
 		KingdomObject kingdom = plugin.getApi().getKingdomManager().getKingdom(args[0]);
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 		
-		if ( kingdom.hasInList("flags", "closed") &&
+		if ( plugin.getApi().getFlagManager().getFlagBoolean(kingdom, FlagManager.INVITE_ONLY) &&
 				!user.hasInList("invites", kingdom.getName()) && !p.hasPermission("kingdom.join." + kingdom.getName()) ) {
-			plugin.getMsg().send(sender, "cmdJoinClosed", kingdom.getName());
+
+			plugin.getMsg().send(sender, "cmdJoinInviteOnly", kingdom.getName());
 
 			for ( Player member : plugin.getApi().getKingdomManager().getOnlineMembers(kingdom) ) {
-				plugin.getMsg().send(member, "cmdJoinClosedMembers", p.getName());
+				plugin.getMsg().send(member, "cmdJoinInviteOnlyMembers", p.getName());
 			}
 
 			return false;

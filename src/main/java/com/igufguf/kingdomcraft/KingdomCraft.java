@@ -46,6 +46,11 @@ public class KingdomCraft extends JavaPlugin {
 
 	private CommandHandler cmdHandler;
 
+	public KingdomCraft() {
+		api = new KingdomCraftApi(this);
+	}
+
+	@Override
 	public void onEnable() {
 		plugin = this;
 
@@ -55,13 +60,9 @@ public class KingdomCraft extends JavaPlugin {
 		}
 
 		//load defaults
-		try {
-			config = new KingdomCraftConfig(this);
-			messages = new KingdomCraftMessages(this);
-			api = new KingdomCraftApi(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		config = new KingdomCraftConfig(this);
+		messages = new KingdomCraftMessages(this);
+		api.initialize();
 
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
@@ -95,7 +96,8 @@ public class KingdomCraft extends JavaPlugin {
 
 		getLogger().info("Enabled " + this.getDescription().getFullName());
 	}
-	
+
+	@Override
 	public void onDisable() {
 		save();
 	}
@@ -110,7 +112,6 @@ public class KingdomCraft extends JavaPlugin {
 		new ReloadCommand(this);
 		new SetRankCommand(this);
 		new SetSpawnCommand(this);
-		new SetStatusCommand(this);
 		new SpawnCommand(this);
 		new FriendlyCommand(this);
 		new EnemyCommand(this);
@@ -119,6 +120,7 @@ public class KingdomCraft extends JavaPlugin {
 		new HelpCommand(this);
 		new SetCommand(this);
 		new SocialSpyCommand(this);
+		new FlagCommand(this);
 	}
 
 	public void save() {
