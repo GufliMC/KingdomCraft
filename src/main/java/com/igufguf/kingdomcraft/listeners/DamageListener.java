@@ -2,6 +2,8 @@ package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.events.KingdomPlayerAttackEvent;
+import com.igufguf.kingdomcraft.managers.FlagManager;
+import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -62,15 +64,15 @@ public class DamageListener extends EventListener {
 
         // event was cancelled
 		if ( e.isCancelled() ) return;
+		if ( d.hasPermission("kingdom.friendlyfire.bypass") ) return;
 
-        // only players from a different kingdom can pvp
-        if ( plugin.getCfg().getBoolean("friendlyfire") && !d.hasPermission("kingdom.friendlyfire.bypass") ) {
+		KingdomObject k1 = plugin.getApi().getUserManager().getKingdom(u1);
+		KingdomObject k2 = plugin.getApi().getUserManager().getKingdom(u2);
 
-            // players are in the same kingdom
-            if ( u1.getKingdom() != null && u2.getKingdom() != null && u1.getKingdom().equals(u2.getKingdom()) ) {
-                e.setCancelled(true);
-                plugin.getMsg().send(d, "damageKingdom");
-            }
+        // only players from a different kingdom can pvp when friendlyfire
+        if ( k1 == k2 && !plugin.getApi().getFlagManager().getFlagBoolean(k1, FlagManager.FRIENDLYFIRE)  ) {
+			e.setCancelled(true);
+			plugin.getMsg().send(d, "damageKingdom");
         }
 	}
 	

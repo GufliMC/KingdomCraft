@@ -30,14 +30,16 @@ public class KingdomCraftApi {
 
     private final KingdomCraft plugin;
 
-    private final KingdomManager kingdomManager;
-    private final UserManager userManager;
-    private final RelationManager relationManager;
-    private final PermissionManager permissionManager;
-    private final ChatManager chatManager;
-    private final TeleportManager teleportManager;
+    private FlagManager flagManager;
 
-    protected KingdomCraftApi(KingdomCraft plugin) throws IOException {
+    private KingdomManager kingdomManager;
+    private UserManager userManager;
+    private RelationManager relationManager;
+    private PermissionManager permissionManager;
+    private ChatManager chatManager;
+    private TeleportManager teleportManager;
+
+    protected KingdomCraftApi(KingdomCraft plugin) {
         this.plugin = plugin;
 
         File datadir = new File(plugin.getDataFolder(), "/data/");
@@ -45,6 +47,10 @@ public class KingdomCraftApi {
             datadir.mkdirs();
         }
 
+        flagManager = new FlagManager(this);
+    }
+
+    protected void initialize() {
         try {
             kingdomManager = new KingdomManager(this);
             userManager = new UserManager(this);
@@ -53,7 +59,7 @@ public class KingdomCraftApi {
             chatManager = new ChatManager(this);
             teleportManager = new TeleportManager(this);
         } catch (IOException e) {
-            throw e;
+            e.printStackTrace();
         }
     }
 
@@ -83,6 +89,10 @@ public class KingdomCraftApi {
 
     public TeleportManager getTeleportManager() {
         return teleportManager;
+    }
+
+    public FlagManager getFlagManager() {
+        return flagManager;
     }
 
     public boolean isWorldEnabled(World world) {
