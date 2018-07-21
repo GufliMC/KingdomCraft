@@ -101,7 +101,7 @@ public class HelpCommand extends CommandBase {
 	private void page4(CommandSender sender) {
 		header(sender);
 		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetSpawn"));
-		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetrank"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetRank"));
 		sender.sendMessage(ChatColor.YELLOW + "/k kick <player> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpKick"));
 		sender.sendMessage(ChatColor.YELLOW + "/k set <player> <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSet"));
 		footer(sender, 4);
