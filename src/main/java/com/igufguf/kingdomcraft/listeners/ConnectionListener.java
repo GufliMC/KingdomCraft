@@ -1,8 +1,6 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.commands.executors.SpawnCommand;
-import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
