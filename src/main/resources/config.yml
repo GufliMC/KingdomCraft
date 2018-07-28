@@ -2,13 +2,15 @@
 #                                                                    #
 #                            KINGDOMCRAFT                            #
 #                   Created by iGufGuf, Copyrighted                  #
-#                          ----------------                          #
-#                 Credits would really be apreciated                 #
+#                        --------------------                        #
+#                             version 4.3                            #
 #                                                                    #
+#                           www.igufguf.com                          #
 ######################################################################
 
+
 #DONT CHANGE THIS, IT WILL BE USED TO AUTO-UPDATE THE CONFIG
-version: {VERSION}
+version: {CONFIG_VERSION}
 
 #Prefix when you are not in a kingdom
 default-prefix: '&f[&6New&f] &7'
@@ -40,9 +42,9 @@ nochannels-format: '&7{RANK}{KINGDOM}{KINGDOMRANK} &b{NAME} &8\u00BB &7{MESSAGE}
 # The channel where you talk in when not in a kingdom, can't be a kingdom only channel!
 # Remove this to make players not able to talk when not in a kingdom!
 # possible chat format variables:
-# playe, username, message
+# player, username, message
 # kingdom, kingdomname, kingdomprefix, kingdomsuffix
-# kingdomrank, kingdomranksuffix, kingdomrankprefix
+# kingdomrank, kingdomrankname, kingdomranksuffix, kingdomrankprefix
 # (vault support:) prefix, suffix
 nokingdom-channel: 'public'
 channels:

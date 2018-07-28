@@ -51,11 +51,6 @@ public class RelationManager {
 
             File oldFile = new File(api.getPlugin().getDataFolder(), "relations.yml");
 
-            // TODO remove, only applicable for beta testers
-            if ( !oldFile.exists() ) {
-                oldFile = new File(api.getPlugin().getDataFolder() + "/data", "relations.yml");
-            }
-
             if ( oldFile.exists() ) {
                 try (
                     FileInputStream fis = new FileInputStream(oldFile);

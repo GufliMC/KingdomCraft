@@ -71,7 +71,7 @@ public class InviteCommand extends CommandBase {
 			return false;
 		}
 
-		if ( user.getKingdom().equals(plugin.getApi().getUserManager().getUser(p).getKingdom()) ) {
+		if ( user.getKingdom() != null && user.getKingdom().equals(plugin.getApi().getUserManager().getUser(p).getKingdom()) ) {
 			plugin.getMsg().send(sender, "cmdInviteAlready", user.getName());
 			return false;
 		}

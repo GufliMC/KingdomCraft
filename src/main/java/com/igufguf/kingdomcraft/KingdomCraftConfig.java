@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  **/
 public class KingdomCraftConfig {
 
-	private static final double configversion = 1.2;
+	private static final double configversion = 1.3;
 
 	private File file;
 	private YamlConfiguration config;
@@ -120,16 +121,17 @@ public class KingdomCraftConfig {
 
 			int bytesread;
 			while ( (bytesread = in.read(buffer)) > 0 ) {
-				String str = new String(buffer, "UTF-8");
+				byte[] sub = Arrays.copyOf(buffer, bytesread);
 
-				if ( str.contains("{VERSION}") ) {
+				// replace the version
+				String str = new String(sub, "UTF-8");
+				if ( str.contains("{CONFIG_VERSION}") ) {
 					String version = configversion + "";
-					str = str.replace("{VERSION}", version);
-
-					bytesread -= "{VERSION}".length() - version.length();
+					str = str.replace("{CONFIG_VERSION}", version);
+					sub = str.getBytes();
 				}
 
-				out.write(str.getBytes(), 0, bytesread);
+				out.write(sub, 0, sub.length);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -92,13 +92,40 @@ cmdHelpFlagSet: 'Setup flag values for a kingdom'
 cmdHelpFlagList: 'Get a list of flags for a kingdom'
 cmdHelpReload: 'Reload KingdomCraft'
 
-cmdFlagSet: '&7Changed flag &8{0} &7for &8{1}&7 to &8{2}!'
-cmdFlagRemove: '&7Removed flag &8{0} &7from &8{1}&7!'
+cmdFlagSet: '&7You changed the flag &8{0} &7for &8{1}&7 to &8{2}!'
+cmdFlagRemove: '&7You removed the flag &8{0} &7from &8{1}&7!'
 cmdFlagList: '&7List of flags: &8{0}'
 
 cmdList: '&7List of kingdoms:'
-
 cmdListNormal: '&7There are &8{0} &7online players:'
+
+cmdCreateAlreadyExists: '&7The kingdom &8{0} &7already exists!'
+cmdCreateFailed: '&cAn error occured while creating the kingdom &4{0}&c!'
+cmdCreateSuccess: '&7You created the kingdom &8{0}&7!'
+
+cmdDeleteConfirm: '&7Type &8/kingdom delete {0} &7again to confirm the &8deletion &7of &8{0}&7!'
+cmdDeleteFailed: '&cAn error occured while deleting the kingdom &4{0}&c!'
+cmdDeleteSuccess: '&7You deleted the kingdom &8{0}&7!'
+
+cmdEditRankInvalidOption: '&cThe option &4{0} &cis not available for ranks!'
+cmdEditRankListAddSuccess: '&7You added &8{1} &7to &8{0} &7for rank &8{2}'
+cmdEditRankListRemoveSuccess: '&7You removed &8{1} &7from &8{0} &7for rank &8{2}'
+cmdEditRankSuccess: '&7You changed &8{1} &7to &8{0} &7for rank &8{2}'
+
+cmdEditKingdomInvalidOption: '&cThe option &4{0} &cis not available for kingdoms!'
+cmdEditKingdomListAddSuccess: '&7You added &8{1} &7to &8{0} &7for kingdom &8{2}'
+cmdEditKingdomListRemoveSuccess: '&7You removed &8{1} &7from &8{0} &7for kingdom &8{2}'
+cmdEditKingdomSuccess: '&7You changed &8{0} &7to &8{1} &7for kingdom &8{2}'
+
+cmdShowRankInvalidOption: '&cThe option &4{0} &cis not available for ranks'
+cmdShowRankOptionNotSet: '&cThe option &4{0} &cis not set for the rank &4{1}'
+cmdShowRankOptionList: '&7The values for option &8{0} &7of the rank &8{1} &7are: &8{2}'
+cmdShowRankOption: '&7The value for option &8{0} &7of the rank &8{1} &7is &8{2}'
+
+cmdShowKingdomInvalidOption: '&cThe option &4{0} &cis not available for kingdoms'
+cmdShowKingdomOptionNotSet: '&cThe option &4{0} &cis not set for the kingdom &4{1}'
+cmdShowKingdomOptionList: '&7The values for option &8{0} &7of the kingdom &8{1} &7are: &8{2}'
+cmdShowKingdomOption: '&7The value for option &8{0} &7of the kingdom &8{1} &7is &8{2}'
 
 damageKingdom: '&7You can''t hurt members of your own kingdom'
 teleportCancel: '&cTeleportation cancelled!'
