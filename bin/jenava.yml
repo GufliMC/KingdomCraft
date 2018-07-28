@@ -1,0 +1,12 @@
+prefix: '&e[Jenava]'
+ranks:
+  king:
+    prefix: '&6[King]'
+    permissions:
+    - kingdom.kick
+    - kingdom.setspawn
+  member:
+    prefix: '&b[Member]'
+    default: true
+    permissions:
+    - kingdom.leave

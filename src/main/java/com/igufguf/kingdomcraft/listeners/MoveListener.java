@@ -1,14 +1,10 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.commands.executors.SpawnCommand;
-import com.igufguf.kingdomcraft.KingdomCraftMessages;
 import com.igufguf.kingdomcraft.managers.TeleportManager;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
