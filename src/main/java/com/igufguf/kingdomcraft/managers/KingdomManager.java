@@ -35,11 +35,13 @@ import java.util.*;
  **/
 public class KingdomManager {
 
+    public final List<String> kingdomOptions = new ArrayList<>(Arrays.asList("prefix", "display"));
+    public final List<String> rankOptions = new ArrayList<>(Arrays.asList("prefix", "permissions", "default"));
+
     private final KingdomCraftApi api;
-
-    private final List<KingdomObject> kingdoms = Collections.synchronizedList(new ArrayList<KingdomObject>());
-
     private final File directory;
+
+    private final List<KingdomObject> kingdoms = Collections.synchronizedList(new ArrayList<>());
 
     public KingdomManager(KingdomCraftApi api) {
         this.api = api;
@@ -198,6 +200,7 @@ public class KingdomManager {
         ChatColor color = ChatColor.values()[new Random().nextInt(ChatColor.values().length)];
 
         ko.setData("prefix", "&7[&" + color.getChar() + name + "&7]");
+        ko.setData("display", "&" + color.getChar() + name);
 
         KingdomRank member = new KingdomRank("member");
         member.setData("default", true);
@@ -225,22 +228,23 @@ public class KingdomManager {
         return ko;
     }
 
-    public void deleteKingdom(String name) {
+    public boolean deleteKingdom(String name) {
         KingdomObject ko = getKingdom(name);
-        if ( ko == null ) return;
+        if ( ko == null ) return false;
 
-        deleteKingdom(ko);
+        return deleteKingdom(ko);
     }
 
-    public void deleteKingdom(KingdomObject ko) {
-        if ( ko == null ) return;
+    public boolean deleteKingdom(KingdomObject ko) {
+        if ( ko == null ) return false;
 
         kingdoms.remove(ko);
 
         File file = new File(directory, ko.getName() + ".yml");
-        if ( !file.exists() ) return;
+        if ( !file.exists() ) return false;
 
         file.delete();
+        return true;
     }
 
 }

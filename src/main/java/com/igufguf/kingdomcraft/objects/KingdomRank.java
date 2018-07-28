@@ -1,5 +1,8 @@
 package com.igufguf.kingdomcraft.objects;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.bukkit.ChatColor;
+
 import java.util.List;
 
 /**
@@ -31,6 +34,10 @@ public class KingdomRank extends KingdomData {
 
     public String getName() {
         return name;
+    }
+
+    public String getDisplay() {
+        return hasData("display") ? ChatColor.translateAlternateColorCodes('&', StringEscapeUtils.unescapeJava((String) getData("display"))) : getName();
     }
 
     public String[] getPermissions() {

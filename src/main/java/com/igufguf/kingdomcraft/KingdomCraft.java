@@ -103,24 +103,34 @@ public class KingdomCraft extends JavaPlugin {
 	}
 	
 	private void loadCommands() {
+		new HelpCommand(this);
+
+		new ChannelCommand(this);
 		new InfoCommand(this);
-		new InviteCommand(this);
-		new JoinCommand(this);
-		new KickCommand(this);
-		new LeaveCommand(this);
 		new ListCommand(this);
-		new ReloadCommand(this);
+		new SpawnCommand(this);
+
+		new JoinCommand(this);
+		new LeaveCommand(this);
+
+		new EnemyCommand(this);
+		new FriendlyCommand(this);
+		new NeutralCommand(this);
+		new InviteCommand(this);
+
+		new KickCommand(this);
 		new SetRankCommand(this);
 		new SetSpawnCommand(this);
-		new SpawnCommand(this);
-		new FriendlyCommand(this);
-		new EnemyCommand(this);
-		new NeutralCommand(this);
-		new ChannelCommand(this);
-		new HelpCommand(this);
 		new SetCommand(this);
+
+		new ReloadCommand(this);
 		new SocialSpyCommand(this);
 		new FlagCommand(this);
+
+		new CreateCommand(this);
+		new DeleteCommand(this);
+		new EditCommand(this);
+		new ShowCommand(this);
 	}
 
 	public void save() {

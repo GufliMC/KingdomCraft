@@ -148,10 +148,15 @@ public class InfoCommand extends CommandBase {
 			plugin.getMsg().send(sender, "cmdInfoPlayer", player.getName());
 		}
 		
-		if ( user.getKingdom() != null ) sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + plugin.getApi().getUserManager().getKingdom(user).getDisplay());
-		else sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + "none");
-		
-		if ( user.getKingdom() != null && user.getRank() != null ) sender.sendMessage(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + user.getRank());
+		if ( user.getKingdom() != null ) {
+			sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + plugin.getApi().getUserManager().getKingdom(user).getDisplay());
+
+			if ( user.getRank() != null ) {
+				sender.sendMessage(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + plugin.getApi().getUserManager().getRank(user).getDisplay());
+			}
+		} else {
+			sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + "none");
+		}
 		
 		sender.sendMessage(" ");
 	}

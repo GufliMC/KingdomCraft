@@ -53,6 +53,8 @@ public class HelpCommand extends CommandBase {
 			else if ( args[0].equalsIgnoreCase("3") ) page3(sender);
 			else if ( args[0].equalsIgnoreCase("4") ) page4(sender);
 			else if ( args[0].equalsIgnoreCase("5") ) page5(sender);
+			else if ( args[0].equalsIgnoreCase("6") ) page6(sender);
+			else if ( args[0].equalsIgnoreCase("7") ) page7(sender);
 		} else {
 			page1(sender);
 		}
@@ -68,7 +70,7 @@ public class HelpCommand extends CommandBase {
 
 	private void footer(CommandSender sender, int page) {
 		sender.sendMessage(" ");
-		sender.sendMessage(ChatColor.YELLOW + "Page " + page + "/5");
+		sender.sendMessage(ChatColor.YELLOW + "Page " + page + "/7");
 	}
 
 	private void page1(CommandSender sender) {
@@ -111,7 +113,23 @@ public class HelpCommand extends CommandBase {
 		header(sender);
 		sender.sendMessage(ChatColor.YELLOW + "/k flag <kingdom> <flag> <value> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFlagSet"));
 		sender.sendMessage(ChatColor.YELLOW + "/k flag list <kingdom>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFlagList"));
-		sender.sendMessage(ChatColor.YELLOW + "/k reload " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpReload"));
+		sender.sendMessage(ChatColor.YELLOW + "/k create <kingdom>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpCreate"));
+		sender.sendMessage(ChatColor.YELLOW + "/k delete <kingdom>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpDelete"));
 		footer(sender, 5);
+	}
+
+	private void page6(CommandSender sender) {
+		header(sender);
+		sender.sendMessage(ChatColor.YELLOW + "/k edit <kingdom> <option> <value>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpEditKingdom"));
+		sender.sendMessage(ChatColor.YELLOW + "/k edit <kingdom> <option> [add/remove] <value>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpEditKingdomList"));
+		sender.sendMessage(ChatColor.YELLOW + "/k edit <kingdom> <rank> <option> <value>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpEditRank"));
+		sender.sendMessage(ChatColor.YELLOW + "/k edit <kingdom> <rank> <option> [add/remove] <value>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpEditRankList"));
+		footer(sender, 6);
+	}
+
+	private void page7(CommandSender sender) {
+		header(sender);
+		sender.sendMessage(ChatColor.YELLOW + "/k reload " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpReload"));
+		footer(sender, 7);
 	}
 }

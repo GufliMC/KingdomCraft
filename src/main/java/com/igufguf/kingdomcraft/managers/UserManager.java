@@ -54,11 +54,6 @@ public class UserManager {
 
             File oldFile = new File(api.getPlugin().getDataFolder(), "users.yml");
 
-            // TODO remove, only applicable for beta testers
-            if ( !oldFile.exists() ) {
-                oldFile = new File(api.getPlugin().getDataFolder() + "/data", "users.yml");
-            }
-
             if ( oldFile.exists() ) {
                 try (
                     FileInputStream fis = new FileInputStream(oldFile);

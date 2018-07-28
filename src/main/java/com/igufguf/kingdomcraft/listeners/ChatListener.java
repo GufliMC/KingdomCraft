@@ -229,7 +229,6 @@ public class ChatListener extends EventListener {
 		Player p = e.getPlayer();
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
 
-
 		String[] placeholders = {
 				"kingdom", "kingdomprefix", "kingdomsuffix",
 				"kingdomrank", "kingdomrankprefix", "kingdomranksuffix",
@@ -248,7 +247,8 @@ public class ChatListener extends EventListener {
 
 			KingdomRank rank = plugin.getApi().getUserManager().getRank(user);
 			if ( rank != null ) {
-				values.put("kingdomrank", formatColors(rank.getName()));
+				values.put("kingdomrank", formatColors(rank.getDisplay()));
+				values.put("kingdomrankname", formatColors(rank.getName()));
 
 				if (rank.hasData("prefix") ) values.put("kingdomrankprefix", formatColors(rank.getString("prefix")));
 				if (rank.hasData("suffix") ) values.put("kingdomranksuffix", formatColors(rank.getString("suffix")));
@@ -261,7 +261,7 @@ public class ChatListener extends EventListener {
 		}
 
 		for ( String placeholder : placeholders ) {
-			if ( values.containsKey(placeholder) ) continue;
+			if ( !values.containsKey(placeholder) ) continue;
 			if ( format.contains("{" + placeholder + "}") ) format = format.replace("{" + placeholder + "}", "");
 		}
 

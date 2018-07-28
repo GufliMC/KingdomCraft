@@ -41,7 +41,7 @@ public abstract class KingdomData {
     }
 
     public final String getString(String key) {
-        return (String) getData(key);
+        return getData(key) + "";
     }
 
     public final boolean getBoolean(String key) {
@@ -71,7 +71,7 @@ public abstract class KingdomData {
     /** Easy adding / removing things from a list **/
 
     public final void addInList(String list, Object value) {
-        if ( hasData(list) && getData(list) instanceof List) {
+        if ( hasData(list) && getData(list) instanceof List ) {
             List l = (List) getData(list);
             l.add(value);
         } else if ( !hasData(list) ){
@@ -84,7 +84,7 @@ public abstract class KingdomData {
     }
 
     public final void delInList(String list, Object value) {
-        if ( hasData(list) && getData(list) instanceof List) {
+        if ( hasData(list) && getData(list) instanceof List ) {
             List l = (List) getData(list);
             l.remove(value);
 
@@ -93,7 +93,7 @@ public abstract class KingdomData {
     }
 
     public final boolean hasInList(String list, Object value) {
-        if ( hasData(list) && getData(list) instanceof List) {
+        if ( hasData(list) && getData(list) instanceof List ) {
             List l = (List) getData(list);
             return l.contains(value);
         }
@@ -121,7 +121,7 @@ public abstract class KingdomData {
     }
 
     public final String getLocalString(String key) {
-        return (String) getLocalData(key);
+        return getLocalData(key) + "";
     }
 
     public final boolean getLocalBoolean(String key) {
@@ -142,7 +142,7 @@ public abstract class KingdomData {
     }
 
     public final boolean hasInLocalList(String list, Object value) {
-        if ( hasLocalData(list) && getLocalData(list) instanceof List) {
+        if ( hasLocalData(list) && getLocalData(list) instanceof List ) {
             List l = (List) getLocalData(list);
             return l.contains(value);
         }
@@ -150,7 +150,7 @@ public abstract class KingdomData {
     }
 
     public final void addInLocalList(String list, Object value) {
-        if ( hasLocalData(list) && getLocalData(list) instanceof List) {
+        if ( hasLocalData(list) && getLocalData(list) instanceof List ) {
             List l = (List) getLocalData(list);
             l.add(value);
         } else {
@@ -162,14 +162,14 @@ public abstract class KingdomData {
     }
 
     public final void delInLocalList(String list, Object value) {
-        if ( hasLocalData(list) && getLocalData(list) instanceof List) {
+        if ( hasLocalData(list) && getLocalData(list) instanceof List ) {
             List l = (List) getLocalData(list);
             l.remove(value);
         }
     }
 
     public final <T> List<T> getLocalList(String key, Class<T> type) {
-        return (List<T>) getData(key);
+        return (List<T>) getLocalData(key);
     }
 
     public final Map<String, Object> getLocalDataMap() {
