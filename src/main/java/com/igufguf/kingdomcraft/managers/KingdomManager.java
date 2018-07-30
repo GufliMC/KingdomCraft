@@ -35,8 +35,8 @@ import java.util.*;
  **/
 public class KingdomManager {
 
-    public final List<String> kingdomOptions = new ArrayList<>(Arrays.asList("prefix", "display"));
-    public final List<String> rankOptions = new ArrayList<>(Arrays.asList("prefix", "permissions", "default"));
+    public final List<String> kingdomOptions = new ArrayList<>(Arrays.asList("prefix", "suffix", "display"));
+    public final List<String> rankOptions = new ArrayList<>(Arrays.asList("prefix", "suffix", "permissions", "default"));
 
     private final KingdomCraftApi api;
     private final File directory;
