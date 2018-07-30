@@ -235,7 +235,6 @@ public class ChatListener extends EventListener {
 				"prefix", "suffix"};
 
 		Map<String, String> values = new HashMap<>();
-		for ( String placeholder : placeholders ) values.put(placeholder, "");
 
 		KingdomObject kd = plugin.getApi().getUserManager().getKingdom(user);
 		if ( kd != null ) {
@@ -261,8 +260,13 @@ public class ChatListener extends EventListener {
 		}
 
 		for ( String placeholder : placeholders ) {
-			if ( !values.containsKey(placeholder) ) continue;
-			if ( format.contains("{" + placeholder + "}") ) format = format.replace("{" + placeholder + "}", "");
+			if ( !format.contains("{" + placeholder + "}") ) continue;
+
+			if ( !values.containsKey(placeholder) ) {
+				format = format.replace("{" + placeholder + "}", "");
+			} else {
+				format = format.replace("{" + placeholder + "}", values.get(placeholder));
+			}
 		}
 
 		e.setFormat(format);

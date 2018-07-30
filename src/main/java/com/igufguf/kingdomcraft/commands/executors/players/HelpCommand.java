@@ -87,24 +87,24 @@ public class HelpCommand extends CommandBase {
 		sender.sendMessage(ChatColor.YELLOW + "/k leave " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpLeave"));
 		sender.sendMessage(ChatColor.YELLOW + "/k channel <channel> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpChannel"));
 		sender.sendMessage(ChatColor.YELLOW + "/k info <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpInfo"));
-		sender.sendMessage(ChatColor.YELLOW + "/k spawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSpawn"));
+		sender.sendMessage(ChatColor.YELLOW + "/k invite <player> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpInvite"));
 		footer(sender, 2);
 	}
 
 	private void page3(CommandSender sender) {
 		header(sender);
-		sender.sendMessage(ChatColor.YELLOW + "/k invite <player> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpInvite"));
 		sender.sendMessage(ChatColor.YELLOW + "/k enemy <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpEnemy"));
 		sender.sendMessage(ChatColor.YELLOW + "/k friendly <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFriendly"));
 		sender.sendMessage(ChatColor.YELLOW + "/k neutral <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpNeutral"));
+		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetSpawn"));
 		footer(sender, 3);
 	}
 
 	private void page4(CommandSender sender) {
 		header(sender);
-		sender.sendMessage(ChatColor.YELLOW + "/k setspawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetSpawn"));
 		sender.sendMessage(ChatColor.YELLOW + "/k setrank <player> <rank> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSetRank"));
 		sender.sendMessage(ChatColor.YELLOW + "/k kick <player> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpKick"));
+		sender.sendMessage(ChatColor.YELLOW + "/k spawn <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSpawn"));
 		sender.sendMessage(ChatColor.YELLOW + "/k set <player> <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSet"));
 		footer(sender, 4);
 	}

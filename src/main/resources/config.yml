@@ -52,7 +52,7 @@ channels:
     
     #Default channel for kingdom, cannot be removed or replaced
     kingdom:
-        format: '&8[K]&7{prefix}{kingdomrank} &7{player} &8\u00BB &7{message}'
+        format: '&8[K]&7{prefix}{kingdomrankprefix} &7{player} &8\u00BB &7{message}'
 
         #Only members of your kingdom will see this
         kingdom-only: true
@@ -66,7 +66,7 @@ channels:
         alwayson: true
 
         #the format that will display when the player is talking in this channel
-        format: '&8[P]&7{prefix}{kingdom}{kingdomrank} &7{player} &8\u00BB &7{message}'
+        format: '&8[P]&7{prefix}{kingdomprefix}{kingdomrankprefix} &7{player} &8\u00BB &7{message}'
 
         #Prefix before message to send a message in this channel
         message-prefix: '!'
