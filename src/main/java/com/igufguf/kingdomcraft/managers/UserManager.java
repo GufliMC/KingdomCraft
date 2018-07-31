@@ -8,6 +8,7 @@ import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -128,7 +129,14 @@ public class UserManager {
 
         for ( String key : data.getConfigurationSection(uuid.toString()).getKeys(false) ) {
             if ( key.equalsIgnoreCase("name") ) continue;
-            ku.setData(key, data.get(uuid.toString() + "." + key));
+
+            Object value = data.get(uuid.toString() + "." + key);
+            if ( value instanceof MemorySection ) {
+                ku.setData(key, ((MemorySection) value).getValues(false));
+            } else {
+                ku.setData(key, value);
+            }
+
             ku.delInLocalList("changes", key);
         }
 
@@ -137,6 +145,7 @@ public class UserManager {
             ku.setData("kingdom", null);
         }
 
+        // if rank doesn't exists, empty it
         if ( ku.getRank() != null && getRank(ku) == null ) {
             ku.setData("rank", null);
         }
@@ -144,6 +153,13 @@ public class UserManager {
         // set user in default rank if no rank was set and he is in a kingdom
         if ( getKingdom(ku) != null && ku.getRank() == null ) {
             setDefaultRank(ku);
+        }
+
+        // convert to new channels system
+        if ( ku.getData("channels") instanceof List ) {
+            Map<String, Boolean> channels = new HashMap<>();
+            for ( String ch : ku.getList("channels", String.class) ) channels.put(ch, true);
+            ku.setData("channels", channels);
         }
 
         return ku;

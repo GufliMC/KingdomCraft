@@ -49,10 +49,10 @@ public class ChatListener extends EventListener {
 		this.cm = plugin.getApi().getChatManager();
 	}
 
-
 	@EventHandler(ignoreCancelled=true, priority=EventPriority.HIGHEST)
 	public void onChat(AsyncPlayerChatEvent e) {
 		if ( !isWorldEnabled(e.getPlayer().getWorld()) ) return;
+		if ( !cm.isChatSystemEnabled() ) return;
 
 		Player p = e.getPlayer();
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
@@ -94,37 +94,27 @@ public class ChatListener extends EventListener {
 
 			// check which channel he is talking in
 			for ( ChatManager.Channel c : cm.getChannels() ) {
-				if ( ( user.hasInList("channels", c.getName()) || c.isAlwayson() )
-						&& c.getMessagePrefix() != null
-						&& ChatColor.stripColor(message).startsWith(c.getMessagePrefix())
-						&& ( channel == null || channel.getMessagePrefix().length() < c.getMessagePrefix().length() ) ) {
+				if ( (cm.isEnabled(user, c.getName()) || c.isAlwaysEnabled()) // enabled
+						&& c.getMessagePrefix() != null // messag prefix is not null
+						&& ChatColor.stripColor(message).startsWith(c.getMessagePrefix()) //message prefix matches sent message
+						&& (channel == null || channel.getMessagePrefix().length() < c.getMessagePrefix().length()) ) { // only when no channel is found or a better matching prefix is found
 					channel = c;
 				}
 			}
 
-			// if no channel is detected, he is talking in the default channel
-			if ( channel == null ) {
-				channel = cm.getChannel(cm.getDefaultChannel());
-				if ( channel == null ) return;
-			} else {
+			// if no channel is detected or player has no permission for this channel, talk in default channel
+			if ( channel == null || (channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) && !p.isOp() )) {
+				channel = cm.getChannel(cm.getDefaultChannel(user));
 
-				// if player has no permission for this channel, talk in default channel
-				if (channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) && !p.isOp()) {
-					channel = cm.getChannel(cm.getDefaultChannel());
-					if (channel == null) return;
-				}
-			}
-
-			// if the type is not public and he is not in a kingdom, he cant talk there so fallback to no kingdom channel
-			if ( channel.getVisibilityType() != ChatManager.VisibilityType.PUBLIC && user.getKingdom() == null ) {
-				channel = cm.getChannel(cm.getNoKingdomChannel());
-
-				// if channel is null or type is not public (which is weird) alert player that he cant talk
-				if ( channel == null || channel.getVisibilityType() != ChatManager.VisibilityType.PUBLIC ) {
+				// player is not in a kingdom and there is no default channel for kingdomless players
+				if ( channel == null && user.getKingdom() == null  ) {
 					plugin.getMsg().send(p, "chatNoKingdom");
 					e.setCancelled(true);
 					return;
 				}
+
+				// no default channel was found
+				if ( channel == null ) return;
 			}
 
 			format = channel.getFormat();
@@ -145,7 +135,7 @@ public class ChatListener extends EventListener {
 				if ( !up.isOnline() ) continue;
 				if ( !isWorldEnabled(up.getWorld()) ) continue;
 				if ( channel.isPermission() && !up.hasPermission("kingdom.channel." + channel.getName()) && !up.isOp() ) continue;
-				if ( !u.hasInList("channels", channel.getName()) && !channel.isAlwayson() && (cm.getDefaultChannel() == null || !channel.getName().equalsIgnoreCase(cm.getDefaultChannel()))) continue;
+				if ( !u.hasInList("channels", channel.getName()) && !channel.isAlwaysEnabled() ) continue;
 
 				if ( channel.getVisibilityType() == ChatManager.VisibilityType.KINGDOM ) {
 					// player must be in same kingdom for this visibility
