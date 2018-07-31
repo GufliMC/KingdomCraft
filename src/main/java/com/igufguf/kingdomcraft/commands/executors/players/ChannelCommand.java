@@ -93,18 +93,20 @@ public class ChannelCommand extends CommandBase {
 			return false;
 		}
 
-		if ( channel.isAlwayson() || (cm.getDefaultChannel() != null && cm.getDefaultChannel().equals(channel.getName())) ) {
+		if ( channel.isAlwaysEnabled() ) {
 			plugin.getMsg().send(p, "cmdChannelToggle", channel.getName());
 			return false;
 		}
 
 		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
-		if ( !user.hasInList("channels", channel.getName()) ) {
-			user.addInList("channels", channel.getName());
-			plugin.getMsg().send(p, "cmdChannelEnable", channel.getName());
-		} else {
-			user.delInList("channels", channel.getName());
+		boolean enabled = cm.isEnabled(user, channel.getName());
+
+		if ( enabled ) {
+			cm.toggleChannel(user, channel.getName());
 			plugin.getMsg().send(p, "cmdChannelDisable", channel.getName());
+		} else {
+			cm.toggleChannel(user, channel.getName());
+			plugin.getMsg().send(p, "cmdChannelEnable", channel.getName());
 		}
 
 		return false;

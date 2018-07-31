@@ -4,12 +4,16 @@ import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.KingdomCraftApi;
 import com.igufguf.kingdomcraft.KingdomCraftConfig;
 import com.igufguf.kingdomcraft.listeners.ChatListener;
+import com.igufguf.kingdomcraft.objects.KingdomUser;
 import net.milkbowl.vault.chat.Chat;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -41,8 +45,8 @@ public class ChatManager {
 
     private boolean channelsenabled = false;
 
-    private String nokingdomchannel;
-    private String defaultchannel;
+    private String kingdomlessDefaultChannel;
+    private String kingdomDefaultChannel;
     private ArrayList<Channel> channels;
 
     private String defaultformat;
@@ -59,62 +63,70 @@ public class ChatManager {
 
         KingdomCraftConfig config = plugin.getCfg();
 
-        chatsystem = config.getBoolean("chat-system");
+        chatsystem = config.getBoolean("chat-system.enabled");
         if ( !chatsystem ) return;
 
-        antiadvertise = config.getBoolean("anti-advertise");
-        anticaps = config.getBoolean("anti-caps");
+        String pathprefix = "chat-system.";
 
-        channelsenabled = config.getBoolean("channels.enabled");
+        antiadvertise = config.getBoolean(pathprefix + "anti-advertise");
+        anticaps = config.getBoolean(pathprefix + "anti-caps");
+
+        channelsenabled = config.getBoolean(pathprefix + "channels.enabled");
         if ( !channelsenabled ) {
-
-            if ( config.has("nochannels-format") ) {
-                defaultformat = config.getString("nochannels-format");
+            if ( config.has(pathprefix + "default-format") ) {
+                defaultformat = config.getString(pathprefix + "default-format");
             }
-
             return;
         }
 
         channels = new ArrayList<>();
 
+        pathprefix = pathprefix + "channels.";
+
         // load channels
-        for ( String name : config.getSection("channels").getKeys(false) ) {
+        for ( String name : config.getSection(pathprefix.substring(0, pathprefix.length()-1)).getKeys(false) ) {
+
+            // non channels in this path
             if ( name.equalsIgnoreCase("enabled") ) continue;
-            if ( !config.has("channels." + name + ".format") ) continue;
 
-            if ( config.getBoolean("channels." + name + ".default") ) {
-                defaultchannel = name;
-            }
+            // channel must have format
+            if ( !config.has(pathprefix + name + ".format") ) continue;
 
+            // channel visiblity
             VisibilityType type = VisibilityType.PUBLIC;
+            if ( config.has(pathprefix + name + ".visibility") ) {
+                String s = config.getString(pathprefix + name + ".visibility");
 
-            if ( config.has("channels." + name + ".visibility") ) {
-
-                String s = config.getString("channels." + name + ".visibility");
                 if ( s.equalsIgnoreCase("kingdom") ) type = VisibilityType.KINGDOM;
                 else if ( s.equalsIgnoreCase("public") ) type = VisibilityType.PUBLIC;
-
-            } else if ( config.getBoolean("channels." + name + ".kingdom-only") ) {
-                type = VisibilityType.KINGDOM;
             }
 
-            String format = config.getString("channels." + name + ".format");
+            // is it a default channel
+            boolean defaultChannel = config.getBoolean(pathprefix + name + ".default");
+            if ( defaultChannel ) {
+                if ( type == VisibilityType.KINGDOM) {
+                    kingdomDefaultChannel = name;
+                }  else {
+                    kingdomlessDefaultChannel = name;
+                }
+            }
 
-            String mprefix = config.getString("channels." + name + ".message-prefix");
+            // channel format
+            String format = config.getString(pathprefix + name + ".format");
 
-            boolean alwayson = config.has("channels." + name + ".alwayson") && config.getBoolean("channels." + name + ".alwayson");
-            boolean permission = config.has("channels." + name + ".permission") && config.getBoolean("channels." + name + ".permission");
+            // channel message prefix
+            String mprefix = config.getString(pathprefix + name + ".message-prefix");
 
-            Channel c = new Channel(name, format, mprefix, type, alwayson, permission);
+            // channel always-enabled
+            boolean alwaysEnabled = config.has(pathprefix + name + ".always-enabled") && config.getBoolean(pathprefix + name + ".always-enabled");
+
+            // channel permission
+            boolean permission = config.has(pathprefix + name + ".permission") && config.getBoolean(pathprefix + name + ".permission");
+
+            boolean defaultEnabled = config.has(pathprefix + name + ".default-enabled") &&  config.getBoolean(pathprefix + name + ".default-enabled");
+
+            Channel c = new Channel(name, format, mprefix, type, defaultChannel || alwaysEnabled, defaultEnabled, permission);
             addChannel(c);
-        }
-
-        if ( config.has("nokingdom-channel") ) {
-            nokingdomchannel = config.getString("nokingdom-channel");
-        }
-
-        if ( config.has("defaultformat") ) {
-            defaultformat = config.getString("defaultformat");
         }
     }
 
@@ -163,12 +175,46 @@ public class ChatManager {
         return null;
     }
 
-    public String getDefaultChannel() {
-        return defaultchannel;
+    public String getKingdomDefaultChannel() {
+        return kingdomDefaultChannel;
     }
 
-    public String getNoKingdomChannel() {
-        return nokingdomchannel;
+    public String getKingdomlessDefaultChannel() {
+        return kingdomlessDefaultChannel;
+    }
+
+
+    // users
+
+    public String getDefaultChannel(KingdomUser user) {
+        if ( user.getKingdom() == null || getKingdomDefaultChannel() == null ) {
+            return getKingdomlessDefaultChannel();
+        }
+        return getKingdomDefaultChannel();
+    }
+
+    public boolean isEnabled(KingdomUser user, String channel) {
+        if ( !user.hasData("channels") ) return false;
+
+        Channel ch = getChannel(channel);
+        if ( ch == null ) return false;
+
+        Map<String, Boolean> options = (Map) user.getData("channels");
+        return (options.containsKey(channel) && options.get(channel)) // manually enabled
+                || (!options.containsKey(channel) && ch.isDefaultEnabled()); // default enabled
+    }
+
+    public void toggleChannel(KingdomUser user, String channel) {
+        boolean enabled = isEnabled(user, channel);
+
+        Map<String, Boolean> options;
+        if ( !user.hasData("channels") ) {
+            user.setData("channels", options = new HashMap<>());
+        } else {
+            options = (Map) user.getData("channels");
+        }
+
+        options.put(channel, !enabled);
     }
 
     public class Channel {
@@ -179,20 +225,23 @@ public class ChatManager {
         private final String mprefix;
 
         private final VisibilityType vtype;
-        private final boolean alwayson;
+
+        private final boolean alwaysEnabled;
+        private final boolean defaultEnabled;
         private final boolean permission;
 
-        public Channel(String name, String format, String mprefix, VisibilityType vtype, boolean alwayson, boolean permission) {
+        public Channel(String name, String format, String mprefix, VisibilityType vtype, boolean alwaysEnabled, boolean defaultEnabled, boolean permission) {
             this.name = name;
             this.format = StringEscapeUtils.unescapeJava(format);
             this.mprefix = mprefix;
             this.vtype = vtype;
-            this.alwayson = alwayson;
+            this.alwaysEnabled = alwaysEnabled;
+            this.defaultEnabled = defaultEnabled;
             this.permission = permission;
         }
 
         public Channel(String name, String format, String mprefix) {
-            this(name, format, mprefix, VisibilityType.PUBLIC, false, false);
+            this(name, format, mprefix, VisibilityType.PUBLIC, false, false, false);
         }
 
 
@@ -212,8 +261,12 @@ public class ChatManager {
             return vtype;
         }
 
-        public boolean isAlwayson() {
-            return alwayson;
+        public boolean isAlwaysEnabled() {
+            return alwaysEnabled;
+        }
+
+        public boolean isDefaultEnabled() {
+            return defaultEnabled;
         }
 
         public boolean isPermission() {
