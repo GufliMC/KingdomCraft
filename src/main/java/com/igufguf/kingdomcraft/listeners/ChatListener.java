@@ -149,7 +149,7 @@ public class ChatListener extends EventListener {
 
 				if ( channel.getVisibilityType() == ChatManager.VisibilityType.KINGDOM ) {
 					// player must be in same kingdom for this visibility
-					if ( u.getKingdom() != null && u.getKingdom() == user.getKingdom() ) {
+					if ( u.getKingdom() != null && u.getKingdom().equals(user.getKingdom()) ) {
 						receivers.add(up);
 					}
 				} else {
