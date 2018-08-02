@@ -40,8 +40,6 @@ public class ConnectionListener extends EventListener {
 
 		KingdomUser user = plugin.getApi().getUserManager().getOfflineUser(p.getUniqueId());
 		plugin.getApi().getUserManager().registerUser(user);
-
-		plugin.getApi().getPermissionManager().refreshPermissions(user);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -52,9 +50,6 @@ public class ConnectionListener extends EventListener {
 		plugin.getApi().getUserManager().unregisterUser(user);
 
 		plugin.getApi().getUserManager().save(user);
-
-		PermissionAttachment pa = user.hasData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
-		if ( pa != null ) pa.remove();
 	}
 	
 }

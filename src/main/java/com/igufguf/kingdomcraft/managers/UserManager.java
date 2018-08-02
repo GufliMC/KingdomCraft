@@ -94,12 +94,15 @@ public class UserManager {
 
     public void registerUser(KingdomUser user) {
         if ( !users.contains(user) ) users.add(user);
+        api.getPermissionManager().refresh(user);
 
         System.out.println(user.getName() + " registered (uuid = " + user.getUuid() + ")");
     }
 
     public void unregisterUser(KingdomUser user) {
         users.remove(user);
+
+        api.getPermissionManager().clear(user);
     }
 
     public KingdomUser getUser(Player p) {
@@ -114,13 +117,20 @@ public class UserManager {
         Player p = Bukkit.getPlayerExact(username);
         if ( p != null ) return getUser(p);
 
-        return getOfflineUser(Bukkit.getOfflinePlayer(username).getUniqueId());
+        return getOfflineUser(username);
+    }
+
+    public KingdomUser getOfflineUser(String username) {
+        for ( String uuid : data.getKeys(false) ) {
+            if ( data.contains(uuid + ".name") && data.getString(uuid + ".name").equalsIgnoreCase(username) ) return getOfflineUser(UUID.fromString(uuid));
+        }
+        return null;
     }
 
     public KingdomUser getOfflineUser(UUID uuid) {
         if ( data.get(uuid.toString()) == null ) {
-            return new KingdomUser(Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() :
-                    Bukkit.getOfflinePlayer(uuid).getName(), uuid.toString());
+            String name = Bukkit.getPlayer(uuid) != null ? Bukkit.getPlayer(uuid).getName() : Bukkit.getOfflinePlayer(uuid).getName();
+            return new KingdomUser(name, uuid.toString());
         }
 
         String name = data.getString(uuid.toString() + ".name");
@@ -216,7 +226,7 @@ public class UserManager {
             invites.remove(kingdom.getName());
         }
 
-        api.getPermissionManager().refreshPermissions(user);
+        api.getPermissionManager().refresh(user);
 
         Bukkit.getPluginManager().callEvent(new KingdomJoinEvent(user));
 
@@ -228,7 +238,7 @@ public class UserManager {
         if ( ko == null || !ko.hasRank(rank) ) return;
 
         user.setData("rank", rank.getName());
-        api.getPermissionManager().refreshPermissions(user);
+        api.getPermissionManager().refresh(user);
     }
 
     public void setDefaultRank(KingdomUser user) {

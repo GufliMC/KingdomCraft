@@ -1,10 +1,12 @@
 package com.igufguf.kingdomcraft.managers;
 
 import com.igufguf.kingdomcraft.KingdomCraftApi;
+import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.permissions.PermissionAttachment;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -34,24 +36,45 @@ public class PermissionManager {
         this.api = api;
     }
 
-    public void refreshPermissions(KingdomUser user) {
-        PermissionAttachment pa = user.hasLocalData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
-        if ( pa != null ) pa.remove();
+    public void refresh(KingdomUser user) {
+        clear(user);
+
+        if ( !api.isWorldEnabled(user.getPlayer().getWorld()) ) return;
 
         KingdomRank rank = api.getUserManager().getRank(user);
-        if ( rank == null || !api.isWorldEnabled(user.getPlayer().getWorld())) return;
+        if ( rank == null ) return;
 
-        pa = user.getPlayer().addAttachment(api.getPlugin());
-
-        for ( String perm : rank.getPermissions() ) {
-            if ( perm.startsWith("-") ) {
-                pa.setPermission(perm.replaceFirst(Pattern.quote("-"), "").trim(), false);
-            } else {
-                pa.setPermission(perm.trim(), true);
-            }
-        }
+        PermissionAttachment pa = user.getPlayer().addAttachment(api.getPlugin());
+        setup(pa, rank);
 
         user.setLocalData("permissions", pa);
+    }
+
+    public void clear(KingdomUser user) {
+        PermissionAttachment pa = user.hasLocalData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
+        if ( pa == null ) return;
+
+        pa.remove();
+    }
+
+    private void setup(PermissionAttachment pa, KingdomRank rank) {
+        setup(pa, rank, false);
+    }
+
+    private void setup(PermissionAttachment pa, KingdomRank rank, boolean inverse) {
+        KingdomObject ko = rank.getKingdom();
+
+        for ( Map.Entry<String, Boolean> perm : rank.getPermissions().entrySet() ) {
+
+            // inheritances, if the permission is a rank name, setup the permissions for that rank
+            KingdomRank r = ko.getRank(perm.getKey());
+            if ( r != null ) {
+                setup(pa, r, !perm.getValue());
+                continue;
+            }
+
+            pa.setPermission(perm.getKey(), inverse ? !perm.getValue() : perm.getValue());
+        }
     }
 
 }
