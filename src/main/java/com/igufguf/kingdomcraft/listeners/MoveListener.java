@@ -56,7 +56,7 @@ public class MoveListener extends EventListener {
 		// if 1 of the worlds is enabled and the other disabled, a change in permissions has to happen
 		if ( isWorldEnabled(e.getFrom().getWorld()) ^ isWorldEnabled(e.getTo().getWorld()) ) {
 			KingdomUser user = plugin.getApi().getUserManager().getUser(e.getPlayer());
-			plugin.getApi().getPermissionManager().refreshPermissions(user);
+			plugin.getApi().getPermissionManager().refresh(user);
 		}
 	}
 }

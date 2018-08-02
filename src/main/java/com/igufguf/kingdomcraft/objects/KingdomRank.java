@@ -3,7 +3,9 @@ package com.igufguf.kingdomcraft.objects;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.ChatColor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -26,10 +28,16 @@ import java.util.List;
  **/
 public class KingdomRank extends KingdomData {
 
+    private final KingdomObject kingdom;
     private final String name;
 
-    public KingdomRank(String name) {
+    public KingdomRank(KingdomObject kingdom, String name) {
+        this.kingdom = kingdom;
         this.name = name;
+    }
+
+    public KingdomObject getKingdom() {
+        return kingdom;
     }
 
     public String getName() {
@@ -40,12 +48,22 @@ public class KingdomRank extends KingdomData {
         return hasData("display") ? ChatColor.translateAlternateColorCodes('&', StringEscapeUtils.unescapeJava((String) getData("display"))) : getName();
     }
 
-    public String[] getPermissions() {
+    public Map<String, Boolean> getPermissions() {
+        Map<String, Boolean> output = new HashMap<>();
+
         if ( hasData("permissions") && getData("permissions") instanceof List) {
-            List<String> list = ((List) getData("permissions"));
-            return list.toArray(new String[list.size()]);
+            List<String> list = getList("permissins", String.class);
+
+            for ( String perm : list ) {
+                if ( perm.startsWith("-") ) {
+                    output.put(perm.substring(1).trim(), false);
+                } else {
+                    output.put(perm.trim(), true);
+                }
+            }
         }
-        return new String[0];
+
+        return output;
     }
 
 }

@@ -127,7 +127,7 @@ public class KingdomManager {
         for ( String rank : data.getConfigurationSection("ranks").getKeys(false) ) {
             ConfigurationSection cs = data.getConfigurationSection("ranks." + rank);
             if ( cs == null ) continue;
-            KingdomRank kr = new KingdomRank(rank);
+            KingdomRank kr = new KingdomRank(ko, rank);
 
             // load rank data
             for ( String key : cs.getKeys(false) ) {
@@ -202,13 +202,13 @@ public class KingdomManager {
         ko.setData("prefix", "&7[&" + color.getChar() + name + "&7]");
         ko.setData("display", "&" + color.getChar() + name);
 
-        KingdomRank member = new KingdomRank("member");
+        KingdomRank member = new KingdomRank(ko, "member");
         member.setData("default", true);
         member.setData("prefix", "&7[&8Member&7]");
         member.setData("permissions", Arrays.asList("kingdom.spawn", "kingdom.channel"));
         ko.getRanks().add(member);
 
-        KingdomRank king = new KingdomRank("king");
+        KingdomRank king = new KingdomRank(ko, "king");
         king.setData("prefix", "&7[&6King&7]");
         king.setData("permissions", Arrays.asList("member", "kingdom.kick", "kingdom.invite"));
         ko.getRanks().add(king);
