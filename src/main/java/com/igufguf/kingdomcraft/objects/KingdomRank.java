@@ -52,7 +52,7 @@ public class KingdomRank extends KingdomData {
         Map<String, Boolean> output = new HashMap<>();
 
         if ( hasData("permissions") && getData("permissions") instanceof List) {
-            List<String> list = getList("permissins", String.class);
+            List<String> list = getList("permissions", String.class);
 
             for ( String perm : list ) {
                 if ( perm.startsWith("-") ) {
