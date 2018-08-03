@@ -164,11 +164,13 @@ public class KingdomManager {
         FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 
         // save kingdom data
-        for ( String key : ko.getDataMap().keySet() ) {
-            if ( !data.contains(key) ) {
-                data.set(key, ko.getData(key));
-            } else if ( ko.hasInLocalList("changes", key) ) {
-                data.set(key, ko.getData(key));
+        if ( ko.hasLocalData("changes") ) {
+            for (String key : ko.getLocalList("changes", String.class)) {
+                if (!ko.hasData(key)) {
+                    data.set(key, null);
+                } else {
+                    data.set(key, ko.getData(key));
+                }
             }
         }
 
@@ -177,11 +179,13 @@ public class KingdomManager {
             String path = "ranks." + kr.getName();
 
             //save rank data
-            for ( String key : kr.getDataMap().keySet() ) {
-                if ( !data.contains(path + "." + key) ) {
-                    data.set(path + "." + key, kr.getData(key));
-                } else if ( kr.hasInLocalList("changes", key) ) {
-                    data.set(path + "." + key, kr.getData(key));
+            if ( kr.hasLocalData("changes") ) {
+                for (String key : kr.getLocalList("changes", String.class)) {
+                    if (!kr.hasData(path + "." + key)) {
+                        data.set(path + "." + key, null);
+                    } else {
+                        data.set(path + "." + key, kr.getData(key));
+                    }
                 }
             }
         }
