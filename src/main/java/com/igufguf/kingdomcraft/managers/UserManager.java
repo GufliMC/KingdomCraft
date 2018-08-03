@@ -255,8 +255,14 @@ public class UserManager {
     public void save(KingdomUser user) {
         data.set(user.getUuid() + ".name", user.getName());
 
-        for ( String key : user.getDataMap().keySet() ) {
-            data.set(user.getUuid() + "." + key, user.getData(key));
+        if ( user.hasLocalData("changes") ) {
+            for (String key : user.getLocalList("changes", String.class)) {
+                if (!user.hasData(key)) {
+                    data.set(user.getUuid() + "." + key, null);
+                } else {
+                    data.set(user.getUuid() + "." + key, user.getData(key));
+                }
+            }
         }
 
         String yaml = this.data.saveToString();
