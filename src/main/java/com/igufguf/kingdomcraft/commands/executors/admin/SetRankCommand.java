@@ -103,11 +103,11 @@ public class SetRankCommand extends CommandBase {
 			return false;
 		}
 
-		user.setData("rank", rank.getName());
+		plugin.getApi().getUserManager().setRank(user, rank);
 		plugin.getMsg().send(sender, "cmdRankSenderChange", user.getName(), rank.getName());
 
 		if ( user.getPlayer() != null ) {
-			plugin.getMsg().send(sender, "cmdRankTargetChange", rank.getName());
+			plugin.getMsg().send(user.getPlayer(), "cmdRankTargetChange", rank.getName());
 		}
 		
 		//save new rank because user is offline

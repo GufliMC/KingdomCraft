@@ -1,6 +1,7 @@
 package com.igufguf.kingdomcraft;
 
 import com.igufguf.kingdomcraft.commands.CommandHandler;
+import com.igufguf.kingdomcraft.commands.executors.admin.DebugCommand;
 import com.igufguf.kingdomcraft.commands.executors.admin.*;
 import com.igufguf.kingdomcraft.commands.executors.members.*;
 import com.igufguf.kingdomcraft.commands.executors.players.*;
@@ -59,6 +60,16 @@ public class KingdomCraft extends JavaPlugin {
 			getDataFolder().mkdirs();
 		}
 
+		// load the command handler
+		this.cmdHandler = new CommandHandler(this);
+
+		PluginCommand cmd = getCommand("kingdom");
+		cmd.setExecutor(cmdHandler);
+		cmd.setTabCompleter(cmdHandler);
+
+		// load first to register debug executors
+		new DebugCommand(this);
+
 		//load defaults
 		config = new KingdomCraftConfig(this);
 		messages = new KingdomCraftMessages(this);
@@ -74,13 +85,8 @@ public class KingdomCraft extends JavaPlugin {
 		if ( api.getChatManager().isChatSystemEnabled() )
 			pm.registerEvents(new ChatListener(this), this);
 
-		//loading the commands
-		this.cmdHandler = new CommandHandler(this);
 
-		PluginCommand cmd = getCommand("kingdom");
-		cmd.setExecutor(cmdHandler);
-		cmd.setTabCompleter(cmdHandler);
-		
+		// load the commands
 		loadCommands();
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
@@ -100,6 +106,10 @@ public class KingdomCraft extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		save();
+
+		for (KingdomUser user : api.getUserManager().getUsers() ) {
+			api.getUserManager().unregisterUser(user);
+		}
 	}
 	
 	private void loadCommands() {
