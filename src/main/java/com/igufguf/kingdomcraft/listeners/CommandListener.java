@@ -40,7 +40,13 @@ public class CommandListener extends EventListener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
 
+        // override list
         if ( e.getMessage().toLowerCase().startsWith("/list") ) {
+
+            if ( !plugin.getCfg().getBoolean("override-list-command") ) {
+                return;
+            }
+
             e.setCancelled(true);
 
             String message = "";

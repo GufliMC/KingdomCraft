@@ -32,6 +32,9 @@ spawn-on-kingdom-join: true
 # Cooldown in seconds for teleporting to kingdom spawn (0 = default), no waiting with kindom.teleport.bypass
 tp-delay: 5
 
+# Override the /list command of bukkit or other plugins to one with kingdom prefixes.
+override-list-command: true
+
 # true = use the below channel system, DON'T USE ANY OTHER CHAT PLUGIN!
 # false = use another chat plugin.
 chat-system:

@@ -1,12 +1,15 @@
 package com.igufguf.kingdomcraft.managers;
 
 import com.igufguf.kingdomcraft.KingdomCraftApi;
+import com.igufguf.kingdomcraft.commands.executors.admin.DebugCommand;
 import com.igufguf.kingdomcraft.events.KingdomJoinEvent;
 import com.igufguf.kingdomcraft.events.KingdomLeaveEvent;
 import com.igufguf.kingdomcraft.objects.KingdomObject;
 import com.igufguf.kingdomcraft.objects.KingdomRank;
 import com.igufguf.kingdomcraft.objects.KingdomUser;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,7 +17,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -86,6 +88,76 @@ public class UserManager {
         } catch (InvalidConfigurationException e) {
             e.printStackTrace();
         }
+
+        // load debugger
+
+        DebugCommand debugger = (DebugCommand) api.getPlugin().getCmdHandler().getByCommand("debug");
+        debugger.register(new DebugCommand.DebugExecutor("user") {
+            @Override
+            public void onExecute(CommandSender sender, String[] args) {
+                if ( args.length == 0 ) return;
+
+                if ( args[0].equalsIgnoreCase("list") ) {
+                    String s = "";
+                    for ( KingdomUser user : getUsers() ) {
+                        s += ", " + ChatColor.GOLD + user.getName() + ChatColor.GRAY;
+                    }
+                    s = s.substring(2);
+                    sender.sendMessage(s);
+                    return;
+                }
+
+                if ( args.length < 2 ) return;
+
+                KingdomUser user = getUser(args[1]);
+                if ( user == null ) user = getOfflineUser(args[1]);
+                if ( user == null ){
+                    sender.sendMessage(ChatColor.RED + "User cannot be found!");
+                    return;
+                }
+
+                if ( args[0].equalsIgnoreCase("keys") ) {
+
+                    String s = "";
+                    for ( String key : user.getDataMap().keySet() ) {
+                        s += ", " + ChatColor.GOLD + key + ChatColor.GRAY;
+                    }
+                    if ( s.length() > 0 ) s = s.substring(2);
+
+                    String s1 = "";
+                    for ( String key : user.getLocalDataMap().keySet() ) {
+                        s1 += ", " + ChatColor.GOLD + key + ChatColor.GRAY;
+                    }
+                    if ( s1.length() > 0 ) s1 = s1.substring(2);
+
+                    sender.sendMessage(ChatColor.RED + "Data: " + ChatColor.GRAY + s);
+                    sender.sendMessage(" ");
+                    sender.sendMessage(ChatColor.RED + "Local Data: " + ChatColor.GRAY + s1);
+
+                } else if ( args[0].equalsIgnoreCase("show") ) {
+                    if ( args.length != 3 ) return;
+
+                    Object v = user.getData(args[2]);
+                    Object v1 = user.getLocalData(args[2]);
+
+                    if ( v == null && v1 == null ) {
+                        sender.sendMessage(ChatColor.RED + "That key does not exist for that user!");
+                        return;
+                    }
+
+
+                    if ( v != null ) {
+                        sender.sendMessage(ChatColor.RED + "Data: " + ChatColor.GOLD + DebugCommand.prettyPrint(v));
+                    }
+
+                    if ( v1 != null ) {
+                        sender.sendMessage(ChatColor.RED + "Local Data: " + ChatColor.GOLD + DebugCommand.prettyPrint(v1));
+                    }
+
+                }
+
+            }
+        });
     }
 
     public List<KingdomUser> getUsers() {
@@ -101,7 +173,6 @@ public class UserManager {
 
     public void unregisterUser(KingdomUser user) {
         users.remove(user);
-
         api.getPermissionManager().clear(user);
     }
 

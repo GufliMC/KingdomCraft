@@ -49,6 +49,13 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		commands.remove(base);
 	}
 
+	public CommandBase getByCommand(String cmd) {
+		for ( CommandBase cb : commands ) {
+			if ( cb.cmd.equalsIgnoreCase(cmd) ) return cb;
+		}
+		return null;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		boolean player = sender instanceof Player;
@@ -69,9 +76,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 							plugin.getMsg().send(sender, "noPermissionCmd");
 							return true;
 						} else {
-							ArrayList<String> argslist = new ArrayList<>(Arrays.asList(args));
-							argslist.remove(0);
-							return cb.execute(sender, argslist.toArray(new String[argslist.size()]));
+							return cb.execute(sender, Arrays.copyOfRange(args, 1, args.length));
 						}
 					}
 				}
