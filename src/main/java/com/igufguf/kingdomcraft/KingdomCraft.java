@@ -75,7 +75,7 @@ public class KingdomCraft extends JavaPlugin {
 		cmd.setTabCompleter((SimpleCommandHandler) api.getCommandHandler());
 
 		// load first to register debug executors
-		new DebugCommand(this);
+		api.getCommandHandler().register(new DebugCommand(this));
 
 		//load defaults
         config.reload();

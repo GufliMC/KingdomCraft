@@ -1,7 +1,6 @@
 package com.igufguf.kingdomcraft.managers;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.api.KingdomCraftApi;
 import com.igufguf.kingdomcraft.KingdomCraftConfig;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import net.milkbowl.vault.chat.Chat;
