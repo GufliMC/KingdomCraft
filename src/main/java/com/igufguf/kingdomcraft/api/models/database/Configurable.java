@@ -35,7 +35,7 @@ public class Configurable {
         }
     }
 
-    protected org.bukkit.configuration.file.FileConfiguration getConfiguration() {
+    public org.bukkit.configuration.file.FileConfiguration getConfiguration() {
         return configData;
     }
 
