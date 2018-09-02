@@ -72,10 +72,10 @@ public class KingdomCraft extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		api.reload();
-
 		// conversion from 4.1.1 to 5.0
 		convert();
+
+		api.reload();
 
 		// register command
 		PluginCommand cmd = getCommand("kingdom");
@@ -224,19 +224,27 @@ public class KingdomCraft extends JavaPlugin {
 		}
 
 		// convert kingdom
-		for ( Kingdom kingdom : getApi().getKingdomHandler().getKingdoms() ) {
-			File file = new File(getDataFolder() + "/kingdoms", kingdom.getName() + ".yml");
-			if  ( !file.exists() ) continue;
+		File directory = new File(getDataFolder() + "/kingdoms");
 
-			FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
+		File newDataFile = new File(getDataFolder(), "kingdoms.yml");
+		FileConfiguration newDataConfig = YamlConfiguration.loadConfiguration(newDataFile);
 
-			// convert spawn
-			if ( kingdom.getSpawn() == null && fc.contains("spawn") ) {
-				kingdom.setSpawn(KingdomUtils.locFromString(fc.getString("spawn")));
+		for ( File file : directory.listFiles() ) {
+			if ( file.isDirectory() ) continue;
+			if ( !file.getName().replace(".yml", "").matches("[a-zA-Z]+") ) continue;
+
+			String kingdom = file.getName().replace(".yml", "");
+
+			try {
+				FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
+				newDataConfig.set("kingdoms." + kingdom, fc);
+				newDataConfig.save(newDataFile);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			file.delete();
-			getLogger().info("Conversion of kingdom data for '" + kingdom.getName() + "' successfull!");
+			file.renameTo(new File(getDataFolder() + "/kingdoms", kingdom + ".old.disabled"));
+			getLogger().info("Conversion of kingdom data for '" + kingdom + "' successfull!");
 		}
 	}
 
