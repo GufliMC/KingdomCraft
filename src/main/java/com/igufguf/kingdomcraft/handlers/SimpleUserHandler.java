@@ -79,8 +79,7 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
     public KingdomUser getUser(String username) {
         Player p = Bukkit.getPlayerExact(username);
         if ( p != null ) return getUser(p);
-
-        return getOfflineUser(username);
+        return null;
     }
 
     @Override

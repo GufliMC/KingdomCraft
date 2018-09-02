@@ -115,10 +115,12 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 		if ( args.length >= 1 ) {
 			for ( CommandBase cb : cmds ) {
 				if ( args[0].equalsIgnoreCase(cb.cmd) || cb.hasAlias(args[0]) ) {
-					return cb.tabcomplete(sender, args);
+					return cb.tabcomplete(sender, Arrays.copyOfRange(args, 1, args.length));
 				}
 			}
-		} 
+		}
+
+		// autocomplete commands
 		if ( args.length == 1 ) {
 			ArrayList<String> list = new ArrayList<>();
 			for ( CommandBase cb : cmds ) {
