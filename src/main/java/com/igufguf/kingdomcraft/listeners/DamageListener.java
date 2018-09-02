@@ -1,17 +1,16 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.events.KingdomPlayerAttackEvent;
-import com.igufguf.kingdomcraft.managers.FlagManager;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.events.KingdomPlayerAttackEvent;
+import com.igufguf.kingdomcraft.api.models.flags.KingdomFlag;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -54,8 +53,8 @@ public class DamageListener extends EventListener {
 			return;
 		}
 
-		KingdomUser u1 = plugin.getApi().getUserManager().getUser(p);
-		KingdomUser u2 = plugin.getApi().getUserManager().getUser(d);
+		KingdomUser u1 = plugin.getApi().getUserHandler().getUser(p);
+		KingdomUser u2 = plugin.getApi().getUserHandler().getUser(d);
 
         KingdomPlayerAttackEvent event = new KingdomPlayerAttackEvent(e, u1, u2);
 
@@ -66,11 +65,11 @@ public class DamageListener extends EventListener {
 		if ( e.isCancelled() ) return;
 		if ( d.hasPermission("kingdom.friendlyfire.bypass") ) return;
 
-		KingdomObject k1 = plugin.getApi().getUserManager().getKingdom(u1);
-		KingdomObject k2 = plugin.getApi().getUserManager().getKingdom(u2);
+		Kingdom k1 = plugin.getApi().getUserHandler().getKingdom(u1);
+		Kingdom k2 = plugin.getApi().getUserHandler().getKingdom(u2);
 
         // only players from a different kingdom can pvp when friendlyfire
-        if ( k1 == k2 && !plugin.getApi().getFlagManager().getFlagBoolean(k1, FlagManager.FRIENDLYFIRE)  ) {
+        if ( k1 == k2 && !plugin.getApi().getFlagHandler().getFlagValue(k1, KingdomFlag.FRIENDLYFIRE)  ) {
 			e.setCancelled(true);
 			plugin.getMsg().send(d, "damageKingdom");
         }

@@ -17,52 +17,48 @@ KingdomCraftApi api = kdc.getApi();
 
 ##### Using the api to retrieve data from an online user:
 ```java
-KingdomUser user = api.getUserManager().getUser(Player);
-KingdomUser user = api.getUserManager().getUser("iGufGuf");
+KingdomUser user = api.getUserHandler().getUser(Player);
+KingdomUser user = api.getUserHandler().getUser("iGufGuf");
 ```
 > Retrieving a user with the username will also return if the user is not online
 
 
 ##### Using the api to retrieve data from an offline user:
 ```java
-KingdomUser user = api.getUserManager().getOfflineUser(UUID);
+KingdomUser user = api.getUserHandler().getOfflineUser(UUID);
 ```
 > After modifying offline userdata make sure to save the data!
 
 
 ##### Saving a user object:
 ```java
-api.getUserManager().save(user);
+api.getUserHandler().save(user);
 ```
 
 ##### Using the api to retrieve data from a kingdom:
 ```java
-KingdomObject kd = api.getKingdomManager().getKingdom("kingdomname");
+Kingdom kd = api.getKingdomHandler().getKingdom("kingdomname");
 ```
 
-##### Saving the kingdom object:
+##### Saving the kingdom data:
 ```java
-api.getKingdomManager().save(kd);
+api.getKingdomHandler().save(kd);
 ```
 
-##### Manipulating data of kingdom objects:
+##### Manipulating custom data of a kingdom
 KingdomUser, KingdomObject & KingdomRank all extends on KingdomData
 ```java
-KingdomObject object;
-KingdomUser object;
-KingdomRank object;
+Kingdom kd = api.getKingdomHandler().getKingdom("kingdomname");
+Storable kingdomdata = kd.getKingdomData();
 
-if ( object.hasData(key) ) {
-    if ( object.getData(key) != value ) {
-        object.setData(key, value);
-    }
-}
+kingdomdata.getData("key");
+kingdomdata.setData("key", value);
 ```
-> KingdomUser has also the possibility to use hasLocalData, getLocalData & setLocalData, this data will not be written to the file
+> KingdomUser has also the possibility to use hasMemory, getMemory & setMemory, this data will not be written to the data file
 
 ##### Getting the relation of a kingdom:
 ```java
-KingdomRelation rel = api.getRelationManager().getRelation(kingdom, targetkingdom);
+KingdomRelation rel = api.getRelationHandler().getRelation(kingdom, targetkingdom);
 ```
 
 ##### Retrieving a kingdomrank from a kingdom
@@ -72,28 +68,75 @@ KingdomRank rank = kd.getRank("rankname");
 
 ##### Changing the rank/kingdom of a user:
 ```java
-api.getUserManager().setRank(user, rank);
-api.getUserManager().setKingdom(user, kingdom);
+api.getUserHandler().setRank(user, rank);
+api.getUserHandler().setKingdom(user, kingdom);
+```
+
+##### Kingdom flags
+
+KingdomFlags are custom options you can change for every kingdom, ex.: friendlyfire, invite-only
+
+The KingdomFlags can have different values like integers, booleans, strings... etc. 
+For this, it makes use of java generics for easier programming. 
+The KingdomFlag class is extendable for more variation in possible value types.
+
+Register new flags
+```java
+public static final KingdomFlag<Boolean> INVITE_ONLY = new KingdomFlag<>("invite-only", Boolean.class);
+
+FlagHandler flagHandler = api.getFlagHandler();
+flagHandler.register(flag);
+```
+
+Retrieve a single flag
+```java
+KingdomFlag flag = flagHandler.getFlag("friendlyfire");
+```
+
+Retrieve all flags for a kingdom
+```java
+List<KingdomFlag> flags = flagHandler.getFlags(kd);
+```
+
+Changing or retrieving flag values for a kingdom
+```java
+flagHandler.setFlag(kd, flag, value);
+flagHandler.getFlagValue(kd, flag);
 ```
 
 KingdomCraft Custom events
 ---
 
-### KingdomChatEvent
+#### KingdomChatEvent
 Called when a player sends a message that is manipulated with kingdomcraft
 
 **Methods**: 
 getPlayer, getFormat, setFormat(String), getMessage, setMessage(String), getReceivers, isCancelled, setCancelled(boolean)
 
-### KingdomJoinEvent
+#### KingdomJoinEvent
 Called when a player joins a kingdom
 
 **Methods**: 
 getUser
 > user.getKingdom() & user.getRank() will return the new kingdom and rank.
 
-### KingdomLeaveEvent
+#### KingdomLeaveEvent
 Called when a player leaves a kingdom
 
 **Methods**: 
 getUser, getOldRank, getOldKingdom
+
+#### KingdomPlayerAttackEvent
+Called when two players damage eachother
+
+**Methods**:
+getDamager, getTarget
+
+Also contains the same methods from EntityDamageEvent
+
+#### Other events
+* KingdomPreLoadEvent
+* KingdomLoadEvent
+* KingdomSaveEvent
+* KingdomUserLoadEvent
+* KingdomUserSaveEvent

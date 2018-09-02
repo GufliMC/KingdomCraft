@@ -2,7 +2,7 @@ package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.managers.TeleportManager;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -41,10 +41,10 @@ public class MoveListener extends EventListener {
 				&& e.getTo().getBlockZ() == e.getFrom().getBlockZ() ) return;
 
 		Player p = e.getPlayer();
-		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
 		if ( user == null ) return;
 
-		TeleportManager tm = plugin.getApi().getTeleportManager();
+		TeleportManager tm = plugin.getTeleportManager();
 		if ( !tm.isTeleporting(user) ) return;
 
 		tm.cancelTaleporter(user);
@@ -55,8 +55,8 @@ public class MoveListener extends EventListener {
 
 		// if 1 of the worlds is enabled and the other disabled, a change in permissions has to happen
 		if ( isWorldEnabled(e.getFrom().getWorld()) ^ isWorldEnabled(e.getTo().getWorld()) ) {
-			KingdomUser user = plugin.getApi().getUserManager().getUser(e.getPlayer());
-			plugin.getApi().getPermissionManager().refresh(user);
+			KingdomUser user = plugin.getApi().getUserHandler().getUser(e.getPlayer());
+			plugin.getPermissionManager().refresh(user);
 		}
 	}
 }

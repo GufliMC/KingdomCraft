@@ -1,19 +1,15 @@
 package com.igufguf.kingdomcraft.managers;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.KingdomCraftApi;
+import com.igufguf.kingdomcraft.api.KingdomCraftApi;
 import com.igufguf.kingdomcraft.KingdomCraftConfig;
-import com.igufguf.kingdomcraft.listeners.ChatListener;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import net.milkbowl.vault.chat.Chat;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -38,7 +34,7 @@ public class ChatManager {
 
     private Chat vault;
 
-    private boolean chatsystem = false;
+    private boolean chatsystem;
 
     private boolean antiadvertise = false;
     private boolean anticaps = false;
@@ -51,9 +47,7 @@ public class ChatManager {
 
     private String defaultformat;
 
-    public ChatManager(KingdomCraftApi api) {
-        KingdomCraft plugin = api.getPlugin();
-
+    public ChatManager(KingdomCraft plugin) {
         if ( plugin.getServer().getPluginManager().getPlugin("Vault") != null ) {
             RegisteredServiceProvider<Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(Chat.class);
             if (chatProvider != null) {
@@ -191,30 +185,6 @@ public class ChatManager {
             return getKingdomlessDefaultChannel();
         }
         return getKingdomDefaultChannel();
-    }
-
-    public boolean isEnabled(KingdomUser user, String channel) {
-        if ( !user.hasData("channels") ) return false;
-
-        Channel ch = getChannel(channel);
-        if ( ch == null ) return false;
-
-        Map<String, Boolean> options = (Map) user.getData("channels");
-        return (options.containsKey(channel) && options.get(channel)) // manually enabled
-                || (!options.containsKey(channel) && ch.isDefaultEnabled()); // default enabled
-    }
-
-    public void toggleChannel(KingdomUser user, String channel) {
-        boolean enabled = isEnabled(user, channel);
-
-        Map<String, Boolean> options;
-        if ( !user.hasData("channels") ) {
-            user.setData("channels", options = new HashMap<>());
-        } else {
-            options = (Map) user.getData("channels");
-        }
-
-        options.put(channel, !enabled);
     }
 
     public class Channel {

@@ -34,11 +34,14 @@ import java.util.regex.Pattern;
 public class KingdomCraftMessages {
 
 	private final KingdomCraft plugin;
-	private final FileConfiguration messages;
+	private FileConfiguration messages;
 
 	public KingdomCraftMessages(KingdomCraft plugin) {
 		this.plugin = plugin;
+		this.reload();
+	}
 
+	public void reload() {
 		InputStream in = plugin.getResource("messages.yml");
 
 		try {

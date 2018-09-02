@@ -1,7 +1,8 @@
 package com.igufguf.kingdomcraft.managers;
 
-import com.igufguf.kingdomcraft.KingdomCraftApi;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.KingdomCraft;
+import com.igufguf.kingdomcraft.api.KingdomCraftApi;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -27,35 +28,35 @@ import org.bukkit.entity.Player;
  **/
 public class TeleportManager {
 
-    private final KingdomCraftApi api;
+    private final KingdomCraft plugin;
 
-    public TeleportManager(KingdomCraftApi api) {
-        this.api = api;
+    public TeleportManager(KingdomCraft plugin) {
+        this.plugin = plugin;
     }
 
     public void startTeleporter(KingdomUser user, Location target, String msg, long delay) {
-        user.setLocalData("teleporting", true);
+        user.memory.put("teleporting", true);
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(api.getPlugin(), () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             Player p = user.getPlayer();
-            if ( p == null || !p.isOnline() || !user.hasLocalData("teleporting") || !user.getLocalBoolean("teleporting") ) {
+            if ( p == null || !p.isOnline() || !user.memory.containsKey("teleporting") || !(boolean) user.memory.get("teleporting") ) {
                 return;
             }
 
             p.teleport(target);
             p.sendMessage(msg);
-            user.setLocalData("teleporting", null);
+            user.memory.remove("teleporting");
         }, delay * 20);
     }
 
     public boolean isTeleporting(KingdomUser user) {
-        return user.hasLocalData("teleporting") && user.getLocalBoolean("teleporting");
+        return user.memory.containsKey("teleporting") && (boolean) user.memory.get("teleporting");
     }
 
     public void cancelTaleporter(KingdomUser user) {
-        user.setLocalData("teleporting", null);
+        user.memory.remove("teleporting");
 
         if ( user.getPlayer() == null ) return;
-        api.getPlugin().getMsg().send(user.getPlayer(), "teleportCancel");
+        plugin.getMsg().send(user.getPlayer(), "teleportCancel");
     }
 }
