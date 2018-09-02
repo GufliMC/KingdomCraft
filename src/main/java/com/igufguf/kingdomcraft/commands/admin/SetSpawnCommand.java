@@ -42,10 +42,10 @@ public class SetSpawnCommand extends CommandBase {
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( !sender.hasPermission("kingdom.setspawn.other") ) return null;
-		if ( args.length == 2 ) {
+		if ( args.length == 1 ) {
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
-				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
+				if ( kd.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			return kingdoms;
 		}

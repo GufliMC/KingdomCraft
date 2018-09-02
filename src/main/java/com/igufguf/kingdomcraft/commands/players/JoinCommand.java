@@ -42,12 +42,12 @@ public class JoinCommand extends CommandBase {
 	
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( args.length == 2 ) {
+		if ( args.length == 1 ) {
 			KingdomUser user = plugin.getApi().getUserHandler().getUser((Player) sender);
 
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
-				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
+				if ( kd.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) {
 					if ( user.getKingdom() != null && kd.getName().equals(user.getKingdom()) ) continue;
 					kingdoms.add(kd.getName());
 				}

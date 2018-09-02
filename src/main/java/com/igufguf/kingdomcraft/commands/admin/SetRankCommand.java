@@ -5,11 +5,14 @@ import com.igufguf.kingdomcraft.api.models.commands.CommandBase;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -42,8 +45,22 @@ public class SetRankCommand extends CommandBase {
 
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( args.length == 3 ) {
-			String username = args[1];
+		if ( args.length == 1 ) {
+			if ( sender.hasPermission("kingdom.setrank.other") ) {
+				return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName)
+						.filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+			} else if ( sender instanceof Player ) {
+				KingdomUser user = plugin.getApi().getUserHandler().getUser((Player) sender);
+				Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
+				if ( user.getKingdom() == null ) return null;
+
+				return plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom).stream().filter(p -> p != sender).map(HumanEntity::getName)
+						.filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+			}
+		}
+
+		if ( args.length == 2 ) {
+			String username = args[0];
 			KingdomUser user = plugin.getApi().getUserHandler().getUser(username);
 			if ( user == null ) return null;
 
@@ -53,7 +70,7 @@ public class SetRankCommand extends CommandBase {
 
 			List<String> ranks = new ArrayList<>();
 			for ( KingdomRank rank : kingdom.getRanks() ) {
-				if ( !rank.getName().toLowerCase().startsWith(args[2].toLowerCase()) ) continue;
+				if ( !rank.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) continue;
 				if ( user.getRank() != null && user.getRank().equals(rank.getName()) ) continue;
 
 				ranks.add(rank.getName());

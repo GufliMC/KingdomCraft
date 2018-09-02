@@ -39,11 +39,6 @@ public class FlagCommand extends CommandBase {
 	}
 	
 	@Override
-	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		return null;
-	}
-	
-	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		Player p = (Player) sender;
 
