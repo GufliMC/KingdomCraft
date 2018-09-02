@@ -168,25 +168,4 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         return ko;
     }
 
-    /*
-    @Override
-    public boolean deleteKingdom(Kingdom ko) {
-        if ( ko == null ) return false;
-
-        for ( KingdomUser user : api.getUserHandler().getUsers() ) {
-            if ( user.getKingdom().equals(ko.getName()) ) {
-                api.getUserHandler().setKingdom(user, null);
-            }
-        }
-
-        kingdoms.remove(ko);
-
-        File file = new File(directory, ko.getName() + ".yml");
-        if ( !file.exists() ) return true;
-
-        file.delete();
-        return true;
-    }
-    */
-
 }
