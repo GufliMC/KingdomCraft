@@ -1,13 +1,12 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.permissions.PermissionAttachment;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -38,18 +37,18 @@ public class ConnectionListener extends EventListener {
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 
-		KingdomUser user = plugin.getApi().getUserManager().getOfflineUser(p.getUniqueId());
-		plugin.getApi().getUserManager().registerUser(user);
+		KingdomUser user = plugin.getApi().getUserHandler().getOfflineUser(p.getUniqueId().toString(), p.getName());
+		plugin.getApi().getUserHandler().registerUser(user);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 
-		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
-		plugin.getApi().getUserManager().unregisterUser(user);
+		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
+		plugin.getApi().getUserHandler().unregisterUser(user);
 
-		plugin.getApi().getUserManager().save(user);
+		plugin.getApi().getUserHandler().save(user);
 	}
 	
 }

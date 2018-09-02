@@ -1,13 +1,16 @@
 package com.igufguf.kingdomcraft.managers;
 
-import com.igufguf.kingdomcraft.KingdomCraftApi;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.objects.KingdomRank;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.KingdomCraft;
+import com.igufguf.kingdomcraft.api.KingdomCraftApi;
+import com.igufguf.kingdomcraft.commands.admin.DebugCommand;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -30,28 +33,54 @@ import java.util.regex.Pattern;
  **/
 public class PermissionManager {
 
-    private final KingdomCraftApi api;
+    private final KingdomCraft plugin;
 
-    public PermissionManager(KingdomCraftApi api) {
-        this.api = api;
+    public PermissionManager(KingdomCraft plugin) {
+        this.plugin = plugin;
+
+        DebugCommand debugger = (DebugCommand) plugin.getApi().getCommandHandler().getByCommand("debug");
+        debugger.register(new DebugCommand.DebugExecutor("perms") {
+            @Override
+            public void onExecute(CommandSender sender, String[] args) {
+                if ( args.length == 0 ) return;
+
+                KingdomUser user = plugin.getApi().getUserHandler().getUser(args[0]);
+                if ( user == null ){
+                    sender.sendMessage(ChatColor.RED + "User cannot be found!");
+                    return;
+                }
+
+                String s = "";
+                for ( String perm : user.getPermissions().getPermissions().keySet() ) {
+                    s += ", " + ChatColor.DARK_GRAY + perm + " " + ChatColor.DARK_GRAY + "(" + ChatColor.GRAY + user.getPermissions().getPermissions().get(perm) + ChatColor.DARK_GRAY + ")";
+                }
+
+                if ( !s.equals("") ) {
+                    s = s.substring(2);
+                    sender.sendMessage(s);
+                } else {
+                    sender.sendMessage("none");
+                }
+            }
+        });
     }
 
     public void refresh(KingdomUser user) {
         clear(user);
 
-        if ( !api.isWorldEnabled(user.getPlayer().getWorld()) ) return;
+        if ( !plugin.getApi().isWorldEnabled(user.getPlayer().getWorld()) ) return;
 
-        KingdomRank rank = api.getUserManager().getRank(user);
+        KingdomRank rank = plugin.getApi().getUserHandler().getRank(user);
         if ( rank == null ) return;
 
-        PermissionAttachment pa = user.getPlayer().addAttachment(api.getPlugin());
+        PermissionAttachment pa = user.getPlayer().addAttachment(plugin);
         setup(pa, rank);
 
-        user.setLocalData("permissions", pa);
+        user.setPermissions(pa);
     }
 
     public void clear(KingdomUser user) {
-        PermissionAttachment pa = user.hasLocalData("permissions") ? (PermissionAttachment) user.getLocalData("permissions") : null;
+        PermissionAttachment pa = user.getPermissions();
         if ( pa == null ) return;
 
         pa.remove();
@@ -62,13 +91,13 @@ public class PermissionManager {
     }
 
     private void setup(PermissionAttachment pa, KingdomRank rank, boolean inverse) {
-        KingdomObject ko = rank.getKingdom();
+        Kingdom ko = rank.getKingdom();
 
         for ( Map.Entry<String, Boolean> perm : rank.getPermissions().entrySet() ) {
 
             // inheritances, if the permission is a rank name, setup the permissions for that rank
             KingdomRank r = ko.getRank(perm.getKey());
-            if ( r != null ) {
+            if ( r != null && r != rank) {
                 setup(pa, r, !perm.getValue());
                 continue;
             }

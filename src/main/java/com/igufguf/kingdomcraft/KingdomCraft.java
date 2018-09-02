@@ -1,13 +1,18 @@
 package com.igufguf.kingdomcraft;
 
-import com.igufguf.kingdomcraft.commands.CommandHandler;
-import com.igufguf.kingdomcraft.commands.executors.admin.DebugCommand;
-import com.igufguf.kingdomcraft.commands.executors.admin.*;
-import com.igufguf.kingdomcraft.commands.executors.members.*;
-import com.igufguf.kingdomcraft.commands.executors.players.*;
+import com.igufguf.kingdomcraft.api.KingdomCraftApi;
+import com.igufguf.kingdomcraft.api.handlers.KingdomCommandHandler;
+import com.igufguf.kingdomcraft.handlers.SimpleCommandHandler;
+import com.igufguf.kingdomcraft.commands.admin.*;
+import com.igufguf.kingdomcraft.commands.members.*;
+import com.igufguf.kingdomcraft.commands.players.*;
 import com.igufguf.kingdomcraft.listeners.*;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import com.igufguf.kingdomcraft.managers.ChatManager;
+import com.igufguf.kingdomcraft.managers.PermissionManager;
+import com.igufguf.kingdomcraft.managers.TeleportManager;
+import com.sun.corba.se.impl.activation.CommandHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
@@ -15,6 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.io.*;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -41,39 +48,43 @@ public class KingdomCraft extends JavaPlugin {
 
 	private KingdomCraft plugin;
 
-	private KingdomCraftApi api;
-	private KingdomCraftConfig config;
-	private KingdomCraftMessages messages;
+	private final KingdomCraftApi api;
+	private final KingdomCraftConfig config;
+	private final KingdomCraftMessages messages;
 
-	private CommandHandler cmdHandler;
+	private ChatManager chatManager;
+	private PermissionManager permissionManager;
+	private TeleportManager teleportManager;
 
 	public KingdomCraft() {
-		api = new KingdomCraftApi(this);
+		this.plugin = this;
+
+        this.config = new KingdomCraftConfig(this);
+        this.messages = new KingdomCraftMessages(this);
+
+		this.api = new KingdomCraftApi(this);
 	}
 
 	@Override
 	public void onEnable() {
-		plugin = this;
+		api.reload();
 
-		// create data folder
-		if ( !getDataFolder().exists() ) {
-			getDataFolder().mkdirs();
-		}
-
-		// load the command handler
-		this.cmdHandler = new CommandHandler(this);
-
+		// register command
 		PluginCommand cmd = getCommand("kingdom");
-		cmd.setExecutor(cmdHandler);
-		cmd.setTabCompleter(cmdHandler);
+		cmd.setExecutor((SimpleCommandHandler) api.getCommandHandler());
+		cmd.setTabCompleter((SimpleCommandHandler) api.getCommandHandler());
 
 		// load first to register debug executors
 		new DebugCommand(this);
 
 		//load defaults
-		config = new KingdomCraftConfig(this);
-		messages = new KingdomCraftMessages(this);
-		api.initialize();
+        config.reload();
+        messages.reload();
+
+        //load managers
+        chatManager = new ChatManager(this);
+        permissionManager = new PermissionManager(this);
+        teleportManager = new TeleportManager(this);
 
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
@@ -82,7 +93,7 @@ public class KingdomCraft extends JavaPlugin {
 		pm.registerEvents(new RespawnListener(this), this);
 		pm.registerEvents(new CommandListener(this), this);
 
-		if ( api.getChatManager().isChatSystemEnabled() )
+		if ( getChatManager().isChatSystemEnabled() )
 			pm.registerEvents(new ChatListener(this), this);
 
 
@@ -90,8 +101,8 @@ public class KingdomCraft extends JavaPlugin {
 		loadCommands();
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
-			KingdomUser user = api.getUserManager().getOfflineUser(p.getUniqueId());
-			api.getUserManager().registerUser(user);
+			KingdomUser user = api.getUserHandler().getOfflineUser(p.getUniqueId().toString(), p.getName());
+			api.getUserHandler().registerUser(user);
 		}
 
 		new BukkitRunnable() {
@@ -107,55 +118,55 @@ public class KingdomCraft extends JavaPlugin {
 	public void onDisable() {
 		save();
 
-		for (KingdomUser user : api.getUserManager().getUsers() ) {
-			api.getUserManager().unregisterUser(user);
+		for (KingdomUser user : api.getUserHandler().getUsers() ) {
+			api.getUserHandler().unregisterUser(user);
 		}
 	}
 	
 	private void loadCommands() {
-		new HelpCommand(this);
+		KingdomCommandHandler cmdHandler = getApi().getCommandHandler();
 
-		new ChannelCommand(this);
-		new InfoCommand(this);
-		new ListCommand(this);
-		new SpawnCommand(this);
+		cmdHandler.register(new HelpCommand(this));
 
-		new JoinCommand(this);
-		new LeaveCommand(this);
+		cmdHandler.register(new InfoCommand(this));
+		cmdHandler.register(new ListCommand(this));
+		cmdHandler.register(new SpawnCommand(this));
 
-		new EnemyCommand(this);
-		new FriendlyCommand(this);
-		new NeutralCommand(this);
-		new InviteCommand(this);
+		cmdHandler.register(new JoinCommand(this));
+		cmdHandler.register(new LeaveCommand(this));
 
-		new KickCommand(this);
-		new SetRankCommand(this);
-		new SetSpawnCommand(this);
-		new SetCommand(this);
+		cmdHandler.register(new EnemyCommand(this));
+		cmdHandler.register(new FriendlyCommand(this));
+		cmdHandler.register(new NeutralCommand(this));
+		cmdHandler.register(new InviteCommand(this));
 
-		new ReloadCommand(this);
-		new SocialSpyCommand(this);
-		new FlagCommand(this);
+		cmdHandler.register(new KickCommand(this));
+		cmdHandler.register(new SetRankCommand(this));
+		cmdHandler.register(new SetSpawnCommand(this));
+		cmdHandler.register(new SetCommand(this));
 
-		new CreateCommand(this);
-		new DeleteCommand(this);
-		new EditCommand(this);
-		new ShowCommand(this);
+		cmdHandler.register(new ReloadCommand(this));
+		cmdHandler.register(new SocialSpyCommand(this));
+		cmdHandler.register(new FlagCommand(this));
+
+		if ( getChatManager().isChatSystemEnabled() && getChatManager().areChannelsEnabled() ) {
+			cmdHandler.register(new ChannelCommand(this));
+		}
 	}
 
 	public void save() {
-		for ( KingdomObject ko : api.getKingdomManager().getKingdoms() ) {
-			api.getKingdomManager().saveKingdom(ko);
+		for ( Kingdom ko : api.getKingdomHandler().getKingdoms() ) {
+			api.getKingdomHandler().save(ko);
 		}
 
-		for ( KingdomUser user : api.getUserManager().getUsers() ) {
-			api.getUserManager().save(user);
+		for ( KingdomUser user : api.getUserHandler().getUsers() ) {
+			api.getUserHandler().save(user);
 		}
 	}
 
-	public String getPrefix() {
-		return prefix;
-	}
+    public KingdomCraft getPlugin() {
+        return plugin;
+    }
 
 	public KingdomCraftApi getApi() {
 		return api;
@@ -165,15 +176,24 @@ public class KingdomCraft extends JavaPlugin {
 		return config;
 	}
 
-	public KingdomCraft getPlugin() {
-		return plugin;
-	}
-
 	public KingdomCraftMessages getMsg() {
 		return messages;
 	}
 
-	public CommandHandler getCmdHandler() {
-		return cmdHandler;
-	}
+
+	public ChatManager getChatManager() {
+	    return chatManager;
+    }
+
+    public PermissionManager getPermissionManager() {
+	    return permissionManager;
+    }
+
+    public TeleportManager getTeleportManager() {
+	    return teleportManager;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
 }

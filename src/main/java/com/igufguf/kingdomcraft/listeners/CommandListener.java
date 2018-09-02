@@ -1,9 +1,9 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.objects.KingdomRank;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -50,30 +50,30 @@ public class CommandListener extends EventListener {
             e.setCancelled(true);
 
             String message = "";
-            for ( KingdomObject kingdom : plugin.getApi().getKingdomManager().getKingdoms()) {
-                List<Player> members = plugin.getApi().getKingdomManager().getOnlineMembers(kingdom);
+            for ( Kingdom kingdom : plugin.getApi().getKingdomHandler().getKingdoms()) {
+                List<Player> members = plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom);
                 if ( members.size() == 0 ) continue;
 
-                String prefix = (String) kingdom.getData("prefix");
+                String prefix = kingdom.getPrefix();
 
-                message += ChatColor.WHITE + (prefix == null ? kingdom.getName() : ChatColor.translateAlternateColorCodes('&', prefix))
+                message += ChatColor.WHITE + (prefix == null ? kingdom.getName() : prefix)
                         + ChatColor.GRAY + " (" + members.size() + ")" + ChatColor.WHITE + ": ";
 
                 String s = "";
                 for (Player p : members) {
-                    KingdomUser user = plugin.getApi().getUserManager().getUser(p);
-                    KingdomRank rank = plugin.getApi().getUserManager().getRank(user);
+                    KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
+                    KingdomRank rank = plugin.getApi().getUserHandler().getRank(user);
 
                     s += ", ";
 
-                    if ( rank.hasData("prefix") ) {
-                        s += ChatColor.translateAlternateColorCodes('&', rank.getString("prefix"));
-                        if ( !rank.getString("prefix").endsWith(" ") ) s += " ";
+                    if ( rank.getPrefix() != null ) {
+                        s += rank.getPrefix();
+                        if ( !s.endsWith(" ") ) s += " ";
                     } else {
                         s += ChatColor.GRAY + p.getName() + ChatColor.WHITE;
                     }
                 }
-                message += s.substring(2, s.length()) + "\n";
+                message += s.substring(2) + "\n";
             }
 
             e.getPlayer().sendMessage(plugin.getPrefix() + plugin.getMsg().getMessage("cmdListNormal", Bukkit.getOnlinePlayers().size() + "") + "\n" + message);

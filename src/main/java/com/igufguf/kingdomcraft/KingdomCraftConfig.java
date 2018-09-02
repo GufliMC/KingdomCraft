@@ -30,7 +30,7 @@ import java.util.List;
  **/
 public class KingdomCraftConfig {
 
-	private static final double configversion = 1.3;
+	private final double configversion = 2.0;
 
 	private File file;
 	private YamlConfiguration config;
@@ -60,6 +60,10 @@ public class KingdomCraftConfig {
 		}
 	}
 
+	public void reload() {
+		config = YamlConfiguration.loadConfiguration(file);
+	}
+
 	public String getString(String path) {
 		return config.getString(path);
 	}
@@ -87,16 +91,6 @@ public class KingdomCraftConfig {
 	public boolean has(String path) {
 		return config.get(path) != null;
 	}
-
-	@Deprecated
-	public void save() {
-		try {
-			config.save(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 
 	private File getFilename(File file) {
 		String baseName = FilenameUtils.getBaseName( file.getName() );

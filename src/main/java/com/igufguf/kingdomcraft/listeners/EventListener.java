@@ -1,7 +1,7 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -33,16 +33,16 @@ class EventListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	public KingdomObject getKingdom(String kdname) {
-		return plugin.getApi().getKingdomManager().getKingdom(kdname);
+	public Kingdom getKingdom(String kdname) {
+		return plugin.getApi().getKingdomHandler().getKingdom(kdname);
 	}
 	
 	public boolean kingdomExists(String kdname) {
-		return plugin.getApi().getKingdomManager().getKingdom(kdname) != null;
+		return plugin.getApi().getKingdomHandler().getKingdom(kdname) != null;
 	}
 	
-	public KingdomObject getKingdom(Player p) {
-		return plugin.getApi().getUserManager().getKingdom(plugin.getApi().getUserManager().getUser(p));
+	public Kingdom getKingdom(Player p) {
+		return plugin.getApi().getUserHandler().getKingdom(plugin.getApi().getUserHandler().getUser(p));
 	}
 
 	public boolean isWorldEnabled(World world) {

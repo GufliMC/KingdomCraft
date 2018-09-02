@@ -1,8 +1,8 @@
 package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -33,10 +33,10 @@ public class RespawnListener extends EventListener {
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
-        KingdomUser user = plugin.getApi().getUserManager().getUser(e.getPlayer());
+        KingdomUser user = plugin.getApi().getUserHandler().getUser(e.getPlayer());
         if ( user == null ) return;
 
-        KingdomObject kingdom = plugin.getApi().getUserManager().getKingdom(user);
+        Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
         if ( kingdom == null ) return;
         if ( kingdom.getSpawn() == null ) return;
 

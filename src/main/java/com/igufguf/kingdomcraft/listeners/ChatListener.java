@@ -2,19 +2,16 @@ package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.managers.ChatManager;
-import com.igufguf.kingdomcraft.objects.KingdomObject;
-import com.igufguf.kingdomcraft.objects.KingdomRank;
-import com.igufguf.kingdomcraft.events.KingdomChatEvent;
-import com.igufguf.kingdomcraft.objects.KingdomUser;
-import com.igufguf.kingdomcraft.KingdomCraftConfig;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
+import com.igufguf.kingdomcraft.api.events.KingdomChatEvent;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -46,7 +43,7 @@ public class ChatListener extends EventListener {
 
 	public ChatListener(KingdomCraft plugin) {
 		super(plugin);
-		this.cm = plugin.getApi().getChatManager();
+		this.cm = plugin.getChatManager();
 	}
 
 	@EventHandler(ignoreCancelled=true, priority=EventPriority.HIGHEST)
@@ -55,7 +52,7 @@ public class ChatListener extends EventListener {
 		if ( !cm.isChatSystemEnabled() ) return;
 
 		Player p = e.getPlayer();
-		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
 
 		String message = e.getMessage();
 
@@ -94,7 +91,7 @@ public class ChatListener extends EventListener {
 
 			// check which channel he is talking in
 			for ( ChatManager.Channel c : cm.getChannels() ) {
-				if ( (cm.isEnabled(user, c.getName()) || c.isAlwaysEnabled()) // enabled
+				if ( ( user.isChannelEnabled(c.getName()) || c.isAlwaysEnabled()) // enabled
 						&& c.getMessagePrefix() != null // messag prefix is not null
 						&& ChatColor.stripColor(message).startsWith(c.getMessagePrefix()) //message prefix matches sent message
 						&& (channel == null || channel.getMessagePrefix().length() < c.getMessagePrefix().length()) ) { // only when no channel is found or a better matching prefix is found
@@ -128,14 +125,14 @@ public class ChatListener extends EventListener {
 			}
 
 			// set the receivers
-			for ( KingdomUser u : plugin.getApi().getUserManager().getUsers() ) {
+			for ( KingdomUser u : plugin.getApi().getUserHandler().getUsers() ) {
 				if ( u == user ) continue;
 				Player up = u.getPlayer();
 
 				if ( !up.isOnline() ) continue;
 				if ( !isWorldEnabled(up.getWorld()) ) continue;
 				if ( channel.isPermission() && !up.hasPermission("kingdom.channel." + channel.getName()) && !up.isOp() ) continue;
-				if ( !u.hasInList("channels", channel.getName()) && !channel.isAlwaysEnabled() ) continue;
+				if ( !u.isChannelEnabled(channel.getName()) && !channel.isAlwaysEnabled() ) continue;
 
 				if ( channel.getVisibilityType() == ChatManager.VisibilityType.KINGDOM ) {
 					// player must be in same kingdom for this visibility
@@ -198,13 +195,13 @@ public class ChatListener extends EventListener {
 		p.sendMessage(format);
 
 		// send message to receivers
-		for ( KingdomUser u : plugin.getApi().getUserManager().getUsers() ) {
+		for ( KingdomUser u : plugin.getApi().getUserHandler().getUsers() ) {
 			if ( u == user) continue;
 
 			Player up = u.getPlayer();
 			if ( receivers.contains(up) ) {
 				up.sendMessage(format);
-			} else if ( u.hasData("socialspy") && (boolean) u.getData("socialspy") && up.hasPermission("kingdom.socialspy") ) {
+			} else if ( u.isSocialSpyEnabled() && up.hasPermission("kingdom.socialspy") ) {
 				up.sendMessage(ChatColor.WHITE + "SS > " + format);
 			}
 		}
@@ -217,7 +214,7 @@ public class ChatListener extends EventListener {
 	public void onKingdomChat(KingdomChatEvent e) {
 		String format = e.getFormat();
 		Player p = e.getPlayer();
-		KingdomUser user = plugin.getApi().getUserManager().getUser(p);
+		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
 
 		String[] placeholders = {
 				"kingdom", "kingdomprefix", "kingdomsuffix",
@@ -226,21 +223,21 @@ public class ChatListener extends EventListener {
 
 		Map<String, String> values = new HashMap<>();
 
-		KingdomObject kd = plugin.getApi().getUserManager().getKingdom(user);
+		Kingdom kd = plugin.getApi().getUserHandler().getKingdom(user);
 		if ( kd != null ) {
 			values.put("kingdom", kd.getDisplay());
 			values.put("kingdomname", kd.getName());
 
-			if ( kd.hasData("prefix") ) values.put("kingdomprefix", formatColors(kd.getString("prefix")));
-			if ( kd.hasData("suffix") ) values.put("kingdomsuffix", formatColors(kd.getString("suffix")));
+			values.put("kingdomprefix", kd.getPrefix());
+			values.put("kingdomsuffix", kd.getSuffix());
 
-			KingdomRank rank = plugin.getApi().getUserManager().getRank(user);
+			KingdomRank rank = plugin.getApi().getUserHandler().getRank(user);
 			if ( rank != null ) {
 				values.put("kingdomrank", formatColors(rank.getDisplay()));
 				values.put("kingdomrankname", formatColors(rank.getName()));
 
-				if (rank.hasData("prefix") ) values.put("kingdomrankprefix", formatColors(rank.getString("prefix")));
-				if (rank.hasData("suffix") ) values.put("kingdomranksuffix", formatColors(rank.getString("suffix")));
+				values.put("kingdomrankprefix", rank.getPrefix());
+				values.put("kingdomranksuffix", rank.getSuffix());
 			}
 		}
 
@@ -252,7 +249,7 @@ public class ChatListener extends EventListener {
 		for ( String placeholder : placeholders ) {
 			if ( !format.contains("{" + placeholder + "}") ) continue;
 
-			if ( !values.containsKey(placeholder) ) {
+			if ( !values.containsKey(placeholder) || values.get(placeholder) == null ) {
 				format = format.replace("{" + placeholder + "}", "");
 			} else {
 				format = format.replace("{" + placeholder + "}", values.get(placeholder));
