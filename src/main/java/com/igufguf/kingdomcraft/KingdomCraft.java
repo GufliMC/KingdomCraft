@@ -225,34 +225,40 @@ public class KingdomCraft extends JavaPlugin {
 
 		// convert kingdom
 		File directory = new File(getDataFolder() + "/kingdoms");
+		if ( directory.exists() ) {
+			File newDataFile = new File(getDataFolder(), "kingdoms.yml");
+			FileConfiguration newDataConfig = YamlConfiguration.loadConfiguration(newDataFile);
 
-		File newDataFile = new File(getDataFolder(), "kingdoms.yml");
-		FileConfiguration newDataConfig = YamlConfiguration.loadConfiguration(newDataFile);
+			for (File file : directory.listFiles()) {
+				if (file.isDirectory()) continue;
+				if (!file.getName().replace(".yml", "").matches("[a-zA-Z]+")) continue;
 
-		for ( File file : directory.listFiles() ) {
-			if ( file.isDirectory() ) continue;
-			if ( !file.getName().replace(".yml", "").matches("[a-zA-Z]+") ) continue;
+				String kingdom = file.getName().replace(".yml", "");
 
-			String kingdom = file.getName().replace(".yml", "");
+				try {
+					FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
+					newDataConfig.set("kingdoms." + kingdom, fc);
+					newDataConfig.save(newDataFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
-			try {
-				FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
-				newDataConfig.set("kingdoms." + kingdom, fc);
-				newDataConfig.save(newDataFile);
-			} catch (IOException e) {
-				e.printStackTrace();
+				getLogger().info("Conversion of kingdom data for '" + kingdom + "' successfull!");
 			}
 
-			file.renameTo(new File(getDataFolder() + "/kingdoms", kingdom + ".old.disabled"));
-			getLogger().info("Conversion of kingdom data for '" + kingdom + "' successfull!");
+			directory.renameTo(new File(getDataFolder() + "/.kingdoms"));
 		}
 	}
 
 	private void convertData(File oldFile, File newFile) {
 		try (
 				FileInputStream fis = new FileInputStream(oldFile);
-				FileOutputStream fos = new FileOutputStream(newFile);
+				FileOutputStream fos = new FileOutputStream(newFile)
 		) {
+			if ( !newFile.exists() ) {
+				newFile.createNewFile();
+			}
+
 			byte[] data = new byte[(int) oldFile.length()];
 			fis.read(data);
 
@@ -264,6 +270,6 @@ public class KingdomCraft extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		oldFile.delete();
+		oldFile.renameTo(new File(getDataFolder(), "." + oldFile.getName() + ".disabled"));
 	}
 }
