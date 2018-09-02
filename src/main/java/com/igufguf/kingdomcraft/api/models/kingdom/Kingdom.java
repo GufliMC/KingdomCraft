@@ -11,8 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.*;
 
-import static com.igufguf.kingdomcraft.utils.KingdomUtils.formatString;
-import static com.igufguf.kingdomcraft.utils.KingdomUtils.mapFromConfiguration;
+import static com.igufguf.kingdomcraft.utils.KingdomUtils.*;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -135,7 +134,7 @@ public class Kingdom extends MemoryHolder {
 
 		//set data
 		kingdomData.setData("flags", this.flags);
-		kingdomData.setData("spawn", this.spawn);
+		kingdomData.setData("spawn", strFromLocation(this.spawn));
 
 		kingdomData.save(data);
 
@@ -156,7 +155,7 @@ public class Kingdom extends MemoryHolder {
 		kingdomData.load(data);
 
 		if ( kingdomData.hasData("spawn") ) {
-			this.spawn = kingdomData.getData("spawn", Location.class);
+            this.spawn = locFromString(kingdomData.getData("spawn", String.class));
 		}
 
 		if ( kingdomData.hasData("flags") ) {
