@@ -286,13 +286,7 @@ public class ChatListener extends EventListener {
 	private boolean isAdvertising(String message) {
 		
 	    String str = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', message.toLowerCase()));
-	    str = str.replaceAll("-", ".");
-	    str = str.replaceAll(",", ".");
-	    str = str.replaceAll("#", ".");
-	    str = str.replaceAll(":", ".");
-	    str = str.replaceAll(" ", "");
-	    while ( str.contains("..") ) str = str.replace("..", ".");
-	    
+
 	    Matcher regexMatcher = ipv4Pattern.matcher(str);
 	    while (regexMatcher.find()) {
 	    	if ((regexMatcher.group().length() != 0) && (ipv4Pattern.matcher(str).find())) {
