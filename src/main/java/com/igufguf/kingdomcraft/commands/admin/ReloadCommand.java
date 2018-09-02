@@ -1,7 +1,9 @@
 package com.igufguf.kingdomcraft.commands.admin;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
+import com.igufguf.kingdomcraft.api.events.KingdomReloadEvent;
 import com.igufguf.kingdomcraft.api.models.commands.CommandBase;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 
@@ -47,6 +49,8 @@ public class ReloadCommand extends CommandBase {
 
 		pm.disablePlugin(plugin);
 		pm.enablePlugin(plugin);
+
+		Bukkit.getServer().getPluginManager().callEvent(new KingdomReloadEvent());
 
 		return false;
 	}

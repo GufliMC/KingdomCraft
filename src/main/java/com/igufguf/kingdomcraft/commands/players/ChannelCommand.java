@@ -44,10 +44,10 @@ public class ChannelCommand extends CommandBase {
 
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( args.length == 2 ) {
+		if ( args.length == 1 ) {
 			List<String> channels = new ArrayList<>();
 			for ( ChatManager.Channel c : cm.getChannels() ) {
-				if ( c.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
+				if ( c.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) {
 					if ( c.isPermission() && !sender.hasPermission("kingdom.channel." + c.getName())) continue;
 					channels.add(c.getName());
 				}

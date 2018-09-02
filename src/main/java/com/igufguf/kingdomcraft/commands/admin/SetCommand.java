@@ -4,11 +4,14 @@ import com.igufguf.kingdomcraft.api.models.commands.CommandBase;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import com.igufguf.kingdomcraft.KingdomCraft;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -41,12 +44,17 @@ public class SetCommand extends CommandBase {
 
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( args.length == 3 ) {
+		if ( args.length == 1 ) {
+			return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName)
+					.filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+		}
+
+		if ( args.length == 2 ) {
 			KingdomUser user = plugin.getApi().getUserHandler().getUser((Player) sender);
 
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
-				if ( kd.getName().toLowerCase().startsWith(args[2].toLowerCase()) ) {
+				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
 					if ( user.getKingdom() != null && kd.getName().equals(user.getKingdom()) ) continue;
 					kingdoms.add(kd.getName());
 				}

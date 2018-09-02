@@ -46,13 +46,13 @@ public class InfoCommand extends CommandBase {
 	
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( args.length == 2 ) {
+		if ( args.length == 1 ) {
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
-				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(kd.getName());
+				if ( kd.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) kingdoms.add(kd.getName());
 			}
 			for ( Player p : Bukkit.getOnlinePlayers() ) {
-				if ( p.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) kingdoms.add(p.getName());
+				if ( p.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) kingdoms.add(p.getName());
 			}
 			return kingdoms;
 		}
