@@ -12,16 +12,21 @@ import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import com.igufguf.kingdomcraft.managers.ChatManager;
 import com.igufguf.kingdomcraft.managers.PermissionManager;
 import com.igufguf.kingdomcraft.managers.TeleportManager;
+import com.igufguf.kingdomcraft.utils.KingdomUtils;
 import com.sun.corba.se.impl.activation.CommandHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.util.Base64;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -69,6 +74,9 @@ public class KingdomCraft extends JavaPlugin {
 	public void onEnable() {
 		api.reload();
 
+		// conversion from 4.1.1 to 5.0
+		convert();
+
 		// register command
 		PluginCommand cmd = getCommand("kingdom");
 		cmd.setExecutor((SimpleCommandHandler) api.getCommandHandler());
@@ -95,7 +103,6 @@ public class KingdomCraft extends JavaPlugin {
 
 		if ( getChatManager().isChatSystemEnabled() )
 			pm.registerEvents(new ChatListener(this), this);
-
 
 		// load the commands
 		loadCommands();
@@ -196,4 +203,59 @@ public class KingdomCraft extends JavaPlugin {
     public String getPrefix() {
         return prefix;
     }
+
+    // convert kingdomcraft 4.1.1 data to 5.0
+    public void convert() {
+
+		// convert users
+		File users = new File(getDataFolder(), "users.yml");
+		if ( users.exists() ) {
+			File usersdata = new File(getDataFolder() + "/data", "users.data");
+			convertData(users, usersdata);
+			getLogger().info("Conversion of user data successfull!");
+		}
+
+		// convert relations
+		File relations = new File(getDataFolder(), "relations.yml");
+		if ( relations.exists() ) {
+			File relationsdata = new File(getDataFolder() + "/data", "relations.data");
+			convertData(relations, relationsdata);
+			getLogger().info("Conversion of relations data successfull!");
+		}
+
+		// convert kingdom
+		for ( Kingdom kingdom : getApi().getKingdomHandler().getKingdoms() ) {
+			File file = new File(getDataFolder() + "/kingdoms", kingdom.getName() + ".yml");
+			if  ( !file.exists() ) continue;
+
+			FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
+
+			// convert spawn
+			if ( kingdom.getSpawn() == null && fc.contains("spawn") ) {
+				kingdom.setSpawn(KingdomUtils.locFromString(fc.getString("spawn")));
+			}
+
+			file.delete();
+			getLogger().info("Conversion of kingdom data for '" + kingdom.getName() + "' successfull!");
+		}
+	}
+
+	private void convertData(File oldFile, File newFile) {
+		try (
+				FileInputStream fis = new FileInputStream(oldFile);
+				FileOutputStream fos = new FileOutputStream(newFile);
+		) {
+			byte[] data = new byte[(int) oldFile.length()];
+			fis.read(data);
+
+			// encode to base64
+			data = Base64.getEncoder().encode(data);
+
+			fos.write(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		oldFile.delete();
+	}
 }
