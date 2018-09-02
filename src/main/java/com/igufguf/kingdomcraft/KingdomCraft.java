@@ -2,6 +2,7 @@ package com.igufguf.kingdomcraft;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftApi;
 import com.igufguf.kingdomcraft.api.handlers.KingdomCommandHandler;
+import com.igufguf.kingdomcraft.api.models.database.StorageManager;
 import com.igufguf.kingdomcraft.handlers.SimpleCommandHandler;
 import com.igufguf.kingdomcraft.commands.admin.*;
 import com.igufguf.kingdomcraft.commands.members.*;
@@ -237,8 +238,22 @@ public class KingdomCraft extends JavaPlugin {
 
 				try {
 					FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
+
+					// this is no longer saved here anymore
+					fc.set("regions", null);
+
 					newDataConfig.set("kingdoms." + kingdom, fc);
 					newDataConfig.save(newDataFile);
+
+					Kingdom ko = api.getKingdomHandler().load(kingdom);
+
+					// convert spawn
+					if ( fc.contains("spawn") ) {
+						ko.setSpawn(KingdomUtils.locFromString(fc.getString("spawn")));
+
+						newDataConfig.set("kingdoms." + kingdom + ".spawn", null);
+						newDataConfig.save(newDataFile);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
