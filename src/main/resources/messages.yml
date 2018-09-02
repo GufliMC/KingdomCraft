@@ -94,7 +94,7 @@ cmdHelpFlagList: 'Get a list of flags for a kingdom'
 cmdHelpReload: 'Reload KingdomCraft'
 
 cmdFlagNotExist: '&7The flag &8{0} &7does not exist!'
-cmdFlagSet: '&7You changed the flag &8{0} &7for &8{1}&7 to &8{2}!'
+cmdFlagSet: '&7You changed the flag &8{0} &7for &8{1}&7 to &8{2}&7!'
 cmdFlagRemove: '&7You removed the flag &8{0} &7from &8{1}&7!'
 cmdFlagList: '&7List of flags: &8{0}'
 cmdFlagInvalidValue: '&cThe value &4{0} &cis not of type: &4{1}&c!'
