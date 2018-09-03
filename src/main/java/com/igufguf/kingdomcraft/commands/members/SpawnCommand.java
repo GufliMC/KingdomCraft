@@ -80,6 +80,11 @@ public class SpawnCommand extends CommandBase {
 				return false;
 			}
 
+			if ( kingdom.getSpawn().getWorld() == null ) {
+				plugin.getMsg().send(sender, "cmdSpawnWorldNotFound", kingdom.getName());
+				return false;
+			}
+
 			p.teleport(kingdom.getSpawn());
 			plugin.getMsg().send(sender, "cmdSpawnTeleported",
 					((int) kingdom.getSpawn().getX()) + ", " +

@@ -134,7 +134,12 @@ public class Kingdom extends MemoryHolder {
 
 		//set data
 		kingdomData.setData("flags", this.flags);
-		kingdomData.setData("spawn", strFromLocation(this.spawn));
+
+		if ( this.spawn != null ) {
+			kingdomData.setData("spawn", strFromLocation(this.spawn));
+		} else {
+			kingdomData.setData("spawn", null);
+		}
 
 		kingdomData.save(data);
 
