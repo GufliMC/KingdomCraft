@@ -15,11 +15,12 @@ import java.util.regex.Pattern;
 public class KingdomUtils {
 
     public static String strFromLocation(Location loc) {
-        if ( loc == null ) return null;
+        if ( loc == null || loc.getWorld() == null ) return null;
         return loc.getWorld().getName() + " , " + loc.getX() + " , " + loc.getY() + " , " + loc.getZ() + " , " + loc.getYaw() + " , " + loc.getPitch();
     }
 
     public static Location locFromString(String s) {
+        s = s.replace(" ",  "");
         String[] split = s.split(Pattern.quote(","));
 
         if ( split.length < 4 && Bukkit.getWorld(split[0]) == null ) return null;

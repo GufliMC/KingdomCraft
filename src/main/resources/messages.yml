@@ -51,6 +51,7 @@ cmdInviteTarget: '&7You have been invited to join &8{0}&7!'
 cmdInviteSender: '&7You invited &8{0} &7to join &8{1}&7!'
 
 cmdSpawnNotExists: '&7The spawn of &8{0} &7has not been setup yet!'
+cmdSpawnWorldNotFound: '&7The world for the spawn of &8{0} &7can''t be found!'
 cmdSpawnTeleported: '&7You have been teleported to &8{0}&7!'
 cmdSpawnTeleportStarting: '&7Teleportation will start in &8{0} &7seconds, don''t move!'
 
