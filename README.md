@@ -20,7 +20,6 @@ KingdomCraftApi api = kdc.getApi();
 KingdomUser user = api.getUserHandler().getUser(Player);
 KingdomUser user = api.getUserHandler().getUser("iGufGuf");
 ```
-> Retrieving a user with the username will also return if the user is not online
 
 
 ##### Using the api to retrieve data from an offline user:
@@ -85,10 +84,11 @@ Register new flags
 public static final KingdomFlag<Boolean> INVITE_ONLY = new KingdomFlag<>("invite-only", Boolean.class);
 
 FlagHandler flagHandler = api.getFlagHandler();
-flagHandler.register(flag);
+flagHandler.register(INVITE_ONLY);
 ```
 
-Retrieve a single flag
+It is recommend to use the flags by its direct reference like `KingdomFlag.INVITE_ONLY`.
+If this is not possible, you can use following method.
 ```java
 KingdomFlag flag = flagHandler.getFlag("friendlyfire");
 ```
