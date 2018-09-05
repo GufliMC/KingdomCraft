@@ -120,10 +120,8 @@ public class SimpleFlagHandler implements KingdomFlagHandler  {
 
     @Override
     public <T> T getFlagValue(Kingdom kd, KingdomFlag<T> flag) {
-        Map<String, Object> flags = kd.getFlags();
-        if ( flags == null || flags.isEmpty() ) return null;
-
-        return flag.parse(flags.get(flag.getName()));
+        if ( !hasFlag(kd, flag) ) return null;
+        return flag.parse(kd.getFlags().get(flag.getName()));
     }
 
 
