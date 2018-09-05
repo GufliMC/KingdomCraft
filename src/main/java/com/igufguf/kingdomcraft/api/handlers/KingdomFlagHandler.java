@@ -30,5 +30,5 @@ public interface KingdomFlagHandler {
     //Object getFlagValue(Kingdom kd, KingdomFlag flag);
 
     boolean hasFlag(Kingdom kd, KingdomFlag flag);
-    <T> T getFlagValue(Kingdom kd, KingdomFlag<T> flag);
+    <T> T getFlag(Kingdom kd, KingdomFlag<T> flag);
 }

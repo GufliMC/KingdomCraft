@@ -65,7 +65,7 @@ public class FlagCommand extends CommandBase {
 			} else {
 				String s = "";
 				for ( KingdomFlag flag : flags ) {
-					s += ", " + ChatColor.DARK_GRAY + flag.getName() + " " + ChatColor.DARK_GRAY + "(" + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', plugin.getApi().getFlagHandler().getFlagValue(kingdom, flag) + "") + ChatColor.DARK_GRAY + ")";
+					s += ", " + ChatColor.DARK_GRAY + flag.getName() + " " + ChatColor.DARK_GRAY + "(" + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', plugin.getApi().getFlagHandler().getFlag(kingdom, flag) + "") + ChatColor.DARK_GRAY + ")";
 				}
 				s = s.substring(2);
 				plugin.getMsg().send(p, "cmdFlagList", s);

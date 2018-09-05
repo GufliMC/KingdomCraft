@@ -119,8 +119,8 @@ public class SimpleFlagHandler implements KingdomFlagHandler  {
     }
 
     @Override
-    public <T> T getFlagValue(Kingdom kd, KingdomFlag<T> flag) {
-        if ( !hasFlag(kd, flag) ) return null;
+    public <T> T getFlag(Kingdom kd, KingdomFlag<T> flag) {
+        if ( !hasFlag(kd, flag) ) return flag.getDefaultValue();
         return flag.parse(kd.getFlags().get(flag.getName()));
     }
 

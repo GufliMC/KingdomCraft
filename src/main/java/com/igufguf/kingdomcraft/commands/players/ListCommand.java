@@ -52,7 +52,7 @@ public class ListCommand extends CommandBase {
 
 		for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
 			if ( plugin.getApi().getFlagHandler().hasFlag(kd, KingdomFlag.INVITE_ONLY)
-					&& plugin.getApi().getFlagHandler().getFlagValue(kd, KingdomFlag.INVITE_ONLY) ) {
+					&& plugin.getApi().getFlagHandler().getFlag(kd, KingdomFlag.INVITE_ONLY) ) {
 				inviteOnly.add(kd.getName());
 			} else {
 				open.add(kd.getName());
