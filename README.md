@@ -101,7 +101,7 @@ List<KingdomFlag> flags = flagHandler.getFlags(kd);
 Changing or retrieving flag values for a kingdom
 ```java
 flagHandler.setFlag(kd, flag, value);
-flagHandler.getFlagValue(kd, flag);
+flagHandler.getFlag(kd, flag);
 ```
 
 KingdomCraft Custom events

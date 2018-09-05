@@ -2,6 +2,7 @@ package com.igufguf.kingdomcraft.listeners;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.api.events.KingdomPlayerAttackEvent;
+import com.igufguf.kingdomcraft.api.handlers.KingdomFlagHandler;
 import com.igufguf.kingdomcraft.api.models.flags.KingdomFlag;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
@@ -68,8 +69,10 @@ public class DamageListener extends EventListener {
 		Kingdom k1 = plugin.getApi().getUserHandler().getKingdom(u1);
 		Kingdom k2 = plugin.getApi().getUserHandler().getKingdom(u2);
 
+		KingdomFlagHandler kfh = plugin.getApi().getFlagHandler();
+
         // only players from a different kingdom can pvp when friendlyfire
-        if ( k1 == k2 && !plugin.getApi().getFlagHandler().getFlagValue(k1, KingdomFlag.FRIENDLYFIRE)  ) {
+        if ( k1 == k2 && kfh.hasFlag(k1, KingdomFlag.FRIENDLYFIRE) && !kfh.getFlag(k1, KingdomFlag.FRIENDLYFIRE)  ) {
 			e.setCancelled(true);
 			plugin.getMsg().send(d, "damageKingdom");
         }

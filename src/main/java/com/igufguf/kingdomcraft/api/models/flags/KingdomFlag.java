@@ -24,15 +24,22 @@ import java.lang.reflect.Method;
  **/
 public class KingdomFlag<T> {
 
-    public static final KingdomFlag<Boolean> INVITE_ONLY = new KingdomFlag<>("invite-only", Boolean.class);
-    public static final KingdomFlag<Boolean> FRIENDLYFIRE = new KingdomFlag<>("friendlyfire", Boolean.class);
+    public static final KingdomFlag<Boolean> INVITE_ONLY = new KingdomFlag<>("invite-only", false, Boolean.class);
+    public static final KingdomFlag<Boolean> FRIENDLYFIRE = new KingdomFlag<>("friendlyfire", false, Boolean.class);
 
-    protected final String name;
-    protected final Class<?> type;
+    private final String name;
+    private final Class<?> type;
+
+    private final T defaultValue;
 
     public KingdomFlag(String name, Class<?> type) {
+        this(name, null, type);
+    }
+
+    public KingdomFlag(String name, T defaultValue, Class<?> type) {
         this.name = name;
         this.type = type;
+        this.defaultValue = defaultValue;
     }
 
     public String getName() {
@@ -52,6 +59,15 @@ public class KingdomFlag<T> {
     public boolean validate(Object value) {
         if ( value == null ) throw new IllegalArgumentException("Value cannot be null.");
         return type.isAssignableFrom(value.getClass());
+    }
+
+    /**
+     * Returns the default value for this KingdomFlag
+     *
+     * @return default value
+     */
+    public T getDefaultValue() {
+        return defaultValue;
     }
 
     /**

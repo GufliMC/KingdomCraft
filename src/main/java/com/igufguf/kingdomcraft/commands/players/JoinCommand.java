@@ -78,7 +78,7 @@ public class JoinCommand extends CommandBase {
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
 		
 		if ( plugin.getApi().getFlagHandler().hasFlag(kingdom, KingdomFlag.INVITE_ONLY)
-				&& plugin.getApi().getFlagHandler().getFlagValue(kingdom, KingdomFlag.INVITE_ONLY)
+				&& plugin.getApi().getFlagHandler().getFlag(kingdom, KingdomFlag.INVITE_ONLY)
 				&& !user.hasKingdomInvite(kingdom.getName()) && !p.hasPermission("kingdom.join." + kingdom.getName()) ) {
 
 			plugin.getMsg().send(sender, "cmdJoinInviteOnly", kingdom.getName());
