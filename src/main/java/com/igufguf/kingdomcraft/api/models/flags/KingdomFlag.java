@@ -50,6 +50,7 @@ public class KingdomFlag<T> {
      * @return true or false
      */
     public boolean validate(Object value) {
+        if ( value == null ) throw new IllegalArgumentException("Value cannot be null.");
         return type.isAssignableFrom(value.getClass());
     }
 
