@@ -82,7 +82,14 @@ public class FlagCommand extends CommandBase {
 
 		KingdomFlag flag = plugin.getApi().getFlagHandler().getFlag(args[1]);
 		if ( flag == null ) {
-			plugin.getMsg().send(sender, "cmdFlagNotExist", args[1]);
+
+			String s = "";
+			for ( KingdomFlag kf : plugin.getApi().getFlagHandler().getAllFlags() ) {
+				s += ", " + kf.getName();
+			}
+			s = s.substring(2);
+
+			plugin.getMsg().send(sender, "cmdFlagNotExist", args[1], s);
 			return false;
 		}
 
