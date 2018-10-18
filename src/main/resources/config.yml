@@ -21,7 +21,7 @@ world-list:
 - world
 
 # Show Offline players in /k info
-info-offline-players: true
+info-offline-members: true
 
 # Make player use /spawn when he leaves or get kicked from a kingdom.
 spawn-on-kingdom-leave: true
