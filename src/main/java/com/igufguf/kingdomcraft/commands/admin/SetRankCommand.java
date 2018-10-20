@@ -38,7 +38,7 @@ public class SetRankCommand extends CommandBase {
 	private KingdomCraft plugin;
 
 	public SetRankCommand(KingdomCraft plugin) {
-		super("setrank", "kingdom.setrank", false);
+		super("setrank", "kingdom.setrank", false, "<player> <rank>");
 
 		this.plugin = plugin;
 	}
@@ -46,7 +46,7 @@ public class SetRankCommand extends CommandBase {
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( args.length == 1 ) {
-			if ( sender.hasPermission("kingdom.setrank.other") ) {
+			if ( sender.hasPermission(this.getPermission() + ".other") ) {
 				return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName)
 						.filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
 			} else if ( sender instanceof Player ) {
@@ -83,19 +83,19 @@ public class SetRankCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 2 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
+
 		String username = args[0];
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(username);
 		
 		if ( user == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultNoPlayer");
-			return false;
+			return true;
 		}
 		if ( user.getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
-			return false;
+			return true;
 		}
 
 		Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
@@ -107,13 +107,13 @@ public class SetRankCommand extends CommandBase {
 
 		if ( rank == null ) {
 			plugin.getMsg().send(sender, "cmdRankNotExist");
-			return false;
+			return true;
 		}
 
 		if ( (sender instanceof Player) && !user.getKingdom().equals(plugin.getApi().getUserHandler().getUser((Player) sender).getKingdom())
-				&& !sender.hasPermission(this.permission + ".other") ) {
+				&& !sender.hasPermission(this.getPermission() + ".other") ) {
 			plugin.getMsg().send(sender, "cmdNoPermissionCmd");
-			return false;
+			return true;
 		}
 
 		plugin.getApi().getUserHandler().setRank(user, rank);
@@ -128,7 +128,7 @@ public class SetRankCommand extends CommandBase {
 			plugin.getApi().getUserHandler().save(user);
 		}
 		
-		return false;
+		return true;
 	}
 
 }

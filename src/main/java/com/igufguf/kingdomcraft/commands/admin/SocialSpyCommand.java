@@ -39,7 +39,6 @@ public class SocialSpyCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
@@ -55,7 +54,7 @@ public class SocialSpyCommand extends CommandBase {
 			plugin.getMsg().send(sender, "cmdSocialspyEnable");
 		}
 		
-		return false;
+		return true;
 	}
 
 }

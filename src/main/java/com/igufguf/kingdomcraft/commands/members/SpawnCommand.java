@@ -43,7 +43,7 @@ public class SpawnCommand extends CommandBase {
 	
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( !sender.hasPermission("kingdom.spawn.other") ) return null;
+		if ( !sender.hasPermission(this.getPermission() + ".other") ) return null;
 		if ( args.length == 1 ) {
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
@@ -62,27 +62,28 @@ public class SpawnCommand extends CommandBase {
 			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
+		
 		if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-			return false;
+			return true;
 		}
 		
-		if ( args.length == 1 && p.hasPermission(this.permission + ".other") ) {
+		if ( args.length == 1 && p.hasPermission(this.getPermission() + ".other") ) {
 			Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[0]);
 
 			if ( kingdom == null ) {
 				plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-				return false;
+				return true;
 			}
 
 			if ( kingdom.getSpawn() == null ) {
 				plugin.getMsg().send(sender, "cmdSpawnNotExists", kingdom.getName());
-				return false;
+				return true;
 			}
 
 			if ( kingdom.getSpawn().getWorld() == null ) {
 				plugin.getMsg().send(sender, "cmdSpawnWorldNotFound", kingdom.getName());
-				return false;
+				return true;
 			}
 
 			p.teleport(kingdom.getSpawn());
@@ -91,7 +92,7 @@ public class SpawnCommand extends CommandBase {
 					((int) kingdom.getSpawn().getY()) + ", " +
 					((int) kingdom.getSpawn().getZ()));
 
-			return false;
+			return true;
 		}
 
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
@@ -99,12 +100,12 @@ public class SpawnCommand extends CommandBase {
 
 		if ( kingdom.getSpawn() == null ) {
 			plugin.getMsg().send(sender, "cmdSpawnNotExists", kingdom.getName());
-			return false;
+			return true;
 		}
 
 		TeleportManager tm = plugin.getTeleportManager();
 		if ( tm.isTeleporting(user) ) {
-			return false;
+			return true;
 		}
 
 		int tpdelay = plugin.getCfg().has("tp-delay") ? plugin.getCfg().getInt("tp-delay") : 0;
@@ -120,7 +121,7 @@ public class SpawnCommand extends CommandBase {
 
 		tm.startTeleporter(user, kingdom.getSpawn(), msg, tpdelay);
 
-		return false;
+		return true;
 	}
 	
 }

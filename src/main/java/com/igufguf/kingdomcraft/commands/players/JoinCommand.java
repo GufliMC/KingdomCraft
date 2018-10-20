@@ -35,7 +35,7 @@ public class JoinCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public JoinCommand(KingdomCraft plugin) {
-		super("join", "kingdom.join", true);
+		super("join", "kingdom.join", true, "<kingdom>");
 
 		this.plugin = plugin;
 	}
@@ -62,16 +62,15 @@ public class JoinCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( plugin.getApi().getKingdomHandler().getKingdom(args[0]) == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
+			return true;
 		}
 		if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() != null ) {
 			plugin.getMsg().send(sender, "cmdJoinAlready");
-			return false;
+			return true;
 		}
 		
 		Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[0]);
@@ -87,12 +86,12 @@ public class JoinCommand extends CommandBase {
 				plugin.getMsg().send(member, "cmdJoinInviteOnlyMembers", p.getName());
 			}
 
-			return false;
+			return true;
 		}
 
 		if ( plugin.getApi().getKingdomHandler().getMembers(kingdom).size() >= kingdom.getMaxMembers() ) {
 			plugin.getMsg().send(sender, "cmdJoinFull", kingdom.getName());
-			return false;
+			return true;
 		}
 
 		for ( Player member : plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom) ) {
@@ -107,7 +106,7 @@ public class JoinCommand extends CommandBase {
 			p.teleport(kingdom.getSpawn());
 		}
 
-		return false;
+		return true;
 	}
 
 }
