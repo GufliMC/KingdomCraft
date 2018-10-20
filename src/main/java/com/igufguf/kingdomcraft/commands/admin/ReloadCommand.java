@@ -39,7 +39,6 @@ public class ReloadCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		
@@ -52,7 +51,7 @@ public class ReloadCommand extends CommandBase {
 
 		Bukkit.getServer().getPluginManager().callEvent(new KingdomReloadEvent());
 
-		return false;
+		return true;
 	}
 
 }

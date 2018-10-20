@@ -35,7 +35,7 @@ public class FriendlyCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public FriendlyCommand(KingdomCraft plugin) {
-		super("friendly", "kingdom.friendly", true);
+		super("friendly", "kingdom.friendly", true, "<kingdom>");
 
 		this.plugin = plugin;
 	}
@@ -62,16 +62,15 @@ public class FriendlyCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-			return false;
+			return true;
 		}
 		if ( plugin.getApi().getKingdomHandler().getKingdom(args[0]) == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
+			return true;
 		}
 
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
@@ -80,19 +79,19 @@ public class FriendlyCommand extends CommandBase {
 
 		if ( senderkd == targetkd ) {
 			plugin.getMsg().send(sender, "cmdDefaultSameKingdom");
-			return false;
+			return true;
 		}
 
 		if ( plugin.getApi().getRelationHandler().getRelation(senderkd, targetkd) == KingdomRelation.FRIENDLY ) {
 			plugin.getMsg().send(sender, "cmdFriendlyAlready", targetkd.getName());
-			return false;
+			return true;
 		}
 
 		plugin.getApi().getRelationHandler().setRelation(senderkd, targetkd, KingdomRelation.FRIENDLY);
 
 		plugin.getMsg().send(sender, "cmdFriendlySuccess", targetkd.getName());
 
-		return false;
+		return true;
 	}
 
 }

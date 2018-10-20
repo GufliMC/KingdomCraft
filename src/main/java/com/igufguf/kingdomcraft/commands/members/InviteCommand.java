@@ -35,7 +35,7 @@ public class InviteCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public InviteCommand(KingdomCraft plugin) {
-		super("invite", "kingdom.invite", true);
+		super("invite", "kingdom.invite", true, "<player>");
 
 		this.plugin = plugin;
 	}
@@ -53,9 +53,10 @@ public class InviteCommand extends CommandBase {
 			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
+		
 		if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-			return false;
+			return true;
 		}
 		
 		String username = args[0];
@@ -63,19 +64,19 @@ public class InviteCommand extends CommandBase {
 		
 		if ( user == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
-			return false;
+			return true;
 		}
 
 		if ( user.getKingdom() != null && user.getKingdom().equals(plugin.getApi().getUserHandler().getUser(p).getKingdom()) ) {
 			plugin.getMsg().send(sender, "cmdInviteAlready", user.getName());
-			return false;
+			return true;
 		}
 
 
 		String kingdom = plugin.getApi().getUserHandler().getUser(p).getKingdom();
 		if ( user.hasKingdomInvite(kingdom) ) {
 			plugin.getMsg().send(sender, "cmdInviteAlready", user.getName());
-			return false;
+			return true;
 		}
 
 		user.addKingdomInvite(kingdom);
@@ -88,7 +89,7 @@ public class InviteCommand extends CommandBase {
 
 		plugin.getMsg().send(sender, "cmdInviteSender", user.getName(), kingdom);
 
-		return false;
+		return true;
 	}
 	
 }

@@ -42,7 +42,6 @@ public class LeaveCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 0 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
@@ -51,7 +50,7 @@ public class LeaveCommand extends CommandBase {
 
 		if ( kingdom == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-			return false;
+			return true;
 		}
 
 		plugin.getApi().getUserHandler().setKingdom(user, null);
@@ -65,7 +64,7 @@ public class LeaveCommand extends CommandBase {
 		if ( plugin.getCfg().has("spawn-on-kingdom-leave") && plugin.getCfg().getBoolean("spawn-on-kingdom-leave") ) {
 			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + p.getName());
 		}
-		return false;
+		return true;
 	}
 	
 }

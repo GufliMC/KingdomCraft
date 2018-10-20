@@ -41,7 +41,7 @@ public class SetSpawnCommand extends CommandBase {
 	
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( !sender.hasPermission("kingdom.setspawn.other") ) return null;
+		if ( !sender.hasPermission(this.getPermission() + ".other") ) return null;
 		if ( args.length == 1 ) {
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
@@ -59,7 +59,7 @@ public class SetSpawnCommand extends CommandBase {
 		if ( args.length == 0 ) {
 			if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() == null ) {
 				plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-				return false;
+				return true;
 			}
 
 			KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
@@ -71,14 +71,14 @@ public class SetSpawnCommand extends CommandBase {
 							+ ", " + ((int) p.getLocation().getZ()));
 			
 		} else if ( args.length == 1 ) {
-			if ( !p.hasPermission(this.permission + ".other") ) {
+			if ( !p.hasPermission(this.getPermission() + ".other") ) {
 				plugin.getMsg().send(sender, "noPermissionCmd");
-				return false;
+				return true;
 			}
 
 			if ( plugin.getApi().getKingdomHandler().getKingdom(args[0]) == null ) {
 				plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-				return false;
+				return true;
 			}
 
 			Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[0]);
@@ -87,8 +87,6 @@ public class SetSpawnCommand extends CommandBase {
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY()) + ", "
 							+ ((int) p.getLocation().getZ()));
 			
-		} else {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 		}
 		return false;
 	}

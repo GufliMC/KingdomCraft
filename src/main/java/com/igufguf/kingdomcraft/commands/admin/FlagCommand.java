@@ -4,11 +4,18 @@ import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.api.models.commands.CommandBase;
 import com.igufguf.kingdomcraft.api.models.flags.KingdomFlag;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -34,8 +41,38 @@ public class FlagCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public FlagCommand(KingdomCraft plugin) {
-		super("flag", "kingdom.flag", true);
+		super("flag", "kingdom.flag", true, "<flag> <value>");
 		this.plugin = plugin;
+	}
+
+	@Override
+	public List<String> tabcomplete(CommandSender sender, String[] args) {
+		if ( args.length == 1 ) {
+			List<String> results = new ArrayList<>();
+			for (KingdomFlag flag : plugin.getApi().getFlagHandler().getAllFlags()) {
+				results.add(flag.getName());
+			}
+			return results;
+		}
+
+		if ( args.length == 2 ) {
+			String flagname = args[0];
+			KingdomFlag flag = plugin.getApi().getFlagHandler().getFlag(flagname);
+			if ( flag == null ) return null;
+
+			List<String> results = new ArrayList<>();
+
+			if ( flag.getType() == Boolean.class ) {
+				results.addAll(Arrays.asList("true", "false"));
+			} else if ( flag.getType().isEnum() ) {
+				for ( Object obj : flag.getType().getEnumConstants() ) {
+					results.add(obj.toString());
+				}
+			}
+
+			return results;
+		}
+		return null;
 	}
 	
 	@Override
@@ -43,20 +80,18 @@ public class FlagCommand extends CommandBase {
 		Player p = (Player) sender;
 
 		if ( args.length < 2 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
 		if ( args[0].equalsIgnoreCase("list") ) {
 			if ( args.length != 2 ) {
-				plugin.getMsg().send(sender, "cmdDefaultUsage");
 				return false;
 			}
 
 			Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[1]);
 			if ( kingdom == null ) {
 				plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[1]);
-				return false;
+				return true;
 			}
 
 			List<KingdomFlag> flags = plugin.getApi().getFlagHandler().getFlags(kingdom);
@@ -71,13 +106,13 @@ public class FlagCommand extends CommandBase {
 				plugin.getMsg().send(p, "cmdFlagList", s);
 			}
 
-			return false;
+			return true;
 		}
 
 		Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[0]);
 		if ( kingdom == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
+			return true;
 		}
 
 		KingdomFlag flag = plugin.getApi().getFlagHandler().getFlag(args[1]);
@@ -90,7 +125,7 @@ public class FlagCommand extends CommandBase {
 			s = s.substring(2);
 
 			plugin.getMsg().send(sender, "cmdFlagNotExist", args[1], s);
-			return false;
+			return true;
 		}
 
 		String value = null;
@@ -108,7 +143,7 @@ public class FlagCommand extends CommandBase {
 				realValue = flag.parse(value);
 			} catch (ClassCastException ex) {
 				plugin.getMsg().send(sender, "cmdFlagInvalidValue", value, flag.getType().getSimpleName());
-				return false;
+				return true;
 			}
 		}
 
@@ -120,6 +155,6 @@ public class FlagCommand extends CommandBase {
 			plugin.getApi().getFlagHandler().setFlag(kingdom, flag, null);
 		}
 
-		return false;
+		return true;
 	}
 }

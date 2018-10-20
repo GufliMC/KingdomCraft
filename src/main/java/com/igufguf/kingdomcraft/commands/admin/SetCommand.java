@@ -37,7 +37,7 @@ public class SetCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public SetCommand(KingdomCraft plugin) {
-		super("set", "kingdom.set", false);
+		super("set", "kingdom.set", false, "<player> <kingdom>");
 
 		this.plugin = plugin;
 	}
@@ -67,19 +67,18 @@ public class SetCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 2 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		if ( plugin.getApi().getKingdomHandler().getKingdom(args[1]) == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[1]);
-			return false;
+			return true;
 		}
 		String username = args[0];
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(username);
 		
 		if ( user == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
-			return false;
+			return true;
 		}
 		
 		Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[1]);
@@ -96,7 +95,7 @@ public class SetCommand extends CommandBase {
 			user.getPlayer().teleport(kingdom.getSpawn());
 		}
 
-		return false;
+		return true;
 	}
 
 }

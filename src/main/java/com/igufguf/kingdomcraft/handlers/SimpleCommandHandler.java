@@ -59,7 +59,7 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 	@Override
 	public CommandBase getByCommand(String cmd) {
 		for ( CommandBase cb : commands ) {
-			if ( cb.cmd.equalsIgnoreCase(cmd) ) return cb;
+			if ( cb.getCommand().equalsIgnoreCase(cmd) ) return cb;
 		}
 		return null;
 	}
@@ -71,22 +71,31 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 		boolean player = sender instanceof Player;
 		if ( player && !plugin.getApi().isWorldEnabled(((Player) sender).getWorld()) ) {
 			plugin.getMsg().send(sender, "noWorld");
-			return false;
+			return true;
 		}
 		
 		if ( args.length >= 1 ) {
 
 			for ( CommandBase cb : commands ) {
-				if ( args[0].equalsIgnoreCase(cb.cmd) || cb.hasAlias(args[0]) ) {
-					if ( !player && cb.playeronly ) {
+				if ( args[0].equalsIgnoreCase(cb.getCommand()) || cb.hasAlias(args[0]) ) {
+					if ( !player && cb.isPlayerOnly() ) {
 						sender.sendMessage(plugin.getPrefix() + ChatColor.RED + "This command can only be executed by players!");
 						return true;
 					} else {
-						if ( cb.permission != null && player && !sender.hasPermission(cb.permission)) {
+						if ( cb.getPermission() != null && player && !sender.hasPermission(cb.getPermission())) {
 							plugin.getMsg().send(sender, "noPermissionCmd");
 							return true;
 						} else {
-							return cb.execute(sender, Arrays.copyOfRange(args, 1, args.length));
+							boolean correct = cb.execute(sender, Arrays.copyOfRange(args, 1, args.length));
+							if ( !correct ) {
+								if ( cb.getUsage() == null ) {
+									plugin.getMsg().send(sender, "cmdDefaultUsage");
+								} else {
+									plugin.getMsg().send(sender, "cmdDefaultUsageExplain",
+											"/" + label.toLowerCase() + " " + cb.getCommand() + " " + cb.getUsage());
+								}
+								return true;
+							}
 						}
 					}
 				}
@@ -114,7 +123,7 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 
 		if ( args.length >= 1 ) {
 			for ( CommandBase cb : cmds ) {
-				if ( args[0].equalsIgnoreCase(cb.cmd) || cb.hasAlias(args[0]) ) {
+				if ( args[0].equalsIgnoreCase(cb.getCommand()) || cb.hasAlias(args[0]) ) {
 					return cb.tabcomplete(sender, Arrays.copyOfRange(args, 1, args.length));
 				}
 			}
@@ -124,7 +133,7 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 		if ( args.length == 1 ) {
 			ArrayList<String> list = new ArrayList<>();
 			for ( CommandBase cb : cmds ) {
-				list.add(cb.cmd);
+				list.add(cb.getCommand());
 			}
 			for ( String c : new ArrayList<>(list) ) {
 				if ( !c.toLowerCase().startsWith(args[0].toLowerCase()) ) list.remove(c);

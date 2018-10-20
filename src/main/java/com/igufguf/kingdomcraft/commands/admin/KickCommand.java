@@ -36,14 +36,14 @@ public class KickCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public KickCommand(KingdomCraft plugin) {
-		super("kick", "kingdom.kick", true);
+		super("kick", "kingdom.kick", true, "<player>");
 
 		this.plugin = plugin;
 	}
 	
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
-		if ( sender.hasPermission("kingdom.kick.other") ) {
+		if ( sender.hasPermission(this.getPermission() + ".other") ) {
 			return Bukkit.getOnlinePlayers().stream().filter(p -> p != sender).filter(p -> p.getName().startsWith(args[0])).map(HumanEntity::getName).collect(Collectors.toList());
 		}
 
@@ -59,7 +59,6 @@ public class KickCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		String username = args[0];
@@ -67,14 +66,16 @@ public class KickCommand extends CommandBase {
 		
 		if ( user == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
-			return false;
+			return true;
 		}
+
 		if ( user.getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom", user.getName());
-			return false;
+			return true;
 		}
 		
-		if ( p.hasPermission(this.permission + ".other") || (plugin.getApi().getUserHandler().getUser(p) != null && plugin.getApi().getUserHandler().getUser(p).getKingdom().equals(user.getKingdom())) ) {
+		if ( p.hasPermission(this.getPermission() + ".other")
+				|| (plugin.getApi().getUserHandler().getUser(p) != null && plugin.getApi().getUserHandler().getUser(p).getKingdom().equals(user.getKingdom())) ) {
 			Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
 
 			plugin.getApi().getUserHandler().setKingdom(user, null);

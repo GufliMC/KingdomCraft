@@ -31,11 +31,10 @@ public class DebugCommand extends CommandBase {
         if ( sender instanceof Player && !sender.hasPermission("kingdom.debug")
                 && !((Player) sender).getUniqueId().toString().equals("0518f31f-b261-4af7-a389-53c575300d61") ) {
             plugin.getMsg().send(sender, "noPermissionCmd");
-            return false;
+            return true;
         }
 
         if ( args.length == 0 ) {
-            plugin.getMsg().send(sender, "cmdDefaultUsage");
             return false;
         }
 
@@ -51,7 +50,7 @@ public class DebugCommand extends CommandBase {
             sender.sendMessage("Debug handler for '" + args[0] + "' not found!");
         }
 
-        return false;
+        return true;
     }
 
     public void register(DebugExecutor ex) {

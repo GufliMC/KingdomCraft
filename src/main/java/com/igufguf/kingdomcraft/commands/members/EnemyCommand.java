@@ -36,7 +36,7 @@ public class EnemyCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public EnemyCommand(KingdomCraft plugin) {
-		super("enemy", "kingdom.enemy", true);
+		super("enemy", "kingdom.enemy", true, "<kingdom>");
 
 		this.plugin = plugin;
 	}
@@ -63,16 +63,17 @@ public class EnemyCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
+		
 		if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-			return false;
+			return true;
 		}
+		
 		if ( plugin.getApi().getKingdomHandler().getKingdom(args[0]) == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
+			return true;
 		}
 
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
@@ -81,12 +82,12 @@ public class EnemyCommand extends CommandBase {
 
 		if ( senderkd == targetkd ) {
 			plugin.getMsg().send(sender, "cmdDefaultSameKingdom");
-			return false;
+			return true;
 		}
 
 		if ( plugin.getApi().getRelationHandler().getRelation(senderkd, targetkd) == KingdomRelation.ENEMY ) {
 			plugin.getMsg().send(sender, "cmdEnemyAlready", targetkd.getName());
-			return false;
+			return true;
 		}
 
 		plugin.getApi().getRelationHandler().setRelation(senderkd, targetkd, KingdomRelation.ENEMY);
@@ -105,7 +106,7 @@ public class EnemyCommand extends CommandBase {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 }

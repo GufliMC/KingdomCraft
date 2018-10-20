@@ -27,15 +27,30 @@ import java.util.List;
  **/
 public abstract class CommandBase {
 
-	public String permission;
-	public boolean playeronly;
-	public String cmd;
-	public List<String> aliases = new ArrayList<String>();
-	
-	public CommandBase(String cmd, String permission, boolean playeronly) {
-		this.cmd = cmd;
+	private String usage;
+	private String permission = null;
+	private boolean isPlayerOnly = false;
+
+	private String command;
+	private List<String> aliases = new ArrayList<String>();
+
+	public CommandBase(String cmd) {
+		this.command = cmd;
+	}
+
+	public CommandBase(String cmd, String permission, boolean isPlayerOnly) {
+		this(cmd);
 		this.permission = permission;
-		this.playeronly = playeronly;
+		this.isPlayerOnly = isPlayerOnly;
+	}
+
+	public CommandBase(String cmd, String permission, boolean isPlayerOnly, String usage) {
+		this(cmd, permission, isPlayerOnly);
+		this.usage = usage;
+	}
+
+	public String getCommand() {
+		return command;
 	}
 	
 	public void addAliasses(String... aliases) {
@@ -45,7 +60,19 @@ public abstract class CommandBase {
 	public boolean hasAlias(String alias) {
 		return aliases.contains(alias);
 	}
-	
+
+	public String getPermission() {
+		return permission;
+	}
+
+	public boolean isPlayerOnly() {
+		return isPlayerOnly;
+	}
+
+	public String getUsage() {
+		return usage;
+	}
+
 	public abstract boolean execute(CommandSender sender, String[] args);
 	
 	public List<String> tabcomplete(CommandSender sender, String[] args) {

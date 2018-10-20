@@ -38,7 +38,7 @@ public class InfoCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public InfoCommand(KingdomCraft plugin) {
-		super("info", null, false);
+		super("info", null, false, "[<player>|<kingdom>]");
 		addAliasses("i");
 
 		this.plugin = plugin;
@@ -64,18 +64,18 @@ public class InfoCommand extends CommandBase {
 	public boolean execute(CommandSender sender, String[] args) {
 		
 		if ( args.length > 1 || (args.length == 0 && !(sender instanceof Player))) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
+		
 		if ( args.length == 1 && plugin.getApi().getKingdomHandler().getKingdom(args[0]) == null ) {
 			if ( Bukkit.getPlayerExact(args[0]) != null ) {
 				Player target = Bukkit.getPlayer(args[0]);
 				
 				showPlayerInfo(sender, target);
-				return false;
+				return true;
 			}
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
+			return true;
 		}
 		Kingdom kingdom;
 		
@@ -88,12 +88,12 @@ public class InfoCommand extends CommandBase {
 		
 		if ( kingdom == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom");
-			return false;
+			return true;
 		}
 		
 		showKingdomInfo(sender, kingdom);
 		
-		return false;
+		return true;
 	}
 	
 	protected void showKingdomInfo(CommandSender sender, Kingdom kingdom) {

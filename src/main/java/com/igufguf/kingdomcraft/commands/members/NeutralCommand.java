@@ -35,7 +35,7 @@ public class NeutralCommand extends CommandBase {
 	private final KingdomCraft plugin;
 
 	public NeutralCommand(KingdomCraft plugin) {
-		super("neutral", "kingdom.neutral", true);
+		super("neutral", "kingdom.neutral", true, "<kingdom>");
 
 		this.plugin = plugin;
 	}
@@ -62,16 +62,17 @@ public class NeutralCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1) {
-			plugin.getMsg().send(sender, ("cmdDefaultUsage"));
 			return false;
 		}
+		
 		if ( plugin.getApi().getUserHandler().getUser(p).getKingdom() == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultSenderNoKingdom");
-			return false;
+			return true;
 		}
+		
 		if ( plugin.getApi().getKingdomHandler().getKingdom(args[0]) == null ) {
 			plugin.getMsg().send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return false;
+			return true;
 		}
 
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
@@ -80,19 +81,19 @@ public class NeutralCommand extends CommandBase {
 
 		if ( senderkd == targetkd ) {
 			plugin.getMsg().send(sender, "cmdDefaultSameKingdom");
-			return false;
+			return true;
 		}
 
 		if ( plugin.getApi().getRelationHandler().getRelation(senderkd, targetkd) == KingdomRelation.NEUTRAL ) {
 			plugin.getMsg().send(sender, "cmdNeutralAlready", targetkd.getName());
-			return false;
+			return true;
 		}
 
 		plugin.getApi().getRelationHandler().setRelation(senderkd, targetkd, KingdomRelation.NEUTRAL);
 
 		plugin.getMsg().send(sender, "cmdNeutralSuccess", targetkd.getName());
 
-		return false;
+		return true;
 	}
 
 }

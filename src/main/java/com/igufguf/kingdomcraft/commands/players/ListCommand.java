@@ -43,7 +43,6 @@ public class ListCommand extends CommandBase {
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if ( args.length != 0 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 		
@@ -71,7 +70,7 @@ public class ListCommand extends CommandBase {
 
 		sender.sendMessage(plugin.getPrefix() + plugin.getMsg().getMessage("cmdList") + " " + s);
 
-		return false;
+		return true;
 	}
 
 }

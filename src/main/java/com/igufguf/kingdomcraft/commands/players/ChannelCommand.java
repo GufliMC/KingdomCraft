@@ -35,7 +35,7 @@ public class ChannelCommand extends CommandBase {
 	private final ChatManager cm;
 
 	public ChannelCommand(KingdomCraft plugin) {
-		super("channel", "kingdom.channel", true);
+		super("channel", "kingdom.channel", true, "<channel>");
 		addAliasses("ch", "c");
 
 		this.plugin = plugin;
@@ -48,7 +48,7 @@ public class ChannelCommand extends CommandBase {
 			List<String> channels = new ArrayList<>();
 			for ( ChatManager.Channel c : cm.getChannels() ) {
 				if ( c.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) {
-					if ( c.isPermission() && !sender.hasPermission("kingdom.channel." + c.getName())) continue;
+					if ( c.isPermission() && !sender.hasPermission(this.getPermission() + "." + c.getName())) continue;
 					channels.add(c.getName());
 				}
 			}
@@ -62,7 +62,6 @@ public class ChannelCommand extends CommandBase {
 		Player p = (Player) sender;
 		
 		if ( args.length != 1 ) {
-			plugin.getMsg().send(sender, "cmdDefaultUsage");
 			return false;
 		}
 
@@ -77,17 +76,17 @@ public class ChannelCommand extends CommandBase {
 
 		if ( channel == null ) {
 			plugin.getMsg().send(p, "cmdChannelNotExist", args[0]);
-			return false;
+			return true;
 		}
 
-		if ( channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) ) {
+		if ( channel.isPermission() && !p.hasPermission(this.getPermission() + "." + channel.getName()) ) {
 			plugin.getMsg().send(p, "cmdChannelNoPerm", channel.getName());
-			return false;
+			return true;
 		}
 
 		if ( channel.isAlwaysEnabled() ) {
 			plugin.getMsg().send(p, "cmdChannelToggle", channel.getName());
-			return false;
+			return true;
 		}
 
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
@@ -101,7 +100,7 @@ public class ChannelCommand extends CommandBase {
 			plugin.getMsg().send(p, "cmdChannelEnable", channel.getName());
 		}
 
-		return false;
+		return true;
 	}
 
 }
