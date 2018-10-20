@@ -74,7 +74,7 @@ public class KickCommand extends CommandBase {
 			return false;
 		}
 		
-		if ( p.hasPermission(this.permission + ".other") || (plugin.getApi().getUserHandler().getUser(p) != null && plugin.getApi().getUserHandler().getUser(p).getKingdom() == user.getKingdom()) ) {
+		if ( p.hasPermission(this.permission + ".other") || (plugin.getApi().getUserHandler().getUser(p) != null && plugin.getApi().getUserHandler().getUser(p).getKingdom().equals(user.getKingdom())) ) {
 			Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
 
 			plugin.getApi().getUserHandler().setKingdom(user, null);
