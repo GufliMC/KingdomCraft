@@ -176,7 +176,7 @@ public class Kingdom extends MemoryHolder {
 	}
 
 	// configuration (can't be changed at runtime)
-	public static Kingdom load(ConfigurationSection data, String name) {
+	public static Kingdom load(ConfigurationSection data, String name, List<KingdomRank> defaultRanks) {
 		Kingdom ko = new Kingdom(name);
 
 		ko.display = data.getString("display");
@@ -187,9 +187,19 @@ public class Kingdom extends MemoryHolder {
 			ko.maxMembers = data.getInt("max-members");
 
 		if ( data.contains("ranks") ) {
-			for (String rank : data.getConfigurationSection("ranks").getKeys(false)) {
+			List<String> ranks = new ArrayList<>(data.getConfigurationSection("ranks").getKeys(false));
+			for ( String rank : ranks ) {
 				KingdomRank kr = KingdomRank.load(data.getConfigurationSection("ranks." + rank), ko, rank);
 				ko.addRank(kr);
+			}
+		}
+
+		// add all default ranks that do not get overriden
+		if ( defaultRanks != null ) {
+			for (KingdomRank kr : defaultRanks) {
+				if (ko.getRank(kr.getName()) == null) {
+					ko.addRank(kr);
+				}
 			}
 		}
 

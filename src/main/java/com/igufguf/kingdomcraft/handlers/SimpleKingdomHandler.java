@@ -5,6 +5,7 @@ import com.igufguf.kingdomcraft.api.handlers.KingdomHandler;
 import com.igufguf.kingdomcraft.api.models.database.Configurable;
 import com.igufguf.kingdomcraft.api.models.database.StorageManager;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,6 +41,7 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
 
     private final StorageManager storageManager;
 
+    private final List<KingdomRank> defaultRanks = new ArrayList<>();
     private final List<Kingdom> kingdoms = Collections.synchronizedList(new ArrayList<>());
 
     public SimpleKingdomHandler(KingdomCraft plugin) {
@@ -48,17 +50,32 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         this.plugin = plugin;
         this.storageManager = new StorageManager(new File(plugin.getDataFolder() + "/data", "kingdoms.data"));
 
+        // save default kingdoms file
+        if ( !getConfigFile().exists() ) {
+            plugin.saveResource("kingdoms.yml", true);
+        }
+
+
         FileConfiguration config = getConfiguration();
 
+        // load default ranks
+        if ( config.contains("ranks") ) {
+            for ( String rank : config.getConfigurationSection("ranks").getKeys(false) ) {
+                KingdomRank kr = KingdomRank.load(config.getConfigurationSection("ranks." + rank), null, rank);
+                defaultRanks.add(kr);
+            }
+        }
+
+        // load kingdoms
         if ( config.contains("kingdoms") ) {
             for (String kingdom : config.getConfigurationSection("kingdoms").getKeys(false)) {
                 load(kingdom);
             }
         }
 
-        // no kingdoms loaded? there are none! Create an example one.
+        // oh oh
         if ( getKingdoms().size() == 0 ) {
-            createKingdom("Gufland");
+            plugin.getLogger().info("Couldn't load any kingdoms, is your kingdoms.yml file correct?");
         }
 
     }
@@ -114,7 +131,7 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         if ( !getConfiguration().contains("kingdoms." + name) ) return null;
 
         ConfigurationSection data = getConfiguration().getConfigurationSection("kingdoms." + name);
-        Kingdom ko = Kingdom.load(data, name);
+        Kingdom ko = Kingdom.load(data, name, defaultRanks);
 
         if ( ko.getRanks().size() == 0 ) {
             plugin.getLogger().warning("The kingdom '" + name + "' has no ranks, kingdom will nog be loaded!");
@@ -141,31 +158,6 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         ko.writeData(this.storageManager.getStorageData().getConfigurationSection(ko.getName()));
 
         this.storageManager.save();
-    }
-
-
-    private Kingdom createKingdom(String name) {
-
-        ChatColor color = ChatColor.values()[new Random().nextInt(ChatColor.values().length)];
-
-        FileConfiguration tmp = new YamlConfiguration();
-        tmp.set("prefix", "&7[&" + color.getChar() + name + "&7]");
-        tmp.set("display", "&" + color.getChar() + name);
-
-        tmp.set("ranks.member.default", true);
-        tmp.set("ranks.member.prefix", "&7[&8Member&7]");
-        tmp.set("ranks.member.permissions", Arrays.asList("kingdom.spawn", "kingdom.leave"));
-
-        tmp.set("ranks.king.prefix", "&7[&6King&7]");
-        tmp.set("ranks.king.permissions", Arrays.asList("member", "kingdom.kick", "kingdom.invite"));
-
-        Kingdom ko = Kingdom.load(tmp, name);
-        kingdoms.add(ko);
-
-        getConfiguration().set("kingdoms." + name, tmp);
-        saveConfiguration();
-
-        return ko;
     }
 
 }
