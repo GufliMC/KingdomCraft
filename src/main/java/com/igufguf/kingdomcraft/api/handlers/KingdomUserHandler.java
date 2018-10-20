@@ -7,6 +7,7 @@ import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Joris on 17/08/2018 in project KingdomCraft.
@@ -28,20 +29,6 @@ public interface KingdomUserHandler {
     List<KingdomUser> getAllUsers();
 
     /**
-     * Register a new user to the handler
-     *
-     * @param user The User to register
-     */
-    void registerUser(KingdomUser user);
-
-    /**
-     * Unregister a user from the handler
-     *
-     * @param user The User to unregister
-     */
-    void unregisterUser(KingdomUser user);
-
-    /**
      * Get a kingdom user by a player
      *
      * @param p Player
@@ -58,27 +45,29 @@ public interface KingdomUserHandler {
     KingdomUser getUser(String username);
 
     /**
-     * Get the user object for the given uuid or name (name if uuid is not found)
-     *
-     * If the user exists, all data will be loaden into the user. If not, a standard user will be returned.
-     *
-     * @param uuid
-     * @param name
-     * @return The KingdomUser for the given parameters
-     */
-    KingdomUser getOfflineUser(String uuid, String name);
-
-    /**
-     * Get the user object for the given uuid
+     * Get the user object for the given uuid or name
      *
      * If the user exists, all data will be loaden into the user.
-     * If not, a UserNotFoundException will be thrown.
      *
      * @param uuid
-     * @throws UserNotFoundException
-     * @return The existing KingdomUser for the given uuid
+     * @return The existing KingdomUser for the given parameters or null
      */
-    KingdomUser getOfflineUser(String uuid) throws UserNotFoundException;
+    KingdomUser getOfflineUser(UUID uuid, String name);
+
+    /**
+     * Load a user into the handler
+     *
+     * @param player
+     * @return The KingdomUser for this player
+     */
+    KingdomUser loadUser(Player player);
+
+    /**
+     * Unload a user from the handler
+     *
+     * @param user The User to unload
+     */
+    void unloadUser(KingdomUser user);
 
     /**
      * Get the kingdom of a user
