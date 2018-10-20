@@ -39,6 +39,10 @@ public class Configurable {
         return configData;
     }
 
+    public File getConfigFile() {
+        return configFile;
+    }
+
     protected void saveConfiguration() {
         try {
             this.configData.save(this.configFile);

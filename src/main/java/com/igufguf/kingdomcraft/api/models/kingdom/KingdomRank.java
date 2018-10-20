@@ -83,8 +83,7 @@ public class KingdomRank extends MemoryHolder {
 
     // permissions
 
-    /** Should only be used when loading from configuration, changes here will not save through plugin restarts **/
-    public void setPermissions(List<String> permissions) {
+    private void setPermissions(List<String> permissions) {
         this.permissions.clear();
 
         for ( String perm : permissions ) {

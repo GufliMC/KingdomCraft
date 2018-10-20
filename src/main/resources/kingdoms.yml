@@ -1,0 +1,31 @@
+# Following ranks will be present in all kingdoms.
+# You can override these ranks in the individual kingdom configurations.
+ranks:
+  member:
+    default: true
+    prefix: '&7[&8Member&7]'
+    display: '&8Member'
+    permissions:
+    - kingdom.spawn
+    - kingdom.leave
+  king:
+    prefix: '&7[&6King&7]'
+    display: '&6King'
+    permissions:
+    - member
+    - kingdom.kick
+    - kingdom.invite
+
+# You can configure the all the kingdoms here and their ranks.
+kingdoms:
+  Gufland:
+    prefix: '&7[&aGufland&7]'
+    display: '&aGufland'
+    ranks:
+      king:
+        prefix: '&7[&eGufKing&7]'
+        display: '&eGufKing'
+        permissions:
+        - member
+        - kingdom.kick
+        - kingdom.invite
