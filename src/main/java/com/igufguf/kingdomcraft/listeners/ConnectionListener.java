@@ -5,7 +5,9 @@ import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -34,21 +36,16 @@ public class ConnectionListener extends EventListener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onJoin(PlayerJoinEvent e) {
+	public void onLogin(PlayerLoginEvent e) {
 		Player p = e.getPlayer();
-
-		KingdomUser user = plugin.getApi().getUserHandler().getOfflineUser(p.getUniqueId().toString(), p.getName());
-		plugin.getApi().getUserHandler().registerUser(user);
+		plugin.getApi().getUserHandler().loadUser(p);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
-
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
-		plugin.getApi().getUserHandler().unregisterUser(user);
-
-		plugin.getApi().getUserHandler().save(user);
+		plugin.getApi().getUserHandler().unloadUser(user);
 	}
 	
 }

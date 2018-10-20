@@ -109,8 +109,7 @@ public class KingdomCraft extends JavaPlugin {
 		loadCommands();
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
-			KingdomUser user = api.getUserHandler().getOfflineUser(p.getUniqueId().toString(), p.getName());
-			api.getUserHandler().registerUser(user);
+			api.getUserHandler().loadUser(p);
 		}
 
 		new BukkitRunnable() {
@@ -127,7 +126,7 @@ public class KingdomCraft extends JavaPlugin {
 		save();
 
 		for (KingdomUser user : api.getUserHandler().getUsers() ) {
-			api.getUserHandler().unregisterUser(user);
+			api.getUserHandler().unloadUser(user);
 		}
 	}
 	

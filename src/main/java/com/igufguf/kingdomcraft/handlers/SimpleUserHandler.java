@@ -3,7 +3,6 @@ package com.igufguf.kingdomcraft.handlers;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.api.events.KingdomJoinEvent;
 import com.igufguf.kingdomcraft.api.events.KingdomLeaveEvent;
-import com.igufguf.kingdomcraft.api.exceptions.UserNotFoundException;
 import com.igufguf.kingdomcraft.api.handlers.KingdomUserHandler;
 import com.igufguf.kingdomcraft.api.models.database.StorageManager;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
@@ -16,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -48,17 +48,10 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
     }
 
     @Override
-    public void registerUser(KingdomUser user) {
-        if ( !users.contains(user) ) users.add(user);
-        plugin.getPermissionManager().refresh(user);
-
-        plugin.getLogger().info(user.getName() + " registered (uuid = " + user.getUuid() + ")");
-    }
-
-    @Override
-    public void unregisterUser(KingdomUser user) {
+    public void unloadUser(KingdomUser user) {
         users.remove(user);
         plugin.getPermissionManager().clear(user);
+        save(user);
     }
 
     @Override
@@ -68,10 +61,16 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
 
     @Override
     public KingdomUser getUser(Player p) {
-        if ( p == null || !p.isOnline() ) return (p != null ? getOfflineUser(p.getUniqueId().toString()) : null);
+        if ( p == null ) return null;
+
+        if ( !p.isOnline() ) {
+            return getOfflineUser(p.getUniqueId(), p.getName());
+        }
+
         for ( KingdomUser ku : users ) {
             if ( ku.getPlayer() == p ) return ku;
         }
+
         return null;
     }
 
@@ -82,33 +81,7 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         return null;
     }
 
-    @Override
-    public KingdomUser getOfflineUser(String uuid, String name) {
-
-        // uuid exists in data
-        if ( uuid != null && getStorageData().contains(uuid) ) {
-            if ( !getStorageData().getString(uuid + ".name").equalsIgnoreCase(name) ) getStorageData().set(uuid + ".name", name); // update name if changed
-            return getOfflineUser(uuid);
-        }
-
-        // uuid doesn't exists but name does
-        for ( String key : getStorageData().getKeys(false) ) {
-            if ( !getStorageData().getString(key + ".name").equalsIgnoreCase(name) ) continue;
-            return getOfflineUser(key);
-        }
-
-        // create new user
-        if ( uuid == null ) return null;
-        if ( !getStorageData().contains(uuid) ) getStorageData().createSection(uuid);
-        return new KingdomUser(uuid, name);
-    }
-
-    @Override
-    public KingdomUser getOfflineUser(String uuid) throws UserNotFoundException {
-        if ( !getStorageData().contains(uuid) ) throw new UserNotFoundException(uuid);
-
-        KingdomUser user = KingdomUser.load(getStorageData().getConfigurationSection(uuid), uuid);
-
+    private KingdomUser fixUser(KingdomUser user) {
         // failsaves on removed kingdoms / ranks while user was offline
         if ( user.getKingdom() != null && getKingdom(user) == null ) {
             user.setKingdom(null);
@@ -128,11 +101,63 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
     }
 
     @Override
+    public KingdomUser getOfflineUser(UUID uuid, String name) {
+        KingdomUser user = null;
+
+        // search by uuid
+        if ( uuid != null) {
+            user = KingdomUser.load(getStorageData().getConfigurationSection(uuid.toString()), uuid.toString());
+        }
+
+        // uuid is null or has no results, search by name
+        if ( user == null && name != null) {
+            for (String uuidkey : getStorageData().getKeys(false)) {
+                if ( !getStorageData().contains(uuidkey + ".name") ) continue;
+                if ( !getStorageData().getString(uuidkey + ".name").equalsIgnoreCase(name) ) continue;
+
+                user = KingdomUser.load(getStorageData().getConfigurationSection(uuidkey), uuidkey);
+                break;
+            }
+        }
+
+        if ( user == null ) return null;
+        return fixUser(user);
+    }
+
+    @Override
+    public KingdomUser loadUser(Player player) {
+        if ( getUser(player) != null ) return getUser(player);
+
+        KingdomUser user = getOfflineUser(player.getUniqueId(), player.getName());
+
+        // update name if wrong
+        if ( !user.getName().equals(player.getName()) ) {
+            getStorageData().set(user.getUuid() + ".name", player.getName());
+            user = KingdomUser.load(getStorageData().getConfigurationSection(user.getUuid()), user.getUuid());
+            fixUser(user);
+        }
+
+        // update uuid if wrong
+        if ( !user.getUuid().equals(player.getUniqueId().toString()) ) {
+            getStorageData().set(player.getUniqueId().toString(), getStorageData().get(user.getUuid()));
+            getStorageData().set(user.getUuid(), null);
+            user = KingdomUser.load(getStorageData().getConfigurationSection(player.getUniqueId().toString()), player.getUniqueId().toString());
+            fixUser(user);
+        }
+
+        users.add(user);
+
+        plugin.getPermissionManager().refresh(user);
+        plugin.getLogger().info(user.getName() + " loaded (uuid = " + user.getUuid() + ")");
+        return user;
+    }
+
+    @Override
     public List<KingdomUser> getAllUsers() {
         List<KingdomUser> users = new ArrayList<>();
 
         for ( String uuid : getStorageData().getKeys(false) ) {
-            users.add(getOfflineUser(uuid));
+            users.add(getOfflineUser(UUID.fromString(uuid), null));
         }
 
         return users;
