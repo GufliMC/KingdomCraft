@@ -63,10 +63,6 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
     public KingdomUser getUser(Player p) {
         if ( p == null ) return null;
 
-        if ( !p.isOnline() ) {
-            return getOfflineUser(p.getUniqueId(), p.getName());
-        }
-
         for ( KingdomUser ku : users ) {
             if ( ku.getPlayer() == p ) return ku;
         }
@@ -105,7 +101,7 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         KingdomUser user = null;
 
         // search by uuid
-        if ( uuid != null) {
+        if ( uuid != null && getStorageData().contains(uuid.toString()) ) {
             user = KingdomUser.load(getStorageData().getConfigurationSection(uuid.toString()), uuid.toString());
         }
 
@@ -124,11 +120,39 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         return fixUser(user);
     }
 
+    // for loading purposes
+    private KingdomUser getOfflineUser(Player player) {
+        KingdomUser user = null;
+
+        // search by uuid
+        if ( getStorageData().contains(player.getUniqueId().toString()) ) {
+            user = KingdomUser.load(getStorageData().getConfigurationSection(player.getUniqueId().toString()), player);
+        }
+
+        // uuid is null or has no results, search by name
+        if ( user == null ) {
+            for (String uuidkey : getStorageData().getKeys(false)) {
+                if ( !getStorageData().contains(uuidkey + ".name") ) continue;
+                if ( !getStorageData().getString(uuidkey + ".name").equalsIgnoreCase(player.getName()) ) continue;
+
+                user = KingdomUser.load(getStorageData().getConfigurationSection(uuidkey), player);
+                break;
+            }
+        }
+
+        if ( user == null ) return null;
+        return fixUser(user);
+    }
+
     @Override
     public KingdomUser loadUser(Player player) {
         if ( getUser(player) != null ) return getUser(player);
 
-        KingdomUser user = getOfflineUser(player.getUniqueId(), player.getName());
+        KingdomUser user = getOfflineUser(player);
+
+        if ( user == null ) {
+            user = KingdomUser.load(null, player);
+        }
 
         // update name if wrong
         if ( !user.getName().equals(player.getName()) ) {

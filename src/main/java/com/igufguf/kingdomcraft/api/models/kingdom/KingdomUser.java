@@ -49,11 +49,19 @@ public class KingdomUser extends MemoryHolder {
 
 	// memory variables
 
+	private final Player player;
 	private PermissionAttachment permissions;
 
-	public KingdomUser(String uuid, String name) {
+	private KingdomUser(String uuid, String name) {
 		this.uuid = uuid;
 		this.name = name;
+		this.player = null;
+	}
+
+	private KingdomUser(Player player) {
+		this.uuid = player.getUniqueId().toString();
+		this.name = player.getName();
+		this.player = player;
 	}
 
 	// getters
@@ -128,12 +136,11 @@ public class KingdomUser extends MemoryHolder {
 	// get players
 
 	public Player getPlayer() {
-		Player p = Bukkit.getPlayer(UUID.fromString(uuid));
-		if ( p == null ) p = Bukkit.getPlayerExact(name);
-		return p;
+		return player;
 	}
 
 	public OfflinePlayer getOfflinePlayer() {
+		if ( player != null ) return player;
 		return Bukkit.getOfflinePlayer(UUID.fromString(uuid));
 	}
 
@@ -152,25 +159,34 @@ public class KingdomUser extends MemoryHolder {
 
 	// load
 
+	public static KingdomUser load(ConfigurationSection data, Player player) {
+		KingdomUser user = new KingdomUser(player);
+		return load(user, data);
+	}
+
 	public static KingdomUser load(ConfigurationSection data, String uuid) {
 		KingdomUser user = new KingdomUser(uuid, data.getString("name"));
+		return load(user, data);
+	}
 
-		user.setKingdom(data.getString("kingdom"));
-		user.setRank(data.getString("rank"));
-		user.setSocialSpyEnabled(data.getBoolean("socialspy"));
+	private static KingdomUser load(KingdomUser user, ConfigurationSection data) {
+		if ( data != null ) {
+			user.setKingdom(data.getString("kingdom"));
+			user.setRank(data.getString("rank"));
+			user.setSocialSpyEnabled(data.getBoolean("socialspy"));
 
-		if ( data.contains("channels") ) {
-			Map<String, Object> chatChannels = mapFromConfiguration(data.get("channels"));
-			for ( String channel : chatChannels.keySet() )
-				user.setChannelEnabled(channel, (boolean) chatChannels.get(channel));
-		}
+			if (data.contains("channels")) {
+				Map<String, Object> chatChannels = mapFromConfiguration(data.get("channels"));
+				for (String channel : chatChannels.keySet())
+					user.setChannelEnabled(channel, (boolean) chatChannels.get(channel));
+			}
 
-		if ( data.contains("invites") ) {
-			user.kingdomInvites = data.getStringList("invites");
+			if (data.contains("invites")) {
+				user.kingdomInvites = data.getStringList("invites");
+			}
 		}
 
 		Bukkit.getServer().getPluginManager().callEvent(new KingdomUserLoadEvent(user, data));
-
 		return user;
 	}
 
