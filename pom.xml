@@ -67,6 +67,14 @@
             <version>2.5</version>
         </dependency>
 
+        <!-- Apache commons text -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+
         <!-- Vault -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>

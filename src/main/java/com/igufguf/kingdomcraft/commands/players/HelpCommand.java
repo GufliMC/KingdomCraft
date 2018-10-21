@@ -48,7 +48,7 @@ public class HelpCommand extends CommandBase {
 			page1(sender);
 		}
 
-		return false;
+		return true;
 	}
 
 	private void header(CommandSender sender) {
@@ -101,7 +101,8 @@ public class HelpCommand extends CommandBase {
 	private void page5(CommandSender sender) {
 		header(sender);
 		sender.sendMessage(ChatColor.YELLOW + "/k flag <kingdom> <flag> <value> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFlagSet"));
-		sender.sendMessage(ChatColor.YELLOW + "/k flag list <kingdom>" + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFlagList"));
+		sender.sendMessage(ChatColor.YELLOW + "/k flag list <kingdom> " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpFlagList"));
+		sender.sendMessage(ChatColor.YELLOW + "/k socialspy " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpSocialSpy"));
 		sender.sendMessage(ChatColor.YELLOW + "/k reload " + ChatColor.WHITE + plugin.getMsg().getMessage("cmdHelpReload"));
 		footer(sender, 5);
 	}
