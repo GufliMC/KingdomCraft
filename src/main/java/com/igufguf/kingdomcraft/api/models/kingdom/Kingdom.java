@@ -198,7 +198,7 @@ public class Kingdom extends MemoryHolder {
 		if ( defaultRanks != null ) {
 			for (KingdomRank kr : defaultRanks) {
 				if (ko.getRank(kr.getName()) == null) {
-					ko.addRank(kr);
+					ko.addRank(new KingdomRank(kr, ko));
 				}
 			}
 		}

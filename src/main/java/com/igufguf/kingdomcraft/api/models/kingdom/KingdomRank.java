@@ -51,6 +51,16 @@ public class KingdomRank extends MemoryHolder {
         this.isDefault = isDefault;
     }
 
+    public KingdomRank(KingdomRank rank, Kingdom kingdom) {
+        this.kingdom = kingdom;
+        this.name = rank.name;
+        this.isDefault = rank.isDefault;
+        this.permissions.putAll(rank.permissions);
+        this.display = rank.display;
+        this.prefix = rank.prefix;
+        this.suffix = rank.suffix;
+    }
+
     // getters
 
     public Kingdom getKingdom() {
