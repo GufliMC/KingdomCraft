@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.handlers;
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.api.handlers.KingdomCommandHandler;
 import com.igufguf.kingdomcraft.api.models.commands.CommandBase;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -87,6 +88,7 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 							return true;
 						} else {
 							boolean correct = cb.execute(sender, Arrays.copyOfRange(args, 1, args.length));
+
 							if ( !correct ) {
 								if ( cb.getUsage() == null ) {
 									plugin.getMsg().send(sender, "cmdDefaultUsage");
@@ -94,8 +96,9 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 									plugin.getMsg().send(sender, "cmdDefaultUsageExplain",
 											"/" + label.toLowerCase() + " " + cb.getCommand() + " " + cb.getUsage());
 								}
-								return true;
 							}
+
+							return true;
 						}
 					}
 				}
@@ -106,6 +109,27 @@ public class SimpleCommandHandler implements CommandExecutor, TabCompleter, King
 			sender.sendMessage(prefix + "v" + plugin.getDescription().getVersion() + " | Created by iGufGuf");
 			sender.sendMessage(prefix + "https://www.igufguf.com");
 			sender.sendMessage(prefix + ChatColor.GREEN + "For help type /k help");
+			return true;
+		}
+
+		// suggest a command if the command doesn't exist
+		LevenshteinDistance ld = new LevenshteinDistance(5);
+		int lowestScore = Integer.MAX_VALUE;
+		CommandBase lowestCommand = null;
+		for ( CommandBase cb : commands ) {
+			int score = ld.apply(args[0], cb.getCommand());
+			if ( score != -1 && score < lowestScore ) {
+				lowestScore = score;
+				lowestCommand = cb;
+
+				if ( score == 1 ) break;
+			}
+		}
+
+		if ( lowestCommand != null ) {
+			plugin.getMsg().send(sender, "cmdDefaultHint",
+					"/" + label.toLowerCase() + " " + lowestCommand.getCommand()
+							+ (lowestCommand.getUsage() != null ? " " + lowestCommand.getUsage() : ""));
 			return true;
 		}
 
