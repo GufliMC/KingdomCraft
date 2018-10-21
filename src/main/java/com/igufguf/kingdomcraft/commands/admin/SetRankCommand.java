@@ -90,7 +90,11 @@ public class SetRankCommand extends CommandBase {
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(username);
 		
 		if ( user == null ) {
-			plugin.getMsg().send(sender, "cmdDefaultNoPlayer");
+			user = plugin.getApi().getUserHandler().getOfflineUser(null, username);
+
+			if ( user == null ) {
+				plugin.getMsg().send(sender, "cmdDefaultNoPlayer");
+			}
 			return true;
 		}
 		if ( user.getKingdom() == null ) {
