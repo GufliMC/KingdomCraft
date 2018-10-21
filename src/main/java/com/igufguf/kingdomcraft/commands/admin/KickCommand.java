@@ -62,11 +62,15 @@ public class KickCommand extends CommandBase {
 			return false;
 		}
 		String username = args[0];
+
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(username);
-		
 		if ( user == null ) {
-			plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
-			return true;
+			user = plugin.getApi().getUserHandler().getOfflineUser(null, username);
+
+			if (user == null) {
+				plugin.getMsg().send(sender, "cmdDefaultNoPlayer", username);
+				return true;
+			}
 		}
 
 		if ( user.getKingdom() == null ) {
