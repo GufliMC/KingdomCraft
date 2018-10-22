@@ -170,20 +170,18 @@ public class KingdomUser extends MemoryHolder {
 	}
 
 	private static KingdomUser load(KingdomUser user, ConfigurationSection data) {
-		if ( data != null ) {
-			user.setKingdom(data.getString("kingdom"));
-			user.setRank(data.getString("rank"));
-			user.setSocialSpyEnabled(data.getBoolean("socialspy"));
+		user.setKingdom(data.getString("kingdom"));
+		user.setRank(data.getString("rank"));
+		user.setSocialSpyEnabled(data.getBoolean("socialspy"));
 
-			if (data.contains("channels")) {
-				Map<String, Object> chatChannels = mapFromConfiguration(data.get("channels"));
-				for (String channel : chatChannels.keySet())
-					user.setChannelEnabled(channel, (boolean) chatChannels.get(channel));
-			}
+		if (data.contains("channels")) {
+			Map<String, Object> chatChannels = mapFromConfiguration(data.get("channels"));
+			for (String channel : chatChannels.keySet())
+				user.setChannelEnabled(channel, (boolean) chatChannels.get(channel));
+		}
 
-			if (data.contains("invites")) {
-				user.kingdomInvites = data.getStringList("invites");
-			}
+		if (data.contains("invites")) {
+			user.kingdomInvites = data.getStringList("invites");
 		}
 
 		Bukkit.getServer().getPluginManager().callEvent(new KingdomUserLoadEvent(user, data));
