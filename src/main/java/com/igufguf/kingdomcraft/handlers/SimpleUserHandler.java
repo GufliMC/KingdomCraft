@@ -9,6 +9,7 @@ import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -151,7 +152,8 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         KingdomUser user = getOfflineUser(player);
 
         if ( user == null ) {
-            user = KingdomUser.load(null, player);
+            ConfigurationSection cs = getStorageData().createSection(player.getUniqueId().toString());
+            user = KingdomUser.load(cs, player);
         }
 
         // update name if wrong
