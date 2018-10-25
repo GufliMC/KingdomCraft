@@ -25,9 +25,9 @@ cmdChannelDisable: '&7You &8disabled &7the channel &8{0}&7!'
 cmdChannelToggle: '&7You can''t toggle &8{0}&7!'
 cmdChannelNotExist: '&7The channel &8{0} &7does not exist!'
 
-cmdRankNotExist: '&7The rank &8{0} &7does not exist!'
-cmdRankSenderChange: '&7You changed the rank of &8{0} &7to &8{1}&7!'
-cmdRankTargetChange: '&7Your rank has been changed to &8{0}&7!'
+cmdSetRankNotExist: '&7The rank &8{0} &7does not exist!'
+cmdSetRankSenderChange: '&7You changed the rank of &8{0} &7to &8{1}&7!'
+cmdSetRankTargetChange: '&7Your rank has been changed to &8{0}&7!'
 
 cmdJoinAlready: '&7You are already in a kingdom!'
 cmdJoinSuccess: '&7You successfully joined &8{0}&7!'
@@ -44,9 +44,6 @@ cmdKickSender: '&7You kicked &8{0} &7out of &8{1}&7!'
 
 cmdSetTarget: '&7You have been placed in &8{0}&7!'
 cmdSetSender: '&7You placed &8{0} &7in &8{1}&7!'
-
-cmdSetStatusOpen: '&7You changed the status of &8{0} &7to &8open&7!'
-cmdSetStatusClosed: '&7You changed the status of &8{0} &7to &8closed&7!'
 
 cmdInviteAlready: '&7The player &8{0} &7is already invited for your kingdom!'
 cmdInviteTarget: '&7You have been invited to join &8{0}&7!'
