@@ -54,8 +54,8 @@ public class DamageListener extends EventListener {
 			return;
 		}
 
-		KingdomUser u1 = plugin.getApi().getUserHandler().getUser(p);
-		KingdomUser u2 = plugin.getApi().getUserHandler().getUser(d);
+		KingdomUser u1 = plugin.getApi().getUserHandler().getUser(d);
+		KingdomUser u2 = plugin.getApi().getUserHandler().getUser(p);
 
         KingdomPlayerAttackEvent event = new KingdomPlayerAttackEvent(e, u1, u2);
 
