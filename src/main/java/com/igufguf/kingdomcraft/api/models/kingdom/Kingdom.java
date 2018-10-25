@@ -183,7 +183,7 @@ public class Kingdom extends MemoryHolder {
 		ko.prefix = data.getString("prefix");
 		ko.suffix = data.getString("suffix");
 
-		if ( data.contains("max-members") )
+		if ( data.contains("max-members") && data.getInt("max-members") > 0 )
 			ko.maxMembers = data.getInt("max-members");
 
 		if ( data.contains("ranks") ) {
