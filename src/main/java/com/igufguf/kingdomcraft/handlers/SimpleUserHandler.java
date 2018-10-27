@@ -109,8 +109,8 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         // uuid is null or has no results, search by name
         if ( user == null && name != null) {
             for (String uuidkey : getStorageData().getKeys(false)) {
-                if ( !getStorageData().contains(uuidkey + ".name") ) continue;
-                if ( !getStorageData().getString(uuidkey + ".name").equalsIgnoreCase(name) ) continue;
+                if ( !getStorageData().contains(uuidkey + ".name")
+                        || !getStorageData().getString(uuidkey + ".name").equalsIgnoreCase(name) ) continue;
 
                 user = KingdomUser.load(getStorageData().getConfigurationSection(uuidkey), uuidkey);
                 break;
@@ -183,7 +183,12 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         List<KingdomUser> users = new ArrayList<>();
 
         for ( String uuid : getStorageData().getKeys(false) ) {
-            users.add(getOfflineUser(UUID.fromString(uuid), null));
+            Player p = Bukkit.getPlayer(UUID.fromString(uuid));
+            if ( p == null ) {
+                users.add(getOfflineUser(UUID.fromString(uuid), null));
+            } else {
+                users.add(getUser(p));
+            }
         }
 
         return users;
