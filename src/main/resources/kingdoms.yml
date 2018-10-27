@@ -21,6 +21,7 @@ kingdoms:
   Gufland:
     prefix: '&7[&aGufland&7]'
     display: '&aGufland'
+    max-members: 10
     ranks:
       king:
         prefix: '&7[&eGufKing&7]'
