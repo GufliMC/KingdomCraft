@@ -1,6 +1,7 @@
 package com.igufguf.kingdomcraft.api.handlers;
 
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.entity.Player;
 
@@ -28,9 +29,11 @@ public interface KingdomHandler {
     Kingdom load(String name);
     void save(Kingdom ko);
 
-    /*
-    Kingdom createKingdom(String name);
-    boolean deleteKingdom(Kingdom ko);
-    */
+    // api, retrieve custom kingdom or rank options
+    Object getKingdomConfigOption(Kingdom kingdom, String option);
+    Object getRankConfigOption(KingdomRank rank, String option);
+
+    boolean containsKingdomConfigOption(Kingdom kingdom, String option);
+    boolean containsRankConfigOption(KingdomRank rank, String option);
 
 }

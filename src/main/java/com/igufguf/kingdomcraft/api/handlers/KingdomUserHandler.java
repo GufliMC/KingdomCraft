@@ -4,6 +4,7 @@ import com.igufguf.kingdomcraft.api.exceptions.UserNotFoundException;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import com.igufguf.kingdomcraft.utils.KingdomUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -114,4 +115,10 @@ public interface KingdomUserHandler {
      * @param user The KingdomUser to save
      */
     void save(KingdomUser user);
+
+
+    // api, set & get custom user values
+
+    void setUserData(KingdomUser user, String path, Object value);
+    Object getUserData(KingdomUser user, String path);
 }

@@ -160,4 +160,35 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         this.storageManager.save();
     }
 
+    @Override
+    public Object getKingdomConfigOption(Kingdom kingdom, String option) {
+        if ( kingdom == null ) return null;
+        return getConfiguration().get("kingdoms." + kingdom.getName() + "." + option);
+    }
+
+    @Override
+    public Object getRankConfigOption(KingdomRank rank, String option) {
+        if ( rank == null ) return null;
+
+        if ( rank.getKingdom() != null ) {
+            ConfigurationSection rankdata = getConfiguration().getConfigurationSection("kingdoms." + rank.getKingdom().getName() + ".ranks." + rank.getName());
+            if (rankdata != null) {
+                return rankdata.get(option);
+            }
+        }
+
+        // kingdom doesn't override rank or rank has no kingdom
+        return getConfiguration().get("ranks." + rank.getName() + "." + option);
+    }
+
+    @Override
+    public boolean containsKingdomConfigOption(Kingdom kingdom, String option) {
+        return getKingdomConfigOption(kingdom, option) != null;
+    }
+
+    @Override
+    public boolean containsRankConfigOption(KingdomRank rank, String option) {
+        return getRankConfigOption(rank, option) != null;
+    }
+
 }

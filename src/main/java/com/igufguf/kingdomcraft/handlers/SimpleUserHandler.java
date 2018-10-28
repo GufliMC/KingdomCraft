@@ -258,4 +258,15 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         save();
     }
 
+    @Override
+    public void setUserData(KingdomUser user, String path, Object value) {
+        getStorageData().getConfigurationSection(user.getUuid()).set(path, value);
+        save();
+    }
+
+    @Override
+    public Object getUserData(KingdomUser user, String path) {
+        return getStorageData().getConfigurationSection(user.getUuid()).get(path);
+    }
+
 }
