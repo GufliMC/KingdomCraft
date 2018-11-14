@@ -123,26 +123,28 @@ public class InfoCommand extends CommandBase {
 
 		// members
 		String members = "";
-		for ( Player p : plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom) ) {
+		List<Player> onlineMembers = plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom);
+		for ( Player p : onlineMembers ) {
 			members += ", " + p.getName();
 		}
 
 		if ( members.equals("") ) members = "none";
 		else members = members.substring(2);
-		sender.sendMessage(ChatColor.GRAY + "Online Members: " + ChatColor.GREEN + members);
+		sender.sendMessage(ChatColor.GRAY + "Online Members (" + ChatColor.GOLD + onlineMembers.size() + ChatColor.GRAY + "): " + ChatColor.GREEN + members);
 
 		// offline members
 		if ( plugin.getCfg().getBoolean("info-offline-members") ) {
 
 			members = "";
-			for (KingdomUser p : plugin.getApi().getKingdomHandler().getMembers(kingdom)) {
+			List<KingdomUser> offlineMembers = plugin.getApi().getKingdomHandler().getMembers(kingdom);
+			for (KingdomUser p : offlineMembers ) {
 				if (p.getPlayer() != null) continue;
 				members += ", " + p.getName();
 			}
 
 			if ( members.equals("") ) members = "none";
 			else members = members.substring(2);
-			sender.sendMessage(ChatColor.GRAY + "Offline Members: " + ChatColor.RED + members);
+			sender.sendMessage(ChatColor.GRAY + "Offline Members (" + ChatColor.GOLD + offlineMembers.size() + ChatColor.GRAY + "): "+ ChatColor.RED + members);
 		}
 	}
 	
