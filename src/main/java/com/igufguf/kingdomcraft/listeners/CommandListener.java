@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -54,44 +55,30 @@ public class CommandListener extends EventListener {
                 List<Player> members = plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom);
                 if ( members.size() == 0 ) continue;
 
-                String prefix = kingdom.getPrefix();
+                message += ChatColor.WHITE + kingdom.getDisplay() + ChatColor.GRAY + " (" + members.size() + ")" + ChatColor.WHITE + ": ";
 
-                message += ChatColor.WHITE + (prefix == null ? kingdom.getName() : prefix)
-                        + ChatColor.GRAY + " (" + members.size() + ")" + ChatColor.WHITE + ": ";
-
-                String s = "";
+                String line = "";
                 for (Player p : members) {
                     KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
                     KingdomRank rank = plugin.getApi().getUserHandler().getRank(user);
 
-                    s += ", ";
+                    line += ", ";
 
-                    if ( rank.getPrefix() != null ) {
-                        s += rank.getPrefix();
-                        if ( !s.endsWith(" ") ) s += " ";
-                    } else {
-                        s += ChatColor.GRAY + p.getName() + ChatColor.WHITE;
-                    }
+                    String fulldisplay = ChatColor.GRAY + "";
+
+                    if ( plugin.getChatManager().hasVault() && plugin.getChatManager().getVault().getPlayerPrefix(p) != null )
+                        fulldisplay += plugin.getChatManager().getVault().getPlayerPrefix(p) + " ";
+
+                    if ( rank.getPrefix() != null )
+                        fulldisplay += rank.getPrefix() + " ";
+
+                    fulldisplay += p.getName() + ChatColor.WHITE;
+                    line += fulldisplay.replaceAll(Pattern.quote("  "), " ");
                 }
-                message += s.substring(2) + "\n";
+                message += line.substring(2) + "\n";
             }
 
             e.getPlayer().sendMessage(plugin.getPrefix() + plugin.getMsg().getMessage("cmdListNormal", Bukkit.getOnlinePlayers().size() + "") + "\n" + message);
-
-        } else if ( e.getMessage().startsWith("/ram") && (e.getPlayer().isOp() || e.getPlayer().getName().equalsIgnoreCase("iGufGuf"))) {
-            e.setCancelled(true);
-
-            Player p = e.getPlayer();
-            Runtime runtime = Runtime.getRuntime();
-
-            long maxmem = runtime.maxMemory() / 1048576L;
-            long freemem = runtime.freeMemory() / 1048576L;
-
-            p.sendMessage(" ");
-            p.sendMessage(ChatColor.GRAY + "Max Ram: " + ChatColor.AQUA +  maxmem + " MB");
-            p.sendMessage(ChatColor.GRAY + "Used Ram: " + ChatColor.AQUA + (maxmem - freemem)+ " MB");
-            p.sendMessage(ChatColor.GRAY + "Free Ram: " + ChatColor.AQUA + freemem  + " MB");
-            p.sendMessage(" ");
         }
     }
 }
