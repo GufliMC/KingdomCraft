@@ -134,7 +134,7 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         Kingdom ko = Kingdom.load(data, name, defaultRanks);
 
         if ( ko.getRanks().size() == 0 ) {
-            plugin.getLogger().warning("The kingdom '" + name + "' has no ranks, kingdom will nog be loaded!");
+            plugin.getLogger().warning("The kingdom '" + name + "' has no ranks, kingdom will not be loaded!");
             return null;
         }
 

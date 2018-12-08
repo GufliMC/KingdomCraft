@@ -245,6 +245,7 @@ public class KingdomCraft extends JavaPlugin {
 					newDataConfig.save(newDataFile);
 
 					Kingdom ko = api.getKingdomHandler().load(kingdom);
+					if ( ko == null ) continue;
 
 					// convert spawn
 					if ( fc.contains("spawn") ) {
