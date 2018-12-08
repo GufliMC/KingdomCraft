@@ -68,6 +68,7 @@ public class DamageListener extends EventListener {
 
 		Kingdom k1 = plugin.getApi().getUserHandler().getKingdom(u1);
 		Kingdom k2 = plugin.getApi().getUserHandler().getKingdom(u2);
+		if ( k1 == null || k2 == null ) return;
 
 		KingdomFlagHandler kfh = plugin.getApi().getFlagHandler();
 
