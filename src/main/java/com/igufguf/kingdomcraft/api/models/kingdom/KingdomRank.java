@@ -76,7 +76,7 @@ public class KingdomRank extends MemoryHolder {
     }
 
     public String getDisplay() {
-        return display != null ? display : getName();
+        return display != null ? formatString(display) : getName();
     }
 
     public String getPrefix() {
