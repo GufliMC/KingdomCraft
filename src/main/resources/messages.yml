@@ -136,6 +136,7 @@ cmdShowKingdomOptionList: '&7The values for option &8{0} &7of the kingdom &8{1} 
 cmdShowKingdomOption: '&7The value for option &8{0} &7of the kingdom &8{1} &7is &8{2}'
 
 damageKingdom: '&7You can''t hurt members of your own kingdom'
+damageFriendly: '&7You can''t hurt members of a friendly kingdom'
 teleportCancel: '&cTeleportation cancelled!'
 
 chatNoKingdom: '&cYou need a kingdom to start chatting!'
