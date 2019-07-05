@@ -113,7 +113,7 @@ public class KingdomCraft extends JavaPlugin {
 			public void run() {
 				save();
 			}
-		}.runTaskTimer(this, 60 * 20L, 60 * 20L); // every minute
+		}.runTaskTimerAsynchronously(this, 60 * 20L, 60 * 20L); // every minute
 
 		getLogger().info("Enabled " + this.getDescription().getFullName());
 	}

@@ -1,5 +1,6 @@
 package com.igufguf.kingdomcraft.api.events;
 
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -30,5 +31,13 @@ public class KingdomEvent extends Event {
     }
     public HandlerList getHandlers(){
         return handlers;
+    }
+
+    public KingdomEvent() {
+        super();
+    }
+
+    public KingdomEvent(boolean isAsync) {
+        super(isAsync);
     }
 }

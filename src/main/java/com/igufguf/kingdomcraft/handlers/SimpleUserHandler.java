@@ -255,7 +255,9 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
     @Override
     public void save(KingdomUser user) {
         ConfigurationSection data = getStorageData().getConfigurationSection(user.getUuid());
-        if ( data == null ) getStorageData().createSection(user.getUuid());
+        if ( data == null ) {
+            data = getStorageData().createSection(user.getUuid());
+        }
         user.save(data);
         save();
     }
