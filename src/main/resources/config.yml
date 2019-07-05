@@ -35,6 +35,9 @@ tp-delay: 5
 # Override the /list command of bukkit or other plugins to one with kingdom prefixes and suffixes.
 override-list-command: true
 
+# Does the friendlyfire flag affect only players in the same kingdom or also friendly kingdoms
+friendlyfire-same-kingdom-only: true
+
 # true = use the below channel system, DON'T USE ANY OTHER CHAT PLUGIN!
 # false = use another chat plugin.
 chat-system:

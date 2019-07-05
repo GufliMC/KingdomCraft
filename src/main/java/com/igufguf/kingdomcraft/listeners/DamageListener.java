@@ -5,6 +5,7 @@ import com.igufguf.kingdomcraft.api.events.KingdomPlayerAttackEvent;
 import com.igufguf.kingdomcraft.api.handlers.KingdomFlagHandler;
 import com.igufguf.kingdomcraft.api.models.flags.KingdomFlag;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRelation;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -72,11 +73,24 @@ public class DamageListener extends EventListener {
 
 		KingdomFlagHandler kfh = plugin.getApi().getFlagHandler();
 
-        // only players from a different kingdom can pvp when friendlyfire
-        if ( k1 == k2 && kfh.hasFlag(k1, KingdomFlag.FRIENDLYFIRE) && !kfh.getFlag(k1, KingdomFlag.FRIENDLYFIRE)  ) {
+		// only if friendlyfire is off
+		if ( !kfh.hasFlag(k1, KingdomFlag.FRIENDLYFIRE) || kfh.getFlag(k1, KingdomFlag.FRIENDLYFIRE) ) {
+			return;
+		}
+
+        // disable pvp for players in the same kingdom
+        if ( k1 == k2 ) {
 			e.setCancelled(true);
 			plugin.getMsg().send(d, "damageKingdom");
+			return;
         }
+
+        // disable attacking a friendly player
+		if ( plugin.getCfg().has("friendlyfire-same-kingdom-only") && !plugin.getCfg().getBoolean("friendlyfire-same-kingdom-only")
+			&& plugin.getApi().getRelationHandler().getRelation(k1, k2) == KingdomRelation.FRIENDLY ) {
+			e.setCancelled(true);
+			plugin.getMsg().send(d, "damageFriendly");
+		}
 	}
 	
 }
