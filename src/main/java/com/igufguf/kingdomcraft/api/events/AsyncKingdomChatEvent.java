@@ -24,7 +24,7 @@ import java.util.List;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class KingdomChatEvent extends KingdomEvent implements Cancellable {
+public class AsyncKingdomChatEvent extends KingdomEvent implements Cancellable {
 
     private boolean cancelled = false;
 
@@ -33,7 +33,8 @@ public class KingdomChatEvent extends KingdomEvent implements Cancellable {
     private String message;
     private List<Player> receivers;
 
-    public KingdomChatEvent(Player p, String format, String message, List<Player> receivers) {
+    public AsyncKingdomChatEvent(Player p, String format, String message, List<Player> receivers) {
+        super(true);
         this.p = p;
         this.format = format;
         this.message = message;

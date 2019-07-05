@@ -4,7 +4,7 @@ import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.managers.ChatManager;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
-import com.igufguf.kingdomcraft.api.events.KingdomChatEvent;
+import com.igufguf.kingdomcraft.api.events.AsyncKingdomChatEvent;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -168,7 +168,7 @@ public class ChatListener extends EventListener {
 		}
 
 		// call chat event
-		KingdomChatEvent event = new KingdomChatEvent(p, format, message, receivers);
+		AsyncKingdomChatEvent event = new AsyncKingdomChatEvent(p, format, message, receivers);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
 		if ( event.isCancelled() ) return;
@@ -211,7 +211,7 @@ public class ChatListener extends EventListener {
 
 	// listen to kingdom chat event, replace variables with corresponding values
 	@EventHandler
-	public void onKingdomChat(KingdomChatEvent e) {
+	public void onKingdomChat(AsyncKingdomChatEvent e) {
 		String format = e.getFormat();
 		Player p = e.getPlayer();
 		KingdomUser user = plugin.getApi().getUserHandler().getUser(p);
