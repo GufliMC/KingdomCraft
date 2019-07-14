@@ -165,6 +165,11 @@ public class KingdomUser extends MemoryHolder {
 	}
 
 	public static KingdomUser load(ConfigurationSection data, String uuid) {
+		// if player is online
+		Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+		if ( player != null ) return load(data, player);
+
+		// if player is offline
 		KingdomUser user = new KingdomUser(uuid, data.getString("name"));
 		return load(user, data);
 	}
