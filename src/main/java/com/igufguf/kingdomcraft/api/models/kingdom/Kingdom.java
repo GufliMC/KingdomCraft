@@ -2,7 +2,7 @@ package com.igufguf.kingdomcraft.api.models.kingdom;
 
 import com.igufguf.kingdomcraft.api.events.KingdomLoadEvent;
 import com.igufguf.kingdomcraft.api.events.KingdomPreLoadEvent;
-import com.igufguf.kingdomcraft.api.events.KingdomSaveEvent;
+import com.igufguf.kingdomcraft.api.events.AsyncKingdomSaveEvent;
 import com.igufguf.kingdomcraft.api.models.storage.Storable;
 import com.igufguf.kingdomcraft.api.models.storage.MemoryHolder;
 import org.bukkit.Bukkit;
@@ -148,7 +148,7 @@ public class Kingdom extends MemoryHolder {
 			kr.saveData(data.getConfigurationSection("ranks." + kr.getName()));
 		}
 
-		Bukkit.getServer().getPluginManager().callEvent(new KingdomSaveEvent(this, data));
+		Bukkit.getServer().getPluginManager().callEvent(new AsyncKingdomSaveEvent(this, data, !Bukkit.getServer().isPrimaryThread()));
 	}
 
 	// load

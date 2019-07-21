@@ -30,7 +30,7 @@ import java.util.List;
  **/
 public class KingdomCraftConfig {
 
-	private final double configversion = 2.0;
+	private final double configversion = 2.1;
 
 	private File file;
 	private YamlConfiguration config;

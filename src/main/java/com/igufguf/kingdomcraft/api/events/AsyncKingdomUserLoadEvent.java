@@ -6,12 +6,13 @@ import org.bukkit.configuration.ConfigurationSection;
 /**
  * Created by Joris on 19/08/2018 in project KingdomCraft.
  */
-public class KingdomUserSaveEvent extends KingdomEvent {
+public class AsyncKingdomUserLoadEvent extends KingdomEvent {
 
     private KingdomUser user;
     private ConfigurationSection configurationSection;
 
-    public KingdomUserSaveEvent(KingdomUser user, ConfigurationSection configurationSection) {
+    public AsyncKingdomUserLoadEvent(KingdomUser user, ConfigurationSection configurationSection, boolean async) {
+        super(async);
         this.user = user;
         this.configurationSection = configurationSection;
     }

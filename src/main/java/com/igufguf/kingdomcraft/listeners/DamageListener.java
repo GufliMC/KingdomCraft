@@ -73,7 +73,7 @@ public class DamageListener extends EventListener {
 
 		KingdomFlagHandler kfh = plugin.getApi().getFlagHandler();
 
-		// only if friendlyfire is off
+		// only if friendlyfire is explicitly turned off go on
 		if ( !kfh.hasFlag(k1, KingdomFlag.FRIENDLYFIRE) || kfh.getFlag(k1, KingdomFlag.FRIENDLYFIRE) ) {
 			return;
 		}
