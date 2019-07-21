@@ -33,8 +33,8 @@ public class AsyncKingdomChatEvent extends KingdomEvent implements Cancellable {
     private String message;
     private List<Player> receivers;
 
-    public AsyncKingdomChatEvent(Player p, String format, String message, List<Player> receivers) {
-        super(true);
+    public AsyncKingdomChatEvent(Player p, String format, String message, List<Player> receivers, boolean async) {
+        super(async);
         this.p = p;
         this.format = format;
         this.message = message;

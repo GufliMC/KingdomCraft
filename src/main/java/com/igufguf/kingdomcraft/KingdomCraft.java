@@ -109,11 +109,13 @@ public class KingdomCraft extends JavaPlugin {
 			api.getUserHandler().loadUser(p);
 		}
 
+		/*
 		new BukkitRunnable() {
 			public void run() {
 				save();
 			}
 		}.runTaskTimerAsynchronously(this, 60 * 20L, 60 * 20L); // every minute
+		*/
 
 		getLogger().info("Enabled " + this.getDescription().getFullName());
 	}

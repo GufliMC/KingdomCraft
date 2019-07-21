@@ -168,7 +168,7 @@ public class ChatListener extends EventListener {
 		}
 
 		// call chat event
-		AsyncKingdomChatEvent event = new AsyncKingdomChatEvent(p, format, message, receivers);
+		AsyncKingdomChatEvent event = new AsyncKingdomChatEvent(p, format, message, receivers, !Bukkit.getServer().isPrimaryThread());
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
 		if ( event.isCancelled() ) return;

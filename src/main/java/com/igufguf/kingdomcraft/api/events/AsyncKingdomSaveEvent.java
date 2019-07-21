@@ -1,27 +1,27 @@
 package com.igufguf.kingdomcraft.api.events;
 
-import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Created by Joris on 19/08/2018 in project KingdomCraft.
  */
-public class KingdomUserLoadEvent extends KingdomEvent {
+public class AsyncKingdomSaveEvent extends KingdomEvent {
 
-    private KingdomUser user;
+    private Kingdom kingdom;
     private ConfigurationSection configurationSection;
 
-    public KingdomUserLoadEvent(KingdomUser user, ConfigurationSection configurationSection) {
-        this.user = user;
+    public AsyncKingdomSaveEvent(Kingdom kingdom, ConfigurationSection configurationSection, boolean async) {
+        super(async);
+        this.kingdom = kingdom;
         this.configurationSection = configurationSection;
     }
 
-    public KingdomUser getUser() {
-        return user;
+    public Kingdom getKingdom() {
+        return kingdom;
     }
 
     public ConfigurationSection getConfigurationSection() {
         return configurationSection;
     }
-
 }

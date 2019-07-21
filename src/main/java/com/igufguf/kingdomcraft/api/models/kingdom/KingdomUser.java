@@ -1,8 +1,7 @@
 package com.igufguf.kingdomcraft.api.models.kingdom;
 
-import com.igufguf.kingdomcraft.api.events.KingdomLoadEvent;
-import com.igufguf.kingdomcraft.api.events.KingdomUserLoadEvent;
-import com.igufguf.kingdomcraft.api.events.KingdomUserSaveEvent;
+import com.igufguf.kingdomcraft.api.events.AsyncKingdomUserLoadEvent;
+import com.igufguf.kingdomcraft.api.events.AsyncKingdomUserSaveEvent;
 import com.igufguf.kingdomcraft.api.models.storage.MemoryHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -154,7 +153,7 @@ public class KingdomUser extends MemoryHolder {
 		data.set("invites", kingdomInvites);
 		data.set("socialspy", socialspy);
 
-		Bukkit.getServer().getPluginManager().callEvent(new KingdomUserSaveEvent(this, data));
+		Bukkit.getServer().getPluginManager().callEvent(new AsyncKingdomUserSaveEvent(this, data, !Bukkit.getServer().isPrimaryThread()));
 	}
 
 	// load
@@ -189,7 +188,7 @@ public class KingdomUser extends MemoryHolder {
 			user.kingdomInvites = data.getStringList("invites");
 		}
 
-		Bukkit.getServer().getPluginManager().callEvent(new KingdomUserLoadEvent(user, data));
+		Bukkit.getServer().getPluginManager().callEvent(new AsyncKingdomUserLoadEvent(user, data, !Bukkit.getServer().isPrimaryThread()));
 		return user;
 	}
 
