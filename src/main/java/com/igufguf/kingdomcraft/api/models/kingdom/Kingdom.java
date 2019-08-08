@@ -1,10 +1,10 @@
 package com.igufguf.kingdomcraft.api.models.kingdom;
 
+import com.igufguf.kingdomcraft.api.events.AsyncKingdomSaveEvent;
 import com.igufguf.kingdomcraft.api.events.KingdomLoadEvent;
 import com.igufguf.kingdomcraft.api.events.KingdomPreLoadEvent;
-import com.igufguf.kingdomcraft.api.events.AsyncKingdomSaveEvent;
-import com.igufguf.kingdomcraft.api.models.storage.Storable;
 import com.igufguf.kingdomcraft.api.models.storage.MemoryHolder;
+import com.igufguf.kingdomcraft.api.models.storage.Storable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -131,17 +131,22 @@ public class Kingdom extends MemoryHolder {
 	// save
 
 	public void writeData(ConfigurationSection data) {
-
 		//set data
-		kingdomData.setData("flags", this.flags);
+		data.set("flags", this.flags);
 
 		if ( this.spawn != null ) {
-			kingdomData.setData("spawn", strFromLocation(this.spawn));
+			data.set("spawn", strFromLocation(this.spawn));
 		} else {
-			kingdomData.setData("spawn", null);
+			data.set("spawn", null);
 		}
 
-		kingdomData.save(data);
+		ConfigurationSection ext = data.getConfigurationSection("ext");
+		if ( ext == null ) {
+			ext = data.createSection("ext");
+		}
+
+		kingdomData.save(ext);
+		data.set("ext", ext);
 
 		for ( KingdomRank kr : getRanks() ) {
 			if ( !data.contains("ranks." + kr.getName())) data.createSection("ranks." + kr.getName());
@@ -156,15 +161,23 @@ public class Kingdom extends MemoryHolder {
 	// data (can be changed at runtime)
 	public void loadData(ConfigurationSection data) {
 
-		// load into kingdomData
-		kingdomData.load(data);
-
-		if ( kingdomData.hasData("spawn") ) {
-            this.spawn = locFromString(kingdomData.getData("spawn", String.class));
+		// load extra data
+		if ( data.contains("ext") && data.get("ext") instanceof ConfigurationSection) {
+			kingdomData.load(data.getConfigurationSection("ext"));
 		}
 
-		if ( kingdomData.hasData("flags") ) {
-			this.flags = mapFromConfiguration(kingdomData.getData("flags"));
+		// TODO conversion for smooth upgrade, remove later
+		else if ( data.contains("warps") ) {
+			data.set("ext.warps", data.get("warps"));
+			kingdomData.load(data.getConfigurationSection("ext"));
+		}
+
+		if ( data.contains("spawn") ) {
+            this.spawn = locFromString(data.getString("spawn"));
+		}
+
+		if ( data.contains("flags") ) {
+			this.flags = mapFromConfiguration(data.get("flags"));
 		}
 
 		for ( KingdomRank kr : getRanks() ) {

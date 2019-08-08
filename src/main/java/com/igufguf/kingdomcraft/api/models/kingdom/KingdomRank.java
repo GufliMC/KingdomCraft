@@ -112,14 +112,24 @@ public class KingdomRank extends MemoryHolder {
     // save
 
     public void saveData(ConfigurationSection data) {
-        kingdomData.save(data);
+        ConfigurationSection ext = data.getConfigurationSection("ext");
+        if ( ext == null ) {
+            ext = data.createSection("ext");
+        }
+
+        kingdomData.save(ext);
+        data.set("ext", ext);
     }
 
     // load
 
     // data (can be changed at runtime)
     public void loadData(ConfigurationSection data) {
-        kingdomData.load(data);
+
+        // load extra data
+        if ( data.contains("ext") && data.get("ext") instanceof ConfigurationSection) {
+            kingdomData.load(data.getConfigurationSection("ext"));
+        }
     }
 
     // configuration (can't be changed at runtime)
