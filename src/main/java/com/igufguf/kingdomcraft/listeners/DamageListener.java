@@ -86,7 +86,7 @@ public class DamageListener extends EventListener {
         }
 
         // disable attacking a friendly player
-		if ( plugin.getCfg().has("friendlyfire-same-kingdom-only") && !plugin.getCfg().getBoolean("friendlyfire-same-kingdom-only")
+		if ( plugin.getCfg().has("friendlyfire-flag-include-friendly-kingdoms") && plugin.getCfg().getBoolean("friendlyfire-flag-include-friendly-kingdoms")
 			&& plugin.getApi().getRelationHandler().getRelation(k1, k2) == KingdomRelation.FRIENDLY ) {
 			e.setCancelled(true);
 			plugin.getMsg().send(d, "damageFriendly");
