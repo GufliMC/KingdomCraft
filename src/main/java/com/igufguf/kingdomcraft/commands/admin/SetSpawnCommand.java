@@ -66,10 +66,12 @@ public class SetSpawnCommand extends CommandBase {
 			Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
 
 			kingdom.setSpawn(p.getLocation());
+			plugin.getApi().getKingdomHandler().save(kingdom);
 			plugin.getMsg().send(sender, "cmdSetSpawnSuccess", kingdom.getName(),
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY())
 							+ ", " + ((int) p.getLocation().getZ()));
-			
+
+			return true;
 		} else if ( args.length == 1 ) {
 			if ( !p.hasPermission(this.getPermission() + ".other") ) {
 				plugin.getMsg().send(sender, "noPermissionCmd");
@@ -83,10 +85,12 @@ public class SetSpawnCommand extends CommandBase {
 
 			Kingdom kingdom = plugin.getApi().getKingdomHandler().getKingdom(args[0]);
 			kingdom.setSpawn(p.getLocation());
+			plugin.getApi().getKingdomHandler().save(kingdom);
 			plugin.getMsg().send(sender, "cmdSetSpawnSuccess", kingdom.getName(),
 					((int) p.getLocation().getX()) + ", " + ((int) p.getLocation().getY()) + ", "
 							+ ((int) p.getLocation().getZ()));
-			
+
+			return true;
 		}
 		return false;
 	}

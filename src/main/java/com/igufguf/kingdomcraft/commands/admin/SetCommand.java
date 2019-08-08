@@ -50,12 +50,12 @@ public class SetCommand extends CommandBase {
 		}
 
 		if ( args.length == 2 ) {
-			KingdomUser user = plugin.getApi().getUserHandler().getUser((Player) sender);
+			KingdomUser user = plugin.getApi().getUserHandler().getUser(Bukkit.getPlayerExact(args[0]));
 
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
-					if ( user.getKingdom() != null && kd.getName().equals(user.getKingdom()) ) continue;
+					if ( user != null && user.getKingdom() != null && kd.getName().equals(user.getKingdom()) ) continue;
 					kingdoms.add(kd.getName());
 				}
 			}
