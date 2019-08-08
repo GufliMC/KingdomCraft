@@ -52,9 +52,8 @@ public class MoveListener extends EventListener {
 
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent e) {
-
 		// if 1 of the worlds is enabled and the other disabled, a change in permissions has to happen
-		if ( isWorldEnabled(e.getFrom().getWorld()) ^ isWorldEnabled(e.getTo().getWorld()) ) {
+		if ( (e.getFrom().getWorld() != null && isWorldEnabled(e.getFrom().getWorld())) ^ isWorldEnabled(e.getTo().getWorld()) ) {
 			KingdomUser user = plugin.getApi().getUserHandler().getUser(e.getPlayer());
 			plugin.getPermissionManager().refresh(user);
 		}
