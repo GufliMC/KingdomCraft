@@ -48,12 +48,9 @@ public class FlagCommand extends CommandBase {
 	@Override
 	public List<String> tabcomplete(CommandSender sender, String[] args) {
 		if ( args.length == 1 ) {
-			KingdomUser user = plugin.getApi().getUserHandler().getUser((Player) sender);
-
 			List<String> kingdoms = new ArrayList<>();
 			for ( Kingdom kd : plugin.getApi().getKingdomHandler().getKingdoms() ) {
 				if ( kd.getName().toLowerCase().startsWith(args[0].toLowerCase()) ) {
-					if ( user.getKingdom() != null && kd.getName().equals(user.getKingdom()) ) continue;
 					kingdoms.add(kd.getName());
 				}
 			}
@@ -167,6 +164,7 @@ public class FlagCommand extends CommandBase {
 			plugin.getMsg().send(sender, "cmdFlagRemove", flag.getName(), kingdom.getName());
 			plugin.getApi().getFlagHandler().setFlag(kingdom, flag, null);
 		}
+		plugin.getApi().getKingdomHandler().save(kingdom);
 
 		return true;
 	}
