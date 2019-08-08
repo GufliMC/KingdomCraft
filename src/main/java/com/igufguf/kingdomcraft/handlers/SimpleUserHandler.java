@@ -226,7 +226,7 @@ public class SimpleUserHandler extends StorageManager implements KingdomUserHand
         user.setKingdom(kingdom.getName());
         setDefaultRank(user);
 
-        user.delKingdomInvite(kingdom.getName());
+        user.clearKingdomInvites();
 
         plugin.getPermissionManager().refresh(user);
 

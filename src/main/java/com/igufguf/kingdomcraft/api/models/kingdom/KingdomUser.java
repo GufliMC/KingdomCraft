@@ -124,6 +124,10 @@ public class KingdomUser extends MemoryHolder {
 		while ( this.kingdomInvites.contains(kingdom) ) this.kingdomInvites.remove(kingdom);
 	}
 
+	public void clearKingdomInvites() {
+		this.kingdomInvites.clear();
+	}
+
 	public void setPermissions(PermissionAttachment permissions) {
 		this.permissions = permissions;
 	}
