@@ -27,7 +27,7 @@ import java.util.List;
  **/
 public abstract class CommandBase {
 
-	private String usage;
+	private String usage = "";
 	private String permission = null;
 	private boolean isPlayerOnly = false;
 
