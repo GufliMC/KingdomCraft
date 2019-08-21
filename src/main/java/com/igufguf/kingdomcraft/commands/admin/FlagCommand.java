@@ -60,13 +60,15 @@ public class FlagCommand extends CommandBase {
 		if ( args.length == 2 ) {
 			List<String> results = new ArrayList<>();
 			for (KingdomFlag flag : plugin.getApi().getFlagHandler().getAllFlags()) {
-				results.add(flag.getName());
+				if ( flag.getName().toLowerCase().startsWith(args[1].toLowerCase()) ) {
+					results.add(flag.getName());
+				}
 			}
 			return results;
 		}
 
 		if ( args.length == 3 ) {
-			String flagname = args[0];
+			String flagname = args[1];
 			KingdomFlag flag = plugin.getApi().getFlagHandler().getFlag(flagname);
 			if ( flag == null ) return null;
 
