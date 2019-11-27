@@ -110,7 +110,7 @@ public class SetRankCommand extends CommandBase {
 		}
 
 		if ( rank == null ) {
-			plugin.getMsg().send(sender, "cmdSetRankNotExist");
+			plugin.getMsg().send(sender, "cmdSetRankNotExist", args[1]);
 			return true;
 		}
 
