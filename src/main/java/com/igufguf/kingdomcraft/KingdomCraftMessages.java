@@ -62,7 +62,7 @@ public class KingdomCraftMessages {
 		if ( message == null ) return null;
 
 		for ( int i = 0; i < placeholders.length; i++ ) {
-			message = message.replaceAll(Pattern.quote("{" + i + "}"), placeholders[i]);
+			message = message.replace("{" + i + "}", placeholders[i]);
 		}
 
 		return message;
