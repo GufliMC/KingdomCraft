@@ -65,7 +65,8 @@ public class DamageListener extends EventListener {
 
         // event was cancelled
 		if ( e.isCancelled() ) return;
-		if ( d.hasPermission("kingdom.friendlyfire.bypass") ) return;
+		if ( d.hasPermission("kingdom.friendlyfire.bypass") // TODO remove old permission in future version
+				|| d.hasPermission("kingdom.flag.bypass.friendlyfire")) return;
 
 		Kingdom k1 = plugin.getApi().getUserHandler().getKingdom(u1);
 		Kingdom k2 = plugin.getApi().getUserHandler().getKingdom(u2);
