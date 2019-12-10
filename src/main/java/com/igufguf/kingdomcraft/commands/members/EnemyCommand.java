@@ -100,9 +100,9 @@ public class EnemyCommand extends CommandBase {
 			if ( ku.getKingdom() == null || on == p ) continue;
 
 			if ( ku.getKingdom().equals(senderkd.getName()) ) {
-				plugin.getMsg().send(sender, "cmdEnemySuccessMembers", targetkd.getName());
+				plugin.getMsg().send(on, "cmdEnemySuccessMembers", targetkd.getName());
 			} else if ( ku.getKingdom().equals(targetkd.getName()) ) {
-				plugin.getMsg().send(sender, "cmdEnemySuccessTarget", senderkd.getName());
+				plugin.getMsg().send(on, "cmdEnemySuccessTarget", senderkd.getName());
 			}
 		}
 
