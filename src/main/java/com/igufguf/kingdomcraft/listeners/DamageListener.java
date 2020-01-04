@@ -8,11 +8,15 @@ import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRelation;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityEvent;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -41,29 +45,43 @@ public class DamageListener extends EventListener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
-		if ( !isWorldEnabled(e.getEntity().getWorld()) ) return;
-		if ( !(e.getEntity() instanceof Player)) return;
+		handleEvent(e, e.getEntity(), e.getDamager());
+	}
 
-		Player p = (Player) e.getEntity();
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+	public void onEntityCombustByEntity(EntityCombustByEntityEvent e) {
+		handleEvent(e, e.getEntity(), e.getCombuster());
+	}
+
+	private <T extends EntityEvent & Cancellable> void handleEvent(T e, Entity entity, Entity damager) {
+		if ( !isWorldEnabled(entity.getWorld()) ) return;
+
+		Player p;
+		if ( entity instanceof Player) {
+			p = (Player) entity;
+		} else {
+			return;
+		}
 
 		Player d;
-		if ( e.getDamager() instanceof Player ) {
-			d = (Player) e.getDamager();
-		} else if ( e.getDamager() instanceof Projectile && ((Projectile) e.getDamager()).getShooter() instanceof Player) {
-			d = (Player) ((Projectile) e.getDamager()).getShooter();
-		} else {
+		if ( damager instanceof Player ) {
+			d = (Player) damager;
+		} else if ( damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Player) {
+			d = (Player) ((Projectile) damager).getShooter();
+		}
+		else {
 			return;
 		}
 
 		KingdomUser u1 = plugin.getApi().getUserHandler().getUser(d);
 		KingdomUser u2 = plugin.getApi().getUserHandler().getUser(p);
 
-        KingdomPlayerAttackEvent event = new KingdomPlayerAttackEvent(e, u1, u2);
+		KingdomPlayerAttackEvent event = new KingdomPlayerAttackEvent(e, u1, u2);
 
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        e.setCancelled(event.isCancelled());
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		e.setCancelled(event.isCancelled());
 
-        // event was cancelled
+		// event was cancelled
 		if ( e.isCancelled() ) return;
 		if ( d.hasPermission("kingdom.friendlyfire.bypass") // TODO remove old permission in future version
 				|| d.hasPermission("kingdom.flag.bypass.friendlyfire")) return;
@@ -79,18 +97,42 @@ public class DamageListener extends EventListener {
 			return;
 		}
 
-        // disable pvp for players in the same kingdom
-        if ( k1 == k2 ) {
-			e.setCancelled(true);
-			plugin.getMsg().send(d, "damageKingdom");
-			return;
-        }
+		// disable pvp for players in the same kingdom
+		if ( k1 == k2 ) {
+			notify(u1, "damageKingdom");
 
-        // disable attacking a friendly player
-		if ( plugin.getCfg().has("friendlyfire-flag-include-friendly-kingdoms") && plugin.getCfg().getBoolean("friendlyfire-flag-include-friendly-kingdoms")
-			&& plugin.getApi().getRelationHandler().getRelation(k1, k2) == KingdomRelation.FRIENDLY ) {
 			e.setCancelled(true);
-			plugin.getMsg().send(d, "damageFriendly");
+			if ( damager instanceof Projectile ) {
+				damager.remove();
+			}
+			return;
+		}
+
+		// disable attacking a friendly player
+		if ( plugin.getCfg().has("friendlyfire-flag-include-friendly-kingdoms") && plugin.getCfg().getBoolean("friendlyfire-flag-include-friendly-kingdoms")
+				&& plugin.getApi().getRelationHandler().getRelation(k1, k2) == KingdomRelation.FRIENDLY ) {
+			notify(u1, "damageFriendly");
+
+			e.setCancelled(true);
+			if ( damager instanceof Projectile ) {
+				damager.remove();
+			}
+		}
+	}
+
+	private final static long NOTIFY_DELAY = 5000L; // 5 seconds
+	private final static String NOTIFY_KEY = "friendlyfire-notify";
+
+	private void notify(KingdomUser d, String msg) {
+		long lastNotification = 0;
+
+		if ( d.hasMemory(NOTIFY_KEY) ) {
+			lastNotification = d.getMemory(NOTIFY_KEY, Long.class);
+		}
+
+		if ( System.currentTimeMillis() - lastNotification > NOTIFY_DELAY ) {
+			plugin.getMsg().send(d.getPlayer(), msg);
+			d.setMemory(NOTIFY_KEY, System.currentTimeMillis());
 		}
 	}
 	
