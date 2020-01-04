@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -102,49 +103,68 @@ public class InfoCommand extends CommandBase {
 		sender.sendMessage(ChatColor.GRAY + "Display: " + kingdom.getDisplay());
 
 		// sort allys/enemys
-		String allys = "";
-		String enemys = "";
+		StringBuilder friendlysb = new StringBuilder();
+		StringBuilder enemysb = new StringBuilder();
 
 		HashMap<Kingdom, KingdomRelation> relations = plugin.getApi().getRelationHandler().getRelations(kingdom);
 		for ( Kingdom ko : relations.keySet() ) {
-			if ( relations.get(ko) == KingdomRelation.FRIENDLY ) allys += ", " + ko.getName();
-			else if ( relations.get(ko) == KingdomRelation.ENEMY) enemys += ", " + ko.getName();
+			if ( relations.get(ko) == KingdomRelation.FRIENDLY ) {
+			    friendlysb.append(", ").append(ko.getName());
+            }
+			else if ( relations.get(ko) == KingdomRelation.ENEMY) {
+			    enemysb.append(", ").append(ko.getName());
+            }
 		}
 
-		// allys
-		if ( allys.equals("") ) allys = "none";
-		else allys = allys.substring(2);
-		if ( !plugin.getMsg().isEmpty("cmdInfoFriendly") ) sender.sendMessage(ChatColor.GRAY + plugin.getMsg().getMessage("cmdInfoFriendly") + ": " + ChatColor.GREEN + allys);
+		// friendlies
+        String friendlies = friendlysb.toString();
+		if ( friendlies.equals("") ) {
+		    friendlies = "/";
+        } else {
+		    friendlies = friendlies.substring(2);
+        }
+		if ( !plugin.getMsg().isEmpty("cmdInfoFriendly") ) sender.sendMessage(ChatColor.GRAY + plugin.getMsg().getMessage("cmdInfoFriendly") + ": " + ChatColor.GREEN + friendlies);
 
 		// enemys
-		if ( enemys.equals("") ) enemys = "none";
-		else enemys = enemys.substring(2);
-		if ( !plugin.getMsg().isEmpty("cmdInfoEnemy") ) sender.sendMessage(ChatColor.GRAY + plugin.getMsg().getMessage("cmdInfoEnemy") + ": " + ChatColor.RED + enemys);
+        String enemies = enemysb.toString();
+		if ( enemies.equals("") ) {
+		    enemies = "/";
+        } else {
+		    enemies = enemies.substring(2);
+        }
+		if ( !plugin.getMsg().isEmpty("cmdInfoEnemy") ) sender.sendMessage(ChatColor.GRAY + plugin.getMsg().getMessage("cmdInfoEnemy") + ": " + ChatColor.RED + enemies);
 
 		// members
-		String members = "";
-		List<Player> onlineMembers = plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom);
-		for ( Player p : onlineMembers ) {
-			members += ", " + p.getName();
-		}
+		StringBuilder sb = new StringBuilder();
+		String result;
 
-		if ( members.equals("") ) members = "none";
-		else members = members.substring(2);
-		sender.sendMessage(ChatColor.GRAY + "Online Members (" + ChatColor.GOLD + onlineMembers.size() + ChatColor.GRAY + "): " + ChatColor.GREEN + members);
+		List<Player> onlineMembers = plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom);
+		if ( onlineMembers.size() > 0 ) {
+			for ( Player p : onlineMembers ) {
+				sb.append(", ").append(p.getName());
+			}
+			result = sb.toString().substring(2);
+		} else {
+			result = "/";
+		}
+		sender.sendMessage(ChatColor.GRAY + "Online Members (" + ChatColor.GOLD + onlineMembers.size() + ChatColor.GRAY + "): " + ChatColor.GREEN + result);
 
 		// offline members
 		if ( plugin.getCfg().getBoolean("info-offline-members") ) {
 
-			members = "";
-			List<KingdomUser> offlineMembers = plugin.getApi().getKingdomHandler().getMembers(kingdom);
-			for (KingdomUser p : offlineMembers ) {
-				if (p.getPlayer() != null) continue;
-				members += ", " + p.getName();
-			}
+			sb = new StringBuilder();
+			List<KingdomUser> offlineMembers = plugin.getApi().getKingdomHandler().getMembers(kingdom).stream()
+					.filter(user -> user.getPlayer() == null).collect(Collectors.toList());
 
-			if ( members.equals("") ) members = "none";
-			else members = members.substring(2);
-			sender.sendMessage(ChatColor.GRAY + "Offline Members (" + ChatColor.GOLD + offlineMembers.size() + ChatColor.GRAY + "): "+ ChatColor.RED + members);
+			if ( offlineMembers.size() > 0 ) {
+				for ( KingdomUser u : offlineMembers ) {
+					sb.append(", ").append(u.getName());
+				}
+				result = sb.toString().substring(2);
+			} else {
+				result = "/";
+			}
+			sender.sendMessage(ChatColor.GRAY + "Offline Members (" + ChatColor.GOLD + offlineMembers.size() + ChatColor.GRAY + "): "+ ChatColor.RED + result);
 		}
 	}
 	
@@ -162,7 +182,7 @@ public class InfoCommand extends CommandBase {
 				sender.sendMessage(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + plugin.getApi().getUserHandler().getRank(user).getDisplay());
 			}
 		} else {
-			sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + "none");
+			sender.sendMessage(ChatColor.GRAY + "Kingdom: " + ChatColor.GOLD + "/");
 		}
 	}
 }
