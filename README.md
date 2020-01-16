@@ -1,7 +1,7 @@
 # KingdomCraft
 The #1 minecraft kingdom plugin for easily managing your kingdoms!
 
-Download KingdomCraft **5.0.2** here: https://igufguf.com/project/1
+Download KingdomCraft **5.1.4** here: https://igufguf.com/project/1
 
 *Before using the api be sure to add "KingdomCraft" to your dependencies!*
 
