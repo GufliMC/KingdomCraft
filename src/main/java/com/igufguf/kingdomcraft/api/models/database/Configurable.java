@@ -1,6 +1,7 @@
 package com.igufguf.kingdomcraft.api.models.database;
 
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -12,30 +13,26 @@ import java.io.IOException;
 public class Configurable {
 
     private final File configFile;
-    private final org.bukkit.configuration.file.FileConfiguration configData;
+    private final FileConfiguration configData;
 
     public Configurable(File configFile) {
         this.configData = new YamlConfiguration();
         this.configFile = configFile;
+        loadConfig();
+    }
 
-        if ( !this.configFile.exists() ) {
-            // create config file
-            try {
-                this.configFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            // load config file
-            try {
-                this.configData.load(this.configFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
-            }
+    public void loadConfig() {
+        if ( !this.configFile.exists() ) return;
+
+        // load config file
+        try {
+            this.configData.load(this.configFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
         }
     }
 
-    public org.bukkit.configuration.file.FileConfiguration getConfiguration() {
+    public FileConfiguration getConfiguration() {
         return configData;
     }
 
@@ -43,7 +40,7 @@ public class Configurable {
         return configFile;
     }
 
-    protected void saveConfiguration() {
+    public void saveConfiguration() {
         try {
             this.configData.save(this.configFile);
         } catch (IOException e) {

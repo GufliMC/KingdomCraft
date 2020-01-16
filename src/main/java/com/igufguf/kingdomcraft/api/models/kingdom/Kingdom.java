@@ -116,6 +116,13 @@ public class Kingdom extends MemoryHolder {
 		return this.ranks.size() != 0 ? this.ranks.get(0) : null;
 	}
 
+	public KingdomRank getLeaderRank() {
+		for ( KingdomRank kr : this.ranks ) {
+			if ( kr.isLeader() ) return kr;
+		}
+		return this.ranks.size() != 0 ? this.ranks.get(0) : null;
+	}
+
 	public KingdomRank getRank(String name) {
 		for ( KingdomRank kr : getRanks() ) {
 			if ( kr.getName().equalsIgnoreCase(name) ) return kr;
