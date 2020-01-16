@@ -2,6 +2,9 @@ package com.igufguf.kingdomcraft;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftApi;
 import com.igufguf.kingdomcraft.api.handlers.KingdomCommandHandler;
+import com.igufguf.kingdomcraft.commands.editor.CreateCommand;
+import com.igufguf.kingdomcraft.commands.editor.DeleteCommand;
+import com.igufguf.kingdomcraft.commands.editor.EditCommand;
 import com.igufguf.kingdomcraft.handlers.SimpleCommandHandler;
 import com.igufguf.kingdomcraft.commands.admin.*;
 import com.igufguf.kingdomcraft.commands.members.*;
@@ -21,7 +24,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
 import java.util.Base64;
@@ -62,6 +64,11 @@ public class KingdomCraft extends JavaPlugin {
 	public KingdomCraft() {
 		this.plugin = this;
 
+		// create data folder
+		if ( !getDataFolder().exists() ) {
+			getDataFolder().mkdirs();
+		}
+
         this.config = new KingdomCraftConfig(this);
         this.messages = new KingdomCraftMessages(this);
 
@@ -77,8 +84,8 @@ public class KingdomCraft extends JavaPlugin {
 
 		// register command
 		PluginCommand cmd = getCommand("kingdom");
-		cmd.setExecutor((SimpleCommandHandler) api.getCommandHandler());
-		cmd.setTabCompleter((SimpleCommandHandler) api.getCommandHandler());
+		cmd.setExecutor(api.getCommandHandler());
+		cmd.setTabCompleter(api.getCommandHandler());
 
 		// load first to register debug executors
 		api.getCommandHandler().register(new DebugCommand(this));
@@ -125,6 +132,10 @@ public class KingdomCraft extends JavaPlugin {
 		KingdomCommandHandler cmdHandler = getApi().getCommandHandler();
 
 		cmdHandler.register(new HelpCommand(this));
+
+		cmdHandler.register(new CreateCommand(this));
+		cmdHandler.register(new DeleteCommand(this));
+		cmdHandler.register(new EditCommand(this));
 
 		cmdHandler.register(new InfoCommand(this));
 		cmdHandler.register(new ListCommand(this));

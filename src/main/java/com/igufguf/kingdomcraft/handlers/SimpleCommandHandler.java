@@ -35,7 +35,7 @@ import java.util.List;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class SimpleCommandHandler implements CommandExecutor, TabCompleter, KingdomCommandHandler {
+public class SimpleCommandHandler implements KingdomCommandHandler {
 
 	private final KingdomCraft plugin;
 	private final List<CommandBase> commands = new ArrayList<>();

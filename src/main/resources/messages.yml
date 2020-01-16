@@ -110,10 +110,13 @@ cmdListNormal: '&7There are &8{0} &7online players:'
 cmdCreateAlreadyExists: '&7The kingdom &8{0} &7already exists!'
 cmdCreateFailed: '&cAn error occured while creating the kingdom &4{0}&c!'
 cmdCreateSuccess: '&7You created the kingdom &8{0}&7!'
+cmdCreateNameInvalid: '&cKingdom name can only contain alphabetical characters'
 
-cmdDeleteConfirm: '&7Type &8/kingdom delete {0} &7again to confirm the &8deletion &7of &8{0}&7!'
 cmdDeleteFailed: '&cAn error occured while deleting the kingdom &4{0}&c!'
 cmdDeleteSuccess: '&7You deleted the kingdom &8{0}&7!'
+
+cmdEditSuccess: '&7Changed option &8{0} &7to &8{1} &7for kingdom &8{2}&7!'
+cmdEditFailed: '&cFailed to change option!'
 
 cmdEditRankInvalidOption: '&cThe option &4{0} &cis not available for ranks!'
 cmdEditRankListAddSuccess: '&7You added &8{1} &7to &8{0} &7for rank &8{2}'
