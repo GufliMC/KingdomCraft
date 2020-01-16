@@ -5,6 +5,7 @@ import com.igufguf.kingdomcraft.api.models.flags.KingdomFlag;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Joris on 17/08/2018 in project KingdomCraft.
@@ -24,10 +25,9 @@ public interface KingdomFlagHandler {
 
     // kingdoms
 
-    List<KingdomFlag> getFlags(Kingdom kd);
+    Map<KingdomFlag, Object> getFlags(Kingdom kd);
 
     void setFlag(Kingdom kd, KingdomFlag flag, Object value);
-    //Object getFlagValue(Kingdom kd, KingdomFlag flag);
 
     boolean hasFlag(Kingdom kd, KingdomFlag flag);
     <T> T getFlag(Kingdom kd, KingdomFlag<T> flag);

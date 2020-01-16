@@ -1,3 +1,9 @@
+# Following flags will be set for every kingdom with this value
+# Can be overriden for individual kingdoms with the command /k flag <kingdom> <flagname> <value>
+flags:
+  invite-only: true
+  friendlyfire: false
+
 # Following ranks will be present in all kingdoms.
 # You can override these ranks in the individual kingdom configurations.
 ranks:

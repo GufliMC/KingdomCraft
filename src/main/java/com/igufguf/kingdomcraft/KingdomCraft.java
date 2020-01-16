@@ -2,10 +2,7 @@ package com.igufguf.kingdomcraft;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftApi;
 import com.igufguf.kingdomcraft.api.handlers.KingdomCommandHandler;
-import com.igufguf.kingdomcraft.commands.editor.CreateCommand;
-import com.igufguf.kingdomcraft.commands.editor.DeleteCommand;
-import com.igufguf.kingdomcraft.commands.editor.EditCommand;
-import com.igufguf.kingdomcraft.handlers.SimpleCommandHandler;
+import com.igufguf.kingdomcraft.commands.editor.*;
 import com.igufguf.kingdomcraft.commands.admin.*;
 import com.igufguf.kingdomcraft.commands.members.*;
 import com.igufguf.kingdomcraft.commands.players.*;
@@ -133,10 +130,6 @@ public class KingdomCraft extends JavaPlugin {
 
 		cmdHandler.register(new HelpCommand(this));
 
-		cmdHandler.register(new CreateCommand(this));
-		cmdHandler.register(new DeleteCommand(this));
-		cmdHandler.register(new EditCommand(this));
-
 		cmdHandler.register(new InfoCommand(this));
 		cmdHandler.register(new ListCommand(this));
 		cmdHandler.register(new SpawnCommand(this));
@@ -156,7 +149,12 @@ public class KingdomCraft extends JavaPlugin {
 
 		cmdHandler.register(new ReloadCommand(this));
 		cmdHandler.register(new SocialSpyCommand(this));
+
+		cmdHandler.register(new CreateCommand(this));
+		cmdHandler.register(new DeleteCommand(this));
+		cmdHandler.register(new EditCommand(this));
 		cmdHandler.register(new FlagCommand(this));
+		cmdHandler.register(new FlagsCommand(this));
 
 		if ( getChatManager().isChatSystemEnabled() && getChatManager().areChannelsEnabled() ) {
 			cmdHandler.register(new ChannelCommand(this));
