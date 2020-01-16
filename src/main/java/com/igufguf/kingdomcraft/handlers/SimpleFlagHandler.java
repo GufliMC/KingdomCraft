@@ -1,10 +1,10 @@
 package com.igufguf.kingdomcraft.handlers;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
-import com.igufguf.kingdomcraft.api.exceptions.PluginNotEnabledException;
 import com.igufguf.kingdomcraft.api.handlers.KingdomFlagHandler;
 import com.igufguf.kingdomcraft.api.models.flags.KingdomFlag;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.*;
 
@@ -32,9 +32,13 @@ import static com.igufguf.kingdomcraft.api.models.flags.KingdomFlag.INVITE_ONLY;
  **/
 public class SimpleFlagHandler implements KingdomFlagHandler  {
 
+    private final KingdomCraft plugin;
+
     private final List<KingdomFlag> flagList = new ArrayList<>();
 
     public SimpleFlagHandler(KingdomCraft plugin) {
+        this.plugin = plugin;
+
         register(INVITE_ONLY);
         register(FRIENDLYFIRE);
     }
@@ -77,22 +81,58 @@ public class SimpleFlagHandler implements KingdomFlagHandler  {
 
     // kingdom api
 
-    @Override
-    public List<KingdomFlag> getFlags(Kingdom kd) {
-        Map<String, Object> flags = kd.getFlags();
+    private Map<KingdomFlag, Object> defaultFlags = null;
 
-        if ( flags == null || flags.isEmpty() ) {
-            return new ArrayList<>();
+    private void loadDefaultFlags() {
+        defaultFlags = new HashMap<>();
+
+        if ( !(plugin.getApi().getKingdomHandler() instanceof SimpleKingdomHandler) ) {
+            return;
         }
 
-        List<KingdomFlag> flagList = new ArrayList<>();
+        SimpleKingdomHandler kh = (SimpleKingdomHandler) plugin.getApi().getKingdomHandler();
+        if ( !kh.getConfiguration().contains("flags") ) {
+            return;
+        }
+
+        ConfigurationSection cs = kh.getConfiguration().getConfigurationSection("flags");
+
+        for ( String flagname : cs.getKeys(false) ) {
+            KingdomFlag flag = getFlag(flagname);
+            if ( flag == null ) continue;
+
+            Object value = cs.get(flagname);
+            if ( !flag.getType().isAssignableFrom(value.getClass()) ) {
+                plugin.getLogger().info("The default flag '" + flag.getName() + "' has an invalid value, it should be of type '" + flag.getClass().getSimpleName() + "'");
+                continue;
+            }
+
+            defaultFlags.put(flag, value);
+        }
+    }
+
+    private Map<KingdomFlag, Object> getDefaultFlags() {
+        if ( defaultFlags == null ) loadDefaultFlags();
+        return defaultFlags;
+    }
+
+    @Override
+    public Map<KingdomFlag, Object> getFlags(Kingdom kd) {
+        Map<KingdomFlag, Object> result = new HashMap<>();
+
+        Map<String, Object> flags = kd.getFlags();
         for ( String flagname : flags.keySet() ) {
             KingdomFlag flag = getFlag(flagname);
             if ( flag == null ) continue;
-            flagList.add(flag);
+            result.put(flag, flags.get(flagname));
         }
 
-        return flagList;
+        for ( KingdomFlag defaultFlag : getDefaultFlags().keySet() ) {
+            if ( result.containsKey(defaultFlag) ) continue;
+            result.put(defaultFlag, defaultFlags.get(defaultFlag));
+        }
+
+        return result;
     }
 
     @Override
@@ -113,15 +153,19 @@ public class SimpleFlagHandler implements KingdomFlagHandler  {
 
     @Override
     public boolean hasFlag(Kingdom kd, KingdomFlag flag) {
-        Map<String, Object> flags = kd.getFlags();
-        if ( flags == null || flags.isEmpty() ) return false;
-        return flags.containsKey(flag.getName());
+        Map<KingdomFlag, Object> flags = getFlags(kd);
+        return flags.containsKey(flag);
     }
 
     @Override
     public <T> T getFlag(Kingdom kd, KingdomFlag<T> flag) {
-        if ( !hasFlag(kd, flag) ) return flag.getDefaultValue();
-        return flag.parse(kd.getFlags().get(flag.getName()));
+        Object result = getFlags(kd).get(flag);
+
+        if ( result == null ) {
+            return flag.getDefaultValue();
+        }
+
+        return flag.parse(result);
     }
 
 
