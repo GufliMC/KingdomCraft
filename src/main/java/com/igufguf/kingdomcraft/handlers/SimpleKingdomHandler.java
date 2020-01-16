@@ -7,14 +7,14 @@ import com.igufguf.kingdomcraft.api.models.database.StorageManager;
 import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomRank;
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Copyrighted 2018 iGufGuf
@@ -53,8 +53,8 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         // save default kingdoms file
         if ( !getConfigFile().exists() ) {
             plugin.saveResource("kingdoms.yml", true);
+            super.loadConfig();
         }
-
 
         FileConfiguration config = getConfiguration();
 
@@ -84,7 +84,7 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
 
     @Override
     public List<Kingdom> getKingdoms() {
-        return new ArrayList<>(kingdoms);
+        return kingdoms;
     }
 
     @Override

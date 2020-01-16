@@ -37,6 +37,7 @@ public class KingdomRank extends MemoryHolder {
 
     private final String name;
     private final boolean isDefault;
+    private final boolean isLeader;
 
     private final Map<String, Boolean> permissions = new HashMap<>();
 
@@ -44,17 +45,19 @@ public class KingdomRank extends MemoryHolder {
     private String prefix;
     private String suffix;
 
-    public KingdomRank(Kingdom kingdom, String name, boolean isDefault) {
+    public KingdomRank(Kingdom kingdom, String name, boolean isDefault, boolean isLeader) {
         this.kingdom = kingdom;
 
         this.name = name;
         this.isDefault = isDefault;
+        this.isLeader = isLeader;
     }
 
     public KingdomRank(KingdomRank rank, Kingdom kingdom) {
         this.kingdom = kingdom;
         this.name = rank.name;
         this.isDefault = rank.isDefault;
+        this.isLeader = rank.isLeader;
         this.permissions.putAll(rank.permissions);
         this.display = rank.display;
         this.prefix = rank.prefix;
@@ -73,6 +76,10 @@ public class KingdomRank extends MemoryHolder {
 
     public boolean isDefault() {
         return isDefault;
+    }
+
+    public boolean isLeader() {
+        return isLeader;
     }
 
     public String getDisplay() {
@@ -135,8 +142,9 @@ public class KingdomRank extends MemoryHolder {
     // configuration (can't be changed at runtime)
     public static KingdomRank load(ConfigurationSection data, Kingdom kingdom, String name) {
         boolean defaultRank = data.getBoolean("default");
+        boolean leaderRank = data.getBoolean("leader");
 
-        KingdomRank rank = new KingdomRank(kingdom, name, defaultRank);
+        KingdomRank rank = new KingdomRank(kingdom, name, defaultRank, leaderRank);
 
         rank.prefix = data.getString("prefix");
         rank.suffix = data.getString("suffix");
