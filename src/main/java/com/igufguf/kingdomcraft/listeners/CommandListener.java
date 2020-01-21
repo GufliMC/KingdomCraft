@@ -66,16 +66,27 @@ public class CommandListener extends EventListener {
 
                     String fulldisplay = ChatColor.GRAY + "";
 
-                    if ( plugin.getChatManager().hasVault() && plugin.getChatManager().getVault().getPlayerPrefix(p) != null )
+                    if ( plugin.getChatManager().hasVault() && plugin.getChatManager().getVault().getPlayerPrefix(p) != null ) {
                         fulldisplay += plugin.getChatManager().getVault().getPlayerPrefix(p) + " ";
+                    }
 
-                    if ( rank.getPrefix() != null )
+                    if ( rank.getPrefix() != null ) {
                         fulldisplay += rank.getPrefix() + " ";
+                    }
 
-                    fulldisplay += p.getName() + ChatColor.WHITE;
+                    fulldisplay += p.getDisplayName() + ChatColor.WHITE;
+
+                    if ( plugin.getChatManager().hasVault() && plugin.getChatManager().getVault().getPlayerSuffix(p) != null ) {
+                        fulldisplay += plugin.getChatManager().getVault().getPlayerSuffix(p) + " ";
+                    }
+
+                    if ( rank.getSuffix() != null ) {
+                        fulldisplay += rank.getSuffix() + " ";
+                    }
+
                     line += fulldisplay.replaceAll(Pattern.quote("  "), " ");
                 }
-                message += line.substring(2) + "\n";
+                message += line.trim().substring(2) + "\n";
             }
 
             e.getPlayer().sendMessage(plugin.getPrefix() + plugin.getMsg().getMessage("cmdListNormal", Bukkit.getOnlinePlayers().size() + "") + "\n" + message);
