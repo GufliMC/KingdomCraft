@@ -1,12 +1,14 @@
 package com.igufguf.kingdomcraft.api.models.database;
 
 import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Base64;
 
 /**
@@ -28,6 +30,7 @@ public class StorageManager {
 
         this.storageData = new YamlConfiguration();
         this.storageFile = storageFile;
+
         if ( !this.storageFile.exists() ) {
 
             if ( !this.storageFile.getParentFile().exists() )
@@ -41,9 +44,26 @@ public class StorageManager {
 
             // no need to convert data because there is no data
             return;
+        } else {
+            // create a backup of the data file, in case a misconfiguration messes up the original data file
+            try {
+                FileUtils.copyFile(this.storageFile, new File(storageFile + ".prev"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        if ( !unreadable ) return;
+        if ( !unreadable ) {
+
+            // no need to convert from base64
+            try {
+                this.storageData.load(this.storageFile);
+            } catch (IOException | InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
 
         // data is unreadable because it is base64
         // convert base64 to yaml
