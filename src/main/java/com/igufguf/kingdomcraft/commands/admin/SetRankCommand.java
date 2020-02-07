@@ -116,7 +116,7 @@ public class SetRankCommand extends CommandBase {
 
 		if ( (sender instanceof Player) && !user.getKingdom().equals(plugin.getApi().getUserHandler().getUser((Player) sender).getKingdom())
 				&& !sender.hasPermission(this.getPermission() + ".other") ) {
-			plugin.getMsg().send(sender, "cmdNoPermissionCmd");
+			plugin.getMsg().send(sender, "noPermissionCmd");
 			return true;
 		}
 
