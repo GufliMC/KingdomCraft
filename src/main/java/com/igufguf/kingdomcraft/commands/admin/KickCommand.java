@@ -77,30 +77,31 @@ public class KickCommand extends CommandBase {
 			plugin.getMsg().send(sender, "cmdDefaultTargetNoKingdom", user.getName());
 			return true;
 		}
-		
-		if ( p.hasPermission(this.getPermission() + ".other")
-				|| (plugin.getApi().getUserHandler().getUser(p) != null && plugin.getApi().getUserHandler().getUser(p).getKingdom().equals(user.getKingdom())) ) {
-			Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
 
-			plugin.getApi().getUserHandler().setKingdom(user, null);
-
-			for ( Player member : plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom) ) {
-				plugin.getMsg().send(member, "cmdLeaveSuccessMembers", user.getName());
-			}
-
-			plugin.getMsg().send(sender, "cmdKickSender", user.getName(), kingdom.getName());
-
-			if ( user.getPlayer() != null ) {
-				plugin.getMsg().send(user.getPlayer(), "cmdKickTarget", kingdom.getName());
-			}
-			
-			if ( plugin.getCfg().getBoolean("spawn-on-kingdom-leave") && user.getPlayer() != null ) {
-				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + user.getName());
-			}
-		} else {
+		if ( !user.getKingdom().equals(plugin.getApi().getUserHandler().getUser((Player) sender).getKingdom())
+				&& !sender.hasPermission(this.getPermission() + ".other") ) {
 			plugin.getMsg().send(sender, "noPermissionCmd");
+			return true;
 		}
-		
+
+		Kingdom kingdom = plugin.getApi().getUserHandler().getKingdom(user);
+
+		plugin.getApi().getUserHandler().setKingdom(user, null);
+
+		for ( Player member : plugin.getApi().getKingdomHandler().getOnlineMembers(kingdom) ) {
+			plugin.getMsg().send(member, "cmdLeaveSuccessMembers", user.getName());
+		}
+
+		plugin.getMsg().send(sender, "cmdKickSender", user.getName(), kingdom.getName());
+
+		if ( user.getPlayer() != null ) {
+			plugin.getMsg().send(user.getPlayer(), "cmdKickTarget", kingdom.getName());
+		}
+
+		if ( plugin.getCfg().getBoolean("spawn-on-kingdom-leave") && user.getPlayer() != null ) {
+			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + user.getName());
+		}
+
 		//save user when player is not online
 		if ( user.getPlayer() == null ) {
 			plugin.getApi().getUserHandler().save(user);
