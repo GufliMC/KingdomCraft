@@ -74,8 +74,22 @@ public class SimpleKingdomHandler extends Configurable implements KingdomHandler
         }
 
         // oh oh
-        if ( getKingdoms().size() == 0 ) {
+        if ( kingdoms.size() == 0 ) {
+            plugin.getLogger().info("\t ");
+            plugin.getLogger().info("!!! WARNING !!!");
+            plugin.getLogger().info("\t ");
             plugin.getLogger().info("Couldn't load any kingdoms, is your kingdoms.yml file correct?");
+            plugin.getLogger().info("\t ");
+            plugin.getLogger().info("If this is unexpected, shut down your server immediately to prevent data loss and fix your configuration.");
+            plugin.getLogger().info("Unmodified data from the previous run is saved in a .prev extension. Take a backup of these files!");
+            plugin.getLogger().info("\t ");
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for ( Kingdom kd : kingdoms ) {
+                sb.append(", ").append(kd.getName());
+            }
+
+            plugin.getLogger().info("Loaded " + kingdoms.size() + " kingdoms: " + sb.toString().substring(2));
         }
 
     }
