@@ -100,7 +100,7 @@ public class ChatListener extends EventListener {
 			}
 
 			// if no channel is detected or player has no permission for this channel, talk in default channel
-			if ( channel == null || (channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) && !p.isOp() )) {
+			if ( channel == null || (channel.isPermission() && !p.hasPermission("kingdom.channel." + channel.getName()) )) {
 				channel = cm.getChannel(cm.getDefaultChannel(user));
 
 				// player is not in a kingdom and there is no default channel for kingdomless players
