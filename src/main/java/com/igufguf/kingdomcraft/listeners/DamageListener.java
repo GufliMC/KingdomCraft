@@ -76,6 +76,11 @@ public class DamageListener extends EventListener {
 		KingdomUser u1 = plugin.getApi().getUserHandler().getUser(d);
 		KingdomUser u2 = plugin.getApi().getUserHandler().getUser(p);
 
+		// Attacking an npc from another plugin will trigger this event but there won't be a KingdomUser object
+		if ( u1 == null || u2 == null ) {
+			return;
+		}
+
 		KingdomPlayerAttackEvent event = new KingdomPlayerAttackEvent(e, u1, u2);
 
 		Bukkit.getServer().getPluginManager().callEvent(event);
