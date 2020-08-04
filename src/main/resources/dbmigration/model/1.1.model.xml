@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <alterColumn columnName="relation" tableName="kingdom_relation" checkConstraint="check ( relation in (0,1,2,3))" checkConstraintName="ck_kingdom_relation_relation"/>
+        <addColumn tableName="kingdom_relation">
+            <column name="kingdom_id" type="bigint" uniqueOneToOne="uq_kingdom_relation_kingdom_id" references="kingdom.id" foreignKeyName="fk_kingdom_relation_kingdom_id"/>
+            <column name="target_id" type="bigint" uniqueOneToOne="uq_kingdom_relation_target_id" references="kingdom.id" foreignKeyName="fk_kingdom_relation_target_id"/>
+        </addColumn>
+    </changeSet>
+    <changeSet type="pendingDrops">
+        <dropColumn columnName="kingdom1_id" tableName="kingdom_relation"/>
+        <dropColumn columnName="kingdom2_id" tableName="kingdom_relation"/>
+    </changeSet>
+</migration>

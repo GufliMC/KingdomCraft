@@ -1,103 +1,16 @@
 ######################################################################
 #                                                                    #
 #                            KINGDOMCRAFT                            #
-#                   Created by iGufGuf, Copyrighted                  #
+#                Created by Joris Guffens, Copyrighted               #
 #                        --------------------                        #
-#                           version 5.1.5                            #
+#                             version 6.0                            #
 #                                                                    #
-#                           www.igufguf.com                          #
+#                       https://kingdomcraft.nl                      #
 ######################################################################
 
 
-# DONT CHANGE THIS, IT WILL BE USED TO AUTO-UPDATE THE CONFIG
-version: {CONFIG_VERSION}
-
-# Prefix when you are not in a kingdom
-default-prefix: '&f[&6New&f] &7'
-
-# Enable the plugin for only some single worlds (case sensitive)
-worlds: false
-world-list:
-- world
-
-# Show Offline players in /k info
-info-offline-members: true
-
-# Make player use /spawn when he leaves or get kicked from a kingdom.
-spawn-on-kingdom-leave: true
-
-# Make players teleport to the kingdom spawn when joining a kingdom.
-spawn-on-kingdom-join: true
-
-# Cooldown in seconds for teleporting to kingdom spawn (0 = default), no waiting with kindom.teleport.bypass
-tp-delay: 5
-
-# Override the /list command of bukkit or other plugins to one with kingdom prefixes and suffixes.
-override-list-command: true
-
-# Does the friendlyfire flag affect only players in the same kingdom or also friendly kingdoms
-friendlyfire-flag-include-friendly-kingdoms: true
-
-# true = use the below channel system, DON'T USE ANY OTHER CHAT PLUGIN!
-# false = use another chat plugin.
-chat-system:
-    enabled: true
-
-    # Chat abuse protection
-    anti-caps: true
-    anti-advertise: true
-
-    # The chat format when the channels are not enabled
-    default-format: '&7{prefix}{kingdomprefix}{kingdomrankprefix} &b{player} &8\u00BB &7{message}'
-
-    # Possible chat format placeholders:
-    # player, username, message
-    # kingdom, kingdomname, kingdomprefix, kingdomsuffix
-    # kingdomrank, kingdomrankname, kingdomranksuffix, kingdomrankprefix
-    # [vault support ->] prefix, suffix
-    channels:
-        enabled: true
-
-        # Default channel for kingdom, cannot be removed or replaced
-        kingdom:
-
-            # The format that will display when the player is talking in this channel
-            format: '&8[K]&7{prefix}{kingdomrankprefix} &7{player} &8\u00BB &7{message}'
-
-            # Only members of your kingdom will see this
-            visibility: 'kingdom'
-
-            # The channel where you talk in by default when in a kingdom (no message prefix)
-            default: true
-
-        # Other channels, you can add or remove more channels here.
-        public:
-
-            # Make players not able to toggle this channel!
-            always-enabled: true
-
-            format: '&8[P]&7{prefix}{kingdomprefix}{kingdomrankprefix} &7{player} &8\u00BB &7{message}'
-
-            # Prefix before message to send a message in this channel
-            message-prefix: '!'
-
-            # The channel where you talk in by default when not in a kingdom (no message prefix), can't be a kingdom only channel!
-            default: true
-
-        roleplay:
-            format: '&8[R]&7{prefix} &7{player} &8\u00BB &7{message}&7'
-            message-prefix: '#'
-
-            # This channel is enabled by default but can be toggled by the player
-            default-enabled: true
-
-        trade:
-            format: '&8[T]&7{prefix} &7{player} &8\u00BB &7{message}'
-            message-prefix: '$'
-
-        admin:
-            format: '&4[A]{prefix} &7{player} &8\u00BB &7{message}'
-
-            #Permission to watch & talk in this channel: kingdom.channel.<channelname>
-            permission: true
-            message-prefix: '@'
+database:
+    driver: 'org.sqlite.JDBC'
+    url: 'jdbc:sqlite:./plugins/KingdomCraft/database.sqlite'
+    username: ''
+    password: ''

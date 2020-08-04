@@ -3,3 +3,4 @@
 *.iws
 target/
 bin/
+dependency-reduced-pom.xml
