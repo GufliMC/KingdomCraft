@@ -1,32 +1,18 @@
 package com.igufguf.kingdomcraft;
 
-import com.igufguf.kingdomcraft.api.KingdomCraftApi;
-import com.igufguf.kingdomcraft.api.handlers.KingdomCommandHandler;
-import com.igufguf.kingdomcraft.commands.editor.*;
-import com.igufguf.kingdomcraft.commands.admin.*;
-import com.igufguf.kingdomcraft.commands.members.*;
-import com.igufguf.kingdomcraft.commands.players.*;
-import com.igufguf.kingdomcraft.listeners.*;
-import com.igufguf.kingdomcraft.api.models.kingdom.Kingdom;
-import com.igufguf.kingdomcraft.api.models.kingdom.KingdomUser;
-import com.igufguf.kingdomcraft.managers.ChatManager;
-import com.igufguf.kingdomcraft.managers.PermissionManager;
-import com.igufguf.kingdomcraft.managers.TeleportManager;
-import com.igufguf.kingdomcraft.utils.KingdomUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.igufguf.kingdomcraft.database.DatabaseManager;
+import com.igufguf.kingdomcraft.handlers.CommandHandler;
+import com.igufguf.kingdomcraft.handlers.KingdomHandler;
+import com.igufguf.kingdomcraft.handlers.MessageHandler;
+import com.igufguf.kingdomcraft.handlers.PlayerHandler;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.util.Base64;
 
 /**
- * Copyrighted 2018 iGufGuf
+ * Copyrighted 2020 iGufGuf
  *
  * This file is part of KingdomCraft.
  *
@@ -46,6 +32,62 @@ import java.util.Base64;
  **/
 public class KingdomCraft extends JavaPlugin {
 
+	public MessageHandler messageHandler;
+	public KingdomHandler kingdomHandler;
+	public PlayerHandler playerHandler;
+	public CommandHandler commandHandler;
+
+	@Override
+	public void onEnable() {
+
+		// LOAD CONFIG
+
+		YamlConfiguration config = new YamlConfiguration();
+
+		File configFile = new File(this.getDataFolder(), "config.yml");
+		if ( !configFile.exists() ) {
+			saveResource("config.yml", true);
+			//configFile = new File(this.getDataFolder(), "config.yml");
+		}
+
+		try {
+			config.load(configFile);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+			getLogger().warning("Database section not found in config.yml!");
+			disable();
+			return;
+		}
+
+		// DATABASE
+
+		if ( !config.contains("database") ) {
+			getLogger().warning("Database section not found in config.yml!");
+			disable();
+			return;
+		}
+
+		DatabaseManager databaseManager;
+		try {
+			databaseManager = new DatabaseManager(this, config.getConfigurationSection("database"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			getLogger().warning("An error occured with the database setup!");
+			disable();
+			return;
+		}
+
+		messageHandler = new MessageHandler(this);
+		kingdomHandler = new KingdomHandler(this, databaseManager.getDatabase());
+		playerHandler = new PlayerHandler(this, databaseManager.getDatabase());
+		commandHandler = new CommandHandler(this);
+	}
+
+	private void disable() {
+		this.getPluginLoader().disablePlugin(this);
+	}
+
+	/*
 	private String prefix = ChatColor.RED + ChatColor.BOLD.toString() + "KingdomCraft" + ChatColor.DARK_GRAY + ChatColor.BOLD + " > " + ChatColor.GRAY;
 
 	private KingdomCraft plugin;
@@ -287,4 +329,5 @@ public class KingdomCraft extends JavaPlugin {
 
 		oldFile.renameTo(new File(getDataFolder(), "." + oldFile.getName() + ".disabled"));
 	}
+	*/
 }

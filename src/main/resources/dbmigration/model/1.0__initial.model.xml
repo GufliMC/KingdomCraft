@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="kingdom" pkName="pk_kingdom">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar"/>
+            <column name="display" type="varchar"/>
+            <column name="prefix" type="varchar"/>
+            <column name="suffix" type="varchar"/>
+            <column name="spawn" type="varchar"/>
+            <column name="invite_only" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="default_rank_id" type="bigint" uniqueOneToOne="uq_kingdom_default_rank_id" references="rank.id" foreignKeyName="fk_kingdom_default_rank_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="kingdom_relation" pkName="pk_kingdom_relation">
+            <column name="kingdom1_id" type="bigint" notnull="true"/>
+            <column name="kingdom2_id" type="bigint" notnull="true"/>
+            <column name="relation" type="integer" checkConstraint="check ( relation in (0,1,2))" checkConstraintName="ck_kingdom_relation_relation"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="player" identityType="external" pkName="pk_player">
+            <column name="id" type="varchar" primaryKey="true"/>
+            <column name="name" type="varchar"/>
+            <column name="kingdom_id" type="bigint" references="kingdom.id" foreignKeyName="fk_player_kingdom_id" foreignKeyIndex="ix_player_kingdom_id"/>
+            <column name="rank_id" type="bigint" references="rank.id" foreignKeyName="fk_player_rank_id" foreignKeyIndex="ix_player_rank_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rank" pkName="pk_rank">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="kingdom_id" type="bigint" references="kingdom.id" foreignKeyName="fk_rank_kingdom_id" foreignKeyIndex="ix_rank_kingdom_id"/>
+            <column name="name" type="varchar"/>
+            <column name="display" type="varchar"/>
+            <column name="prefix" type="varchar"/>
+            <column name="suffix" type="varchar"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>

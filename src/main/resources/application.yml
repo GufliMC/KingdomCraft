@@ -1,0 +1,3 @@
+ebean:
+  migration:
+    run: true
