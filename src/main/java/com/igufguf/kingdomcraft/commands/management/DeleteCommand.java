@@ -1,8 +1,7 @@
-package com.igufguf.kingdomcraft.commands;
+package com.igufguf.kingdomcraft.commands.management;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.domain.Kingdom;
-import com.igufguf.kingdomcraft.domain.KingdomInvite;
 import com.igufguf.kingdomcraft.domain.Player;
 import com.igufguf.kingdomcraft.models.CommandBase;
 import org.bukkit.command.CommandSender;
@@ -29,19 +28,10 @@ import java.util.stream.Collectors;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class JoinCommand extends CommandBase {
+public class DeleteCommand extends CommandBase {
 
-	public JoinCommand(KingdomCraft kingdomCraft) {
-		super(kingdomCraft, "join");
-	}
-	
-	@Override
-	public List<String> autocomplete(org.bukkit.entity.Player sender, String[] args) {
-		if ( args.length != 1 ) {
-			return null;
-		}
-
-		return kingdomCraft.kingdomHandler.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+	public DeleteCommand(KingdomCraft kingdomCraft) {
+		super(kingdomCraft, "delete");
 	}
 	
 	@Override
@@ -58,38 +48,21 @@ public class JoinCommand extends CommandBase {
 		}
 
 		Player player = kingdomCraft.playerHandler.getPlayer((org.bukkit.entity.Player) sender);
-		if ( player.getKingdom() != null ) {
-			kingdomCraft.messageHandler.send(sender, "cmdJoinAlready");
+
+		// other kingdom
+		if ( player.getKingdom() != target && !sender.hasPermission("kingdom.delete.other") ) {
+			kingdomCraft.messageHandler.send(sender, "noPermission");
 			return;
 		}
 
-		if ( target.isInviteOnly() ) {
-			kingdomCraft.messageHandler.send(sender, "cmdJoinInviteOnly", target.getName());
-
-			KingdomInvite invite = kingdomCraft.kingdomHandler.getInvite(player, target);
-			if ( invite == null ) {
-				kingdomCraft.messageHandler.send(sender, "cmdJoinInviteOnly", target.getName());
-				return;
-			}
-
+		// own kingdom
+		if ( player.getKingdom() == target && !sender.hasPermission("kingdom.delete") ) {
+			kingdomCraft.messageHandler.send(sender, "noPermission");
 			return;
 		}
 
-		// TODO check for max members
-
-		for ( Player member : kingdomCraft.kingdomHandler.getOnlineMembers(target) ) {
-			kingdomCraft.messageHandler.send(member, "cmdJoinSuccessMembers", player.getName());
-		}
-
-		kingdomCraft.kingdomHandler.join(player, target);
-		kingdomCraft.messageHandler.send(sender, "cmdJoinSuccess", target.getName());
-
-		// TODO teleport to spawn
-		/*
-		if ( kingdom.getSpawn() != null && plugin.getCfg().getBoolean("spawn-on-kingdom-join") ) {
-			p.teleport(kingdom.getSpawn());
-		}
-		*/
+		kingdomCraft.kingdomHandler.delete(target);
+		kingdomCraft.messageHandler.send(sender, "cmdDeleteSuccess", target.getName());
 	}
 
 }

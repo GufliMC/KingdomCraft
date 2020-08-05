@@ -87,12 +87,16 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        if ( !(sender instanceof org.bukkit.entity.Player) ) {
+            return null;
+        }
 
         // TODO check enabled world
 
+        org.bukkit.entity.Player player = (org.bukkit.entity.Player) sender;
         for ( CommandBase cb : commands ) {
             if ( cb.getCommandAliasses().stream().anyMatch(ca -> ca.equalsIgnoreCase(args[0])) ) {
-                return cb.autocompleteChain(sender, Arrays.copyOfRange(args, 1, args.length));
+                return cb.autocompleteChain(player, Arrays.copyOfRange(args, 1, args.length));
             }
         }
 

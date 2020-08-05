@@ -2,13 +2,16 @@ package com.igufguf.kingdomcraft.database;
 
 import io.ebean.Database;
 import io.ebean.DatabaseFactory;
+import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
+import io.ebean.dbmigration.DbMigration;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
+import java.io.IOException;
 import java.sql.Connection;
 
 public class DatabaseManager {
@@ -56,6 +59,17 @@ public class DatabaseManager {
 
     public Database getDatabase() {
         return this.database;
+    }
+
+    /**
+     * Generate the DDL for the next DB migration.
+     */
+    public static void main(String[] args) throws IOException {
+
+        DbMigration dbMigration = DbMigration.create();
+        dbMigration.setPlatform(Platform.SQLITE);
+
+        dbMigration.generateMigration();
     }
 
 }

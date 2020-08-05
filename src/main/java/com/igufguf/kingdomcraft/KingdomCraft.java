@@ -33,9 +33,10 @@ import java.io.*;
 public class KingdomCraft extends JavaPlugin {
 
 	public MessageHandler messageHandler;
+	public CommandHandler commandHandler;
+
 	public KingdomHandler kingdomHandler;
 	public PlayerHandler playerHandler;
-	public CommandHandler commandHandler;
 
 	@Override
 	public void onEnable() {
