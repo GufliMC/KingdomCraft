@@ -2,9 +2,12 @@ package com.igufguf.kingdomcraft.handlers;
 
 import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.domain.Kingdom;
+import com.igufguf.kingdomcraft.domain.KingdomInvite;
 import com.igufguf.kingdomcraft.domain.KingdomRelation;
 import com.igufguf.kingdomcraft.domain.Player;
+import com.igufguf.kingdomcraft.domain.query.QKingdomInvite;
 import com.igufguf.kingdomcraft.domain.query.QKingdomRelation;
+import com.igufguf.kingdomcraft.domain.query.QPlayer;
 import com.igufguf.kingdomcraft.models.Relation;
 import io.ebean.Database;
 
@@ -46,6 +49,18 @@ public class KingdomHandler {
     }
 
     public boolean delete(Kingdom kingdom) {
+
+        // update locally
+        for ( Player p : kingdomCraft.playerHandler.getOnlinePlayers() ) {
+            if ( p.getKingdom() == kingdom ) {
+                p.setKingdom(null);
+            }
+        }
+
+        // update in database
+        new QPlayer().kingdom.eq(kingdom).asUpdate().set("kingdom", null).set("rank", null).update();
+
+        // delete kingdom
         return database.delete(kingdom);
     }
 
@@ -82,4 +97,26 @@ public class KingdomHandler {
         return relations.stream().filter(r -> r.getKingdom() == kingdom).collect(Collectors.toList());
     }
 
+    public void addInvite(Player sender, Player target) {
+        KingdomInvite invite = new KingdomInvite(sender.getKingdom(), sender, target);
+        database.save(invite);
+    }
+
+    public KingdomInvite getInvite(Player player, Kingdom kingdom) {
+        return new QKingdomInvite().target.eq(player).and().kingdom.eq(kingdom).findOne();
+    }
+
+    public void join(Player player, Kingdom kingdom) {
+        // remove all invites for this player to this kingdom
+        new QKingdomInvite().target.eq(player).and().kingdom.eq(kingdom).delete();
+
+        // set kingdom
+        player.setKingdom(kingdom);
+        player.save();
+    }
+
+    public void quit(Player player) {
+        player.setKingdom(null);
+        player.save();
+    }
 }

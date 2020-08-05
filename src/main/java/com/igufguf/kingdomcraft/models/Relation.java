@@ -1,5 +1,12 @@
 package com.igufguf.kingdomcraft.models;
 
-public enum Relation {
-    NEUTRAL, ENEMY, FRIENDLY
+import java.util.Comparator;
+
+public enum Relation implements Comparator<Relation> {
+    NEUTRAL, ENEMY, FRIENDLY;
+
+    @Override
+    public int compare(Relation o1, Relation o2) {
+        return o1.compareTo(o2);
+    }
 }

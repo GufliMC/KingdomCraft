@@ -1,13 +1,17 @@
 package com.igufguf.kingdomcraft.domain;
 
+import com.avaje.ebean.annotation.CreatedTimestamp;
 import io.ebean.Model;
-import io.ebean.annotation.WhenCreated;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Date;
 
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"kingdom_id", "name"})
+)
 @Entity
 public class Rank extends Model {
 
@@ -17,6 +21,7 @@ public class Rank extends Model {
     @ManyToOne
     Kingdom kingdom;
 
+    @Column(nullable = false)
     String name;
 
     String display;
@@ -25,8 +30,8 @@ public class Rank extends Model {
 
     String suffix;
 
-    @WhenCreated
-    Instant createdAt;
+    @CreatedTimestamp
+    Date createdAt;
 
     public Rank(String name, Kingdom kingdom) {
         this.name = name;
@@ -73,7 +78,7 @@ public class Rank extends Model {
         this.suffix = suffix;
     }
 
-    public Instant getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 

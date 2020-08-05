@@ -1,13 +1,12 @@
 package com.igufguf.kingdomcraft.domain;
 
+import com.avaje.ebean.annotation.CreatedTimestamp;
 import io.ebean.Model;
-import io.ebean.annotation.WhenCreated;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,6 +15,7 @@ public class Kingdom extends Model {
     @Id
     long id;
 
+    @Column(unique = true, nullable = false)
     String name;
 
     String display;
@@ -26,6 +26,7 @@ public class Kingdom extends Model {
 
     String spawn;
 
+    @Column(columnDefinition = "integer default 0")
     boolean inviteOnly = false;
 
     @OneToMany(mappedBy = "kingdom")
@@ -37,8 +38,8 @@ public class Kingdom extends Model {
     @OneToOne
     Rank defaultRank;
 
-    @WhenCreated
-    Instant createdAt;
+    @CreatedTimestamp
+    Date createdAt;
 
     public Kingdom(String name) {
         this.name = name;
@@ -108,7 +109,7 @@ public class Kingdom extends Model {
         return defaultRank;
     }
 
-    public Instant getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 

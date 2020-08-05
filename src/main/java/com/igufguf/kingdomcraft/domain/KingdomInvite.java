@@ -1,19 +1,16 @@
 package com.igufguf.kingdomcraft.domain;
 
 import com.avaje.ebean.annotation.CreatedTimestamp;
-import com.igufguf.kingdomcraft.models.Relation;
 import io.ebean.Model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Table(
-        uniqueConstraints=
-        @UniqueConstraint(columnNames={"kingdom_id", "target_id"})
-)
 @Entity
-public class KingdomRelation extends Model {
+public class KingdomInvite extends Model {
 
     @Column(nullable = false)
     @OneToOne
@@ -21,30 +18,31 @@ public class KingdomRelation extends Model {
 
     @Column(nullable = false)
     @OneToOne
-    Kingdom target;
+    Player sender;
 
     @Column(nullable = false)
-    Relation relation;
+    @OneToOne
+    Player target;
 
     @CreatedTimestamp
     Date createdAt;
 
-    public KingdomRelation(Kingdom kingdom, Kingdom target, Relation relation) {
+    public KingdomInvite(Kingdom kingdom, Player sender, Player target) {
         this.kingdom = kingdom;
+        this.sender = sender;
         this.target = target;
-        this.relation = relation;
     }
 
     public Kingdom getKingdom() {
         return kingdom;
     }
 
-    public Kingdom getTarget() {
-        return target;
+    public Player getSender() {
+        return sender;
     }
 
-    public Relation getRelation() {
-        return relation;
+    public Player getTarget() {
+        return target;
     }
 
 }

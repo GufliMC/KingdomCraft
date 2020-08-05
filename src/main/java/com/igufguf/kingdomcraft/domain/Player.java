@@ -1,8 +1,10 @@
 package com.igufguf.kingdomcraft.domain;
 
 import io.ebean.Model;
+import io.ebean.annotation.NotNull;
 import io.ebean.annotation.WhenCreated;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,12 +17,13 @@ public class Player extends Model {
     @Id
     String id;
 
+    @Column(nullable = false, unique = true)
     String name;
 
     @WhenCreated
     Instant createdAt;
 
-    @ManyToOne()
+    @ManyToOne
     Kingdom kingdom;
 
     @ManyToOne()

@@ -4,6 +4,7 @@ import com.igufguf.kingdomcraft.KingdomCraft;
 import com.igufguf.kingdomcraft.domain.Player;
 import com.igufguf.kingdomcraft.domain.query.QPlayer;
 import io.ebean.Database;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,16 @@ public class PlayerHandler {
 
     public Player getPlayer(org.bukkit.entity.Player bplayer) {
         return players.get(bplayer);
+    }
+
+    public Player getPlayer(String name) {
+        Player player = getPlayer(Bukkit.getPlayer(name));
+        if ( player != null ) {
+            return player;
+        }
+
+        player = new QPlayer(database).name.eq(name).findOne();
+        return player;
     }
 
     public void join(org.bukkit.entity.Player bplayer) {

@@ -92,7 +92,7 @@ public abstract class CommandBase {
 		execute(sender, args);
 	}
 
-	public List<String> autocompleteChain(CommandSender sender, String[] args) {
+	public List<String> autocompleteChain(org.bukkit.entity.Player sender, String[] args) {
 		if ( args.length > 0 && !children.isEmpty() ) {
 			for (CommandBase child : children) {
 				if (child.getCommandAliasses().stream().anyMatch(ca -> ca.equalsIgnoreCase(args[0]))) {
@@ -107,7 +107,7 @@ public abstract class CommandBase {
 		}
 
 		if ( args.length > 0 ) {
-			return result.stream().filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+			return result.stream().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
 		}
 
 		return result;
@@ -117,7 +117,7 @@ public abstract class CommandBase {
 
 	public abstract void execute(CommandSender sender, String[] args);
 	
-	public List<String> autocomplete(CommandSender sender, String[] args) {
+	public List<String> autocomplete(org.bukkit.entity.Player sender, String[] args) {
 		return null;
 	}
 
