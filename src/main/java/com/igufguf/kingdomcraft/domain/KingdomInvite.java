@@ -1,12 +1,11 @@
 package com.igufguf.kingdomcraft.domain;
 
-import com.avaje.ebean.annotation.CreatedTimestamp;
 import io.ebean.Model;
+import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -24,7 +23,7 @@ public class KingdomInvite extends Model {
     @OneToOne
     Player target;
 
-    @CreatedTimestamp
+    @WhenCreated
     Date createdAt;
 
     public KingdomInvite(Kingdom kingdom, Player sender, Player target) {

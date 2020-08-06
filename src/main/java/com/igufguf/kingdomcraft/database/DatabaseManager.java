@@ -2,15 +2,19 @@ package com.igufguf.kingdomcraft.database;
 
 import io.ebean.Database;
 import io.ebean.DatabaseFactory;
-import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
+import io.ebean.config.dbplatform.mysql.MySqlPlatform;
+import io.ebean.config.dbplatform.postgres.PostgresPlatform;
+import io.ebean.config.dbplatform.sqlite.SQLitePlatform;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.dbmigration.DbMigration;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
+import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -22,7 +26,9 @@ public class DatabaseManager {
     public DatabaseManager(Plugin plugin, ConfigurationSection config) {
         this.plugin = plugin;
 
-        ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
+        // WARNING
+        // For Ebean to work we have to change the classloader of this thread to the one used by this plugin.
+        // This might cause problems in the future. Unfortunately I haven't been able to find a better solution.
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
         // MIGRATE
@@ -35,12 +41,8 @@ public class DatabaseManager {
 
         MigrationRunner runner = new MigrationRunner(migrationConfig);
         runner.run();
-        plugin.getLogger().info("Database migrations ran!");
 
         // CONNECT
-
-        DatabaseConfig serverConfig = new DatabaseConfig();
-        serverConfig.setRegister(true);
 
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUsername(config.getString("username"));
@@ -48,11 +50,14 @@ public class DatabaseManager {
         dataSourceConfig.setDriver(config.getString("driver"));
         dataSourceConfig.setUrl(config.getString("url"));
         dataSourceConfig.setIsolationLevel(Connection.TRANSACTION_SERIALIZABLE);
+        dataSourceConfig.setAutoCommit(true);
 
+        DatabaseConfig serverConfig = new DatabaseConfig();
         serverConfig.setDataSourceConfig(dataSourceConfig);
+        serverConfig.setRegister(true);
+
         this.database = DatabaseFactory.create(serverConfig);
 
-        Thread.currentThread().setContextClassLoader(originalContextClassLoader);
         plugin.getLogger().info("Connected with database!");
 
     }
@@ -67,7 +72,9 @@ public class DatabaseManager {
     public static void main(String[] args) throws IOException {
 
         DbMigration dbMigration = DbMigration.create();
-        dbMigration.setPlatform(Platform.SQLITE);
+        dbMigration.addDatabasePlatform(new SQLitePlatform(), "sqlite");
+        dbMigration.addDatabasePlatform(new MySqlPlatform(), "mysql");
+        dbMigration.addDatabasePlatform(new PostgresPlatform(), "postgresql");
 
         dbMigration.generateMigration();
     }

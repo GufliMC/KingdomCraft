@@ -10,24 +10,24 @@
             <column name="spawn" type="varchar"/>
             <column name="invite_only" type="integer default 0" notnull="true"/>
             <column name="default_rank_id" type="bigint" uniqueOneToOne="uq_kingdom_default_rank_id" references="rank.id" foreignKeyName="fk_kingdom_default_rank_id"/>
-            <column name="created_at" type="timestamp"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
         </createTable>
         <createTable name="kingdom_invite" pkName="pk_kingdom_invite">
             <column name="kingdom_id" type="bigint" uniqueOneToOne="uq_kingdom_invite_kingdom_id" references="kingdom.id" foreignKeyName="fk_kingdom_invite_kingdom_id"/>
             <column name="sender_id" type="varchar" uniqueOneToOne="uq_kingdom_invite_sender_id" references="player.id" foreignKeyName="fk_kingdom_invite_sender_id"/>
             <column name="target_id" type="varchar" uniqueOneToOne="uq_kingdom_invite_target_id" references="player.id" foreignKeyName="fk_kingdom_invite_target_id"/>
-            <column name="created_at" type="timestamp"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
         </createTable>
         <createTable name="kingdom_relation" pkName="pk_kingdom_relation">
             <column name="kingdom_id" type="bigint" uniqueOneToOne="uq_kingdom_relation_kingdom_id" references="kingdom.id" foreignKeyName="fk_kingdom_relation_kingdom_id"/>
             <column name="target_id" type="bigint" uniqueOneToOne="uq_kingdom_relation_target_id" references="kingdom.id" foreignKeyName="fk_kingdom_relation_target_id"/>
             <column name="relation" type="integer" notnull="true" checkConstraint="check ( relation in (0,1,2))" checkConstraintName="ck_kingdom_relation_relation"/>
-            <column name="created_at" type="timestamp"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
             <uniqueConstraint name="uq_kingdom_relation_kingdom_id_target_id" columnNames="kingdom_id,target_id" oneToOne="false" nullableColumns="kingdom_id,target_id"/>
         </createTable>
         <createTable name="player" identityType="external" pkName="pk_player">
             <column name="id" type="varchar" primaryKey="true"/>
-            <column name="name" type="varchar" notnull="true"/>
+            <column name="name" type="varchar" notnull="true" unique="uq_player_name"/>
             <column name="kingdom_id" type="bigint" references="kingdom.id" foreignKeyName="fk_player_kingdom_id" foreignKeyIndex="ix_player_kingdom_id"/>
             <column name="rank_id" type="bigint" references="rank.id" foreignKeyName="fk_player_rank_id" foreignKeyIndex="ix_player_rank_id"/>
             <column name="created_at" type="timestamp" notnull="true"/>
@@ -39,7 +39,7 @@
             <column name="display" type="varchar"/>
             <column name="prefix" type="varchar"/>
             <column name="suffix" type="varchar"/>
-            <column name="created_at" type="timestamp"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
             <uniqueConstraint name="uq_rank_kingdom_id_name" columnNames="kingdom_id,name" oneToOne="false" nullableColumns="kingdom_id"/>
         </createTable>
     </changeSet>
