@@ -1,8 +1,12 @@
 package com.igufguf.kingdomcraft.api;
 
-import com.igufguf.kingdomcraft.api.handlers.KingdomManager;
-import com.igufguf.kingdomcraft.api.handlers.PlayerManager;
+import com.igufguf.kingdomcraft.api.managers.CommandManager;
+import com.igufguf.kingdomcraft.api.managers.KingdomManager;
+import com.igufguf.kingdomcraft.api.managers.MessageManager;
+import com.igufguf.kingdomcraft.api.managers.PlayerManager;
 import com.igufguf.kingdomcraft.api.scheduler.AbstractScheduler;
+
+import java.io.InputStream;
 
 public interface KingdomCraftPlugin {
 
@@ -12,4 +16,7 @@ public interface KingdomCraftPlugin {
 
     KingdomManager getKingdomManager();
 
+    MessageManager getMessageManager();
+
+    CommandManager getCommandManager();
 }
