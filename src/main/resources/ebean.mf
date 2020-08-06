@@ -1,2 +1,2 @@
-entity-packages: com.igufguf.kingdomcraft.domain
+entity-packages: com.igufguf.kingdomcraft.common.domain
 transactional-packages: com.igufguf.kingdomcraft
