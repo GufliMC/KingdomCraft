@@ -1,7 +1,7 @@
 package com.igufguf.kingdomcraft.common.managers;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.handlers.PlayerManager;
+import com.igufguf.kingdomcraft.api.managers.PlayerManager;
 import com.igufguf.kingdomcraft.api.models.Kingdom;
 import com.igufguf.kingdomcraft.api.models.Player;
 import com.igufguf.kingdomcraft.common.storage.Storage;

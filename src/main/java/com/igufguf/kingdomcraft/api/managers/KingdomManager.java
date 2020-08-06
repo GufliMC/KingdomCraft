@@ -1,4 +1,4 @@
-package com.igufguf.kingdomcraft.api.handlers;
+package com.igufguf.kingdomcraft.api.managers;
 
 
 import com.igufguf.kingdomcraft.api.models.Kingdom;

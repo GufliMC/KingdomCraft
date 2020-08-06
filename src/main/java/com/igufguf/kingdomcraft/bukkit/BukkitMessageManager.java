@@ -1,15 +1,15 @@
-package com.igufguf.kingdomcraft.common.handlers;
+package com.igufguf.kingdomcraft.bukkit;
 
-import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
-import com.igufguf.kingdomcraft.common.domain.DPlayer;
+import com.igufguf.kingdomcraft.api.managers.MessageManager;
+import com.igufguf.kingdomcraft.api.models.Player;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
@@ -32,13 +32,12 @@ import java.util.regex.Pattern;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class MessageHandler {
+public class BukkitMessageManager implements MessageManager {
 
-	public final String prefix;
-
+	private final String prefix;
 	private final FileConfiguration messages;
 
-	public MessageHandler(KingdomCraft kingdomCraft) {
+	public BukkitMessageManager(KingdomCraft kingdomCraft) {
 		InputStream in = kingdomCraft.getResource("messages.yml");
 		try {
 			messages = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -70,18 +69,12 @@ public class MessageHandler {
 		return messages.get(name) == null || messages.getString(name).replaceAll(Pattern.quote(" "), "").equals("");
 	}
 
-	public void send(CommandSender p, String name, String... placeholders) {
+	public void send(Player player, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 
-		p.sendMessage(prefix + getMessage(name, placeholders));
-	}
-
-	public void send(DPlayer p, String name, String... placeholders) {
-		if ( isEmpty(name) ) return;
-
-		org.bukkit.entity.Player player = Bukkit.getPlayer(p.getId());
-		if ( player != null ) {
-			player.sendMessage(prefix + getMessage(name, placeholders));
+		org.bukkit.entity.Player bplayer = Bukkit.getPlayer(player.getUniqueId());
+		if ( bplayer != null ) {
+			bplayer.sendMessage(prefix + getMessage(name, placeholders));
 		}
 	}
 }
