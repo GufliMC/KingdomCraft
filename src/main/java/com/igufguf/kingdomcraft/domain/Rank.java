@@ -1,11 +1,9 @@
 package com.igufguf.kingdomcraft.domain;
 
-import com.avaje.ebean.annotation.CreatedTimestamp;
 import io.ebean.Model;
+import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.Instant;
 import java.util.Date;
 
 @Table(
@@ -30,7 +28,7 @@ public class Rank extends Model {
 
     String suffix;
 
-    @CreatedTimestamp
+    @WhenCreated
     Date createdAt;
 
     public Rank(String name, Kingdom kingdom) {

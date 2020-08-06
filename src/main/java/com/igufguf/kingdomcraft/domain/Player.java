@@ -1,7 +1,6 @@
 package com.igufguf.kingdomcraft.domain;
 
 import io.ebean.Model;
-import io.ebean.annotation.NotNull;
 import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.Column;

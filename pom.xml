@@ -38,6 +38,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
         <!-- API, java.xml.bind module -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
@@ -157,6 +163,9 @@
                     <include>*.*</include>
                     <include>dbmigration/*</include>
                     <include>dbmigration/model/*</include>
+                    <include>dbmigration/mysql/*</include>
+                    <include>dbmigration/postgresql/*</include>
+                    <include>dbmigration/sqlite/*</include>
                 </includes>
             </resource>
         </resources>

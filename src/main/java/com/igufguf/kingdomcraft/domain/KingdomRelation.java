@@ -1,11 +1,10 @@
 package com.igufguf.kingdomcraft.domain;
 
-import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.igufguf.kingdomcraft.models.Relation;
 import io.ebean.Model;
+import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(
@@ -26,7 +25,7 @@ public class KingdomRelation extends Model {
     @Column(nullable = false)
     Relation relation;
 
-    @CreatedTimestamp
+    @WhenCreated
     Date createdAt;
 
     public KingdomRelation(Kingdom kingdom, Kingdom target, Relation relation) {
