@@ -1,6 +1,7 @@
-package com.igufguf.kingdomcraft.api.models;
+package com.igufguf.kingdomcraft.api.domain;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Kingdom {
 
@@ -32,9 +33,12 @@ public interface Kingdom {
 
     public List<Rank> getRanks();
 
-    public void addRank(Rank rank);
+    public Map<Kingdom, Relation> getRelations();
 
-    public void removeRank(Rank rank);
+    public Relation getRelation(Kingdom kingdom);
 
+    public void setRelation(Kingdom kingdom, Relation relation);
+
+    public List<Player> getMembers();
 
 }

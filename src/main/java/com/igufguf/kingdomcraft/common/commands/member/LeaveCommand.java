@@ -1,58 +1,32 @@
 package com.igufguf.kingdomcraft.common.commands.member;
 
-import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
-import com.igufguf.kingdomcraft.common.domain.DKingdom;
-import com.igufguf.kingdomcraft.common.domain.DPlayer;
-import com.igufguf.kingdomcraft.common.commands.CommandBase;
-import org.bukkit.command.CommandSender;
+import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
+import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.common.commands.DefaultCommandBase;
 
-/**
- * Copyrighted 2020 iGufGuf
- * <p>
- * This file is part of KingdomCraft.
- * <p>
- * Kingdomcraft is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * KingdomCraft is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
- **/
-public class LeaveCommand extends CommandBase {
+public class LeaveCommand extends DefaultCommandBase {
 
-    public LeaveCommand(KingdomCraft kingdomCraft) {
-        super(kingdomCraft, "leave");
+    public LeaveCommand(KingdomCraftPlugin plugin) {
+        super(plugin, "leave", 0, true);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length > 0) {
-            sendInvalidUsage(sender);
-            return;
-        }
-
-
-        DPlayer player = kingdomCraft.playerHandler.getPlayer((org.bukkit.entity.Player) sender);
+        Player player = sender.getPlayer();
         if (player.getKingdom() == null) {
-            kingdomCraft.messageHandler.send(sender, "cmdDefaultSenderNoKingdom");
+            plugin.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
         }
 
-        DKingdom oldKingdom = player.getKingdom();
+        Kingdom oldKingdom = player.getKingdom();
+        plugin.getPlayerManager().leaveKingdom(player);
 
-        player.setKingdom(null);
-        player.save();
+        plugin.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
 
-        kingdomCraft.messageHandler.send(sender, "cmdLeaveSuccess", oldKingdom.getName());
-
-        for (DPlayer member : kingdomCraft.kingdomHandler.getOnlineMembers(oldKingdom)) {
-            kingdomCraft.messageHandler.send(member, "cmdLeaveSuccessMembers", player.getName());
+        for (Player member : plugin.getKingdomManager().getOnlineMembers(oldKingdom)) {
+            plugin.getMessageManager().send(member, "cmdLeaveSuccessMembers", player.getName());
         }
 
         // TODO teleport to spawn
@@ -62,5 +36,4 @@ public class LeaveCommand extends CommandBase {
 		}
 		*/
     }
-
 }

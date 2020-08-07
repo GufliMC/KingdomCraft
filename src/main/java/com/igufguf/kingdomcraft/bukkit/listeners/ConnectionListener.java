@@ -1,5 +1,6 @@
 package com.igufguf.kingdomcraft.bukkit.listeners;
 
+import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,19 +10,19 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ConnectionListener implements Listener {
 
-    private final KingdomCraft kingdomCraft;
+    private final KingdomCraftPlugin plugin;
 
-    public ConnectionListener(KingdomCraft kingdomCraft) {
-        this.kingdomCraft = kingdomCraft;
+    public ConnectionListener(KingdomCraftPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLogin(PlayerLoginEvent e) {
-        kingdomCraft.playerHandler.join(e.getPlayer());
+        plugin.getPlayerManager().load(e.getPlayer().getUniqueId(), e.getPlayer().getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        kingdomCraft.playerHandler.quit(e.getPlayer());
+        plugin.getPlayerManager().unload(plugin.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()));
     }
 }

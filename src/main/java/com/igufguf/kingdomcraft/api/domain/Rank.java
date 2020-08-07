@@ -1,4 +1,4 @@
-package com.igufguf.kingdomcraft.api.models;
+package com.igufguf.kingdomcraft.api.domain;
 
 public interface Rank {
 

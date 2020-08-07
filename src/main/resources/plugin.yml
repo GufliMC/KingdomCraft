@@ -5,5 +5,5 @@ description: 'The Ultimate Kingdom Plugin'
 softdepend: [Vault, WorldEdit, WorldGuard]
 main: com.igufguf.kingdomcraft.bukkit.KingdomCraft
 commands:
-    kingdom:
-      aliases: [k, kd, kdc, kingdoms, kingdomcraft]
+    kingdomcraft:
+      aliases: [k, kd, kdc, kingdoms, kingdom]

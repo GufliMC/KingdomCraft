@@ -1,9 +1,10 @@
 package com.igufguf.kingdomcraft.common.storage;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.models.Kingdom;
-import com.igufguf.kingdomcraft.api.models.Player;
-import com.igufguf.kingdomcraft.api.models.Rank;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.api.domain.Rank;
+import com.igufguf.kingdomcraft.common.storage.implementation.H2StorageImplementation;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class Storage {
 
     public Storage(KingdomCraftPlugin plugin) {
         this.plugin = plugin;
-        this.impl = new DatabaseStorageImplementation();
+        this.impl = new H2StorageImplementation();
     }
 
     // ----

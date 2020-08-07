@@ -1,92 +1,48 @@
 package com.igufguf.kingdomcraft.common.commands.admin;
 
-import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
-import com.igufguf.kingdomcraft.common.domain.DKingdom;
-import com.igufguf.kingdomcraft.common.domain.DPlayer;
-import com.igufguf.kingdomcraft.common.commands.CommandBase;
-import org.bukkit.command.CommandSender;
+import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
+import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.common.commands.DefaultCommandBase;
+import org.bukkit.ChatColor;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Copyrighted 2020 iGufGuf
- *
- * This file is part of KingdomCraft.
- *
- * Kingdomcraft is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * KingdomCraft is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+public class KickCommand extends DefaultCommandBase {
 
- * You should have received a copy of the GNU General Public License
- * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
- *
- **/
-public class KickCommand extends CommandBase {
+    public KickCommand(KingdomCraftPlugin plugin) {
+        super(plugin, "kick", 1);
+    }
 
-	public KickCommand(KingdomCraft kingdomCraft) {
-		super(kingdomCraft, "kick");
-	}
-	
-	@Override
-	public List<String> autocomplete(org.bukkit.entity.Player sender, String[] args) {
-		if ( sender.hasPermission("kingdom.kick.other") ) {
-			return kingdomCraft.playerHandler.getOnlinePlayers().stream()
-					.filter(p -> p.getId() != sender.getUniqueId())
-					.filter(p -> p.getKingdom() != null)
-					.map(DPlayer::getName)
-					.collect(Collectors.toList());
-		}
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        Player target = plugin.getPlayerManager().getPlayer(args[0]);
+        if ( target == null ) {
+            plugin.getMessageManager().send(sender, "cmdDefaultNoPlayer");
+            return;
+        }
+        Kingdom kingdom = target.getKingdom();
 
-		DPlayer player = kingdomCraft.playerHandler.getPlayer(sender);
-		if ( player.getName() == null || !sender.hasPermission("kingdom.kick") ) {
-			return null;
-		}
+        if ( !sender.isConsole() ) {
+            Player player = sender.getPlayer();
+            // kick other kingdom
+            if (kingdom != player.getKingdom() && !sender.hasPermission("kingdom.kick.other")) {
+                plugin.getMessageManager().send(sender, "noPermissionCmd");
+                return;
+            }
 
-		return kingdomCraft.kingdomHandler.getOnlineMembers(player.getKingdom()).stream()
-				.filter(p -> p != player)
-				.map(DPlayer::getName)
-				.collect(Collectors.toList());
-	}
-	
-	@Override
-	public void execute(CommandSender sender, String[] args) {
-		if ( args.length != 1 ) {
-			sendInvalidUsage(sender);
-			return;
-		}
+            // kick own kingdom
+            if (kingdom == player.getKingdom() && !sender.hasPermission("kingdom.kick")) {
+                plugin.getMessageManager().send(sender, "noPermissionCmd");
+                return;
+            }
+        }
 
-		DPlayer player = kingdomCraft.playerHandler.getPlayer((org.bukkit.entity.Player) sender);
-
-		DPlayer target = kingdomCraft.playerHandler.getPlayer(args[0]);
-		if ( target == null ) {
-			kingdomCraft.messageHandler.send(sender, "cmdDefaultNoPlayer");
-			return;
-		}
-		DKingdom kingdom = target.getKingdom();
-
-		// kick other kingdom
-		if ( kingdom != player.getKingdom() && !sender.hasPermission("kingdom.kick.other") ) {
-			kingdomCraft.messageHandler.send(sender, "noPermissionCmd");
-			return;
-		}
-
-		// kick own kingdom
-		if ( kingdom == player.getKingdom() && !sender.hasPermission("kingdom.kick") ) {
-			kingdomCraft.messageHandler.send(sender, "noPermissionCmd");
-			return;
-		}
-
-
-		kingdomCraft.kingdomHandler.quit(target);
-		kingdomCraft.messageHandler.send(target, "cmdKickTarget", kingdom.getName());
-		kingdomCraft.messageHandler.send(sender, "cmdKickSender", target.getName(), kingdom.getName());
-	}
-
+        plugin.getPlayerManager().leaveKingdom(target);
+        plugin.getMessageManager().send(target, "cmdKickTarget", kingdom.getName());
+        plugin.getMessageManager().send(sender, "cmdKickSender", target.getName(), kingdom.getName());
+    }
 }

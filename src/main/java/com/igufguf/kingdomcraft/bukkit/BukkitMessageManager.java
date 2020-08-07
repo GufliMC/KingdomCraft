@@ -1,7 +1,8 @@
 package com.igufguf.kingdomcraft.bukkit;
 
 import com.igufguf.kingdomcraft.api.managers.MessageManager;
-import com.igufguf.kingdomcraft.api.models.Player;
+import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.domain.Player;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,7 +66,7 @@ public class BukkitMessageManager implements MessageManager {
 		return message;
 	}
 
-	public boolean isEmpty(String name) {
+	private boolean isEmpty(String name) {
 		return messages.get(name) == null || messages.getString(name).replaceAll(Pattern.quote(" "), "").equals("");
 	}
 
@@ -76,5 +77,11 @@ public class BukkitMessageManager implements MessageManager {
 		if ( bplayer != null ) {
 			bplayer.sendMessage(prefix + getMessage(name, placeholders));
 		}
+	}
+
+	@Override
+	public void send(CommandSender sender, String name, String... placeholders) {
+		if ( isEmpty(name) ) return;
+		sender.sendMessage(prefix + getMessage(name, placeholders));
 	}
 }
