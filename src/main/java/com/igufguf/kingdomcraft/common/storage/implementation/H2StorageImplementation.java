@@ -1,19 +1,20 @@
-package com.igufguf.kingdomcraft.common.storage;
+package com.igufguf.kingdomcraft.common.storage.implementation;
 
 
-import com.igufguf.kingdomcraft.api.models.Kingdom;
-import com.igufguf.kingdomcraft.api.models.Player;
-import com.igufguf.kingdomcraft.api.models.Rank;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.api.domain.Rank;
+import com.igufguf.kingdomcraft.common.storage.StorageImplementation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class DatabaseStorageImplementation implements StorageImplementation {
+public class H2StorageImplementation implements StorageImplementation {
 
     // TODO
 
-    public DatabaseStorageImplementation() {
+    public H2StorageImplementation() {
 
     }
 

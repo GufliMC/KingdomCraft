@@ -2,11 +2,12 @@ package com.igufguf.kingdomcraft.common.managers;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.managers.CommandManager;
-import com.igufguf.kingdomcraft.api.models.CommandBase;
-import com.igufguf.kingdomcraft.api.models.CommandSender;
+import com.igufguf.kingdomcraft.api.commands.CommandBase;
+import com.igufguf.kingdomcraft.api.commands.CommandSender;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DefaultCommandManager implements CommandManager {
@@ -28,9 +29,6 @@ public class DefaultCommandManager implements CommandManager {
     @Override
     public void registerCommand(CommandBase command) {
         commands.add(command);
-
-        commands.sort(Comparator.comparing(c -> c.getArguments().length));
-        Collections.reverse(commands);
     }
 
     @Override
@@ -40,28 +38,30 @@ public class DefaultCommandManager implements CommandManager {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        outer: for ( CommandBase cb : commands ) {
-            if ( args.length < cb.getArguments().length + 1 ) {
-                continue;
-            }
+        if ( args.length == 0 ) {
+            return;
+        }
 
+
+        for ( CommandBase cb : commands ) {
             for ( String cmd : cb.getCommands() ) {
-                // check for the "command" argument
-                if ( !cmd.equalsIgnoreCase(args[0]) ) {
+                if ( !String.join(" ", args).toLowerCase().startsWith(cmd.toLowerCase()) ) {
                     continue;
                 }
 
-                // check full arguments match
-                for ( int i = 0; i < cb.getArguments().length; i++ ) {
-                    if ( !cb.getArguments()[i].equalsIgnoreCase(args[i + 1]) ) {
-                        continue outer;
-                    }
+                int argsLength = cmd.split(Pattern.quote(" ")).length;
+                if ( args.length - argsLength != cb.getExpectedArguments() ) {
+                    // TODO invalid arguments
+                    continue;
                 }
 
-                String[] cmdArgs = Arrays.copyOfRange(args, cb.getArguments().length + 1, args.length);
-                if ( cb.preflight(sender) ) {
-                    cb.execute(sender, cmdArgs);
+                if ( cb.isPlayerOnly() && sender.isConsole() ) {
+                    // TODO player only
+                    return;
                 }
+
+                String[] cmdArgs = Arrays.copyOfRange(args, argsLength, args.length);
+                cb.execute(sender, cmdArgs);
                 return;
             }
         }
@@ -96,7 +96,7 @@ public class DefaultCommandManager implements CommandManager {
         // autocomplete command
         if ( args.length <= 1 ) {
             List<String> result = new ArrayList<>();
-            commands.forEach(cb -> result.addAll(cb.getCommands()));
+            commands.forEach(cb -> result.addAll(cb.getCommands().stream().map(c -> c.split(Pattern.quote(" "))[0]).collect(Collectors.toList())));
             return result.stream().filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
         }
 
@@ -104,33 +104,18 @@ public class DefaultCommandManager implements CommandManager {
         List<String> result = new ArrayList<>();
         outer: for ( CommandBase cb : commands ) {
             for ( String cmd : cb.getCommands() ) {
-                // check for the "command" argument
-                if ( !cmd.equalsIgnoreCase(args[0]) ) {
-                    continue;
+                // check full command match
+                if ( String.join(" ", args).toLowerCase().startsWith(cmd.toLowerCase()) ) {
+                    String[] cmdArgs = Arrays.copyOfRange(args, cmd.split(Pattern.quote(" ")).length, args.length);
+                    result.addAll(cb.autocomplete(sender, cmdArgs));
+                    continue outer;
                 }
 
-                // check partial arguments match
-                if ( args.length - 1 < cb.getArguments().length ) {
-                    for ( int i = 0; i < args.length - 2; i++ ) { // - "command" argument & - autocomplete argument
-                        if ( !cb.getArguments()[i].equalsIgnoreCase(args[i + 1]) ) {
-                            continue outer;
-                        }
-                    }
-
-                    result.add(cb.getArguments()[args.length - 2]);
-                    break;
+                // check partial command match
+                if ( cmd.toLowerCase().startsWith(String.join(" ", args).toLowerCase()) ) {
+                    result.add(cmd.split(Pattern.quote(" "))[args.length - 1]);
+                    continue outer;
                 }
-
-                // check full arguments match
-                for ( int i = 0; i < cb.getArguments().length; i++ ) {
-                    if ( !cb.getArguments()[i].equalsIgnoreCase(args[i + 1]) ) {
-                        continue outer;
-                    }
-                }
-
-                String[] cmdArgs = Arrays.copyOfRange(args, cb.getArguments().length + 1, args.length);
-                result.addAll(cb.autocomplete(sender, cmdArgs));
-                break;
             }
         }
 

@@ -1,8 +1,8 @@
 package com.igufguf.kingdomcraft.api.managers;
 
 
-import com.igufguf.kingdomcraft.api.models.Kingdom;
-import com.igufguf.kingdomcraft.api.models.Player;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
 
 import java.util.List;
 
@@ -19,4 +19,5 @@ public interface KingdomManager {
     void saveKingdom(Kingdom kingdom);
 
     List<Player> getOnlineMembers(Kingdom kingdom);
+
 }

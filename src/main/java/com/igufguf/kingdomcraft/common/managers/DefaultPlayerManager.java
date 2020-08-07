@@ -1,9 +1,12 @@
 package com.igufguf.kingdomcraft.common.managers;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
+import com.igufguf.kingdomcraft.api.domain.KingdomInvite;
 import com.igufguf.kingdomcraft.api.managers.PlayerManager;
-import com.igufguf.kingdomcraft.api.models.Kingdom;
-import com.igufguf.kingdomcraft.api.models.Player;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.common.domain.DefaultKingdomInvite;
+import com.igufguf.kingdomcraft.common.domain.DefaultPlayer;
 import com.igufguf.kingdomcraft.common.storage.Storage;
 
 import java.util.*;
@@ -38,6 +41,39 @@ public class DefaultPlayerManager implements PlayerManager {
         return players.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    public Player getOnlinePlayer(UUID uuid) {
+        return players.stream().filter(p -> p.getUniqueId() == uuid).findFirst().orElse(null);
+    }
+
+    @Override
+    public Player load(UUID uuid, String name) {
+        try {
+            Player player = storage.getPlayer(uuid).get();
+            if ( player == null ) {
+                player = storage.getPlayer(name).get();
+            }
+
+            if ( player == null ) {
+                player = new DefaultPlayer(uuid, name);
+                savePlayer(player);
+            }
+            else if ( !player.getName().equals(name) ) {
+                // TODO update name
+            }
+
+            return player;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public void unload(Player player) {
+        players.remove(player);
+    }
+
     public Player getPlayer(String name) {
         Player player = getOnlinePlayer(name);
         if ( player != null ) {
@@ -52,29 +88,19 @@ public class DefaultPlayerManager implements PlayerManager {
         return player;
     }
 
-    public Player join(UUID uuid, String name) {
-        try {
-            Player player = storage.getPlayer(uuid).get();
-            if ( player == null ) {
-                player = storage.getPlayer(name).get();
-            }
-
-            if ( player == null ) {
-                // TODO create new player
-            }
-            else if ( !player.getName().equals(name) ) {
-                // TODO update name
-            }
-
+    @Override
+    public Player getPlayer(UUID uuid) {
+        Player player = getOnlinePlayer(uuid);
+        if ( player != null ) {
             return player;
+        }
+
+        try {
+            player = storage.getPlayer(uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return null;
-    }
-
-    public void quit(Player player) {
-        players.remove(player);
+        return player;
     }
 
     public void joinKingdom(Player player, Kingdom kingdom) {
@@ -84,6 +110,18 @@ public class DefaultPlayerManager implements PlayerManager {
 
     public void leaveKingdom(Player player) {
         player.setKingdom(null);
+        storage.savePlayer(player);
+    }
+
+    @Override
+    public void addInvite(Player from, Player target) {
+        KingdomInvite invite = new DefaultKingdomInvite(from, target, from.getKingdom());
+        target.addInvite(invite);
+        savePlayer(target);
+    }
+
+    @Override
+    public void savePlayer(Player player) {
         storage.savePlayer(player);
     }
 

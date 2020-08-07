@@ -1,79 +1,35 @@
 package com.igufguf.kingdomcraft.common.commands.admin;
 
-import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
-import com.igufguf.kingdomcraft.common.domain.DKingdom;
-import com.igufguf.kingdomcraft.common.domain.DPlayer;
-import com.igufguf.kingdomcraft.common.commands.CommandBase;
-import org.bukkit.command.CommandSender;
+import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
+import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.common.commands.DefaultCommandBase;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public class SetKingdomCommand extends DefaultCommandBase {
 
-/**
- * Copyrighted 2020 iGufGuf
- *
- * This file is part of KingdomCraft.
- *
- * Kingdomcraft is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * KingdomCraft is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+    public SetKingdomCommand(KingdomCraftPlugin plugin) {
+        super(plugin, "kick", 1);
+    }
 
- * You should have received a copy of the GNU General Public License
- * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
- *
- **/
-public class SetKingdomCommand extends CommandBase {
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        Player target = plugin.getPlayerManager().getPlayer(args[0]);
+        if ( target == null ) {
+            plugin.getMessageManager().send(sender, "cmdDefaultNoPlayer");
+            return;
+        }
 
-	public SetKingdomCommand(KingdomCraft kingdomCraft) {
-		super(kingdomCraft, "setkingdom");
-	}
-	
-	@Override
-	public List<String> autocomplete(org.bukkit.entity.Player sender, String[] args) {
-		if ( !sender.hasPermission("kingdom.setkingodm") ) {
-			return null;
-		}
+        Kingdom kingdom = plugin.getKingdomManager().getKingdom(args[1]);
+        if ( kingdom == null ) {
+            plugin.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            return;
+        }
 
-		if ( args.length <= 1 ) {
-			return kingdomCraft.playerHandler.getOnlinePlayers().stream()
-					.map(DPlayer::getName)
-					.collect(Collectors.toList());
-		}
+        plugin.getPlayerManager().leaveKingdom(target);
+        plugin.getPlayerManager().joinKingdom(target, kingdom);
 
-		return kingdomCraft.kingdomHandler.getKingdoms().stream().map(DKingdom::getName).collect(Collectors.toList());
-	}
-	
-	@Override
-	public void execute(CommandSender sender, String[] args) {
-		if ( args.length != 2 ) {
-			sendInvalidUsage(sender);
-			return;
-		}
-
-		DPlayer target = kingdomCraft.playerHandler.getPlayer(args[0]);
-		if ( target == null ) {
-			kingdomCraft.messageHandler.send(sender, "cmdDefaultNoPlayer");
-			return;
-		}
-
-		DKingdom kingdom = kingdomCraft.kingdomHandler.getKingdom(args[1]);
-		if ( kingdom == null ) {
-			kingdomCraft.messageHandler.send(sender, "cmdDefaultKingdomNotExist", args[0]);
-			return;
-		}
-
-		kingdomCraft.kingdomHandler.quit(target);
-		kingdomCraft.kingdomHandler.join(target, kingdom);
-
-		kingdomCraft.kingdomHandler.quit(target);
-		kingdomCraft.messageHandler.send(target, "cmdSetKingdomTarget", kingdom.getName());
-		kingdomCraft.messageHandler.send(sender, "cmdSetKingdomSender", target.getName(), kingdom.getName());
-	}
-
+        plugin.getMessageManager().send(target, "cmdSetKingdomTarget", kingdom.getName());
+        plugin.getMessageManager().send(sender, "cmdSetKingdomSender", target.getName(), kingdom.getName());
+    }
 }

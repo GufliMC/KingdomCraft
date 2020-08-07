@@ -6,10 +6,14 @@ import com.igufguf.kingdomcraft.api.managers.KingdomManager;
 import com.igufguf.kingdomcraft.api.managers.MessageManager;
 import com.igufguf.kingdomcraft.api.managers.PlayerManager;
 import com.igufguf.kingdomcraft.api.scheduler.AbstractScheduler;
+import com.igufguf.kingdomcraft.bukkit.commands.CommandHandler;
+import com.igufguf.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.igufguf.kingdomcraft.common.managers.DefaultCommandManager;
 import com.igufguf.kingdomcraft.common.managers.DefaultKingdomManager;
 import com.igufguf.kingdomcraft.common.managers.DefaultPlayerManager;
 import com.igufguf.kingdomcraft.common.storage.Storage;
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,7 +50,6 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
 	@Override
 	public void onEnable() {
-
 		// LOAD CONFIG
 
 		YamlConfiguration config = new YamlConfiguration();
@@ -81,6 +84,14 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		this.playerManager = new DefaultPlayerManager(this, storage);
 		this.kingdomManager = new DefaultKingdomManager(this, storage);
 
+		// commands
+		CommandHandler commandHandler = new CommandHandler(this);
+		PluginCommand command = getCommand("kingdomcraft");
+		command.setExecutor(commandHandler);
+		command.setTabCompleter(commandHandler);
+
+		// listeners
+		getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
 	}
 
 	private void disable() {
@@ -109,6 +120,6 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
 	@Override
 	public CommandManager getCommandManager() {
-		return this.getCommandManager();
+		return this.commandManager;
 	}
 }

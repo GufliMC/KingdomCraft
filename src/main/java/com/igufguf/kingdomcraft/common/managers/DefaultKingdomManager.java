@@ -2,8 +2,8 @@ package com.igufguf.kingdomcraft.common.managers;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.managers.KingdomManager;
-import com.igufguf.kingdomcraft.api.models.Kingdom;
-import com.igufguf.kingdomcraft.api.models.Player;
+import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.domain.Player;
 import com.igufguf.kingdomcraft.common.storage.Storage;
 
 import java.util.List;
