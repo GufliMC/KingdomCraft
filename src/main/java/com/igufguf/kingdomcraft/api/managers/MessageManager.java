@@ -1,6 +1,6 @@
 package com.igufguf.kingdomcraft.api.managers;
 
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Player;
 
 public interface MessageManager {

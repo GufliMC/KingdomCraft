@@ -1,15 +1,25 @@
 package com.igufguf.kingdomcraft.common.commands.management;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
-import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.common.commands.DefaultCommandBase;
+import com.igufguf.kingdomcraft.common.command.DefaultCommandBase;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditSuffixOtherCommand extends DefaultCommandBase {
 
     public EditSuffixOtherCommand(KingdomCraftPlugin plugin) {
         super(plugin, "edit suffix", 1);
+    }
+
+    @Override
+    public List<String> autocomplete(CommandSender sender, String[] args) {
+        if ( args.length == 1 ) {
+            return plugin.getKingdomManager().getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

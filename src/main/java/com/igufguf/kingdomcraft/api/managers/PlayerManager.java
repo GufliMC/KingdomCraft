@@ -17,6 +17,8 @@ public interface PlayerManager {
 
     public Player getPlayer(UUID uuid);
 
+    public Player getOnlinePlayer(UUID uuid);
+
     public Player getOnlinePlayer(String name);
 
     public Player load(UUID id, String name);

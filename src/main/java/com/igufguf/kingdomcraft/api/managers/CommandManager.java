@@ -1,7 +1,7 @@
 package com.igufguf.kingdomcraft.api.managers;
 
-import com.igufguf.kingdomcraft.api.commands.CommandBase;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandBase;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 
 import java.util.List;
 

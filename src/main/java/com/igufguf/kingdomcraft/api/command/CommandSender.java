@@ -1,4 +1,4 @@
-package com.igufguf.kingdomcraft.api.commands;
+package com.igufguf.kingdomcraft.api.command;
 
 import com.igufguf.kingdomcraft.api.domain.Player;
 

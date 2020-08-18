@@ -1,9 +1,13 @@
 package com.igufguf.kingdomcraft.common.commands;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.common.command.DefaultCommandBase;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class JoinCommand extends DefaultCommandBase {
 
@@ -12,7 +16,19 @@ public class JoinCommand extends DefaultCommandBase {
     }
 
     @Override
+    public List<String> autocomplete(CommandSender sender, String[] args) {
+        if ( !sender.hasPermission("kingdom.kick.other") ) {
+            return null;
+        }
+        return plugin.getKingdomManager().getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+    }
+
+    @Override
     public void execute(CommandSender sender, String[] args) {
+        if ( !sender.hasPermission("kingdom.join") ) {
+            plugin.getMessageManager().send(sender, "noPermission");
+        }
+
         Kingdom kingdom = plugin.getKingdomManager().getKingdom(args[0]);
         if ( kingdom == null ) {
             plugin.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
@@ -31,6 +47,7 @@ public class JoinCommand extends DefaultCommandBase {
             // TODO check invite
             return;
         }
+
 
         // TODO check for max members
 

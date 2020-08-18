@@ -1,15 +1,15 @@
 package com.igufguf.kingdomcraft.common.commands.management;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.common.commands.DefaultCommandBase;
+import com.igufguf.kingdomcraft.common.command.DefaultCommandBase;
 
 public class DeleteCommand extends DefaultCommandBase {
 
     public DeleteCommand(KingdomCraftPlugin plugin) {
-        super(plugin, "create", 1);
+        super(plugin, "delete", 1);
     }
 
     @Override
