@@ -1,11 +1,15 @@
 package com.igufguf.kingdomcraft.common.managers;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
+import com.igufguf.kingdomcraft.api.domain.Rank;
 import com.igufguf.kingdomcraft.api.managers.KingdomManager;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.common.domain.DefaultKingdom;
+import com.igufguf.kingdomcraft.common.domain.DefaultRank;
 import com.igufguf.kingdomcraft.common.storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +18,7 @@ public class DefaultKingdomManager implements KingdomManager {
     private final KingdomCraftPlugin plugin;
     private final Storage storage;
 
-    private List<Kingdom> kingdoms;
+    private List<Kingdom> kingdoms = new ArrayList<>();
 
     public DefaultKingdomManager(KingdomCraftPlugin plugin, Storage storage) {
         this.plugin = plugin;
@@ -31,7 +35,14 @@ public class DefaultKingdomManager implements KingdomManager {
 
     @Override
     public Kingdom createKingdom(String name) {
-        return null;
+        Kingdom kingdom = new DefaultKingdom(name);
+        kingdoms.add(kingdom);
+
+        Rank rank = new DefaultRank("Member", kingdom);
+        kingdom.getRanks().add(rank);
+        kingdom.setDefaultRank(rank);
+
+        return kingdom;
     }
 
     public void deleteKingdom(Kingdom kingdom) {
@@ -46,7 +57,7 @@ public class DefaultKingdomManager implements KingdomManager {
         // update database
 
         // delete kingdom
-
+        kingdoms.remove(kingdom);
     }
 
     public void saveKingdom(Kingdom kingdom) {

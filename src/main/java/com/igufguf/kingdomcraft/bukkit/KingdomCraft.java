@@ -6,13 +6,12 @@ import com.igufguf.kingdomcraft.api.managers.KingdomManager;
 import com.igufguf.kingdomcraft.api.managers.MessageManager;
 import com.igufguf.kingdomcraft.api.managers.PlayerManager;
 import com.igufguf.kingdomcraft.api.scheduler.AbstractScheduler;
-import com.igufguf.kingdomcraft.bukkit.commands.CommandHandler;
+import com.igufguf.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.igufguf.kingdomcraft.bukkit.listeners.ConnectionListener;
-import com.igufguf.kingdomcraft.common.managers.DefaultCommandManager;
+import com.igufguf.kingdomcraft.common.command.DefaultCommandManager;
 import com.igufguf.kingdomcraft.common.managers.DefaultKingdomManager;
 import com.igufguf.kingdomcraft.common.managers.DefaultPlayerManager;
 import com.igufguf.kingdomcraft.common.storage.Storage;
-import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,6 +41,7 @@ import java.io.IOException;
  **/
 public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
+	private BukkitScheduler scheduler;
 
 	private KingdomManager kingdomManager;
 	private PlayerManager playerManager;
@@ -79,13 +79,15 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
 		Storage storage = new Storage(this);
 
+		this.scheduler = new BukkitScheduler(this);
+
 		this.messageManager = new BukkitMessageManager(this);
 		this.commandManager = new DefaultCommandManager(this);
 		this.playerManager = new DefaultPlayerManager(this, storage);
 		this.kingdomManager = new DefaultKingdomManager(this, storage);
 
 		// commands
-		CommandHandler commandHandler = new CommandHandler(this);
+		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(this);
 		PluginCommand command = getCommand("kingdomcraft");
 		command.setExecutor(commandHandler);
 		command.setTabCompleter(commandHandler);
@@ -100,7 +102,7 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
 	@Override
 	public AbstractScheduler getScheduler() {
-		return null;
+		return this.scheduler;
 	}
 
 	@Override

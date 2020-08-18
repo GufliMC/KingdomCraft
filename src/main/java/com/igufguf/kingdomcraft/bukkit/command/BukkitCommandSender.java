@@ -1,20 +1,20 @@
-package com.igufguf.kingdomcraft.bukkit.commands;
+package com.igufguf.kingdomcraft.bukkit.command;
 
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Player;
 
 public class BukkitCommandSender implements CommandSender {
 
-    private org.bukkit.command.CommandSender commandSender;
-    private Player player = null;
+    private final org.bukkit.command.CommandSender commandSender;
+    private Player player;
 
     public BukkitCommandSender(org.bukkit.command.CommandSender commandSender) {
         this.commandSender = commandSender;
     }
 
     public BukkitCommandSender(org.bukkit.command.CommandSender commandSender, Player player) {
+        this(commandSender);
         this.player = player;
-        this.commandSender = commandSender;
     }
 
     @Override

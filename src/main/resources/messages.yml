@@ -4,6 +4,8 @@
 # Created by: iGufGuf
 #
 #
+prefix: ''
+
 noPermissionCmd: '&cYou don''t have permission to use that command!'
 noPermission: '&cYou don''t have permission to do that!'
 noWorld: '&4KingdomCraft &cis not enabled in this world!'

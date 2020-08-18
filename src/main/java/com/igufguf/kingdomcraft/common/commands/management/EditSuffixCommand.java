@@ -1,10 +1,10 @@
 package com.igufguf.kingdomcraft.common.commands.management;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.common.commands.DefaultCommandBase;
+import com.igufguf.kingdomcraft.common.command.DefaultCommandBase;
 
 public class EditSuffixCommand extends DefaultCommandBase {
 

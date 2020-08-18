@@ -1,4 +1,4 @@
-package com.igufguf.kingdomcraft.common.commands.member;
+package com.igufguf.kingdomcraft.common.commands;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.command.CommandSender;
@@ -14,30 +14,22 @@ public class LeaveCommand extends DefaultCommandBase {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.leave") ) {
-            plugin.getMessageManager().send(sender, "noPermission");
-        }
-
         Player player = sender.getPlayer();
-        if (player.getKingdom() == null) {
+        if ( player.getKingdom() == null ) {
             plugin.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
         }
 
-        Kingdom oldKingdom = player.getKingdom();
+        Kingdom kingdom = player.getKingdom();
+
         plugin.getPlayerManager().leaveKingdom(player);
+        plugin.getMessageManager().send(sender, "cmdLeaveSuccess", kingdom.getName());
 
-        plugin.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
-
-        for (Player member : plugin.getKingdomManager().getOnlineMembers(oldKingdom)) {
+        for ( Player member : plugin.getKingdomManager().getOnlineMembers(kingdom) ) {
+            if ( member == player ) continue;
             plugin.getMessageManager().send(member, "cmdLeaveSuccessMembers", player.getName());
         }
 
         // TODO teleport to spawn
-		/*
-		if ( plugin.getCfg().has("spawn-on-kingdom-leave") && plugin.getCfg().getBoolean("spawn-on-kingdom-leave") ) {
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + p.getName());
-		}
-		*/
     }
 }

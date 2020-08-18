@@ -17,7 +17,7 @@ public class DefaultPlayerManager implements PlayerManager {
     private final KingdomCraftPlugin plugin;
     private final Storage storage;
 
-    private List<Player> players;
+    private final List<Player> players = new ArrayList<>();
 
     public DefaultPlayerManager(KingdomCraftPlugin plugin, Storage storage) {
         this.plugin = plugin;
@@ -61,6 +61,7 @@ public class DefaultPlayerManager implements PlayerManager {
                 // TODO update name
             }
 
+            this.players.add(player);
             return player;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

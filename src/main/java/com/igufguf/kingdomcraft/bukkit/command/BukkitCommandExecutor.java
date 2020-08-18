@@ -1,4 +1,4 @@
-package com.igufguf.kingdomcraft.bukkit.commands;
+package com.igufguf.kingdomcraft.bukkit.command;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.domain.Player;
@@ -9,11 +9,11 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.List;
 
-public class CommandHandler implements CommandExecutor, TabCompleter {
+public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
 
     private final KingdomCraftPlugin plugin;
 
-    public CommandHandler(KingdomCraftPlugin plugin) {
+    public BukkitCommandExecutor(KingdomCraftPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -27,7 +27,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
         BukkitCommandSender bcs;
         if ( sender instanceof org.bukkit.entity.Player) {
-            Player player = plugin.getPlayerManager().getPlayer(((org.bukkit.entity.Player) sender).getUniqueId());
+            Player player = plugin.getPlayerManager().getOnlinePlayer(((org.bukkit.entity.Player) sender).getUniqueId());
             bcs = new BukkitCommandSender(sender, player);
         } else {
             bcs = new BukkitCommandSender(sender);
@@ -42,7 +42,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
         BukkitCommandSender bcs;
         if ( sender instanceof org.bukkit.entity.Player) {
-            Player player = plugin.getPlayerManager().getPlayer(((org.bukkit.entity.Player) sender).getUniqueId());
+            Player player = plugin.getPlayerManager().getOnlinePlayer(((org.bukkit.entity.Player) sender).getUniqueId());
             bcs = new BukkitCommandSender(sender, player);
         } else {
             bcs = new BukkitCommandSender(sender);

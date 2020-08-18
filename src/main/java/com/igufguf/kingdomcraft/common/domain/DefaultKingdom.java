@@ -5,6 +5,7 @@ import com.igufguf.kingdomcraft.api.domain.Player;
 import com.igufguf.kingdomcraft.api.domain.Rank;
 import com.igufguf.kingdomcraft.api.domain.Relation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class DefaultKingdom implements Kingdom {
     private boolean inviteOnly;
 
     private Rank defaultRank;
-    private List<Rank> ranks;
+    private List<Rank> ranks = new ArrayList<>();
 
     private Map<Kingdom, Relation> relations;
 
@@ -92,6 +93,9 @@ public class DefaultKingdom implements Kingdom {
 
     @Override
     public void setDefaultRank(Rank defaultRank) {
+        if ( !this.ranks.contains(defaultRank) ) {
+            throw new IllegalArgumentException("The given defaultRank does not belong to this kingdom.");
+        }
         this.defaultRank = defaultRank;
     }
 

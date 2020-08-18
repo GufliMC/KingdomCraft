@@ -1,8 +1,8 @@
-package com.igufguf.kingdomcraft.common.commands;
+package com.igufguf.kingdomcraft.common.command;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.commands.CommandBase;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandBase;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;

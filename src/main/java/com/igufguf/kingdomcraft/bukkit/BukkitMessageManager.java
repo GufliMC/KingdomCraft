@@ -1,7 +1,7 @@
 package com.igufguf.kingdomcraft.bukkit;
 
 import com.igufguf.kingdomcraft.api.managers.MessageManager;
-import com.igufguf.kingdomcraft.api.commands.CommandSender;
+import com.igufguf.kingdomcraft.api.command.CommandSender;
 import com.igufguf.kingdomcraft.api.domain.Player;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
