@@ -19,6 +19,7 @@ public class DefaultKingdom implements Kingdom {
 
     private String spawn;
     private boolean inviteOnly;
+    private int maxMembers;
 
     private Rank defaultRank;
     private List<Rank> ranks = new ArrayList<>();
@@ -38,7 +39,7 @@ public class DefaultKingdom implements Kingdom {
 
     @Override
     public String getDisplay() {
-        return display;
+        return display != null ? display : name;
     }
 
     @Override
@@ -87,6 +88,16 @@ public class DefaultKingdom implements Kingdom {
     }
 
     @Override
+    public int getMaxMembers() {
+        return maxMembers;
+    }
+
+    @Override
+    public void setMaxMembers(int maxMembers) {
+        this.maxMembers = maxMembers;
+    }
+
+    @Override
     public Rank getDefaultRank() {
         return defaultRank;
     }
@@ -120,6 +131,7 @@ public class DefaultKingdom implements Kingdom {
     }
 
     @Override
+    @Deprecated
     public List<Player> getMembers() {
         return members;
     }

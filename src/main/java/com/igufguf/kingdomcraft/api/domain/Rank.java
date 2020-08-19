@@ -3,19 +3,23 @@ package com.igufguf.kingdomcraft.api.domain;
 public interface Rank {
 
 
-    public String getName();
+    String getName();
 
-    public Kingdom getKingdom();
+    Kingdom getKingdom();
 
-    public String getDisplay();
+    String getDisplay();
 
-    public void setDisplay(String display);
+    void setDisplay(String display);
 
-    public String getPrefix();
+    String getPrefix();
 
-    public void setPrefix(String prefix);
+    void setPrefix(String prefix);
 
-    public String getSuffix();
+    String getSuffix();
 
-    public void setSuffix(String suffix);
+    void setSuffix(String suffix);
+
+    int getMaxMembers();
+
+    void setMaxMembers(int maxMembers);
 }

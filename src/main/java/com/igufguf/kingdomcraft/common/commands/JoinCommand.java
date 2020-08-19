@@ -48,9 +48,7 @@ public class JoinCommand extends DefaultCommandBase {
             return;
         }
 
-
         // TODO check for max members
-
 
         plugin.getPlayerManager().joinKingdom(player, kingdom);
         plugin.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
@@ -59,6 +57,8 @@ public class JoinCommand extends DefaultCommandBase {
             if ( member == player ) continue;
             plugin.getMessageManager().send(member, "cmdJoinSuccessMembers", player.getName());
         }
+
+        plugin.getEventManager().kingdomJoin(player);
 
         // TODO teleport to spawn
 		/*

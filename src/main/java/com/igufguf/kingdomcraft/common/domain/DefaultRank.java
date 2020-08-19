@@ -11,6 +11,7 @@ public class DefaultRank implements Rank {
     private String display;
     private String prefix;
     private String suffix;
+    private int maxMembers;
 
     public DefaultRank(String name, Kingdom kingdom) {
         this.name = name;
@@ -29,7 +30,7 @@ public class DefaultRank implements Rank {
 
     @Override
     public String getDisplay() {
-        return display;
+        return display != null ? display : name;
     }
 
     @Override
@@ -55,5 +56,15 @@ public class DefaultRank implements Rank {
     @Override
     public void setSuffix(String suffix) {
         this.suffix = suffix;
+    }
+
+    @Override
+    public int getMaxMembers() {
+        return maxMembers;
+    }
+
+    @Override
+    public void setMaxMembers(int maxMembers) {
+        this.maxMembers = maxMembers;
     }
 }

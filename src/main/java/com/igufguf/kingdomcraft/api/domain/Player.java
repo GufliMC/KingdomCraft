@@ -5,20 +5,20 @@ import java.util.UUID;
 
 public interface Player {
 
-    public UUID getUniqueId();
+    UUID getUniqueId();
 
-    public String getName();
+    String getName();
 
-    public Rank getRank();
+    Rank getRank();
 
-    public Kingdom getKingdom();
+    Kingdom getKingdom();
 
     void setKingdom(Kingdom kingdom);
 
-    public List<KingdomInvite> getInvites();
+    List<KingdomInvite> getInvites();
 
-    public boolean isInvitedFor(Kingdom kingdom);
+    boolean isInvitedFor(Kingdom kingdom);
 
-    public void addInvite(KingdomInvite invite);
+    void addInvite(KingdomInvite invite);
 
 }

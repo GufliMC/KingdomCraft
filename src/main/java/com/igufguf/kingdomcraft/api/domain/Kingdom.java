@@ -7,38 +7,42 @@ public interface Kingdom {
 
     String getName();
 
-    public String getDisplay();
+    String getDisplay();
 
-    public void setDisplay(String display);
+    void setDisplay(String display);
 
-    public String getPrefix();
+    String getPrefix();
 
-    public void setPrefix(String prefix);
+    void setPrefix(String prefix);
 
-    public String getSuffix();
+    String getSuffix();
 
-    public void setSuffix(String suffix);
+    void setSuffix(String suffix);
 
-    public String getSpawn();
+    String getSpawn();
 
-    public void setSpawn(String spawn);
+    void setSpawn(String spawn);
 
-    public boolean isInviteOnly();
+    boolean isInviteOnly();
 
-    public void setInviteOnly(boolean inviteOnly);
+    void setInviteOnly(boolean inviteOnly);
 
-    public Rank getDefaultRank();
+    int getMaxMembers();
 
-    public void setDefaultRank(Rank defaultRank);
+    void setMaxMembers(int maxMembers);
 
-    public List<Rank> getRanks();
+    Rank getDefaultRank();
 
-    public Map<Kingdom, Relation> getRelations();
+    void setDefaultRank(Rank defaultRank);
 
-    public Relation getRelation(Kingdom kingdom);
+    List<Rank> getRanks();
 
-    public void setRelation(Kingdom kingdom, Relation relation);
+    Map<Kingdom, Relation> getRelations();
 
-    public List<Player> getMembers();
+    Relation getRelation(Kingdom kingdom);
+
+    void setRelation(Kingdom kingdom, Relation relation);
+
+    List<Player> getMembers();
 
 }

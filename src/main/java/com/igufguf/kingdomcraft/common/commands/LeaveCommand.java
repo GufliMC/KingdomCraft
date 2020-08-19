@@ -20,15 +20,17 @@ public class LeaveCommand extends DefaultCommandBase {
             return;
         }
 
-        Kingdom kingdom = player.getKingdom();
+        Kingdom oldKingdom = player.getKingdom();
 
         plugin.getPlayerManager().leaveKingdom(player);
-        plugin.getMessageManager().send(sender, "cmdLeaveSuccess", kingdom.getName());
+        plugin.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
 
-        for ( Player member : plugin.getKingdomManager().getOnlineMembers(kingdom) ) {
+        for ( Player member : plugin.getKingdomManager().getOnlineMembers(oldKingdom) ) {
             if ( member == player ) continue;
             plugin.getMessageManager().send(member, "cmdLeaveSuccessMembers", player.getName());
         }
+
+        plugin.getEventManager().kingdomLeave(player, oldKingdom);
 
         // TODO teleport to spawn
     }
