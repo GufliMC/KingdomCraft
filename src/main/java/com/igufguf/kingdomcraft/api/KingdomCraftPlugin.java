@@ -34,4 +34,6 @@ public interface KingdomCraftPlugin {
 
     String stripColors(String msg);
 
+    void log(String msg);
+
 }

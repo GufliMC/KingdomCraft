@@ -18,6 +18,8 @@ public class DefaultPlayer implements Player {
 
     private List<KingdomInvite> invites;
 
+    private boolean adminMode;
+
     public DefaultPlayer(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
@@ -75,6 +77,16 @@ public class DefaultPlayer implements Player {
     @Override
     public void addInvite(KingdomInvite invite) {
         this.invites.add(invite);
+    }
+
+    @Override
+    public boolean hasAdminMode() {
+        return adminMode;
+    }
+
+    @Override
+    public void setAdminMode(boolean adminMode) {
+        this.adminMode = adminMode;
     }
 
     //

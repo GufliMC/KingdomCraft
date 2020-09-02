@@ -14,16 +14,8 @@ public class ChatEventListener implements EventListener {
     }
 
     @Override
-    public void onKingdomCreate(Kingdom kingdom) {
-        KingdomChatChannel ch = new KingdomChatChannel(kingdom.getName(), kingdom);
-        ch.setFormat("{player} >> {message}");
-        chatManager.addChatChannel(ch);
-    }
-
-    @Override
     public void onKingdomDelete(Kingdom kingdom) {
-        ChatChannel ch = chatManager.getChatChannel(kingdom.getName());
-        chatManager.removeChatChannel(ch);
+        chatManager.getKingdomChannels(kingdom).forEach(chatManager::removeChatChannel);
     }
 
 }

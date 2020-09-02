@@ -1,8 +1,10 @@
 package com.igufguf.kingdomcraft.common.placeholders;
 
+import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.domain.Player;
 import com.igufguf.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.igufguf.kingdomcraft.api.placeholders.PlaceholderReplacer;
+import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,10 @@ import java.util.regex.Pattern;
 public class DefaultPlaceholderManager implements PlaceholderManager {
 
     private final Map<String, PlaceholderReplacer> placeholderReplacers = new HashMap<>();
+
+    public DefaultPlaceholderManager(KingdomCraftPlugin plugin) {
+        new DefaultPlaceholderReplacer(plugin, this);
+    }
 
     @Override
     public void addPlaceholderReplacer(PlaceholderReplacer placeholderReplacer, String... placeholders) {

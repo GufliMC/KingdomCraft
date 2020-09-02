@@ -4,6 +4,7 @@ import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.chat.ChatChannel;
 import com.igufguf.kingdomcraft.api.chat.ChatManager;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
+import com.igufguf.kingdomcraft.api.event.EventListener;
 import com.igufguf.kingdomcraft.bukkit.KingdomCraft;
 import com.igufguf.kingdomcraft.common.chat.DefaultChatChannel;
 import com.igufguf.kingdomcraft.common.chat.KingdomChatChannel;
@@ -13,12 +14,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class BukkitChat {
+public class BukkitChat implements EventListener {
 
-    private KingdomCraftPlugin plugin;
+    private final KingdomCraftPlugin plugin;
+
+    private ConfigurationSection kingdomChannelConfig;
 
     public BukkitChat(KingdomCraft plugin) {
         this.plugin = plugin;
+        plugin.getEventManager().addListener(this);
 
         File configFile = new File(plugin.getDataFolder(), "chat.yml");
         if ( !configFile.exists() ) {
@@ -36,11 +40,13 @@ public class BukkitChat {
         ChatManager cm = plugin.getChatManager();
 
         if ( config.contains("kingdom-channels") && config.getBoolean("kingdom-channels")) {
-            ConfigurationSection cs = config.getConfigurationSection("kingdom-channel");
+            kingdomChannelConfig = config.getConfigurationSection("kingdom-channel");
             for ( Kingdom kd : plugin.getKingdomManager().getKingdoms() ) {
-                cs.set("kingdom", kd.getName());
-                ChatChannel ch = parse(kd.getName(), cs);
-                cm.addChatChannel(ch);
+                kingdomChannelConfig.set("kingdom", kd.getName());
+                ChatChannel ch = parse(kd.getName(), kingdomChannelConfig);
+                if ( ch != null ) {
+                    cm.addChatChannel(ch);
+                }
             }
         }
 
@@ -51,8 +57,22 @@ public class BukkitChat {
         ConfigurationSection channels = config.getConfigurationSection("channels");
         for ( String name : channels.getKeys(false) ) {
             ConfigurationSection cs = channels.getConfigurationSection(name);
+
+            if ( cs.contains("kingdom") && cs.getString("kingdom").equals("*") ) {
+                for ( Kingdom kd : plugin.getKingdomManager().getKingdoms() ) {
+                    cs.set("kingdom", kd.getName());
+                    ChatChannel ch = parse(kd.getName(), cs);
+                    if ( ch != null ) {
+                        cm.addChatChannel(ch);
+                    }
+                }
+                continue;
+            }
+
             ChatChannel ch = parse(name, cs);
-            cm.addChatChannel(ch);
+            if ( ch != null ) {
+                cm.addChatChannel(ch);
+            }
         }
     }
 
@@ -94,6 +114,15 @@ public class BukkitChat {
         }
 
         return channel;
+    }
+
+    @Override
+    public void onKingdomCreate(Kingdom kingdom) {
+        kingdomChannelConfig.set("kingdom", kingdom.getName());
+        ChatChannel ch = parse(kingdom.getName(), kingdomChannelConfig);
+        if ( ch != null ) {
+            plugin.getChatManager().addChatChannel(ch);
+        }
     }
 
 }

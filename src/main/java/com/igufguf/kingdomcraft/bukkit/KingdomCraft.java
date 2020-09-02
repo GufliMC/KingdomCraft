@@ -107,7 +107,7 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		this.kingdomManager = new DefaultKingdomManager(this, storage);
 		this.eventManager = new DefaultEventManager();
 		this.chatManager = new DefaultChatManager(this);
-		this.placeholderManager = new DefaultPlaceholderManager();
+		this.placeholderManager = new DefaultPlaceholderManager(this);
 
 		new BukkitPlaceholderReplacer(this);
 		new BukkitChat(this);
@@ -185,4 +185,11 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 	public String stripColors(String msg) {
 		return ChatColor.stripColor(msg);
 	}
+
+	@Override
+	public void log(String msg) {
+		getLogger().info(msg);
+	}
+
+
 }

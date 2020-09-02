@@ -49,7 +49,7 @@ public class DefaultKingdom implements Kingdom {
 
     @Override
     public String getPrefix() {
-        return prefix;
+        return prefix != null ? prefix : "";
     }
 
     @Override
@@ -59,7 +59,7 @@ public class DefaultKingdom implements Kingdom {
 
     @Override
     public String getSuffix() {
-        return suffix;
+        return suffix != null ? suffix : "";
     }
 
     @Override
