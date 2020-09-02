@@ -40,7 +40,7 @@ public class DefaultRank implements Rank {
 
     @Override
     public String getPrefix() {
-        return prefix;
+        return prefix != null ? prefix : "";
     }
 
     @Override
@@ -50,7 +50,7 @@ public class DefaultRank implements Rank {
 
     @Override
     public String getSuffix() {
-        return suffix;
+        return suffix != null ? suffix : "";
     }
 
     @Override

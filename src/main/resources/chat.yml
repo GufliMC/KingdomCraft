@@ -1,4 +1,5 @@
 
+enabled: true
 
 kingdom-channels: true
 kingdom-channel:
@@ -18,8 +19,14 @@ channels:
     restricted: true
     toggleable: true
 
-  gufland-trade:
+  trade:
     prefix: '$'
     format: '&6[K][T]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-    kingdom: 'gufland'
+    kingdom: '*' # every kingdom gets it's own trade channel
+    toggleable: true
+
+  gufland-only:
+    prefix: '#'
+    format: '&6[K][O]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
+    kingdom: 'gufland' # this channel will only exist for this kingdom
     toggleable: true

@@ -20,12 +20,6 @@ public class DefaultChatManager implements ChatManager {
     public DefaultChatManager(KingdomCraftPlugin plugin) {
         this.plugin = plugin;
         plugin.getEventManager().addListener(new ChatEventListener(this));
-
-        for ( Kingdom kingdom : plugin.getKingdomManager().getKingdoms() ) {
-            KingdomChatChannel ch = new KingdomChatChannel(kingdom.getName(), kingdom);
-            ch.setFormat("{player} >> {message}");
-            addChatChannel(ch);
-        }
     }
 
     @Override
@@ -40,6 +34,10 @@ public class DefaultChatManager implements ChatManager {
 
     @Override
     public void addChatChannel(ChatChannel chatChannel) {
+        if ( chatChannel == null ) {
+            return;
+        }
+
         if ( !this.chatChannels.contains(chatChannel) ) {
             this.chatChannels.add(chatChannel);
         }
@@ -51,28 +49,55 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void handle(Player player, String message) {
-        ChatChannel channel = null;
+    public List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
+        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel).filter(ch -> ((KingdomChatChannel) ch).getKingdom() == kingdom).collect(Collectors.toList());
+    }
 
-        Kingdom kingdom = player.getKingdom();
-        if ( kingdom != null ) {
-            // check for channels in the kingdom
-            List<ChatChannel> channels = chatChannels.stream()
-                    .filter(ch -> ch instanceof KingdomChatChannel)
-                    .filter(ch -> canTalk(player, ch))
-                    .sorted(Comparator.comparingInt(ch -> ch.getPrefix().length()))
-                    .collect(Collectors.toList());
-            channel = match(channels, message);
+    @Override
+    public List<ChatChannel> getPublicChannels() {
+        return getChatChannels().stream().filter(ch -> !(ch instanceof KingdomChatChannel)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ChatChannel> getVisibleChannels(Player player) {
+        return getChatChannels().stream().filter(ch -> isVisible(player, ch)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isVisible(Player player, ChatChannel channel) {
+        if ( player.hasAdminMode() ) {
+            return true;
         }
 
-        if ( channel == null ) {
-            // check for public channels
-            List<ChatChannel> channels = chatChannels.stream()
-                    .filter(ch -> !(ch instanceof KingdomChatChannel))
-                    .filter(ch -> canTalk(player, ch))
-                    .sorted(Comparator.comparingInt(ch -> ch.getPrefix().length()))
-                    .collect(Collectors.toList());
-            channel = match(channels, message);
+        if ( channel instanceof KingdomChatChannel ) {
+            KingdomChatChannel ch = (KingdomChatChannel) channel;
+            if ( player.getKingdom() != ch.getKingdom() ) {
+                return false;
+            }
+        }
+
+        if ( channel.isRestricted() && !player.hasPermission(channel.getPermission())) {
+            return false;
+        }
+
+        // TODO if channel is toggled off -> return false
+
+        return true;
+    }
+
+    @Override
+    public void handle(Player player, String message) {
+
+        List<ChatChannel> channels = getVisibleChannels(player);
+        channels.sort(Comparator.comparingInt(ch -> -ch.getPrefix().length()));
+
+        ChatChannel channel = null;
+        for ( ChatChannel ch : channels ) {
+            if ( ch.getPrefix() != null && !message.startsWith(ch.getPrefix()) ) {
+                continue;
+            }
+            channel = ch;
+            break;
         }
 
         if ( channel == null ) {
@@ -87,16 +112,6 @@ public class DefaultChatManager implements ChatManager {
         send(player, channel, message);
     }
 
-    private ChatChannel match(List<ChatChannel> channels, String message) {
-        for ( ChatChannel ch : channels ) {
-            if ( ch.getPrefix() != null && !message.startsWith(ch.getPrefix()) ) {
-                continue;
-            }
-            return ch;
-        }
-        return null;
-    }
-
     @Override
     public void send(Player player, ChatChannel channel, String message) {
         String result = channel.getFormat();
@@ -107,41 +122,8 @@ public class DefaultChatManager implements ChatManager {
         result = result.replace("{player}", player.getName());
 
         String finalResult = result;
-        plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> canSee(p, channel)).forEach(p -> p.sendMessage(finalResult));
-    }
-
-    public boolean hasDefaultAccess(Player player, ChatChannel channel) {
-        if ( player.hasPermission("kingdom.chat.channel.*") ) {
-            return true;
-        }
-
-        if ( channel instanceof KingdomChatChannel ) {
-            KingdomChatChannel ch = (KingdomChatChannel) channel;
-            if ( player.getKingdom() != ch.getKingdom() ) {
-                return false;
-            }
-        }
-
-        if ( channel.isRestricted() && !player.hasPermission(channel.getPermission())) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean canSee(Player player, ChatChannel channel) {
-        if ( !hasDefaultAccess(player, channel) ) {
-            return false;
-        }
-        // TODO
-        return true;
-    }
-
-    public boolean canTalk(Player player, ChatChannel channel) {
-        if ( !hasDefaultAccess(player, channel) ) {
-            return false;
-        }
-        // TODO
-        return true;
+        plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
+        System.out.println(plugin.stripColors(result));
     }
 
 }

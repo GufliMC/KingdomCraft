@@ -23,4 +23,8 @@ public interface Player extends Entity {
 
     void addInvite(KingdomInvite invite);
 
+    boolean hasAdminMode();
+
+    void setAdminMode(boolean adminMode);
+
 }
