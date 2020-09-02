@@ -57,20 +57,22 @@ public class DefaultChatManager implements ChatManager {
         Kingdom kingdom = player.getKingdom();
         if ( kingdom != null ) {
             // check for channels in the kingdom
-            List<ChatChannel> channels = chatChannels.stream().filter(ch -> ch instanceof KingdomChatChannel)
-                    .map(ch -> (KingdomChatChannel) ch)
-                    .filter(ch -> ch.getKingdom() == kingdom)
-                    .sorted(Comparator.comparingInt(ch -> ch.getDestinationPrefix().length()))
+            List<ChatChannel> channels = chatChannels.stream()
+                    .filter(ch -> ch instanceof KingdomChatChannel)
+                    .filter(ch -> canTalk(player, ch))
+                    .sorted(Comparator.comparingInt(ch -> ch.getPrefix().length()))
                     .collect(Collectors.toList());
-            channel = find(player, channels, message);
+            channel = match(channels, message);
         }
 
         if ( channel == null ) {
             // check for public channels
-            List<ChatChannel> channels = chatChannels.stream().filter(ch -> !(ch instanceof KingdomChatChannel))
-                    .sorted(Comparator.comparingInt(ch -> ch.getDestinationPrefix().length()))
+            List<ChatChannel> channels = chatChannels.stream()
+                    .filter(ch -> !(ch instanceof KingdomChatChannel))
+                    .filter(ch -> canTalk(player, ch))
+                    .sorted(Comparator.comparingInt(ch -> ch.getPrefix().length()))
                     .collect(Collectors.toList());
-            channel = find(player, channels, message);
+            channel = match(channels, message);
         }
 
         if ( channel == null ) {
@@ -78,23 +80,18 @@ public class DefaultChatManager implements ChatManager {
             return;
         }
 
-        if ( channel.getDestinationPrefix() != null ) {
-            message = message.substring(channel.getDestinationPrefix().length()).trim();
+        if ( channel.getPrefix() != null ) {
+            message = message.substring(channel.getPrefix().length()).trim();
         }
 
         send(player, channel, message);
     }
 
-    private ChatChannel find(Player player, List<ChatChannel> channels, String message) {
+    private ChatChannel match(List<ChatChannel> channels, String message) {
         for ( ChatChannel ch : channels ) {
-            if ( ch.getDestinationPrefix() != null && !message.startsWith(ch.getDestinationPrefix()) ) {
+            if ( ch.getPrefix() != null && !message.startsWith(ch.getPrefix()) ) {
                 continue;
             }
-
-            if ( !canTalk(player, ch) ) {
-                continue;
-            }
-
             return ch;
         }
         return null;
@@ -125,7 +122,7 @@ public class DefaultChatManager implements ChatManager {
             }
         }
 
-        if ( channel.isRestricted() && !player.hasPermission("kingdom.chat.channel." + channel.getName().toLowerCase())) {
+        if ( channel.isRestricted() && !player.hasPermission(channel.getPermission())) {
             return false;
         }
         return true;
