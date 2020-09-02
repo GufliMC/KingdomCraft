@@ -1,7 +1,6 @@
 package com.igufguf.kingdomcraft.api.chat;
 
 import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.api.integration.OnlinePlayer;
 
 import java.util.List;
 
@@ -15,8 +14,14 @@ public interface ChatManager {
 
     void removeChatChannel(ChatChannel chatChannel);
 
-    void handle(OnlinePlayer player, String message);
+    void handle(Player player, String message);
 
-    void send(OnlinePlayer player, ChatChannel channel, String message);
+    void send(Player player, ChatChannel channel, String message);
+
+    boolean hasDefaultAccess(Player player, ChatChannel channel);
+
+    boolean canSee(Player player, ChatChannel channel);
+
+    boolean canTalk(Player player, ChatChannel channel);
 
 }

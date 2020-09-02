@@ -1,6 +1,7 @@
 package com.igufguf.kingdomcraft.common.storage;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
+import com.igufguf.kingdomcraft.api.domain.Factory;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
 import com.igufguf.kingdomcraft.api.domain.Rank;
@@ -16,6 +17,7 @@ public class Storage {
 
     private final KingdomCraftPlugin plugin;
     private final StorageImplementation impl;
+
 
     public Storage(KingdomCraftPlugin plugin) {
         this.plugin = plugin;

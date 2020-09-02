@@ -1,12 +1,11 @@
-package com.igufguf.kingdomcraft.common.managers;
+package com.igufguf.kingdomcraft.common.player;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.domain.KingdomInvite;
 import com.igufguf.kingdomcraft.api.managers.PlayerManager;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.common.domain.DefaultKingdomInvite;
-import com.igufguf.kingdomcraft.common.domain.DefaultPlayer;
+import com.igufguf.kingdomcraft.common.kingdom.DefaultKingdomInvite;
 import com.igufguf.kingdomcraft.common.storage.Storage;
 
 import java.util.*;
@@ -54,8 +53,7 @@ public class DefaultPlayerManager implements PlayerManager {
             }
 
             if ( player == null ) {
-                player = new DefaultPlayer(uuid, name);
-                savePlayer(player);
+                player = plugin.getFactory().createPlayer(uuid, name);
             }
             else if ( !player.getName().equals(name) ) {
                 // TODO update name

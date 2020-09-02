@@ -1,6 +1,7 @@
 package com.igufguf.kingdomcraft.common.storage.implementation;
 
 
+import com.igufguf.kingdomcraft.api.domain.Factory;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
 import com.igufguf.kingdomcraft.api.domain.Rank;
