@@ -5,6 +5,7 @@ import com.igufguf.kingdomcraft.api.chat.ChatChannel;
 import com.igufguf.kingdomcraft.api.chat.ChatManager;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
+import com.igufguf.kingdomcraft.api.integration.OnlinePlayer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -50,9 +51,9 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void handle(Player player, String message) {
+    public void handle(OnlinePlayer oplayer, String message) {
 
-        Kingdom kingdom = player.getKingdom();
+        Kingdom kingdom = oplayer.getPlayer().getKingdom();
         if ( kingdom != null ) {
             // check for channels in the kingdom
             List<ChatChannel> channels = chatChannels.stream().filter(ch -> ch instanceof KingdomChatChannel)
@@ -61,9 +62,9 @@ public class DefaultChatManager implements ChatManager {
                     .sorted(Comparator.comparingInt(ch -> ch.getDestinationPrefix().length()))
                     .collect(Collectors.toList());
 
-            ChatChannel ch = find(player, channels, message);
+            ChatChannel ch = find(oplayer, channels, message);
             if ( ch != null ) {
-                send(player, ch, message.substring(ch.getDestinationPrefix().length()).trim());
+                send(oplayer, ch, message.substring(ch.getDestinationPrefix().length()).trim());
                 return;
             }
         }
@@ -73,20 +74,20 @@ public class DefaultChatManager implements ChatManager {
                 .sorted(Comparator.comparingInt(ch -> ch.getDestinationPrefix().length()))
                 .collect(Collectors.toList());
 
-        ChatChannel ch = find(player, channels, message);
+        ChatChannel ch = find(oplayer, channels, message);
         if ( ch != null ) {
-            send(player, ch, message.substring(ch.getDestinationPrefix().length()).trim());
+            send(oplayer, ch, message.substring(ch.getDestinationPrefix().length()).trim());
             return;
         }
     }
 
-    private ChatChannel find(Player player, List<ChatChannel> channels, String message) {
+    private ChatChannel find(OnlinePlayer oplayer, List<ChatChannel> channels, String message) {
         for ( ChatChannel ch : channels ) {
             if ( !message.startsWith(ch.getDestinationPrefix()) ) {
                 continue;
             }
 
-            if ( ch.isRestricted() ) { // TODO check permission
+            if ( ch.isRestricted() && !oplayer.hasPermission("kingdom.chat.channel." + ch.getName().toLowerCase())) {
                 continue;
             }
 
@@ -96,13 +97,14 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void send(Player player, ChatChannel channel, String message) {
+    public void send(OnlinePlayer oplayer, ChatChannel channel, String message) {
         String result = channel.getFormat();
-        result = plugin.getPlaceholderManager().handle(player, result);
+        result = plugin.getPlaceholderManager().handle(oplayer.getPlayer(), result);
         result = result.replace("{message}", message);
 
         for ( Player recipient : channel.getRecipients() ) {
-            // TODO send result to recipient
+            OnlinePlayer orecipient = plugin.getIntegration().getOnlinePlayer(recipient);
+            orecipient.sendMessage(result);
         }
     }
 

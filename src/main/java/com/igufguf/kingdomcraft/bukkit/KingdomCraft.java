@@ -3,6 +3,7 @@ package com.igufguf.kingdomcraft.bukkit;
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.chat.ChatManager;
 import com.igufguf.kingdomcraft.api.event.EventManager;
+import com.igufguf.kingdomcraft.api.integration.Integration;
 import com.igufguf.kingdomcraft.api.managers.CommandManager;
 import com.igufguf.kingdomcraft.api.managers.KingdomManager;
 import com.igufguf.kingdomcraft.api.managers.MessageManager;
@@ -11,6 +12,7 @@ import com.igufguf.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.igufguf.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.igufguf.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.igufguf.kingdomcraft.bukkit.chat.ChatListener;
+import com.igufguf.kingdomcraft.bukkit.integration.BukkitIntegration;
 import com.igufguf.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.igufguf.kingdomcraft.common.chat.DefaultChatManager;
 import com.igufguf.kingdomcraft.common.command.DefaultCommandManager;
@@ -19,9 +21,11 @@ import com.igufguf.kingdomcraft.common.managers.DefaultKingdomManager;
 import com.igufguf.kingdomcraft.common.managers.DefaultPlayerManager;
 import com.igufguf.kingdomcraft.common.placeholders.DefaultPlaceholderManager;
 import com.igufguf.kingdomcraft.common.storage.Storage;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +54,7 @@ import java.io.IOException;
 public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
 	private BukkitScheduler scheduler;
+	private Integration integration;
 
 	private KingdomManager kingdomManager;
 	private PlayerManager playerManager;
@@ -100,6 +105,8 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		this.chatManager = new DefaultChatManager(this);
 		this.placeholderManager = new DefaultPlaceholderManager();
 
+		this.integration = new BukkitIntegration(this);
+
 		// commands
 		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(this);
 		PluginCommand command = getCommand("kingdomcraft");
@@ -110,6 +117,10 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
 		pm.registerEvents(new ChatListener(this), this);
+
+		for ( Player player : Bukkit.getOnlinePlayers() ) {
+			getPlayerManager().join(player.getUniqueId(), player.getName());
+		}
 	}
 
 	private void disable() {
@@ -119,6 +130,11 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 	@Override
 	public AbstractScheduler getScheduler() {
 		return scheduler;
+	}
+
+	@Override
+	public Integration getIntegration() {
+		return integration;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = plugin.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
-        plugin.getChatManager().handle(player, event.getMessage());
+        plugin.getChatManager().handle(plugin.getIntegration().getOnlinePlayer(player), event.getMessage());
         event.setCancelled(true);
     }
 }

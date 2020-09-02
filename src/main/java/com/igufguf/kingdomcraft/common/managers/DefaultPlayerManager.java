@@ -46,7 +46,7 @@ public class DefaultPlayerManager implements PlayerManager {
     }
 
     @Override
-    public Player load(UUID uuid, String name) {
+    public Player join(UUID uuid, String name) {
         try {
             Player player = storage.getPlayer(uuid).get();
             if ( player == null ) {
@@ -62,17 +62,18 @@ public class DefaultPlayerManager implements PlayerManager {
             }
 
             this.players.add(player);
+            plugin.getEventManager().join(player);
             return player;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
     @Override
-    public void unload(Player player) {
+    public void leave(Player player) {
         players.remove(player);
+        plugin.getEventManager().leave(player);
     }
 
     public Player getPlayer(String name) {

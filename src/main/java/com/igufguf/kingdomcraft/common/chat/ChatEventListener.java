@@ -7,7 +7,7 @@ import com.igufguf.kingdomcraft.api.event.EventListener;
 
 public class ChatEventListener implements EventListener {
 
-    private ChatManager chatManager;
+    private final ChatManager chatManager;
 
     public ChatEventListener(ChatManager chatManager) {
         this.chatManager = chatManager;
