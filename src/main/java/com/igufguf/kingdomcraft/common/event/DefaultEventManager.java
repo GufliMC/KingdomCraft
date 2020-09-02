@@ -25,6 +25,16 @@ public class DefaultEventManager implements EventManager {
     }
 
     @Override
+    public void join(Player player) {
+        listeners.forEach(l -> l.onJoin(player));
+    }
+
+    @Override
+    public void leave(Player player) {
+        listeners.forEach(l -> l.onLeave(player));
+    }
+
+    @Override
     public void kingdomJoin(Player player) {
         listeners.forEach(l -> l.onKingdomJoin(player));
     }
@@ -32,5 +42,15 @@ public class DefaultEventManager implements EventManager {
     @Override
     public void kingdomLeave(Player player, Kingdom oldKingdom) {
         listeners.forEach(l -> l.onKingdomLeave(player, oldKingdom));
+    }
+
+    @Override
+    public void kingdomCreate(Kingdom kingdom) {
+        listeners.forEach(l -> l.onKingdomCreate(kingdom));
+    }
+
+    @Override
+    public void kingdomDelete(Kingdom kingdom) {
+        listeners.forEach(l -> l.onKingdomDelete(kingdom));
     }
 }

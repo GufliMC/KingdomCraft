@@ -18,11 +18,11 @@ public class ConnectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLogin(PlayerLoginEvent e) {
-        plugin.getPlayerManager().load(e.getPlayer().getUniqueId(), e.getPlayer().getName());
+        plugin.getPlayerManager().join(e.getPlayer().getUniqueId(), e.getPlayer().getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        plugin.getPlayerManager().unload(plugin.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()));
+        plugin.getPlayerManager().leave(plugin.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()));
     }
 }

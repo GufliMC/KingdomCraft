@@ -9,28 +9,28 @@ import java.util.UUID;
 
 public interface PlayerManager {
 
-    public List<Player> getPlayers();
+    List<Player> getPlayers();
 
-    public List<Player> getOnlinePlayers();
+    List<Player> getOnlinePlayers();
 
-    public Player getPlayer(String name);
+    Player getPlayer(String name);
 
-    public Player getPlayer(UUID uuid);
+    Player getPlayer(UUID uuid);
 
-    public Player getOnlinePlayer(UUID uuid);
+    Player getOnlinePlayer(UUID uuid);
 
-    public Player getOnlinePlayer(String name);
+    Player getOnlinePlayer(String name);
 
-    public Player load(UUID id, String name);
+    Player join(UUID id, String name);
 
-    public void unload(Player player);
+    void leave(Player player);
 
-    public void joinKingdom(Player player, Kingdom kingdom);
+    void joinKingdom(Player player, Kingdom kingdom);
 
-    public void leaveKingdom(Player player);
+    void leaveKingdom(Player player);
 
-    public void addInvite(Player from, Player target);
+    void addInvite(Player from, Player target);
 
-    public void savePlayer(Player player);
+    void savePlayer(Player player);
 
 }

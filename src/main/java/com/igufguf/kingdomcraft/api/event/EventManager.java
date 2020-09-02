@@ -11,6 +11,10 @@ public interface EventManager {
 
     // kingdoms
 
+    void join(Player player);
+
+    void leave(Player player);
+
     void kingdomJoin(Player player);
 
     void kingdomLeave(Player player, Kingdom oldKingdom);
