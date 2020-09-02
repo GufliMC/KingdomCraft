@@ -1,0 +1,25 @@
+
+
+kingdom-channels: true
+kingdom-channel:
+  prefix: ''
+  format: '&6[K]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
+
+channels:
+  public:
+    prefix: '!'
+    format: '&6[P]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
+    toggleable: false
+    range: 20
+
+  hkm:
+    prefix: '@'
+    format: '&6[HKM]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
+    restricted: true
+    toggleable: true
+
+  gufland-trade:
+    prefix: '$'
+    format: '&6[K][T]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
+    kingdom: 'gufland'
+    toggleable: true

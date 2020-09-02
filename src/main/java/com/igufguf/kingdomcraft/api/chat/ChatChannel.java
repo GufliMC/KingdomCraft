@@ -4,9 +4,9 @@ public interface ChatChannel {
 
     String getName();
 
-    String getDestinationPrefix();
+    String getPrefix();
 
-    void setDestionationPrefix(String destionationPrefix);
+    void setPrefix(String prefix);
 
     String getFormat();
 
@@ -14,6 +14,16 @@ public interface ChatChannel {
 
     boolean isRestricted();
 
+    void setRestricted(boolean restricted);
+
+    String getPermission();
+
     boolean isToggleable();
+
+    void setToggleable(boolean toggleable);
+
+    int getRange();
+
+    void setRange(int range);
 
 }

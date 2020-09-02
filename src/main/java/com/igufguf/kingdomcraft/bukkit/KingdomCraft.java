@@ -10,6 +10,7 @@ import com.igufguf.kingdomcraft.api.managers.MessageManager;
 import com.igufguf.kingdomcraft.api.managers.PlayerManager;
 import com.igufguf.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.igufguf.kingdomcraft.api.scheduler.AbstractScheduler;
+import com.igufguf.kingdomcraft.bukkit.chat.BukkitChat;
 import com.igufguf.kingdomcraft.bukkit.chat.ChatListener;
 import com.igufguf.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.igufguf.kingdomcraft.bukkit.domain.BukkitFactory;
@@ -109,6 +110,7 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		this.placeholderManager = new DefaultPlaceholderManager();
 
 		new BukkitPlaceholderReplacer(this);
+		new BukkitChat(this);
 
 		// commands
 		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(this);
@@ -119,7 +121,6 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		// listeners
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
-		pm.registerEvents(new ChatListener(this), this);
 
 		for ( Player player : Bukkit.getOnlinePlayers() ) {
 			getPlayerManager().join(player.getUniqueId(), player.getName());
