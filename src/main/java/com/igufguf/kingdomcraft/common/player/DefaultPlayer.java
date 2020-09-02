@@ -1,9 +1,10 @@
-package com.igufguf.kingdomcraft.common.domain;
+package com.igufguf.kingdomcraft.common.player;
 
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.KingdomInvite;
 import com.igufguf.kingdomcraft.api.domain.Player;
 import com.igufguf.kingdomcraft.api.domain.Rank;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,6 +53,11 @@ public class DefaultPlayer implements Player {
     }
 
     @Override
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    @Override
     public List<KingdomInvite> getInvites() {
         return invites;
     }
@@ -69,5 +75,17 @@ public class DefaultPlayer implements Player {
     @Override
     public void addInvite(KingdomInvite invite) {
         this.invites.add(invite);
+    }
+
+    //
+
+    @Override
+    public boolean hasPermission(String permission) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void sendMessage(String msg) {
+        throw new NotImplementedException();
     }
 }

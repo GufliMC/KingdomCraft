@@ -3,7 +3,7 @@ package com.igufguf.kingdomcraft.api.domain;
 import java.util.List;
 import java.util.UUID;
 
-public interface Player {
+public interface Player extends Entity {
 
     UUID getUniqueId();
 
@@ -14,6 +14,8 @@ public interface Player {
     Kingdom getKingdom();
 
     void setKingdom(Kingdom kingdom);
+
+    void setRank(Rank rank);
 
     List<KingdomInvite> getInvites();
 

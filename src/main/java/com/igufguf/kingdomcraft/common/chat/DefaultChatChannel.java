@@ -1,9 +1,6 @@
 package com.igufguf.kingdomcraft.common.chat;
 
 import com.igufguf.kingdomcraft.api.chat.ChatChannel;
-import com.igufguf.kingdomcraft.api.domain.Player;
-
-import java.util.List;
 
 public class DefaultChatChannel implements ChatChannel {
 
@@ -49,11 +46,6 @@ public class DefaultChatChannel implements ChatChannel {
     @Override
     public boolean isToggleable() {
         return false;
-    }
-
-    @Override
-    public List<Player> getRecipients() {
-        return null;
     }
 
 }

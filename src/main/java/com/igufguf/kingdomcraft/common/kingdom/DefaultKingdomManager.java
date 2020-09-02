@@ -1,12 +1,10 @@
-package com.igufguf.kingdomcraft.common.managers;
+package com.igufguf.kingdomcraft.common.kingdom;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
 import com.igufguf.kingdomcraft.api.domain.Rank;
 import com.igufguf.kingdomcraft.api.managers.KingdomManager;
 import com.igufguf.kingdomcraft.api.domain.Kingdom;
 import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.common.domain.DefaultKingdom;
-import com.igufguf.kingdomcraft.common.domain.DefaultRank;
 import com.igufguf.kingdomcraft.common.storage.Storage;
 
 import java.util.ArrayList;
@@ -35,12 +33,14 @@ public class DefaultKingdomManager implements KingdomManager {
 
     @Override
     public Kingdom createKingdom(String name) {
-        Kingdom kingdom = new DefaultKingdom(name);
+        Kingdom kingdom = plugin.getFactory().createKingdom(name);
         kingdoms.add(kingdom);
 
-        Rank rank = new DefaultRank("Member", kingdom);
+        Rank rank = plugin.getFactory().createRank("Member", kingdom);
         kingdom.getRanks().add(rank);
         kingdom.setDefaultRank(rank);
+
+        plugin.getEventManager().kingdomCreate(kingdom);
 
         return kingdom;
     }
@@ -58,6 +58,8 @@ public class DefaultKingdomManager implements KingdomManager {
 
         // delete kingdom
         kingdoms.remove(kingdom);
+
+        plugin.getEventManager().kingdomDelete(kingdom);
     }
 
     public void saveKingdom(Kingdom kingdom) {

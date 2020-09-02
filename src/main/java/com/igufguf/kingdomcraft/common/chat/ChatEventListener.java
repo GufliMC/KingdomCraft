@@ -16,6 +16,7 @@ public class ChatEventListener implements EventListener {
     @Override
     public void onKingdomCreate(Kingdom kingdom) {
         KingdomChatChannel ch = new KingdomChatChannel(kingdom.getName(), kingdom);
+        ch.setFormat("{player} >> {message}");
         chatManager.addChatChannel(ch);
     }
 

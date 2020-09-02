@@ -1,18 +1,19 @@
 package com.igufguf.kingdomcraft.common.command;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.managers.CommandManager;
 import com.igufguf.kingdomcraft.api.command.CommandBase;
 import com.igufguf.kingdomcraft.api.command.CommandSender;
+import com.igufguf.kingdomcraft.api.managers.CommandManager;
 import com.igufguf.kingdomcraft.common.commands.JoinCommand;
-import com.igufguf.kingdomcraft.common.commands.LeaveCommand;
 import com.igufguf.kingdomcraft.common.commands.ListCommand;
 import com.igufguf.kingdomcraft.common.commands.admin.KickCommand;
 import com.igufguf.kingdomcraft.common.commands.admin.SetKingdomCommand;
 import com.igufguf.kingdomcraft.common.commands.management.*;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,6 @@ public class DefaultCommandManager implements CommandManager {
 
         registerCommand(new ListCommand(plugin));
         registerCommand(new JoinCommand(plugin));
-        registerCommand(new LeaveCommand(plugin));
 
         registerCommand(new CreateCommand(plugin));
         registerCommand(new DeleteCommand(plugin));

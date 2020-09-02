@@ -32,7 +32,12 @@ public class KickCommand extends DefaultCommandBase {
             plugin.getMessageManager().send(sender, "cmdDefaultNoPlayer");
             return;
         }
+
         Kingdom kingdom = target.getKingdom();
+        if ( kingdom == null ) {
+            plugin.getMessageManager().send(sender, "cmdDefaultTargetNoKingdom", target.getName());
+            return;
+        }
 
         if ( !sender.isConsole() ) {
             Player player = sender.getPlayer();

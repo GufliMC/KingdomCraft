@@ -1,9 +1,5 @@
 package com.igufguf.kingdomcraft.api.chat;
 
-import com.igufguf.kingdomcraft.api.domain.Player;
-
-import java.util.List;
-
 public interface ChatChannel {
 
     String getName();
@@ -19,7 +15,5 @@ public interface ChatChannel {
     boolean isRestricted();
 
     boolean isToggleable();
-
-    List<Player> getRecipients();
 
 }

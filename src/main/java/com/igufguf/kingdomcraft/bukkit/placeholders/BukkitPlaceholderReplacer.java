@@ -1,70 +1,47 @@
 package com.igufguf.kingdomcraft.bukkit.placeholders;
 
 import com.igufguf.kingdomcraft.api.KingdomCraftPlugin;
-import com.igufguf.kingdomcraft.api.domain.Player;
-import com.igufguf.kingdomcraft.api.placeholders.PlaceholderReplacer;
+import com.igufguf.kingdomcraft.api.placeholders.PlaceholderManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
-public class BukkitPlaceholderReplacer implements PlaceholderReplacer {
+public class BukkitPlaceholderReplacer {
 
     public BukkitPlaceholderReplacer(KingdomCraftPlugin plugin) {
-        plugin.getPlaceholderManager().addPlaceholderReplacer(this,
-                "kingdom", "kingdom_name", "rank", "rank_name", "kingdom_prefix", "kingdom_suffix",
-                "rank_prefix", "rank_suffix", "world", "item", "weapon");
-    }
+        PlaceholderManager pm = plugin.getPlaceholderManager();
 
-    @Override
-    public String replace(Player player, String placeholder) {
+        pm.addPlaceholderReplacer((player, placeholder) -> translate(player.getKingdom().getDisplay()),
+                "kingdom");
+        pm.addPlaceholderReplacer((player, placeholder) -> player.getKingdom().getName(),
+                "kingdom_name");
 
-        if ( placeholder.equals("kingdom") ) {
-            return translate(player.getKingdom().getDisplay());
-        }
+        pm.addPlaceholderReplacer((player, placeholder) -> translate(player.getRank().getDisplay()),
+                "rank");
+        pm.addPlaceholderReplacer((player, placeholder) -> player.getRank().getName(),
+                "rank_name");
 
-        if ( placeholder.equals("kingdom_name") ) {
-            return translate(player.getKingdom().getName());
-        }
+        pm.addPlaceholderReplacer((player, placeholder) -> translate(player.getKingdom().getPrefix()),
+                "kingdom_prefix");
+        pm.addPlaceholderReplacer((player, placeholder) -> translate(player.getKingdom().getSuffix()),
+                "kingdom_suffix");
 
-        if ( placeholder.equals("rank") ) {
-            return translate(player.getRank().getDisplay());
-        }
+        pm.addPlaceholderReplacer((player, placeholder) -> translate(player.getRank().getPrefix()),
+                "rank_prefix");
+        pm.addPlaceholderReplacer((player, placeholder) -> translate(player.getRank().getSuffix()),
+                "rank_suffix");
 
-        if ( placeholder.equals("rank_name") ) {
-            return translate(player.getRank().getName());
-        }
+        pm.addPlaceholderReplacer((player, placeholder) -> Bukkit.getPlayer(player.getUniqueId()).getLocation().getWorld().toString(),
+                "world");
 
-        if ( placeholder.equals("kingdom_prefix") ) {
-            return translate(player.getKingdom().getPrefix());
-        }
-
-        if ( placeholder.equals("kingdom_suffix") ) {
-            return translate(player.getKingdom().getSuffix());
-        }
-
-        if ( placeholder.equals("rank_prefix") ) {
-            return translate(player.getRank().getPrefix());
-        }
-
-        if ( placeholder.equals("rank_suffix") ) {
-            return translate(player.getRank().getSuffix());
-        }
-
-        org.bukkit.entity.Player bplayer = Bukkit.getPlayer(player.getUniqueId());
-
-        if ( placeholder.equals("world") ) {
-            return bplayer.getLocation().getWorld().toString();
-        }
-
-        if ( placeholder.equals("item") || placeholder.equals("weapon")) {
-            ItemStack stack = bplayer.getItemInHand();
-            if ( stack.getItemMeta() == null ) {
-                return "";
-            }
-            return stack.getItemMeta().getDisplayName();
-        }
-
-        return null;
+        pm.addPlaceholderReplacer((player, placeholder) -> {
+                    ItemStack stack = Bukkit.getPlayer(player.getUniqueId()).getItemInHand();
+                    if ( stack.getItemMeta() == null ) {
+                        return "";
+                    }
+                    return stack.getItemMeta().getDisplayName();
+                },
+                "item", "weapone");
     }
 
     private String translate(String msg) {
