@@ -1,2 +1,2 @@
-entity-packages: com.igufguf.kingdomcraft.common.domain
-transactional-packages: com.igufguf.kingdomcraft
+entity-packages: com.guflan.kingdomcraft.common.ebean.beans
+transactional-packages: com.guflan.kingdomcraft
