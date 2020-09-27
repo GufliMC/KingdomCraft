@@ -1,3 +1,0 @@
-ebean:
-  migration:
-    run: true
