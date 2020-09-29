@@ -5,6 +5,7 @@ import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -59,19 +60,19 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public List<ChatChannel> getVisibleChannels(Player player) {
+    public List<ChatChannel> getVisibleChannels(EntityPlayer player) {
         return getChatChannels().stream().filter(ch -> isVisible(player, ch)).collect(Collectors.toList());
     }
 
     @Override
-    public boolean isVisible(Player player, ChatChannel channel) {
-        if ( player.hasAdminMode() ) {
+    public boolean isVisible(EntityPlayer player, ChatChannel channel) {
+        if ( player.isAdmin() ) {
             return true;
         }
 
         if ( channel instanceof KingdomChatChannel ) {
             KingdomChatChannel ch = (KingdomChatChannel) channel;
-            if ( player.getKingdom() != ch.getKingdom() ) {
+            if ( player.getPlayer().getKingdom() != ch.getKingdom() ) {
                 return false;
             }
         }
@@ -86,7 +87,7 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void handle(Player player, String message) {
+    public void handle(EntityPlayer player, String message) {
 
         List<ChatChannel> channels = getVisibleChannels(player);
         channels.sort(Comparator.comparingInt(ch -> -ch.getPrefix().length()));
@@ -113,13 +114,13 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void send(Player player, ChatChannel channel, String message) {
+    public void send(EntityPlayer player, ChatChannel channel, String message) {
         String result = channel.getFormat();
-        result = plugin.getPlaceholderManager().handle(player, result);
+        result = plugin.getPlaceholderManager().handle(player.getPlayer(), result);
         result = plugin.translateColors(result);
 
         result = result.replace("{message}", plugin.stripColors(message));
-        result = result.replace("{player}", player.getName());
+        result = result.replace("{player}", player.getPlayer().getName());
 
         String finalResult = result;
         plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));

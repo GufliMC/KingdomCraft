@@ -40,6 +40,10 @@ public class Storage {
         return makeFuture(() -> impl.savePlayer(player));
     }
 
+    public CompletableFuture<Player> createPlayer(UUID uuid, String name) {
+        return makeFuture(() -> impl.createPlayer(uuid, name));
+    }
+
     public CompletableFuture<List<Kingdom>> getKingdoms() {
         return makeFuture(impl::getKingdoms);
     }
@@ -48,12 +52,24 @@ public class Storage {
         return makeFuture(() -> impl.saveKingdom(kingdom));
     }
 
-    public CompletableFuture<Void> saveRank(Rank rank) {
-        return makeFuture(() -> impl.saveRank(rank));
+    public CompletableFuture<Kingdom> createKingdom(String name) {
+        return makeFuture(() -> impl.createKingdom(name));
     }
 
     public CompletableFuture<Void> deleteKingdom(Kingdom kingdom) {
         return makeFuture(() -> impl.deleteKingdom(kingdom));
+    }
+
+    public CompletableFuture<Void> saveRank(Rank rank) {
+        return makeFuture(() -> impl.saveRank(rank));
+    }
+
+    public CompletableFuture<Rank> createRank(String name, Kingdom kingdom) {
+        return makeFuture(() -> impl.createRank(name, kingdom));
+    }
+
+    public CompletableFuture<Void> deleteRank(Rank rank) {
+        return makeFuture(() -> impl.deleteRank(rank));
     }
 
     // ----

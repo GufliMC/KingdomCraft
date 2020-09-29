@@ -1,8 +1,8 @@
 package com.guflan.kingdomcraft.common.commands;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 import org.bukkit.ChatColor;
 

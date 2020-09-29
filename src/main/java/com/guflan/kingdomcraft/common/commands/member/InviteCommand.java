@@ -1,8 +1,8 @@
 package com.guflan.kingdomcraft.common.commands.member;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class InviteCommand extends DefaultCommandBase {
@@ -34,7 +34,7 @@ public class InviteCommand extends DefaultCommandBase {
             return;
         }
 
-        if ( target.isInvitedFor(player.getKingdom()) ) {
+        if ( target.hasInvite(player.getKingdom()) ) {
             plugin.getMessageManager().send(sender, "cmdInviteAlready", target.getName());
             return;
         }

@@ -1,7 +1,7 @@
-package com.guflan.kingdomcraft.bukkit.command;
+package com.guflan.kingdomcraft.bukkit.entity;
 
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 
 public class BukkitCommandSender implements CommandSender {
 
@@ -18,8 +18,8 @@ public class BukkitCommandSender implements CommandSender {
     }
 
     @Override
-    public void sendMessage(String msg) {
-        commandSender.sendMessage(msg);
+    public Player getPlayer() {
+        return player;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class BukkitCommandSender implements CommandSender {
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public void sendMessage(String msg) {
+        commandSender.sendMessage(msg);
     }
 
 }

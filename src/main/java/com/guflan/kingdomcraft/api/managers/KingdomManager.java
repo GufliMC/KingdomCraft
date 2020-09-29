@@ -3,6 +3,7 @@ package com.guflan.kingdomcraft.api.managers;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
 
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface KingdomManager {
 
     void saveKingdom(Kingdom kingdom);
 
-    List<Player> getOnlineMembers(Kingdom kingdom);
+    List<EntityPlayer> getOnlineMembers(Kingdom kingdom);
 
 }

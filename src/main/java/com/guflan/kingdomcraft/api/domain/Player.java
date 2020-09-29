@@ -1,9 +1,8 @@
 package com.guflan.kingdomcraft.api.domain;
 
-import java.util.List;
 import java.util.UUID;
 
-public interface Player extends Entity {
+public interface Player {
 
     UUID getUniqueId();
 
@@ -17,14 +16,8 @@ public interface Player extends Entity {
 
     void setRank(Rank rank);
 
-    List<KingdomInvite> getInvites();
+    boolean hasInvite(Kingdom kingdom);
 
-    boolean isInvitedFor(Kingdom kingdom);
-
-    void addInvite(KingdomInvite invite);
-
-    boolean hasAdminMode();
-
-    void setAdminMode(boolean adminMode);
+    void addInvite(Player sender);
 
 }

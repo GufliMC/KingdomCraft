@@ -3,27 +3,32 @@ package com.guflan.kingdomcraft.api.managers;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface PlayerManager {
 
+    List<EntityPlayer> getOnlinePlayers();
+
+    EntityPlayer getOnlinePlayer(UUID uuid);
+
+    EntityPlayer getOnlinePlayer(String name);
+
+    void join(EntityPlayer player);
+
+    void leave(EntityPlayer player);
+
+    //
+
     List<Player> getPlayers();
 
-    List<Player> getOnlinePlayers();
+    Player getPlayer(UUID uuid, String name);
 
     Player getPlayer(String name);
 
     Player getPlayer(UUID uuid);
-
-    Player getOnlinePlayer(UUID uuid);
-
-    Player getOnlinePlayer(String name);
-
-    Player join(UUID id, String name);
-
-    void leave(Player player);
 
     void joinKingdom(Player player, Kingdom kingdom);
 

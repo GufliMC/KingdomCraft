@@ -5,7 +5,6 @@ import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.bukkit.chat.BukkitChat;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
-import com.guflan.kingdomcraft.bukkit.domain.BukkitFactory;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
 import com.guflan.kingdomcraft.common.chat.DefaultChatManager;
@@ -13,10 +12,9 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandManager;
 import com.guflan.kingdomcraft.common.event.DefaultEventManager;
 import com.guflan.kingdomcraft.common.kingdom.DefaultKingdomManager;
 import com.guflan.kingdomcraft.common.placeholders.DefaultPlaceholderManager;
-import com.guflan.kingdomcraft.common.player.DefaultPlayerManager;
+import com.guflan.kingdomcraft.common.kingdom.DefaultPlayerManager;
 import com.guflan.kingdomcraft.common.storage.Storage;
 import com.guflan.kingdomcraft.common.storage.implementation.EBeanStorageImplementation;
-import com.guflan.kingdomcraft.api.domain.Factory;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.managers.CommandManager;
 import com.guflan.kingdomcraft.api.managers.KingdomManager;
@@ -58,7 +56,6 @@ import java.io.IOException;
 public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
 	private BukkitScheduler scheduler;
-	private Factory factory;
 
 	private KingdomManager kingdomManager;
 	private PlayerManager playerManager;
@@ -99,6 +96,7 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 
         ConfigurationSection dbConfig = config.getConfigurationSection("database");
 		EBeanStorageImplementation impl = new EBeanStorageImplementation(
+				this,
 				dbConfig.getString("url"),
                 dbConfig.getString("driver"),
                 dbConfig.getString("username"),
@@ -107,7 +105,6 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		Storage storage = new Storage(this, impl);
 
 		this.scheduler = new BukkitScheduler(this);
-		this.factory = new BukkitFactory(this);
 
 		this.messageManager = new BukkitMessageManager(this);
 		this.commandManager = new DefaultCommandManager(this);
@@ -129,10 +126,6 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		// listeners
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
-
-		for ( Player player : Bukkit.getOnlinePlayers() ) {
-			getPlayerManager().join(player.getUniqueId(), player.getName());
-		}
 	}
 
 	private void disable() {
@@ -142,11 +135,6 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 	@Override
 	public AbstractScheduler getScheduler() {
 		return scheduler;
-	}
-
-	@Override
-	public Factory getFactory() {
-		return factory;
 	}
 
 	@Override

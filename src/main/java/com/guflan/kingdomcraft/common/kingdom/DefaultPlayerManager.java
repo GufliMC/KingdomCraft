@@ -1,12 +1,14 @@
-package com.guflan.kingdomcraft.common.player;
+package com.guflan.kingdomcraft.common.kingdom;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.common.kingdom.DefaultKingdomInvite;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitEntityPlayer;
 import com.guflan.kingdomcraft.common.storage.Storage;
 import com.guflan.kingdomcraft.api.domain.KingdomInvite;
 import com.guflan.kingdomcraft.api.managers.PlayerManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import org.bukkit.Bukkit;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -16,16 +18,42 @@ public class DefaultPlayerManager implements PlayerManager {
     private final KingdomCraftPlugin plugin;
     private final Storage storage;
 
-    private final List<Player> players = new ArrayList<>();
+    protected final List<EntityPlayer> players = new ArrayList<>();
 
     public DefaultPlayerManager(KingdomCraftPlugin plugin, Storage storage) {
         this.plugin = plugin;
         this.storage = storage;
     }
 
-    public List<Player> getOnlinePlayers() {
+    public List<EntityPlayer> getOnlinePlayers() {
         return new ArrayList<>(players);
     }
+
+    public EntityPlayer getOnlinePlayer(String name) {
+        return players.stream().filter(p -> p.getPlayer().getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    public EntityPlayer getOnlinePlayer(UUID uuid) {
+        return players.stream().filter(p -> p.getPlayer().getUniqueId() == uuid).findFirst().orElse(null);
+    }
+
+    @Override
+    public void join(EntityPlayer player) {
+        if ( players.contains(player) ) {
+            return;
+        }
+
+        players.add(player);
+        plugin.getEventManager().leave(player.getPlayer());
+    }
+
+    @Override
+    public void leave(EntityPlayer player) {
+        players.remove(player);
+        plugin.getEventManager().leave(player.getPlayer());
+    }
+
+    // -------------
 
     public List<Player> getPlayers() {
         try {
@@ -36,16 +64,7 @@ public class DefaultPlayerManager implements PlayerManager {
         return new ArrayList<>();
     }
 
-    public Player getOnlinePlayer(String name) {
-        return players.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-    }
-
-    public Player getOnlinePlayer(UUID uuid) {
-        return players.stream().filter(p -> p.getUniqueId() == uuid).findFirst().orElse(null);
-    }
-
-    @Override
-    public Player join(UUID uuid, String name) {
+    public Player getPlayer(UUID uuid, String name) {
         try {
             Player player = storage.getPlayer(uuid).get();
             if ( player == null ) {
@@ -53,14 +72,12 @@ public class DefaultPlayerManager implements PlayerManager {
             }
 
             if ( player == null ) {
-                player = plugin.getFactory().createPlayer(uuid, name);
+                player = storage.createPlayer(uuid, name).get();
             }
             else if ( !player.getName().equals(name) ) {
                 // TODO update name
             }
 
-            this.players.add(player);
-            plugin.getEventManager().join(player);
             return player;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -68,39 +85,23 @@ public class DefaultPlayerManager implements PlayerManager {
         return null;
     }
 
-    @Override
-    public void leave(Player player) {
-        players.remove(player);
-        plugin.getEventManager().leave(player);
-    }
-
     public Player getPlayer(String name) {
-        Player player = getOnlinePlayer(name);
-        if ( player != null ) {
-            return player;
-        }
-
         try {
-            player = storage.getPlayer(name).get();
+            return storage.getPlayer(name).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return player;
+        return null;
     }
 
     @Override
     public Player getPlayer(UUID uuid) {
-        Player player = getOnlinePlayer(uuid);
-        if ( player != null ) {
-            return player;
-        }
-
         try {
-            player = storage.getPlayer(uuid).get();
+            return storage.getPlayer(uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return player;
+        return null;
     }
 
     public void joinKingdom(Player player, Kingdom kingdom) {
@@ -115,8 +116,7 @@ public class DefaultPlayerManager implements PlayerManager {
 
     @Override
     public void addInvite(Player from, Player target) {
-        KingdomInvite invite = new DefaultKingdomInvite(from, target, from.getKingdom());
-        target.addInvite(invite);
+        target.addInvite(from);
         savePlayer(target);
     }
 

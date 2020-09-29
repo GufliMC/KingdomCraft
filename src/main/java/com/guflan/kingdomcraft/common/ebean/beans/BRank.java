@@ -1,22 +1,34 @@
-package com.guflan.kingdomcraft.common.kingdom;
+package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 
-public class DefaultRank implements Rank {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-    private final String name;
-    private final Kingdom kingdom;
+@Entity
+@Table(name = "ranks")
+public class BRank extends BaseModel implements Rank {
 
-    private String display;
-    private String prefix;
-    private String suffix;
-    private int maxMembers;
+    @Column(unique=true)
+    final String name;
 
-    public DefaultRank(String name, Kingdom kingdom) {
+    @ManyToOne
+    final BKingdom kingdom;
+
+    String display;
+    String prefix;
+    String suffix;
+    int maxMembers;
+
+    public BRank(String name, BKingdom kingdom) {
         this.name = name;
         this.kingdom = kingdom;
     }
+
+    // interface
 
     @Override
     public String getName() {

@@ -82,7 +82,7 @@ public class BukkitChat implements EventListener {
         if ( section.contains("kingdom") ) {
             Kingdom kd = plugin.getKingdomManager().getKingdom(section.getString("kingdom"));
             if ( kd == null ) {
-                System.out.println("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.");
+                plugin.log("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.");
                 return null;
             }
 
@@ -92,7 +92,7 @@ public class BukkitChat implements EventListener {
         }
 
         if ( !section.contains("format") ) {
-            System.out.println("Cannot create channel with name '" + name + "' because no format is given.");
+            plugin.log("Cannot create channel with name '" + name + "' because no format is given.");
             return null;
         }
         channel.setFormat(section.getString("format"));
