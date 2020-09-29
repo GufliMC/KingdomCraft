@@ -18,12 +18,20 @@ public interface StorageImplementation {
 
     void savePlayer(Player player);
 
+    Player createPlayer(UUID uuid, String name);
+
     List<Kingdom> getKingdoms();
 
     void saveKingdom(Kingdom kingdom);
 
-    void saveRank(Rank rank);
+    Kingdom createKingdom(String name);
 
     void deleteKingdom(Kingdom kingdom);
+
+    void saveRank(Rank rank);
+
+    Rank createRank(String name, Kingdom kingdom);
+
+    void deleteRank(Rank rank);
 
 }

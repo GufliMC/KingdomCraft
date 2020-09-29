@@ -1,10 +1,10 @@
 package com.guflan.kingdomcraft.common.commands.admin;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 import java.util.List;
@@ -21,9 +21,9 @@ public class SetRankCommand extends DefaultCommandBase {
 
         if ( args.length == 1 ) {
             if ( sender.hasPermission("kingdom.setrank.other") ) {
-                return plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> p.getKingdom() != null).map(Player::getName).collect(Collectors.toList());
+                return plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> p.getPlayer().getKingdom() != null).map((p) -> p.getPlayer().getName()).collect(Collectors.toList());
             } else if ( sender.hasPermission("kingdom.setrank") && !sender.isConsole()) {
-                return plugin.getKingdomManager().getOnlineMembers(sender.getPlayer().getKingdom()).stream().map(Player::getName).collect(Collectors.toList());
+                return plugin.getKingdomManager().getOnlineMembers(sender.getPlayer().getKingdom()).stream().map((p) -> p.getPlayer().getName()).collect(Collectors.toList());
             }
             return null;
         }

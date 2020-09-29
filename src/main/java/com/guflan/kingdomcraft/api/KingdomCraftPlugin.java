@@ -14,8 +14,6 @@ public interface KingdomCraftPlugin {
 
     AbstractScheduler getScheduler();
 
-    Factory getFactory();
-
     PlayerManager getPlayerManager();
 
     KingdomManager getKingdomManager();

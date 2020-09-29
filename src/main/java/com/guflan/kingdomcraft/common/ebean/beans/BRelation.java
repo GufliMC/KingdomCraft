@@ -7,20 +7,20 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-public class Relation {
+public class BRelation {
 
     @EmbeddedId
-    RelationKey id;
+    BRelationKey id;
 
     @ManyToOne
     @MapsId("kingdomId")
     @JoinColumn(name = "kingdom_id")
-    Kingdom kingdom;
+    BKingdom kingdom;
 
     @ManyToOne
     @MapsId("targetKingdomId")
     @JoinColumn(name = "target_kingdom_id")
-    Kingdom target;
+    BKingdom target;
 
     int relation;
 
@@ -29,5 +29,11 @@ public class Relation {
 
     @WhenModified
     Instant updated_at;
+
+    public BRelation(BKingdom kingdom, BKingdom target, int relation) {
+        this.kingdom = kingdom;
+        this.target = target;
+        this.relation = relation;
+    }
 
 }

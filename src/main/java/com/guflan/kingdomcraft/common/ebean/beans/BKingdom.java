@@ -1,36 +1,45 @@
-package com.guflan.kingdomcraft.common.kingdom;
+package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.Relation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.*;
+import java.util.*;
 
-public class DefaultKingdom implements Kingdom {
+@Entity
+@Table(name = "kingdoms")
+public class BKingdom extends BaseModel implements Kingdom {
 
-    private final String name;
+    @Column(unique=true)
+    final String name;
 
-    private String display;
-    private String prefix;
-    private String suffix;
+    String display;
+    String prefix;
+    String suffix;
+    boolean inviteOnly;
+    int maxMembers;
 
-    private String spawn;
-    private boolean inviteOnly;
-    private int maxMembers;
+    String spawn;
 
-    private Rank defaultRank;
-    private List<Rank> ranks = new ArrayList<>();
+    @OneToOne
+    BRank defaultRank;
 
-    private Map<Kingdom, Relation> relations;
+    @OneToMany(mappedBy = "kingdom")
+    List<BRank> ranks;
 
+    @OneToMany(mappedBy = "kingdom")
+    Set<BRelation> relations;
+
+    @OneToMany(mappedBy = "kingdom")
     private List<Player> members;
 
-    public DefaultKingdom(String name) {
+    public BKingdom(String name) {
         this.name = name;
     }
+
+    // interface
 
     @Override
     public String getName() {
@@ -107,32 +116,42 @@ public class DefaultKingdom implements Kingdom {
         if ( !this.ranks.contains(defaultRank) ) {
             throw new IllegalArgumentException("The given defaultRank does not belong to this kingdom.");
         }
-        this.defaultRank = defaultRank;
+        this.defaultRank = (BRank) defaultRank;
     }
 
     @Override
     public List<Rank> getRanks() {
-        return ranks;
+        return new ArrayList<>(ranks);
     }
 
     @Override
     public Map<Kingdom, Relation> getRelations() {
-        return relations;
+        Map<Kingdom, Relation> relationMap = new HashMap<>();
+        for ( BRelation rel : relations ) {
+            relationMap.put(rel.target, Relation.fromId(rel.relation));
+        }
+        return relationMap;
     }
 
     @Override
     public Relation getRelation(Kingdom kingdom) {
-        return relations.getOrDefault(kingdom, Relation.NEUTRAL);
+        for ( BRelation rel : relations ) {
+            if ( rel.target == kingdom ) {
+                return Relation.fromId(rel.relation);
+            }
+        }
+        return Relation.NEUTRAL;
     }
 
     @Override
     public void setRelation(Kingdom kingdom, Relation relation) {
-        relations.put(kingdom, relation);
+        relations.removeIf(rel -> rel.target == kingdom);
+        relations.add(new BRelation(this, (BKingdom) kingdom, relation.getId()));
     }
 
     @Override
     @Deprecated
     public List<Player> getMembers() {
-        return members;
+        return new ArrayList<>(members);
     }
 }

@@ -2,6 +2,7 @@ package com.guflan.kingdomcraft.common.kingdom;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
 import com.guflan.kingdomcraft.api.managers.KingdomManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
@@ -9,6 +10,7 @@ import com.guflan.kingdomcraft.common.storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class DefaultKingdomManager implements KingdomManager {
@@ -33,24 +35,31 @@ public class DefaultKingdomManager implements KingdomManager {
 
     @Override
     public Kingdom createKingdom(String name) {
-        Kingdom kingdom = plugin.getFactory().createKingdom(name);
-        kingdoms.add(kingdom);
+        try {
+            Kingdom kingdom = storage.createKingdom(name).get();
+            kingdoms.add(kingdom);
 
-        Rank rank = plugin.getFactory().createRank("Member", kingdom);
-        kingdom.getRanks().add(rank);
-        kingdom.setDefaultRank(rank);
+            /*
+            Rank rank = storage.createRank("member", kingdom);;
+            kingdom.getRanks().add(rank);
+            kingdom.setDefaultRank(rank);
+            */
 
-        plugin.getEventManager().kingdomCreate(kingdom);
+            plugin.getEventManager().kingdomCreate(kingdom);
 
-        return kingdom;
+            return kingdom;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void deleteKingdom(Kingdom kingdom) {
 
         // update locally
-        for ( Player p : plugin.getPlayerManager().getOnlinePlayers() ) {
-            if ( p.getKingdom() == kingdom ) {
-                p.setKingdom(null);
+        for ( EntityPlayer p : plugin.getPlayerManager().getOnlinePlayers() ) {
+            if ( p.getPlayer().getKingdom() == kingdom ) {
+                p.getPlayer().setKingdom(null);
             }
         }
 
@@ -66,8 +75,8 @@ public class DefaultKingdomManager implements KingdomManager {
         storage.saveKingdom(kingdom);
     }
 
-    public List<Player> getOnlineMembers(Kingdom kingdom) {
-        return plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> p.getKingdom() == kingdom).collect(Collectors.toList());
+    public List<EntityPlayer> getOnlineMembers(Kingdom kingdom) {
+        return plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> p.getPlayer().getKingdom() == kingdom).collect(Collectors.toList());
     }
 
 }

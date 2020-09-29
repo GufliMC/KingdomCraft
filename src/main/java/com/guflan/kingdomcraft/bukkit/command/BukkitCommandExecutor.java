@@ -1,11 +1,12 @@
 package com.guflan.kingdomcraft.bukkit.command;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -25,29 +26,19 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        BukkitCommandSender bcs;
-        if ( sender instanceof org.bukkit.entity.Player) {
-            Player player = plugin.getPlayerManager().getOnlinePlayer(((org.bukkit.entity.Player) sender).getUniqueId());
-            bcs = new BukkitCommandSender(sender, player);
-        } else {
-            bcs = new BukkitCommandSender(sender);
-        }
-
-        plugin.getCommandManager().execute(bcs, args);
+        plugin.getCommandManager().execute(wrap(sender), args);
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(org.bukkit.command.CommandSender sender, Command command, String alias, String[] args) {
+        return plugin.getCommandManager().autocomplete(wrap(sender), args);
+    }
 
-        BukkitCommandSender bcs;
-        if ( sender instanceof org.bukkit.entity.Player) {
-            Player player = plugin.getPlayerManager().getOnlinePlayer(((org.bukkit.entity.Player) sender).getUniqueId());
-            bcs = new BukkitCommandSender(sender, player);
-        } else {
-            bcs = new BukkitCommandSender(sender);
+    private com.guflan.kingdomcraft.api.entity.CommandSender wrap(CommandSender sender) {
+        if ( sender instanceof Player) {
+            return plugin.getPlayerManager().getOnlinePlayer(((Player) sender).getUniqueId());
         }
-
-        return plugin.getCommandManager().autocomplete(bcs, args);
+        return new BukkitCommandSender(sender);
     }
 }

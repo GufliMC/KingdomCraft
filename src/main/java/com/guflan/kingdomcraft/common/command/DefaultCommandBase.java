@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.command;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.command.CommandBase;
-import com.guflan.kingdomcraft.api.command.CommandSender;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;

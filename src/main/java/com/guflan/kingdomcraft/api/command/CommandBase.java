@@ -1,5 +1,7 @@
 package com.guflan.kingdomcraft.api.command;
 
+import com.guflan.kingdomcraft.api.entity.CommandSender;
+
 import java.util.List;
 
 public interface CommandBase {

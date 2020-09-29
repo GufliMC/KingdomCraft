@@ -1,9 +1,9 @@
 package com.guflan.kingdomcraft.common.commands.admin;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class KickCommand extends DefaultCommandBase {
     @Override
     public List<String> autocomplete(CommandSender sender, String[] args) {
         if ( sender.hasPermission("kingdom.kick.other") ) {
-            return plugin.getPlayerManager().getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+            return plugin.getPlayerManager().getOnlinePlayers().stream().map((p) -> p.getPlayer().getName()).collect(Collectors.toList());
         } else if ( sender.hasPermission("kingdom.kick") && sender.getPlayer().getKingdom() != null ) {
             return sender.getPlayer().getKingdom().getMembers().stream().map(Player::getName).collect(Collectors.toList());
         }

@@ -5,25 +5,25 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public class RelationKey implements Serializable {
+public class BKingdomInviteKey implements Serializable {
+
+    @Column(name = "player_id")
+    String playerId;
 
     @Column(name = "kingdom_id")
     int kingdomId;
 
-    @Column(name = "target_kingdom_id")
-    int targetKingdomId;
-
     @Override
     public int hashCode() {
-        return kingdomId & targetKingdomId;
+        return playerId.hashCode() & kingdomId;
     }
 
     @Override
     public boolean equals(Object other) {
-        if ( !(other instanceof RelationKey) ) {
+        if ( !(other instanceof BKingdomInviteKey) ) {
             return false;
         }
-        return kingdomId == ((RelationKey) other).kingdomId && targetKingdomId == ((RelationKey) other).targetKingdomId;
+        return playerId.equals(((BKingdomInviteKey) other).playerId) && kingdomId == ((BKingdomInviteKey) other).kingdomId;
     }
 
 }

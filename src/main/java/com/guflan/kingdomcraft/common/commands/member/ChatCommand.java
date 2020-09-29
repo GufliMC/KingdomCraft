@@ -2,9 +2,10 @@ package com.guflan.kingdomcraft.common.commands.member;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 import java.util.List;
@@ -51,8 +52,8 @@ public class ChatCommand extends DefaultCommandBase {
         plugin.getPlayerManager().joinKingdom(player, kingdom);
         plugin.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
 
-        for ( Player member : plugin.getKingdomManager().getOnlineMembers(kingdom) ) {
-            if ( member == player ) continue;
+        for ( EntityPlayer member : plugin.getKingdomManager().getOnlineMembers(kingdom) ) {
+            if ( member.getPlayer() == player ) continue;
             plugin.getMessageManager().send(member, "cmdJoinSuccessMembers", player.getName());
         }
 

@@ -1,9 +1,9 @@
 package com.guflan.kingdomcraft.common.commands.admin;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.command.CommandSender;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class SetKingdomCommand extends DefaultCommandBase {
             return null;
         }
         if ( args.length == 1 ) {
-            return plugin.getPlayerManager().getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+            return plugin.getPlayerManager().getOnlinePlayers().stream().map((p) -> p.getPlayer().getName()).collect(Collectors.toList());
         }
 
         return plugin.getKingdomManager().getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());

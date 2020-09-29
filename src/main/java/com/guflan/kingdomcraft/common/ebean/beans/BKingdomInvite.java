@@ -7,28 +7,35 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-public class KingdomInvite {
+@Table(name = "kingdom_invites")
+public class BKingdomInvite {
 
     @EmbeddedId
-    KingdomInviteKey id;
+    BKingdomInviteKey id;
 
     @ManyToOne
     @MapsId("playerId")
     @JoinColumn(name = "player_id")
-    Player player;
+    BPlayer player;
 
     @ManyToOne
     @MapsId("kingdomId")
     @JoinColumn(name = "kingdom_id")
-    Kingdom kingdom;
+    BKingdom kingdom;
 
     @ManyToOne
-    Player sender;
+    BPlayer sender;
 
     @WhenCreated
     Instant created_at;
 
     @WhenModified
     Instant updated_at;
+
+    public BKingdomInvite(BPlayer player, BPlayer sender, BKingdom kingdom) {
+        this.player = player;
+        this.sender = sender;
+        this.kingdom = kingdom;
+    }
 
 }

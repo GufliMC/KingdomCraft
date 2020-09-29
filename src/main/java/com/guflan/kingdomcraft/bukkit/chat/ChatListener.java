@@ -2,6 +2,7 @@ package com.guflan.kingdomcraft.bukkit.chat;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.EntityPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,7 +18,7 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        Player player = plugin.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+        EntityPlayer player = plugin.getPlayerManager().getOnlinePlayer(event.getPlayer().getUniqueId());
         plugin.getChatManager().handle(player, event.getMessage());
         event.setCancelled(true);
     }
