@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.storage;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 
 import java.util.List;
@@ -24,23 +24,23 @@ public class Storage {
 
     // ----
 
-    public CompletableFuture<List<Player>> getPlayers() {
+    public CompletableFuture<List<User>> getPlayers() {
         return makeFuture(impl::getPlayers);
     }
 
-    public CompletableFuture<Player> getPlayer(String name) {
+    public CompletableFuture<User> getPlayer(String name) {
         return makeFuture(() -> impl.getPlayer(name));
     }
 
-    public CompletableFuture<Player> getPlayer(UUID uuid) {
+    public CompletableFuture<User> getPlayer(UUID uuid) {
         return makeFuture(() -> impl.getPlayer(uuid));
     }
 
-    public CompletableFuture<Void> savePlayer(Player player) {
+    public CompletableFuture<Void> savePlayer(User player) {
         return makeFuture(() -> impl.savePlayer(player));
     }
 
-    public CompletableFuture<Player> createPlayer(UUID uuid, String name) {
+    public CompletableFuture<User> createPlayer(UUID uuid, String name) {
         return makeFuture(() -> impl.createPlayer(uuid, name));
     }
 

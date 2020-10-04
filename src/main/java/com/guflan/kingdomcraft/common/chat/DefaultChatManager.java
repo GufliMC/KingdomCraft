@@ -1,11 +1,11 @@
 package com.guflan.kingdomcraft.common.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraftBridge;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
-import com.guflan.kingdomcraft.api.entity.EntityPlayer;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 public class DefaultChatManager implements ChatManager {
 
-    private final KingdomCraftPlugin plugin;
+    private final KingdomCraftBridge bridge;
 
     private final List<ChatChannel> chatChannels = new ArrayList<>();
 
-    public DefaultChatManager(KingdomCraftPlugin plugin) {
-        this.plugin = plugin;
-        plugin.getEventManager().addListener(new ChatEventListener(this));
+    public DefaultChatManager(KingdomCraftBridge bridge) {
+        this.bridge = bridge;
+        bridge.getEventManager().addListener(new ChatEventListener(this));
     }
 
     @Override
@@ -60,19 +60,20 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public List<ChatChannel> getVisibleChannels(EntityPlayer player) {
+    public List<ChatChannel> getVisibleChannels(Player player) {
         return getChatChannels().stream().filter(ch -> isVisible(player, ch)).collect(Collectors.toList());
     }
 
     @Override
-    public boolean isVisible(EntityPlayer player, ChatChannel channel) {
-        if ( player.isAdmin() ) {
-            return true;
-        }
+    public boolean isVisible(Player player, ChatChannel channel) {
+//        if ( player.isAdmin() ) {
+//            return true;
+//        }
 
+        User user = bridge.getUserManager().getUser(player.getUniqueId());
         if ( channel instanceof KingdomChatChannel ) {
             KingdomChatChannel ch = (KingdomChatChannel) channel;
-            if ( player.getPlayer().getKingdom() != ch.getKingdom() ) {
+            if ( user.getKingdom() != ch.getKingdom() ) {
                 return false;
             }
         }
@@ -87,7 +88,7 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void handle(EntityPlayer player, String message) {
+    public void handle(Player player, String message) {
 
         List<ChatChannel> channels = getVisibleChannels(player);
         channels.sort(Comparator.comparingInt(ch -> -ch.getPrefix().length()));
@@ -114,17 +115,18 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
-    public void send(EntityPlayer player, ChatChannel channel, String message) {
+    public void send(Player player, ChatChannel channel, String message) {
         String result = channel.getFormat();
-        result = plugin.getPlaceholderManager().handle(player.getPlayer(), result);
-        result = plugin.translateColors(result);
+        result = bridge.getPlaceholderManager().handle(player, result);
+        result = bridge.getMessageManager().colorify(result);
 
-        result = result.replace("{message}", plugin.stripColors(message));
-        result = result.replace("{player}", player.getPlayer().getName());
+        message = bridge.getMessageManager().decolorify(message); // TODO check for permission
+        result = result.replace("{message}", message);
+        result = result.replace("{player}", player.getName());
 
         String finalResult = result;
-        plugin.getPlayerManager().getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
-        System.out.println(plugin.stripColors(result));
+        bridge.getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
+        System.out.println(bridge.getMessageManager().decolorify(result));
     }
 
 }

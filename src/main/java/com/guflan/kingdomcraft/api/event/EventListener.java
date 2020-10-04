@@ -1,17 +1,17 @@
 package com.guflan.kingdomcraft.api.event;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 
 public interface EventListener {
 
-    default void onJoin(Player player) {}
+    default void onJoin(User player) {}
 
-    default void onLeave(Player player) {}
+    default void onLeave(User player) {}
 
-    default void onKingdomJoin(Player player) {}
+    default void onKingdomJoin(User player) {}
 
-    default void onKingdomLeave(Player player, Kingdom oldKingdom) {}
+    default void onKingdomLeave(User player, Kingdom oldKingdom) {}
 
     default void onKingdomCreate(Kingdom kingdom) {}
 

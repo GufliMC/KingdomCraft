@@ -1,6 +1,7 @@
-package com.guflan.kingdomcraft.bukkit;
+package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
+import com.guflan.kingdomcraft.bukkit.KingdomCraft;
 
 import java.util.concurrent.Executor;
 

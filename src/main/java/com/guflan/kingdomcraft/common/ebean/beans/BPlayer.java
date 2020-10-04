@@ -1,7 +1,7 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "players")
-public class BPlayer extends Model implements Player {
+public class BPlayer extends Model implements User {
 
     @Id
     String id;
@@ -92,7 +92,7 @@ public class BPlayer extends Model implements Player {
     }
 
     @Override
-    public void addInvite(Player sender) {
+    public void addInvite(User sender) {
         if ( sender.getKingdom() == null ) {
             return;
         }

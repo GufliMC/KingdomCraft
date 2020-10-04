@@ -1,7 +1,8 @@
 package com.guflan.kingdomcraft.common.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraftBridge;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
+import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.commands.JoinCommand;
 import com.guflan.kingdomcraft.common.commands.ListCommand;
 import com.guflan.kingdomcraft.common.commands.admin.KickCommand;
@@ -19,31 +20,31 @@ import java.util.stream.Collectors;
 
 public class DefaultCommandManager implements CommandManager {
 
-    private final KingdomCraftPlugin plugin;
+    private final KingdomCraftBridge bridge;
     private final List<CommandBase> commands = new ArrayList<>();
 
-    public DefaultCommandManager(KingdomCraftPlugin plugin) {
-        this.plugin = plugin;
+    public DefaultCommandManager(KingdomCraftBridge bridge) {
+        this.bridge = bridge;
         registerAll();
     }
 
     public void registerAll() {
         commands.clear();
 
-        registerCommand(new ListCommand(plugin));
-        registerCommand(new JoinCommand(plugin));
+        registerCommand(new ListCommand(bridge));
+        registerCommand(new JoinCommand(bridge));
 
-        registerCommand(new CreateCommand(plugin));
-        registerCommand(new DeleteCommand(plugin));
-        registerCommand(new EditDisplayCommand(plugin));
-        registerCommand(new EditDisplayOtherCommand(plugin));
-        registerCommand(new EditPrefixCommand(plugin));
-        registerCommand(new EditPrefixOtherCommand(plugin));
-        registerCommand(new EditSuffixCommand(plugin));
-        registerCommand(new EditSuffixOtherCommand(plugin));
+        registerCommand(new CreateCommand(bridge));
+        registerCommand(new DeleteCommand(bridge));
+        registerCommand(new EditDisplayCommand(bridge));
+        registerCommand(new EditDisplayOtherCommand(bridge));
+        registerCommand(new EditPrefixCommand(bridge));
+        registerCommand(new EditPrefixOtherCommand(bridge));
+        registerCommand(new EditSuffixCommand(bridge));
+        registerCommand(new EditSuffixOtherCommand(bridge));
 
-        registerCommand(new KickCommand(plugin));
-        registerCommand(new SetKingdomCommand(plugin));
+        registerCommand(new KickCommand(bridge));
+        registerCommand(new SetKingdomCommand(bridge));
         // TODO
     }
 
@@ -75,7 +76,7 @@ public class DefaultCommandManager implements CommandManager {
                     continue;
                 }
 
-                if ( cb.isPlayerOnly() && sender.isConsole() ) {
+                if ( cb.isPlayerOnly() && !(sender instanceof Player) ) {
                     sender.sendMessage("This command cannot be executed in the console!");
                     return;
                 }

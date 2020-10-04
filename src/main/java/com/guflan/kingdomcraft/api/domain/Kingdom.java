@@ -43,6 +43,6 @@ public interface Kingdom {
 
     void setRelation(Kingdom kingdom, Relation relation);
 
-    List<Player> getMembers();
+    List<User> getMembers();
 
 }

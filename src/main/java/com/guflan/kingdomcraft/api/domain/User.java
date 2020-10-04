@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.api.domain;
 
 import java.util.UUID;
 
-public interface Player {
+public interface User {
 
     UUID getUniqueId();
 
@@ -18,6 +18,6 @@ public interface Player {
 
     boolean hasInvite(Kingdom kingdom);
 
-    void addInvite(Player sender);
+    void addInvite(User sender);
 
 }

@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.commands.management;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
@@ -21,7 +21,7 @@ public class DeleteCommand extends DefaultCommandBase {
         }
 
         if ( !sender.isConsole() ) {
-            Player player = sender.getPlayer();
+            User player = sender.getPlayer();
 
             // other kingdom
             if (player.getKingdom() != kingdom && !sender.hasPermission("kingdom.delete.other")) {

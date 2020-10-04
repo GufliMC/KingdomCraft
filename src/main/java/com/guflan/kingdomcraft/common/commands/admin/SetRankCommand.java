@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.commands.admin;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
@@ -28,7 +28,7 @@ public class SetRankCommand extends DefaultCommandBase {
             return null;
         }
 
-        Player player = plugin.getPlayerManager().getPlayer(args[0]);
+        User player = plugin.getPlayerManager().getPlayer(args[0]);
         if ( player.getKingdom() == null ) {
             return null;
         }
@@ -42,7 +42,7 @@ public class SetRankCommand extends DefaultCommandBase {
             return;
         }
 
-        Player target = plugin.getPlayerManager().getPlayer(args[0]);
+        User target = plugin.getPlayerManager().getPlayer(args[0]);
         if ( target == null ) {
             plugin.getMessageManager().send(sender, "cmdDefaultNoPlayer");
             return;

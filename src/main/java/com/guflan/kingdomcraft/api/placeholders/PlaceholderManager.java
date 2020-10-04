@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.api.placeholders;
 
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.entity.Player;
 
 public interface PlaceholderManager {
 

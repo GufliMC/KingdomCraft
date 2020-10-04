@@ -1,8 +1,7 @@
 package com.guflan.kingdomcraft.api.chat;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
-import com.guflan.kingdomcraft.api.entity.EntityPlayer;
+import com.guflan.kingdomcraft.api.entity.Player;
 
 import java.util.List;
 
@@ -20,13 +19,13 @@ public interface ChatManager {
 
     List<ChatChannel> getPublicChannels();
 
-    List<ChatChannel> getVisibleChannels(EntityPlayer player);
+    List<ChatChannel> getVisibleChannels(Player player);
 
-    boolean isVisible(EntityPlayer player, ChatChannel channel);
+    boolean isVisible(Player player, ChatChannel channel);
 
-    void handle(EntityPlayer player, String message);
+    void handle(Player player, String message);
 
-    void send(EntityPlayer player, ChatChannel channel, String message);
+    void send(Player player, ChatChannel channel, String message);
 
 
 }
