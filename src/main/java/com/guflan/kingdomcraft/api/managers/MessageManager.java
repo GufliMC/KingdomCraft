@@ -1,16 +1,20 @@
 package com.guflan.kingdomcraft.api.managers;
 
-import com.guflan.kingdomcraft.api.domain.Player;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
+import com.guflan.kingdomcraft.api.entity.Player;
 
 public interface MessageManager {
 
-	public String getMessage(String name);
+	String getMessage(String name);
 
-	public String getMessage(String name, String... placeholders);
+	String getMessage(String name, String... placeholders);
 
-	public void send(Player player, String name, String... placeholders);
+	void send(Player player, String name, String... placeholders);
 
-	public void send(CommandSender sender, String name, String... placeholders);
+	void send(CommandSender sender, String name, String... placeholders);
+
+	String colorify(String msg);
+
+	String decolorify(String msg);
 
 }

@@ -1,20 +1,25 @@
 package com.guflan.kingdomcraft.api;
 
 import com.guflan.kingdomcraft.api.chat.ChatManager;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
-import com.guflan.kingdomcraft.api.domain.Factory;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.managers.CommandManager;
 import com.guflan.kingdomcraft.api.managers.KingdomManager;
 import com.guflan.kingdomcraft.api.managers.MessageManager;
-import com.guflan.kingdomcraft.api.managers.PlayerManager;
+import com.guflan.kingdomcraft.api.managers.UserManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 
-public interface KingdomCraftPlugin {
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+
+public interface KingdomCraftBridge {
 
     AbstractScheduler getScheduler();
 
-    PlayerManager getPlayerManager();
+    UserManager getUserManager();
 
     KingdomManager getKingdomManager();
 
@@ -28,10 +33,16 @@ public interface KingdomCraftPlugin {
 
     PlaceholderManager getPlaceholderManager();
 
-    String translateColors(String msg);
+    List<Player> getOnlinePlayers();
 
-    String stripColors(String msg);
+    Player getPlayer(UUID uuid);
 
     void log(String msg);
+
+    void log(String msg, Level level);
+
+    void join(User user);
+
+    void quit(User user);
 
 }

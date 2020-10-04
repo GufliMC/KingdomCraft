@@ -1,7 +1,7 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.Relation;
 
@@ -33,7 +33,7 @@ public class BKingdom extends BaseModel implements Kingdom {
     Set<BRelation> relations;
 
     @OneToMany(mappedBy = "kingdom")
-    private List<Player> members;
+    private List<User> members;
 
     public BKingdom(String name) {
         this.name = name;
@@ -151,7 +151,7 @@ public class BKingdom extends BaseModel implements Kingdom {
 
     @Override
     @Deprecated
-    public List<Player> getMembers() {
+    public List<User> getMembers() {
         return new ArrayList<>(members);
     }
 }

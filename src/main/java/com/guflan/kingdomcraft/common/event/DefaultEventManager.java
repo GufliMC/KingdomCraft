@@ -1,7 +1,7 @@
 package com.guflan.kingdomcraft.common.event;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.event.EventListener;
 import com.guflan.kingdomcraft.api.event.EventManager;
 
@@ -25,22 +25,22 @@ public class DefaultEventManager implements EventManager {
     }
 
     @Override
-    public void join(Player player) {
+    public void join(User player) {
         listeners.forEach(l -> l.onJoin(player));
     }
 
     @Override
-    public void leave(Player player) {
+    public void leave(User player) {
         listeners.forEach(l -> l.onLeave(player));
     }
 
     @Override
-    public void kingdomJoin(Player player) {
+    public void kingdomJoin(User player) {
         listeners.forEach(l -> l.onKingdomJoin(player));
     }
 
     @Override
-    public void kingdomLeave(Player player, Kingdom oldKingdom) {
+    public void kingdomLeave(User player, Kingdom oldKingdom) {
         listeners.forEach(l -> l.onKingdomLeave(player, oldKingdom));
     }
 

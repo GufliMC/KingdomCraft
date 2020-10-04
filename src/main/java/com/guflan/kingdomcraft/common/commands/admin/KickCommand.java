@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.commands.admin;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
@@ -20,14 +20,14 @@ public class KickCommand extends DefaultCommandBase {
         if ( sender.hasPermission("kingdom.kick.other") ) {
             return plugin.getPlayerManager().getOnlinePlayers().stream().map((p) -> p.getPlayer().getName()).collect(Collectors.toList());
         } else if ( sender.hasPermission("kingdom.kick") && sender.getPlayer().getKingdom() != null ) {
-            return sender.getPlayer().getKingdom().getMembers().stream().map(Player::getName).collect(Collectors.toList());
+            return sender.getPlayer().getKingdom().getMembers().stream().map(User::getName).collect(Collectors.toList());
         }
         return null;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        Player target = plugin.getPlayerManager().getPlayer(args[0]);
+        User target = plugin.getPlayerManager().getPlayer(args[0]);
         if ( target == null ) {
             plugin.getMessageManager().send(sender, "cmdDefaultNoPlayer");
             return;
@@ -40,7 +40,7 @@ public class KickCommand extends DefaultCommandBase {
         }
 
         if ( !sender.isConsole() ) {
-            Player player = sender.getPlayer();
+            User player = sender.getPlayer();
             // kick other kingdom
             if (kingdom != player.getKingdom() && !sender.hasPermission("kingdom.kick.other")) {
                 plugin.getMessageManager().send(sender, "noPermissionCmd");

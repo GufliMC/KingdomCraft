@@ -1,10 +1,9 @@
 package com.guflan.kingdomcraft.bukkit.listeners;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.Player;
-import com.guflan.kingdomcraft.api.entity.EntityPlayer;
-import com.guflan.kingdomcraft.bukkit.entity.BukkitEntityPlayer;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.bukkit.KingdomCraft;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,13 +12,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ConnectionListener implements Listener {
 
-    private final KingdomCraftPlugin plugin;
+    private final KingdomCraft plugin;
 
-    public ConnectionListener(KingdomCraftPlugin plugin) {
+    public ConnectionListener(KingdomCraft plugin) {
         this.plugin = plugin;
 
-        for ( org.bukkit.entity.Player bplayer : Bukkit.getOnlinePlayers() ) {
-            join(bplayer);
+        for ( Player player : Bukkit.getOnlinePlayers() ) {
+            join(player);
         }
     }
 
@@ -30,13 +29,13 @@ public class ConnectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        plugin.getPlayerManager().leave(plugin.getPlayerManager().getOnlinePlayer(e.getPlayer().getUniqueId()));
+        User user = plugin.getBridge().getUserManager().getUser(e.getPlayer().getUniqueId());
+        plugin.getBridge().quit(user);
     }
 
-    private void join(org.bukkit.entity.Player bplayer) {
-        Player player = plugin.getPlayerManager().getPlayer(bplayer.getUniqueId(), bplayer.getName());
-        EntityPlayer eplayer = new BukkitEntityPlayer(bplayer, player);
-        plugin.getPlayerManager().join(eplayer);
+    private void join(Player player) {
+        User user = plugin.getBridge().getUserManager().getUser(player.getUniqueId());
+        plugin.getBridge().join(user);
     }
 
 }

@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.storage;
 
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 
 import java.util.List;
@@ -10,15 +10,15 @@ import java.util.UUID;
 
 public interface StorageImplementation {
 
-    List<Player> getPlayers();
+    List<User> getPlayers();
 
-    Player getPlayer(String name);
+    User getPlayer(String name);
 
-    Player getPlayer(UUID uuid);
+    User getPlayer(UUID uuid);
 
-    void savePlayer(Player player);
+    void savePlayer(User player);
 
-    Player createPlayer(UUID uuid, String name);
+    User createPlayer(UUID uuid, String name);
 
     List<Kingdom> getKingdoms();
 

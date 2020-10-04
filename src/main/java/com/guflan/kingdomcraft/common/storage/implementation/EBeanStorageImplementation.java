@@ -1,11 +1,9 @@
 package com.guflan.kingdomcraft.common.storage.implementation;
 
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.BPlayer;
@@ -67,22 +65,22 @@ public class EBeanStorageImplementation implements StorageImplementation {
     }
 
     @Override
-    public List<Player> getPlayers() {
+    public List<User> getPlayers() {
         return new ArrayList<>(new QBPlayer().findList());
     }
 
     @Override
-    public Player getPlayer(String name) {
+    public User getPlayer(String name) {
         return new QBPlayer().name.eq(name).findOne();
     }
 
     @Override
-    public Player getPlayer(UUID uuid) {
+    public User getPlayer(UUID uuid) {
         return new QBPlayer().id.eq(uuid.toString()).findOne();
     }
 
     @Override
-    public void savePlayer(Player player) {
+    public void savePlayer(User player) {
         if ( !(player instanceof BPlayer) ) {
             // TODO error
         }
@@ -92,7 +90,7 @@ public class EBeanStorageImplementation implements StorageImplementation {
     }
 
     @Override
-    public Player createPlayer(UUID uuid, String name) {
+    public User createPlayer(UUID uuid, String name) {
         return new BPlayer(uuid.toString(), name);
     }
 

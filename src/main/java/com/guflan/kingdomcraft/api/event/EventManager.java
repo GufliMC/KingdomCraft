@@ -1,7 +1,7 @@
 package com.guflan.kingdomcraft.api.event;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 
 public interface EventManager {
 
@@ -11,13 +11,13 @@ public interface EventManager {
 
     // kingdoms
 
-    void join(Player player);
+    void join(User player);
 
-    void leave(Player player);
+    void leave(User player);
 
-    void kingdomJoin(Player player);
+    void kingdomJoin(User player);
 
-    void kingdomLeave(Player player, Kingdom oldKingdom);
+    void kingdomLeave(User player, Kingdom oldKingdom);
 
     void kingdomCreate(Kingdom kingdom);
 

@@ -1,33 +1,17 @@
 package com.guflan.kingdomcraft.bukkit;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
-import com.guflan.kingdomcraft.bukkit.chat.BukkitChat;
+import com.guflan.kingdomcraft.api.KingdomCraftBridge;
+import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraftBridge;
+import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
-import com.guflan.kingdomcraft.common.chat.DefaultChatManager;
-import com.guflan.kingdomcraft.common.command.DefaultCommandManager;
-import com.guflan.kingdomcraft.common.event.DefaultEventManager;
-import com.guflan.kingdomcraft.common.kingdom.DefaultKingdomManager;
-import com.guflan.kingdomcraft.common.placeholders.DefaultPlaceholderManager;
-import com.guflan.kingdomcraft.common.kingdom.DefaultPlayerManager;
 import com.guflan.kingdomcraft.common.storage.Storage;
 import com.guflan.kingdomcraft.common.storage.implementation.EBeanStorageImplementation;
-import com.guflan.kingdomcraft.api.event.EventManager;
-import com.guflan.kingdomcraft.api.managers.CommandManager;
-import com.guflan.kingdomcraft.api.managers.KingdomManager;
-import com.guflan.kingdomcraft.api.managers.MessageManager;
-import com.guflan.kingdomcraft.api.managers.PlayerManager;
-import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,17 +37,9 @@ import java.io.IOException;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
+public class KingdomCraft extends JavaPlugin {
 
-	private BukkitScheduler scheduler;
-
-	private KingdomManager kingdomManager;
-	private PlayerManager playerManager;
-	private CommandManager commandManager;
-	private MessageManager messageManager;
-	private EventManager eventManager;
-	private ChatManager chatManager;
-	private PlaceholderManager placeholderManager;
+	public KingdomCraftBridge bridge;
 
 	@Override
 	public void onEnable() {
@@ -104,18 +80,10 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		);
 		Storage storage = new Storage(this, impl);
 
-		this.scheduler = new BukkitScheduler(this);
-
-		this.messageManager = new BukkitMessageManager(this);
-		this.commandManager = new DefaultCommandManager(this);
-		this.playerManager = new DefaultPlayerManager(this, storage);
-		this.kingdomManager = new DefaultKingdomManager(this, storage);
-		this.eventManager = new DefaultEventManager();
-		this.chatManager = new DefaultChatManager(this);
-		this.placeholderManager = new DefaultPlaceholderManager(this);
+		this.bridge = new BukkitKingdomCraftBridge(this, storage);
 
 		new BukkitPlaceholderReplacer(this);
-		new BukkitChat(this);
+		new ChatHandler(this);
 
 		// commands
 		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(this);
@@ -132,60 +100,7 @@ public class KingdomCraft extends JavaPlugin implements KingdomCraftPlugin {
 		this.getPluginLoader().disablePlugin(this);
 	}
 
-	@Override
-	public AbstractScheduler getScheduler() {
-		return scheduler;
+	public KingdomCraftBridge getBridge() {
+		return bridge;
 	}
-
-	@Override
-	public PlayerManager getPlayerManager() {
-		return playerManager;
-	}
-
-	@Override
-	public KingdomManager getKingdomManager() {
-		return kingdomManager;
-	}
-
-	@Override
-	public MessageManager getMessageManager() {
-		return messageManager;
-	}
-
-	@Override
-	public CommandManager getCommandManager() {
-		return commandManager;
-	}
-
-	@Override
-	public EventManager getEventManager() {
-		return eventManager;
-	}
-
-	@Override
-	public ChatManager getChatManager() {
-		return chatManager;
-	}
-
-	@Override
-	public PlaceholderManager getPlaceholderManager() {
-		return placeholderManager;
-	}
-
-	@Override
-	public String translateColors(String msg) {
-		return ChatColor.translateAlternateColorCodes('&', msg);
-	}
-
-	@Override
-	public String stripColors(String msg) {
-		return ChatColor.stripColor(msg);
-	}
-
-	@Override
-	public void log(String msg) {
-		getLogger().info(msg);
-	}
-
-
 }

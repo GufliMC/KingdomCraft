@@ -1,7 +1,8 @@
 package com.guflan.kingdomcraft.bukkit.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.bukkit.KingdomCraft;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitCommandSender;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,9 +13,9 @@ import java.util.List;
 
 public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
 
-    private final KingdomCraftPlugin plugin;
+    private final KingdomCraft plugin;
 
-    public BukkitCommandExecutor(KingdomCraftPlugin plugin) {
+    public BukkitCommandExecutor(KingdomCraft plugin) {
         this.plugin = plugin;
     }
 
@@ -26,18 +27,18 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        plugin.getCommandManager().execute(wrap(sender), args);
+        plugin.getBridge().getCommandManager().execute(wrap(sender), args);
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(org.bukkit.command.CommandSender sender, Command command, String alias, String[] args) {
-        return plugin.getCommandManager().autocomplete(wrap(sender), args);
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return plugin.getBridge().getCommandManager().autocomplete(wrap(sender), args);
     }
 
     private com.guflan.kingdomcraft.api.entity.CommandSender wrap(CommandSender sender) {
         if ( sender instanceof Player) {
-            return plugin.getPlayerManager().getOnlinePlayer(((Player) sender).getUniqueId());
+            return new BukkitPlayer((Player) sender);
         }
         return new BukkitCommandSender(sender);
     }

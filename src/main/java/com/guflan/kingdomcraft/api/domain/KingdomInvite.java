@@ -4,9 +4,9 @@ import java.util.Date;
 
 public interface KingdomInvite {
 
-    Player getPlayer();
+    User getPlayer();
 
-    Player getSender();
+    User getSender();
 
     Kingdom getKingdom();
 

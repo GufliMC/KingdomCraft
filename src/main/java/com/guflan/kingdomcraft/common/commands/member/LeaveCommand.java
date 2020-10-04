@@ -2,9 +2,9 @@ package com.guflan.kingdomcraft.common.commands.member;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.EntityPlayer;
+import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class LeaveCommand extends DefaultCommandBase {
@@ -19,7 +19,7 @@ public class LeaveCommand extends DefaultCommandBase {
             plugin.getMessageManager().send(sender, "noPermission");
         }
 
-        Player player = sender.getPlayer();
+        User player = sender.getPlayer();
         if (player.getKingdom() == null) {
             plugin.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
@@ -30,7 +30,7 @@ public class LeaveCommand extends DefaultCommandBase {
 
         plugin.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
 
-        for ( EntityPlayer member : plugin.getKingdomManager().getOnlineMembers(oldKingdom) ) {
+        for ( Player member : plugin.getKingdomManager().getOnlineMembers(oldKingdom) ) {
             plugin.getMessageManager().send(member, "cmdLeaveSuccessMembers", player.getName());
         }
 

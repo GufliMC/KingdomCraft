@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraftBridge;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 
@@ -9,25 +9,25 @@ import java.util.List;
 
 public abstract class DefaultCommandBase implements CommandBase {
 
-    protected final KingdomCraftPlugin plugin;
+    protected final KingdomCraftBridge bridge;
 
     private final List<String> commands = new ArrayList<>();
 
     private boolean isPlayerOnly;
     private int expectedArguments = 0;
 
-    public DefaultCommandBase(KingdomCraftPlugin plugin, String command) {
-        this.plugin = plugin;
+    public DefaultCommandBase(KingdomCraftBridge bridge, String command) {
+        this.bridge = bridge;
         this.commands.add(command);
     }
 
-    public DefaultCommandBase(KingdomCraftPlugin plugin, String command, int expectedArguments) {
-        this(plugin, command);
+    public DefaultCommandBase(KingdomCraftBridge bridge, String command, int expectedArguments) {
+        this(bridge, command);
         this.expectedArguments = expectedArguments;
     }
 
-    public DefaultCommandBase(KingdomCraftPlugin plugin, String command, int expectedArguments, boolean isPlayerOnly) {
-        this(plugin, command, expectedArguments);
+    public DefaultCommandBase(KingdomCraftBridge bridge, String command, int expectedArguments, boolean isPlayerOnly) {
+        this(bridge, command, expectedArguments);
         this.isPlayerOnly = isPlayerOnly;
     }
 

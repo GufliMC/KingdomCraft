@@ -1,8 +1,10 @@
-package com.guflan.kingdomcraft.bukkit;
+package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.entity.CommandSender;
+import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.managers.MessageManager;
-import com.guflan.kingdomcraft.api.domain.Player;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.bukkit.KingdomCraft;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,11 +52,17 @@ public class BukkitMessageManager implements MessageManager {
 		prefix = messages.getString("prefix");
 	}
 
+	private boolean isEmpty(String name) {
+		return messages.get(name) == null || messages.getString(name).replaceAll(Pattern.quote(" "), "").equals("");
+	}
+
+	@Override
 	public String getMessage(String name) {
 		if ( messages.get(name) == null ) return null;
 		return ChatColor.translateAlternateColorCodes('&', StringEscapeUtils.unescapeJava(messages.getString(name)));
 	}
 
+	@Override
 	public String getMessage(String name, String... placeholders) {
 		String message = getMessage(name);
 		if ( message == null ) return null;
@@ -66,22 +74,25 @@ public class BukkitMessageManager implements MessageManager {
 		return message;
 	}
 
-	private boolean isEmpty(String name) {
-		return messages.get(name) == null || messages.getString(name).replaceAll(Pattern.quote(" "), "").equals("");
-	}
-
+	@Override
 	public void send(Player player, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
-
-		org.bukkit.entity.Player bplayer = Bukkit.getPlayer(player.getUniqueId());
-		if ( bplayer != null ) {
-			bplayer.sendMessage(prefix + getMessage(name, placeholders));
-		}
+		player.sendMessage(prefix + getMessage(name, placeholders));
 	}
 
 	@Override
 	public void send(CommandSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 		sender.sendMessage(prefix + getMessage(name, placeholders));
+	}
+
+	@Override
+	public String colorify(String msg) {
+		return ChatColor.translateAlternateColorCodes('&', msg);
+	}
+
+	@Override
+	public String decolorify(String msg) {
+		return ChatColor.stripColor(msg);
 	}
 }
