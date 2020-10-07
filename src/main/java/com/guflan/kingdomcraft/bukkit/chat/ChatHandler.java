@@ -1,28 +1,31 @@
 package com.guflan.kingdomcraft.bukkit.chat;
 
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.common.chat.DefaultChatChannel;
 import com.guflan.kingdomcraft.common.chat.KingdomChatChannel;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.event.EventListener;
-import com.guflan.kingdomcraft.bukkit.KingdomCraft;
+import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.logging.Level;
 
 public class ChatHandler implements EventListener {
 
-    private final KingdomCraft plugin;
+    private final KingdomCraft kdc;
 
     private ConfigurationSection kingdomChannelConfig;
 
-    public ChatHandler(KingdomCraft plugin) {
-        this.plugin = plugin;
-        plugin.getBridge().getEventManager().addListener(this);
+    public ChatHandler(Plugin plugin, KingdomCraft kdc) {
+        this.kdc = kdc;
+
+        kdc.getEventManager().addListener(this);
 
         File configFile = new File(plugin.getDataFolder(), "chat.yml");
         if ( !configFile.exists() ) {
@@ -35,13 +38,13 @@ public class ChatHandler implements EventListener {
             return;
         }
 
-        Bukkit.getPluginManager().registerEvents(new ChatListener(plugin), plugin);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(kdc), plugin);
 
-        ChatManager cm = plugin.getBridge().getChatManager();
+        ChatManager cm = kdc.getChatManager();
 
         if ( config.contains("kingdom-channels") && config.getBoolean("kingdom-channels")) {
             kingdomChannelConfig = config.getConfigurationSection("kingdom-channel");
-            for ( Kingdom kd : plugin.getBridge().getKingdomManager().getKingdoms() ) {
+            for ( Kingdom kd : kdc.getKingdoms() ) {
                 kingdomChannelConfig.set("kingdom", kd.getName());
                 ChatChannel ch = parse(kd.getName(), kingdomChannelConfig);
                 if ( ch != null ) {
@@ -59,7 +62,7 @@ public class ChatHandler implements EventListener {
             ConfigurationSection cs = channels.getConfigurationSection(name);
 
             if ( cs.contains("kingdom") && cs.getString("kingdom").equals("*") ) {
-                for ( Kingdom kd : plugin.getBridge().getKingdomManager().getKingdoms() ) {
+                for ( Kingdom kd : kdc.getKingdoms() ) {
                     cs.set("kingdom", kd.getName());
                     ChatChannel ch = parse(kd.getName(), cs);
                     if ( ch != null ) {
@@ -80,9 +83,9 @@ public class ChatHandler implements EventListener {
 
         ChatChannel channel;
         if ( section.contains("kingdom") ) {
-            Kingdom kd = plugin.getBridge().getKingdomManager().getKingdom(section.getString("kingdom"));
+            Kingdom kd = kdc.getKingdom(section.getString("kingdom"));
             if ( kd == null ) {
-                plugin.getBridge().log("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.", Level.WARNING);
+                kdc.log("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.", Level.WARNING);
                 return null;
             }
 
@@ -92,7 +95,7 @@ public class ChatHandler implements EventListener {
         }
 
         if ( !section.contains("format") ) {
-            plugin.getBridge().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
+            kdc.log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
             return null;
         }
         channel.setFormat(section.getString("format"));
@@ -121,7 +124,7 @@ public class ChatHandler implements EventListener {
         kingdomChannelConfig.set("kingdom", kingdom.getName());
         ChatChannel ch = parse(kingdom.getName(), kingdomChannelConfig);
         if ( ch != null ) {
-            plugin.getBridge().getChatManager().addChatChannel(ch);
+            kdc.getChatManager().addChatChannel(ch);
         }
     }
 

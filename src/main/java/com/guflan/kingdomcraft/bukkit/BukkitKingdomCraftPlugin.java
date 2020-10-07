@@ -1,13 +1,13 @@
 package com.guflan.kingdomcraft.bukkit;
 
-import com.guflan.kingdomcraft.api.KingdomCraftBridge;
-import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraftBridge;
+import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraft;
+import com.guflan.kingdomcraft.bukkit.bridge.BukkitScheduler;
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
-import com.guflan.kingdomcraft.common.storage.Storage;
-import com.guflan.kingdomcraft.common.storage.implementation.EBeanStorageImplementation;
+import com.guflan.kingdomcraft.common.storage.EBeanStorage;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -37,9 +37,9 @@ import java.io.IOException;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class KingdomCraft extends JavaPlugin {
+public class BukkitKingdomCraftPlugin extends JavaPlugin {
 
-	public KingdomCraftBridge bridge;
+	public KingdomCraft kdc;
 
 	@Override
 	public void onEnable() {
@@ -70,37 +70,38 @@ public class KingdomCraft extends JavaPlugin {
 			return;
 		}
 
+		BukkitScheduler scheduler = new BukkitScheduler(this);
+
         ConfigurationSection dbConfig = config.getConfigurationSection("database");
-		EBeanStorageImplementation impl = new EBeanStorageImplementation(
-				this,
+		EBeanStorage storage = new EBeanStorage(
+				scheduler,
 				dbConfig.getString("url"),
                 dbConfig.getString("driver"),
                 dbConfig.getString("username"),
                 dbConfig.getString("password")
 		);
-		Storage storage = new Storage(this, impl);
 
-		this.bridge = new BukkitKingdomCraftBridge(this, storage);
+		this.kdc = new BukkitKingdomCraft(this, scheduler, storage);
 
-		new BukkitPlaceholderReplacer(this);
-		new ChatHandler(this);
+		new BukkitPlaceholderReplacer(kdc);
+		new ChatHandler(this, kdc);
 
 		// commands
-		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(this);
+		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(kdc);
 		PluginCommand command = getCommand("kingdomcraft");
 		command.setExecutor(commandHandler);
 		command.setTabCompleter(commandHandler);
 
 		// listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new ConnectionListener(this), this);
+		pm.registerEvents(new ConnectionListener(kdc), this);
 	}
 
 	private void disable() {
 		this.getPluginLoader().disablePlugin(this);
 	}
 
-	public KingdomCraftBridge getBridge() {
-		return bridge;
+	public KingdomCraft getKingdomCraft() {
+		return kdc;
 	}
 }

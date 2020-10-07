@@ -1,6 +1,7 @@
 package com.guflan.kingdomcraft.bukkit.command;
 
-import com.guflan.kingdomcraft.bukkit.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitCommandSender;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.command.Command;
@@ -13,10 +14,10 @@ import java.util.List;
 
 public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
 
-    private final KingdomCraft plugin;
+    private final KingdomCraft kdc;
 
-    public BukkitCommandExecutor(KingdomCraft plugin) {
-        this.plugin = plugin;
+    public BukkitCommandExecutor(KingdomCraft kdc) {
+        this.kdc = kdc;
     }
 
     @Override
@@ -27,13 +28,13 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        plugin.getBridge().getCommandManager().execute(wrap(sender), args);
+        kdc.getCommandManager().execute(wrap(sender), args);
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return plugin.getBridge().getCommandManager().autocomplete(wrap(sender), args);
+        return kdc.getCommandManager().autocomplete(wrap(sender), args);
     }
 
     private com.guflan.kingdomcraft.api.entity.CommandSender wrap(CommandSender sender) {

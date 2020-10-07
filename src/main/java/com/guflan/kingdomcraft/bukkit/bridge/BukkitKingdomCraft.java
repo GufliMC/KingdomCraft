@@ -1,37 +1,38 @@
 package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.api.managers.MessageManager;
+import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
-import com.guflan.kingdomcraft.bukkit.KingdomCraft;
+import com.guflan.kingdomcraft.api.storage.Storage;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraftBridge;
-import com.guflan.kingdomcraft.common.storage.Storage;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class BukkitKingdomCraftBridge extends AbstractKingdomCraftBridge {
+public class BukkitKingdomCraft extends AbstractKingdomCraft {
 
-    private KingdomCraft plugin;
+    private final Plugin plugin;
+    private final AbstractScheduler scheduler;
 
-    private AbstractScheduler scheduler;
     private MessageManager messageManager;
 
-    public BukkitKingdomCraftBridge(KingdomCraft plugin, Storage storage) {
+    public BukkitKingdomCraft(Plugin plugin, BukkitScheduler scheduler, Storage storage) {
         super(storage);
 
         this.plugin = plugin;
-        this.scheduler = new BukkitScheduler(plugin);
+        this.scheduler = scheduler;
+
         this.messageManager = new BukkitMessageManager(plugin);
     }
 
     @Override
     public AbstractScheduler getScheduler() {
-        return this.getScheduler();
+        return scheduler;
     }
 
     @Override

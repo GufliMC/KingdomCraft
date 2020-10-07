@@ -2,31 +2,34 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import io.ebean.annotation.WhenCreated;
+import io.ebean.annotation.WhenModified;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "ranks")
-public class BRank extends BaseModel implements Rank {
+public class BRank implements Rank {
 
-    @Column(unique=true)
-    final String name;
+    @Id
+    public long id;
+
+    public String name;
 
     @ManyToOne
-    final BKingdom kingdom;
+    public BKingdom kingdom;
 
-    String display;
-    String prefix;
-    String suffix;
-    int maxMembers;
+    public String display;
+    public String prefix;
+    public String suffix;
+    public int maxMembers;
 
-    public BRank(String name, BKingdom kingdom) {
-        this.name = name;
-        this.kingdom = kingdom;
-    }
+    @WhenCreated
+    public Instant createdAt;
+
+    @WhenModified
+    public Instant updatedAt;
 
     // interface
 

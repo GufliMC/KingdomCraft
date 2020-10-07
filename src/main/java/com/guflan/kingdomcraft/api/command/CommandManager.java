@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.api.managers;
+package com.guflan.kingdomcraft.api.command;
 
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.entity.CommandSender;

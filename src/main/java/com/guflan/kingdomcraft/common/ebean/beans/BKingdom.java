@@ -4,40 +4,47 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.Relation;
+import io.ebean.Model;
+import io.ebean.annotation.WhenCreated;
+import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.*;
 
 @Entity
 @Table(name = "kingdoms")
-public class BKingdom extends BaseModel implements Kingdom {
+public class BKingdom extends Model implements Kingdom {
+
+    @Id
+    public long id;
 
     @Column(unique=true)
-    final String name;
+    public String name;
 
-    String display;
-    String prefix;
-    String suffix;
-    boolean inviteOnly;
-    int maxMembers;
-
-    String spawn;
+    public String display;
+    public String prefix;
+    public String suffix;
+    public boolean inviteOnly;
+    public int maxMembers;
 
     @OneToOne
-    BRank defaultRank;
+    public BRank defaultRank;
 
     @OneToMany(mappedBy = "kingdom")
-    List<BRank> ranks;
+    public Set<BRank> ranks;
 
     @OneToMany(mappedBy = "kingdom")
-    Set<BRelation> relations;
+    public Set<BRelation> relations;
 
     @OneToMany(mappedBy = "kingdom")
-    private List<User> members;
+    public Set<User> members;
 
-    public BKingdom(String name) {
-        this.name = name;
-    }
+    @WhenCreated
+    Instant createdAt;
+
+    @WhenModified
+    Instant updatedAt;
 
     // interface
 
@@ -74,16 +81,6 @@ public class BKingdom extends BaseModel implements Kingdom {
     @Override
     public void setSuffix(String suffix) {
         this.suffix = suffix;
-    }
-
-    @Override
-    public String getSpawn() {
-        return spawn;
-    }
-
-    @Override
-    public void setSpawn(String spawn) {
-        this.spawn = spawn;
     }
 
     @Override
@@ -125,10 +122,29 @@ public class BKingdom extends BaseModel implements Kingdom {
     }
 
     @Override
+    public Rank getRank(String name) {
+        return ranks.stream().filter(r -> r.name.equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Rank addRank(String name) {
+        BRank rank = new BRank();
+        rank.name = name;
+        rank.kingdom = this;
+        ranks.add(rank);
+        return rank;
+    }
+
+    @Override
+    public void deleteRank(Rank rank) {
+        ranks.remove(rank);
+    }
+
+    @Override
     public Map<Kingdom, Relation> getRelations() {
         Map<Kingdom, Relation> relationMap = new HashMap<>();
         for ( BRelation rel : relations ) {
-            relationMap.put(rel.target, Relation.fromId(rel.relation));
+            relationMap.put(rel.otherKingdom, Relation.fromId(rel.relation));
         }
         return relationMap;
     }
@@ -136,7 +152,7 @@ public class BKingdom extends BaseModel implements Kingdom {
     @Override
     public Relation getRelation(Kingdom kingdom) {
         for ( BRelation rel : relations ) {
-            if ( rel.target == kingdom ) {
+            if ( rel.otherKingdom == kingdom ) {
                 return Relation.fromId(rel.relation);
             }
         }
@@ -145,13 +161,18 @@ public class BKingdom extends BaseModel implements Kingdom {
 
     @Override
     public void setRelation(Kingdom kingdom, Relation relation) {
-        relations.removeIf(rel -> rel.target == kingdom);
-        relations.add(new BRelation(this, (BKingdom) kingdom, relation.getId()));
+        relations.removeIf(rel -> rel.otherKingdom == kingdom);
+
+        BRelation rel = new BRelation();
+        rel.kingdom = this;
+        rel.otherKingdom = (BKingdom) kingdom;
+        rel.relation = relation.getId();
+        relations.add(rel);
     }
 
     @Override
     @Deprecated
-    public List<User> getMembers() {
-        return new ArrayList<>(members);
+    public Set<User> getMembers() {
+        return members;
     }
 }
