@@ -38,6 +38,8 @@ public interface KingdomCraft {
 
     Player getPlayer(UUID uuid);
 
+    Player getPlayer(User user);
+
     User getUser(Player player);
 
     //
@@ -55,6 +57,10 @@ public interface KingdomCraft {
     //
 
     Set<User> getOnlineUsers();
+
+    User getOnlineUser(String name);
+
+    User getOnlineUser(UUID uuid);
 
     CompletableFuture<Set<User>> getUsers();
 

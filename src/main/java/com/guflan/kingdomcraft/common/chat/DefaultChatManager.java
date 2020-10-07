@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 public class DefaultChatManager implements ChatManager {
 
-    private final KingdomCraft bridge;
+    private final KingdomCraft kdc;
 
     private final List<ChatChannel> chatChannels = new ArrayList<>();
 
-    public DefaultChatManager(KingdomCraft bridge) {
-        this.bridge = bridge;
-        bridge.getEventManager().addListener(new ChatEventListener(this));
+    public DefaultChatManager(KingdomCraft kdc) {
+        this.kdc = kdc;
+        kdc.getEventManager().addListener(new ChatEventListener(this));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class DefaultChatManager implements ChatManager {
 //            return true;
 //        }
 
-        User user = bridge.getUserManager().getUser(player.getUniqueId());
+        User user = kdc.getUser(player);
         if ( channel instanceof KingdomChatChannel ) {
             KingdomChatChannel ch = (KingdomChatChannel) channel;
             if ( user.getKingdom() != ch.getKingdom() ) {
@@ -117,16 +117,16 @@ public class DefaultChatManager implements ChatManager {
     @Override
     public void send(Player player, ChatChannel channel, String message) {
         String result = channel.getFormat();
-        result = bridge.getPlaceholderManager().handle(player, result);
-        result = bridge.getMessageManager().colorify(result);
+        result = kdc.getPlaceholderManager().handle(player, result);
+        result = kdc.getMessageManager().colorify(result);
 
-        message = bridge.getMessageManager().decolorify(message); // TODO check for permission
+        message = kdc.getMessageManager().decolorify(message); // TODO check for permission
         result = result.replace("{message}", message);
         result = result.replace("{player}", player.getName());
 
         String finalResult = result;
-        bridge.getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
-        System.out.println(bridge.getMessageManager().decolorify(result));
+        kdc.getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
+        System.out.println(kdc.getMessageManager().decolorify(result));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -9,29 +9,30 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class LeaveCommand extends DefaultCommandBase {
 
-    public LeaveCommand(KingdomCraftPlugin plugin) {
-        super(plugin, "leave", 0, true);
+    public LeaveCommand(KingdomCraft kdc) {
+        super(kdc, "leave", 0, true);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.leave") ) {
-            plugin.getMessageManager().send(sender, "noPermission");
+            kdc.getMessageManager().send(sender, "noPermission");
         }
 
-        User player = sender.getPlayer();
-        if (player.getKingdom() == null) {
-            plugin.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+        User user = kdc.getUser((Player) sender);
+        if (user.getKingdom() == null) {
+            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
         }
 
-        Kingdom oldKingdom = player.getKingdom();
-        plugin.getPlayerManager().leaveKingdom(player);
+        Kingdom oldKingdom = user.getKingdom();
+        user.setKingdom(null);
 
-        plugin.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
 
-        for ( Player member : plugin.getKingdomManager().getOnlineMembers(oldKingdom) ) {
-            plugin.getMessageManager().send(member, "cmdLeaveSuccessMembers", player.getName());
+        for ( Player member : kdc.getOnlinePlayers() ) {
+            if ( kdc.getUser(member).getKingdom() != oldKingdom ) continue;
+            kdc.getMessageManager().send(member, "cmdLeaveSuccessMembers", user.getName());
         }
 
         // TODO teleport to spawn

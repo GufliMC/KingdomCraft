@@ -1,34 +1,35 @@
 package com.guflan.kingdomcraft.common.commands.management;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
+import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class EditDisplayCommand extends DefaultCommandBase {
 
-    public EditDisplayCommand(KingdomCraftPlugin plugin) {
-        super(plugin, "edit display", 1, true);
+    public EditDisplayCommand(KingdomCraft kdc) {
+        super(kdc, "edit display", 1, true);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.edit.display") ) {
-            plugin.getMessageManager().send(sender, "noPermission");
+            kdc.getMessageManager().send(sender, "noPermission");
             return;
         }
 
-        User player = sender.getPlayer();
-        Kingdom kingdom = player.getKingdom();
+        User user = kdc.getUser((Player) sender);
+        Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            plugin.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
         }
 
         kingdom.setDisplay(args[0]);
-        plugin.getKingdomManager().saveKingdom(kingdom);
+        kdc.save(kingdom);
 
-        plugin.getMessageManager().send(sender, "cmdEditSuccess", "display", args[0], kingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdEditSuccess", "display", args[0], kingdom.getName());
     }
 }

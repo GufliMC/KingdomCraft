@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
@@ -12,23 +12,21 @@ import java.util.stream.Collectors;
 
 public class ListCommand extends DefaultCommandBase {
 
-    public ListCommand(KingdomCraftPlugin plugin) {
-        super(plugin, "list", 0);
+    public ListCommand(KingdomCraft kdc) {
+        super(kdc, "list", 0);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.list") ) {
-            plugin.getMessageManager().send(sender, "noPermission");
+            kdc.getMessageManager().send(sender, "noPermission");
         }
 
-        List<String> kingdoms = plugin.getKingdomManager().getKingdoms().stream()
+        List<String> kingdoms = kdc.getKingdoms().stream()
                 .sorted(Comparator.comparing(Kingdom::isInviteOnly))
                 .map(k -> (k.isInviteOnly() ? ChatColor.RED : ChatColor.GREEN) + k.getName())
                 .collect(Collectors.toList());
 
-        // TODO add prefix
-        sender.sendMessage(plugin.getMessageManager().getMessage("cmdList") + " "
-                + String.join(ChatColor.GRAY + ", ", kingdoms));
+        kdc.getMessageManager().send(sender, "cmdList", String.join(ChatColor.GRAY + ", ", kingdoms));
     }
 }

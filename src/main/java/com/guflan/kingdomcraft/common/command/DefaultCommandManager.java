@@ -20,31 +20,31 @@ import java.util.stream.Collectors;
 
 public class DefaultCommandManager implements CommandManager {
 
-    private final KingdomCraft bridge;
+    private final KingdomCraft kdc;
     private final List<CommandBase> commands = new ArrayList<>();
 
-    public DefaultCommandManager(KingdomCraft bridge) {
-        this.bridge = bridge;
+    public DefaultCommandManager(KingdomCraft kdc) {
+        this.kdc = kdc;
         registerAll();
     }
 
     public void registerAll() {
         commands.clear();
 
-        registerCommand(new ListCommand(bridge));
-        registerCommand(new JoinCommand(bridge));
+        registerCommand(new ListCommand(kdc));
+        registerCommand(new JoinCommand(kdc));
 
-        registerCommand(new CreateCommand(bridge));
-        registerCommand(new DeleteCommand(bridge));
-        registerCommand(new EditDisplayCommand(bridge));
-        registerCommand(new EditDisplayOtherCommand(bridge));
-        registerCommand(new EditPrefixCommand(bridge));
-        registerCommand(new EditPrefixOtherCommand(bridge));
-        registerCommand(new EditSuffixCommand(bridge));
-        registerCommand(new EditSuffixOtherCommand(bridge));
+        registerCommand(new CreateCommand(kdc));
+        registerCommand(new DeleteCommand(kdc));
+        registerCommand(new EditDisplayCommand(kdc));
+        registerCommand(new EditDisplayOtherCommand(kdc));
+        registerCommand(new EditPrefixCommand(kdc));
+        registerCommand(new EditPrefixOtherCommand(kdc));
+        registerCommand(new EditSuffixCommand(kdc));
+        registerCommand(new EditSuffixOtherCommand(kdc));
 
-        registerCommand(new KickCommand(bridge));
-        registerCommand(new SetKingdomCommand(bridge));
+        registerCommand(new KickCommand(kdc));
+        registerCommand(new SetKingdomCommand(kdc));
         // TODO
     }
 
