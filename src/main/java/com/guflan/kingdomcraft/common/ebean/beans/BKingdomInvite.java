@@ -1,41 +1,27 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
 import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "kingdom_invites")
+@Table(name = "user_invites")
 public class BKingdomInvite {
 
-    @EmbeddedId
-    BKingdomInviteKey id;
+    @Id
+    public long id;
 
     @ManyToOne
-    @MapsId("playerId")
-    @JoinColumn(name = "player_id")
-    BPlayer player;
+    public BUser user;
 
     @ManyToOne
-    @MapsId("kingdomId")
-    @JoinColumn(name = "kingdom_id")
-    BKingdom kingdom;
+    public BKingdom kingdom;
 
     @ManyToOne
-    BPlayer sender;
+    public BUser sender;
 
     @WhenCreated
-    Instant created_at;
-
-    @WhenModified
-    Instant updated_at;
-
-    public BKingdomInvite(BPlayer player, BPlayer sender, BKingdom kingdom) {
-        this.player = player;
-        this.sender = sender;
-        this.kingdom = kingdom;
-    }
+    public Instant createdAt;
 
 }

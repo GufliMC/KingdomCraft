@@ -13,32 +13,27 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "players")
-public class BPlayer extends Model implements User {
+@Table(name = "users")
+public class BUser extends Model implements User {
 
     @Id
-    String id;
-
-    @WhenCreated
-    Instant created_at;
-
-    @WhenModified
-    Instant updated_at;
+    public String id;
 
     @Column(unique=true)
-    String name;
+    public String name;
 
-    BRank rank;
+    public BRank rank;
 
-    BKingdom kingdom;
+    public BKingdom kingdom;
 
-    @OneToMany(mappedBy = "player")
-    Set<BKingdomInvite> kingdomInvites;
+    @OneToMany(mappedBy = "user")
+    public Set<BKingdomInvite> kingdomInvites;
 
-    public BPlayer(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    @WhenCreated
+    public Instant createdAt;
+
+    @WhenModified
+    public Instant updatedAt;
 
     // interface
 
@@ -84,7 +79,7 @@ public class BPlayer extends Model implements User {
     @Override
     public boolean hasInvite(Kingdom kingdom) {
         for ( BKingdomInvite invite : kingdomInvites ) {
-            if ( invite.kingdom == kingdom && invite.player.getKingdom() == kingdom ) {
+            if ( invite.kingdom == kingdom && invite.user.getKingdom() == kingdom ) {
                 return true; // TODO time check
             }
         }
@@ -97,7 +92,11 @@ public class BPlayer extends Model implements User {
             return;
         }
 
-        BKingdomInvite invite = new BKingdomInvite(this, (BPlayer) sender, (BKingdom) sender.getKingdom());
+        BKingdomInvite invite = new BKingdomInvite();
+        invite.kingdom = (BKingdom) sender.getKingdom();
+        invite.sender = (BUser) sender;
+        invite.user = this;
+
         this.kingdomInvites.add(invite);
     }
 

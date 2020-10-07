@@ -1,12 +1,12 @@
 package com.guflan.kingdomcraft.common.placeholders;
 
-import com.guflan.kingdomcraft.api.KingdomCraftBridge;
-import com.guflan.kingdomcraft.api.managers.MessageManager;
+import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 
 public class DefaultPlaceholderReplacer {
 
-    public DefaultPlaceholderReplacer(KingdomCraftBridge bridge, PlaceholderManager pm) {
+    public DefaultPlaceholderReplacer(KingdomCraft bridge, PlaceholderManager pm) {
         MessageManager mm = bridge.getMessageManager();
 
         pm.addPlaceholderReplacer((player, placeholder) -> player.getKingdom() != null ? mm.colorify(player.getKingdom().getDisplay()) : "",

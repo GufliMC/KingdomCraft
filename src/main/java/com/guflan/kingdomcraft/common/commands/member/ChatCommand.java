@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
@@ -13,51 +13,50 @@ import java.util.stream.Collectors;
 
 public class ChatCommand extends DefaultCommandBase {
 
-    public ChatCommand(KingdomCraftPlugin plugin) {
-        super(plugin, "chat", -1, true);
+    public ChatCommand(KingdomCraft bridge) {
+        super(bridge, "chat", -1, true);
     }
 
     @Override
     public List<String> autocomplete(CommandSender sender, String[] args) {
-        return plugin.getChatManager().getChatChannels().stream().filter(ch -> !ch.isRestricted()).map(ChatChannel::getName).collect(Collectors.toList());
+        return bridge.getChatManager().getChatChannels().stream().filter(ch -> !ch.isRestricted()).map(ChatChannel::getName).collect(Collectors.toList());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.join") ) {
-            plugin.getMessageManager().send(sender, "noPermission");
+        Player player = (Player) sender;
+        if ( !player.hasPermission("kingdom.join") ) {
+            bridge.getMessageManager().send(sender, "noPermission");
         }
 
-        Kingdom kingdom = plugin.getKingdomManager().getKingdom(args[0]);
+        Kingdom kingdom = bridge.getKingdomManager().getKingdom(args[0]);
         if ( kingdom == null ) {
-            plugin.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            bridge.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
             return;
         }
 
-        User player = sender.getPlayer();
-        if ( player.getKingdom() != null ) {
-            plugin.getMessageManager().send(sender, "cmdJoinAlready");
+        User user = bridge.getUserManager().getUser(player.getUniqueId());
+        if ( user.getKingdom() != null ) {
+            bridge.getMessageManager().send(sender, "cmdJoinAlready");
             return;
         }
 
-        if ( kingdom.isInviteOnly() ) {
-            plugin.getMessageManager().send(sender, "cmdJoinInviteOnly", kingdom.getName());
-
-            // TODO check invite
+        if ( kingdom.isInviteOnly() && !user.hasInvite(kingdom) ) {
+            bridge.getMessageManager().send(sender, "cmdJoinInviteOnly", kingdom.getName());
             return;
         }
 
         // TODO check for max members
 
-        plugin.getPlayerManager().joinKingdom(player, kingdom);
-        plugin.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
+        user.setKingdom(kingdom);
+        bridge.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
 
-        for ( Player member : plugin.getKingdomManager().getOnlineMembers(kingdom) ) {
-            if ( member.getPlayer() == player ) continue;
-            plugin.getMessageManager().send(member, "cmdJoinSuccessMembers", player.getName());
+        for ( Player p : bridge.getOnlinePlayers() ) {
+            if ( p == player || bridge.getUserManager().getUser(p.getUniqueId()).getKingdom() != kingdom ) continue;
+            bridge.getMessageManager().send(p, "cmdJoinSuccessMembers", player.getName());
         }
 
-        plugin.getEventManager().kingdomJoin(player);
+        bridge.getEventManager().kingdomJoin(user);
 
         // TODO teleport to spawn
 		/*

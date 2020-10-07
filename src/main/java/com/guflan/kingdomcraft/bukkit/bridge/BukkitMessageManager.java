@@ -2,14 +2,12 @@ package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.api.managers.MessageManager;
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.bukkit.KingdomCraft;
+import com.guflan.kingdomcraft.api.messages.MessageManager;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +38,7 @@ public class BukkitMessageManager implements MessageManager {
 	private final String prefix;
 	private final FileConfiguration messages;
 
-	public BukkitMessageManager(KingdomCraft kingdomCraft) {
+	public BukkitMessageManager(Plugin kingdomCraft) {
 		InputStream in = kingdomCraft.getResource("messages.yml");
 		try {
 			messages = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));

@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class JoinCommand extends DefaultCommandBase {
 
-    public JoinCommand(KingdomCraftPlugin plugin) {
+    public JoinCommand(KingdomCraft plugin) {
         super(plugin, "join", 1, true);
     }
 
@@ -21,45 +21,45 @@ public class JoinCommand extends DefaultCommandBase {
         if ( !sender.hasPermission("kingdom.kick.other") ) {
             return null;
         }
-        return plugin.getKingdomManager().getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.join") ) {
-            plugin.getMessageManager().send(sender, "noPermission");
+            kdc.getMessageManager().send(sender, "noPermission");
         }
 
-        Kingdom kingdom = plugin.getKingdomManager().getKingdom(args[0]);
+        Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            plugin.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
             return;
         }
 
-        User player = sender.getPlayer();
-        if ( player.getKingdom() != null ) {
-            plugin.getMessageManager().send(sender, "cmdJoinAlready");
+        User user = kdc.getUser((Player) sender);
+        if ( user.getKingdom() != null ) {
+            kdc.getMessageManager().send(sender, "cmdJoinAlready");
             return;
         }
 
-        if ( kingdom.isInviteOnly() ) {
-            plugin.getMessageManager().send(sender, "cmdJoinInviteOnly", kingdom.getName());
-
-            // TODO check invite
+        if ( kingdom.isInviteOnly() && !user.hasInvite(kingdom) ) {
+            kdc.getMessageManager().send(sender, "cmdJoinInviteOnly", kingdom.getName());
             return;
         }
 
         // TODO check for max members
 
-        plugin.getPlayerManager().joinKingdom(player, kingdom);
-        plugin.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
+        user.setKingdom(kingdom);
+        kdc.save(user);
 
-        for ( Player member : plugin.getKingdomManager().getOnlineMembers(kingdom) ) {
-            if ( member.getPlayer() == player ) continue;
-            plugin.getMessageManager().send(member, "cmdJoinSuccessMembers", player.getName());
+        kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
+
+        for ( Player p : kdc.getOnlinePlayers() ) {
+            if ( p == sender || kdc.getUser(p).getKingdom() != kingdom ) continue;
+            kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
         }
 
-        plugin.getEventManager().kingdomJoin(player);
+        kdc.getEventManager().kingdomJoin(user);
 
         // TODO teleport to spawn
 		/*

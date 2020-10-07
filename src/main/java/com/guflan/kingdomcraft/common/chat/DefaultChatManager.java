@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraftBridge;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public class DefaultChatManager implements ChatManager {
 
-    private final KingdomCraftBridge bridge;
+    private final KingdomCraft bridge;
 
     private final List<ChatChannel> chatChannels = new ArrayList<>();
 
-    public DefaultChatManager(KingdomCraftBridge bridge) {
+    public DefaultChatManager(KingdomCraft bridge) {
         this.bridge = bridge;
         bridge.getEventManager().addListener(new ChatEventListener(this));
     }

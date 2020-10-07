@@ -2,6 +2,7 @@ package com.guflan.kingdomcraft.api.domain;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface Kingdom {
 
@@ -19,10 +20,6 @@ public interface Kingdom {
 
     void setSuffix(String suffix);
 
-    String getSpawn();
-
-    void setSpawn(String spawn);
-
     boolean isInviteOnly();
 
     void setInviteOnly(boolean inviteOnly);
@@ -37,12 +34,18 @@ public interface Kingdom {
 
     List<Rank> getRanks();
 
+    Rank getRank(String name);
+
+    Rank addRank(String name);
+
+    void deleteRank(Rank rank);
+
     Map<Kingdom, Relation> getRelations();
 
     Relation getRelation(Kingdom kingdom);
 
     void setRelation(Kingdom kingdom, Relation relation);
 
-    List<User> getMembers();
+    Set<User> getMembers();
 
 }

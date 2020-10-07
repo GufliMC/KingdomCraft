@@ -7,33 +7,24 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
+@Table(name = "kingdom_relations")
 public class BRelation {
 
-    @EmbeddedId
-    BRelationKey id;
+    @Id
+    public long id;
 
     @ManyToOne
-    @MapsId("kingdomId")
-    @JoinColumn(name = "kingdom_id")
-    BKingdom kingdom;
+    public BKingdom kingdom;
 
     @ManyToOne
-    @MapsId("targetKingdomId")
-    @JoinColumn(name = "target_kingdom_id")
-    BKingdom target;
+    public BKingdom otherKingdom;
 
-    int relation;
+    public int relation;
 
     @WhenCreated
-    Instant created_at;
+    public Instant createdAt;
 
     @WhenModified
-    Instant updated_at;
-
-    public BRelation(BKingdom kingdom, BKingdom target, int relation) {
-        this.kingdom = kingdom;
-        this.target = target;
-        this.relation = relation;
-    }
+    public Instant updatedAt;
 
 }

@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraftBridge;
+import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.commands.JoinCommand;
@@ -9,7 +9,7 @@ import com.guflan.kingdomcraft.common.commands.admin.KickCommand;
 import com.guflan.kingdomcraft.common.commands.admin.SetKingdomCommand;
 import com.guflan.kingdomcraft.common.commands.management.*;
 import com.guflan.kingdomcraft.api.command.CommandBase;
-import com.guflan.kingdomcraft.api.managers.CommandManager;
+import com.guflan.kingdomcraft.api.command.CommandManager;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 
 public class DefaultCommandManager implements CommandManager {
 
-    private final KingdomCraftBridge bridge;
+    private final KingdomCraft bridge;
     private final List<CommandBase> commands = new ArrayList<>();
 
-    public DefaultCommandManager(KingdomCraftBridge bridge) {
+    public DefaultCommandManager(KingdomCraft bridge) {
         this.bridge = bridge;
         registerAll();
     }
