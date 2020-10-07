@@ -81,7 +81,9 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
                 if (user == null) {
                     user = storage.createUser(player.getUniqueId(), player.getName());
                 }
-                // TODO event
+
+                onlineUsers.add(user);
+                // TODO join event
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -108,7 +110,8 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     @Override
     public Kingdom createKingdom(String name) {
         Kingdom kingdom = storage.createKingdom(name);
-
+        save(kingdom);
+        kingdoms.add(kingdom);
         eventManager.kingdomCreate(kingdom);
         return kingdom;
     }
@@ -131,13 +134,23 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     }
 
     @Override
+    public User getOnlineUser(String name) {
+        return onlineUsers.stream().filter(u -> u.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public User getOnlineUser(UUID uuid) {
+        return onlineUsers.stream().filter(u -> u.getUniqueId().equals(uuid)).findFirst().orElse(null);
+    }
+
+    @Override
     public CompletableFuture<Set<User>> getUsers() {
         return storage.getUsers();
     }
 
     @Override
     public CompletableFuture<User> getUser(String name) {
-        User user = onlineUsers.stream().filter(u -> u.getName().equals(name)).findFirst().orElse(null);
+        User user = getOnlineUser(name);
         if ( user != null ) {
             return CompletableFuture.completedFuture(user);
         }
@@ -147,7 +160,7 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     @Override
     public CompletableFuture<User> getUser(UUID uuid) {
-        User user = onlineUsers.stream().filter(u -> u.getUniqueId().equals(uuid)).findFirst().orElse(null);
+        User user = getOnlineUser(uuid);
         if ( user != null ) {
             return CompletableFuture.completedFuture(user);
         }
@@ -162,6 +175,6 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     @Override
     public User getUser(Player player) {
-        return onlineUsers.stream().filter(u -> u.getUniqueId().equals(player.getUniqueId())).findFirst().orElse(null);
+        return getOnlineUser(player.getUniqueId());
     }
 }

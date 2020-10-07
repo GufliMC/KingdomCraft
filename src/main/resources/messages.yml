@@ -106,7 +106,7 @@ cmdFlagRemove: '&7You removed the flag &8{0} &7from &8{1}&7!'
 cmdFlagList: '&7List of flags: &8{0}'
 cmdFlagInvalidValue: '&cThe value &4{0} &cis not of type: &4{1}&c!'
 
-cmdList: '&7List of kingdoms:'
+cmdList: '&7List of kingdoms: {0}'
 cmdListNormal: '&7There are &8{0} &7online players:'
 
 cmdCreateAlreadyExists: '&7The kingdom &8{0} &7already exists!'

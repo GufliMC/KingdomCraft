@@ -1,5 +1,6 @@
 package com.guflan.kingdomcraft.bukkit.bridge;
 
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
@@ -53,6 +54,11 @@ public class BukkitKingdomCraft extends AbstractKingdomCraft {
         }
 
         return new BukkitPlayer(bplayer);
+    }
+
+    @Override
+    public Player getPlayer(User user) {
+        return getPlayer(user.getUniqueId());
     }
 
     @Override
