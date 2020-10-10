@@ -22,19 +22,19 @@ import java.util.concurrent.ExecutionException;
 
 public abstract class AbstractKingdomCraft implements KingdomCraft {
 
-    private Storage storage;
+    private final Storage storage;
 
     //
 
-    private DefaultCommandManager commandManager;
-    private DefaultEventManager eventManager;
-    private DefaultChatManager chatManager;
-    private DefaultPlaceholderManager placeholderManager;
+    private final DefaultCommandManager commandManager;
+    private final DefaultEventManager eventManager;
+    private final DefaultChatManager chatManager;
+    private final DefaultPlaceholderManager placeholderManager;
 
     //
 
-    private Set<Kingdom> kingdoms = new HashSet<>();
-    private Set<User> onlineUsers = new HashSet<>();
+    private final Set<Kingdom> kingdoms = new HashSet<>();
+    private final Set<User> onlineUsers = new HashSet<>();
 
     public AbstractKingdomCraft(Storage storage) {
         this.storage = storage;
@@ -43,6 +43,12 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
         this.eventManager = new DefaultEventManager();
         this.chatManager = new DefaultChatManager(this);
         this.placeholderManager = new DefaultPlaceholderManager(this);
+
+        try {
+            kingdoms.addAll(storage.getKingdoms().get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     //

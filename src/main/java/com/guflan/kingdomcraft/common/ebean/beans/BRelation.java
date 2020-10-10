@@ -1,5 +1,7 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
+import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
@@ -15,9 +17,11 @@ public class BRelation {
     public long id;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BKingdom kingdom;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BKingdom otherKingdom;
 
     public int relation;

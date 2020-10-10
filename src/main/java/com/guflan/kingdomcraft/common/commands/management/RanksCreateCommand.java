@@ -2,20 +2,21 @@ package com.guflan.kingdomcraft.common.commands.management;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
-public class CreateCommand extends DefaultCommandBase {
+public class RanksCreateCommand extends DefaultCommandBase {
 
-    public CreateCommand(KingdomCraft kdc) {
-        super(kdc, "create", 1);
+    public RanksCreateCommand(KingdomCraft kdc) {
+        super(kdc, "ranks create", 1);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.create") ) {
+        if ( !sender.hasPermission("kingdom.ranks.create") ) {
             kdc.getMessageManager().send(sender, "noPermission");
         }
 
@@ -24,19 +25,16 @@ public class CreateCommand extends DefaultCommandBase {
             return;
         }
 
-        if ( kdc.getKingdom(args[0]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdCreateAlreadyExists", args[0]);
+        User user = kdc.getUser((Player) sender);
+        Kingdom kingdom = user.getKingdom();
+        if ( kingdom == null ) {
+            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
         }
 
-        Kingdom kingdom = kdc.createKingdom(args[0]);
-        kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName());
+        Rank r = kingdom.addRank(args[0]);
+        kdc.save(kingdom);
 
-        // place player in created kingdom (TODO is this necessary?)
-//        if ( sender instanceof Player) {
-//            User user = kdc.getUser((Player) sender);
-//            user.setKingdom(kingdom);
-//            kdc.save(user);
-//        }
+        sender.sendMessage("Created rank " + r.getName());
     }
 }

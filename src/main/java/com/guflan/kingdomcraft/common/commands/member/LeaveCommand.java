@@ -36,10 +36,5 @@ public class LeaveCommand extends DefaultCommandBase {
         }
 
         // TODO teleport to spawn
-		/*
-		if ( plugin.getCfg().has("spawn-on-kingdom-leave") && plugin.getCfg().getBoolean("spawn-on-kingdom-leave") ) {
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "spawn " + p.getName());
-		}
-		*/
     }
 }

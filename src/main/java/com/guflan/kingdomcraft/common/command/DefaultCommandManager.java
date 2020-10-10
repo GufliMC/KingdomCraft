@@ -3,6 +3,7 @@ package com.guflan.kingdomcraft.common.command;
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.common.commands.InfoCommand;
 import com.guflan.kingdomcraft.common.commands.JoinCommand;
 import com.guflan.kingdomcraft.common.commands.ListCommand;
 import com.guflan.kingdomcraft.common.commands.admin.KickCommand;
@@ -10,6 +11,8 @@ import com.guflan.kingdomcraft.common.commands.admin.SetKingdomCommand;
 import com.guflan.kingdomcraft.common.commands.management.*;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
+import com.guflan.kingdomcraft.common.commands.member.InviteCommand;
+import com.guflan.kingdomcraft.common.commands.member.LeaveCommand;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.ArrayList;
@@ -31,20 +34,36 @@ public class DefaultCommandManager implements CommandManager {
     public void registerAll() {
         commands.clear();
 
+        // all
         registerCommand(new ListCommand(kdc));
         registerCommand(new JoinCommand(kdc));
+        registerCommand(new InfoCommand(kdc));
 
+        // member
+        registerCommand(new LeaveCommand(kdc));
+        registerCommand(new InviteCommand(kdc));
+
+        // management
         registerCommand(new CreateCommand(kdc));
         registerCommand(new DeleteCommand(kdc));
+
         registerCommand(new EditDisplayCommand(kdc));
         registerCommand(new EditDisplayOtherCommand(kdc));
+
         registerCommand(new EditPrefixCommand(kdc));
         registerCommand(new EditPrefixOtherCommand(kdc));
+
         registerCommand(new EditSuffixCommand(kdc));
         registerCommand(new EditSuffixOtherCommand(kdc));
 
+        registerCommand(new RanksListCommand(kdc));
+        registerCommand(new RanksCreateCommand(kdc));
+
+        // admin
         registerCommand(new KickCommand(kdc));
         registerCommand(new SetKingdomCommand(kdc));
+
+
         // TODO
     }
 
