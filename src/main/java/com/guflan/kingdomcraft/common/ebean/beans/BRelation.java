@@ -5,6 +5,7 @@ import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "kingdom_relations")
@@ -22,9 +23,9 @@ public class BRelation {
     public int relation;
 
     @WhenCreated
-    public Instant createdAt;
+    public Date createdAt;
 
     @WhenModified
-    public Instant updatedAt;
+    public Date updatedAt;
 
 }

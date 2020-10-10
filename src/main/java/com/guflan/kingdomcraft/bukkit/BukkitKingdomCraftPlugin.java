@@ -1,6 +1,8 @@
 package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraft;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitScheduler;
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
@@ -17,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Copyrighted 2020 iGufGuf
@@ -37,9 +40,14 @@ import java.io.IOException;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class BukkitKingdomCraftPlugin extends JavaPlugin {
+public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraftPlugin {
 
-	public KingdomCraft kdc;
+	private final BukkitScheduler scheduler;
+	private KingdomCraft kdc;
+
+	public BukkitKingdomCraftPlugin() {
+		this.scheduler = new BukkitScheduler(this);
+	}
 
 	@Override
 	public void onEnable() {
@@ -70,18 +78,29 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin {
 			return;
 		}
 
-		BukkitScheduler scheduler = new BukkitScheduler(this);
 
-        ConfigurationSection dbConfig = config.getConfigurationSection("database");
-		EBeanStorage storage = new EBeanStorage(
-				scheduler,
+		// For some reason, required ebean classes are not in the classpath of the current classloader.
+		// Fix this by changing the class loader to the one of the current class.
+		ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+
+		// create ebean storage instance
+		EBeanStorage storage = new EBeanStorage(this);
+
+		// load database connection
+		ConfigurationSection dbConfig = config.getConfigurationSection("database");
+		storage.init(
 				dbConfig.getString("url"),
-                dbConfig.getString("driver"),
-                dbConfig.getString("username"),
-                dbConfig.getString("password")
+				dbConfig.getString("driver"),
+				dbConfig.getString("username"),
+				dbConfig.getString("password")
 		);
 
-		this.kdc = new BukkitKingdomCraft(this, scheduler, storage);
+		// revert class loader to original
+		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
+
+
+		this.kdc = new BukkitKingdomCraft(this, storage);
 
 		new BukkitPlaceholderReplacer(kdc);
 		new ChatHandler(this, kdc);
@@ -103,5 +122,22 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin {
 
 	public KingdomCraft getKingdomCraft() {
 		return kdc;
+	}
+
+	//
+
+	@Override
+	public AbstractScheduler getScheduler() {
+		return scheduler;
+	}
+
+	@Override
+	public void log(String msg) {
+		getLogger().info(msg);
+	}
+
+	@Override
+	public void log(String msg, Level level) {
+		getLogger().log(level, msg);
 	}
 }

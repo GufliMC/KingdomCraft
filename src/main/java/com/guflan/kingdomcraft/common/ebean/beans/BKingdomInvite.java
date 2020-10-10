@@ -3,7 +3,7 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "user_invites")
@@ -22,6 +22,6 @@ public class BKingdomInvite {
     public BUser sender;
 
     @WhenCreated
-    public Instant createdAt;
+    public Date createdAt;
 
 }

@@ -1,9 +1,9 @@
 package com.guflan.kingdomcraft.common.placeholders;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderReplacer;
-import com.guflan.kingdomcraft.api.domain.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
     }
 
     @Override
-    public String handle(User player, String str) {
+    public String handle(Player player, String str) {
         StringBuffer sb = new StringBuffer();
         Pattern p = Pattern.compile("(\\{[^}]+\\})");
         Matcher m = p.matcher(str);

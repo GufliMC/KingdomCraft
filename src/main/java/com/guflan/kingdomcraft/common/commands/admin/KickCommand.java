@@ -38,7 +38,7 @@ public class KickCommand extends DefaultCommandBase {
             return;
         }
 
-        kdc.getScheduler().executeAsync(() -> {
+        kdc.getPlugin().getScheduler().executeAsync(() -> {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
