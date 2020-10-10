@@ -1,6 +1,7 @@
 package com.guflan.kingdomcraft.bukkit.listeners;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,11 +29,11 @@ public class ConnectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        kdc.quit(kdc.getPlayer(e.getPlayer().getUniqueId()));
+        kdc.quit(new BukkitPlayer(e.getPlayer()));
     }
 
     private void join(Player player) {
-        kdc.join(kdc.getPlayer(player.getUniqueId()));
+        kdc.join(new BukkitPlayer(player));
     }
 
 }

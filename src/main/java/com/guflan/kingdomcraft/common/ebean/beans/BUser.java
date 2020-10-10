@@ -4,6 +4,8 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import io.ebean.Model;
+import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
@@ -24,12 +26,14 @@ public class BUser extends Model implements User {
     public String name;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BRank rank;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BKingdom kingdom;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public Set<BKingdomInvite> kingdomInvites;
 
     @WhenCreated
@@ -57,7 +61,7 @@ public class BUser extends Model implements User {
 
     @Override
     public Kingdom getKingdom() {
-        return rank != null ? rank.getKingdom() : null;
+        return kingdom;
     }
 
     @Override
@@ -74,7 +78,7 @@ public class BUser extends Model implements User {
     @Override
     public void setRank(Rank rank) {
         if ( rank.getKingdom() != kingdom ) {
-            return; // TODO throw exception
+            throw new IllegalArgumentException("The given rank does not belong to the user their kingdom.");
         }
         this.rank = (BRank) rank;
     }

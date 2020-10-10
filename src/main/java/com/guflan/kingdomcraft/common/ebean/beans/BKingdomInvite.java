@@ -1,5 +1,7 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
+import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
@@ -13,12 +15,15 @@ public class BKingdomInvite {
     public long id;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BUser user;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BKingdom kingdom;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BUser sender;
 
     @WhenCreated

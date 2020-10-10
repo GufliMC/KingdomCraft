@@ -141,17 +141,6 @@
                 <excludes>
                     <exclude>dbmigration/model</exclude>
                 </excludes>
-                <!--
-                <includes>
-                    <include>*.*</include>
-                    <include>dbmigration/*</include>
-                    <include>dbmigration/model/*</include>
-                    <include>dbmigration/mysql/*</include>
-                    <include>dbmigration/postgresql/*</include>
-                    <include>dbmigration/sqlite/*</include>
-                    <include>dbmigration/h2/*</include>
-                </includes>
-                -->
             </resource>
         </resources>
 

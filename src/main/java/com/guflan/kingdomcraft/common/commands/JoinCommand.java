@@ -18,7 +18,7 @@ public class JoinCommand extends DefaultCommandBase {
 
     @Override
     public List<String> autocomplete(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.kick.other") ) {
+        if ( !sender.hasPermission("kingdom.join") ) {
             return null;
         }
         return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());

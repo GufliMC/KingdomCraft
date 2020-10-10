@@ -5,6 +5,8 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.Relation;
 import io.ebean.Model;
+import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
@@ -28,12 +30,13 @@ public class BKingdom extends Model implements Kingdom {
     public int maxMembers;
 
     @OneToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BRank defaultRank;
 
-    @OneToMany(mappedBy = "kingdom")
+    @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
     public Set<BRank> ranks;
 
-    @OneToMany(mappedBy = "kingdom")
+    @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
     public Set<BRelation> relations;
 
     @OneToMany(mappedBy = "kingdom")
@@ -130,13 +133,21 @@ public class BKingdom extends Model implements Kingdom {
         BRank rank = new BRank();
         rank.name = name;
         rank.kingdom = this;
+
         ranks.add(rank);
+        if ( defaultRank == null ) {
+            defaultRank = rank;
+        }
+
         return rank;
     }
 
     @Override
     public void deleteRank(Rank rank) {
         ranks.remove(rank);
+        if ( defaultRank == rank ) {
+            defaultRank = ranks.stream().findFirst().orElse(null);
+        }
     }
 
     @Override
