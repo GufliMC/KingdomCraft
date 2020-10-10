@@ -71,7 +71,7 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     @Override
     public void join(Player player) {
-        getScheduler().async().execute(() -> {
+        getPlugin().getScheduler().async().execute(() -> {
             try {
                 User user = getUser(player.getUniqueId()).get();
                 if (user == null) {

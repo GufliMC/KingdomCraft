@@ -1,10 +1,12 @@
 package com.guflan.kingdomcraft.bukkit.bridge;
 
+import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.api.storage.Storage;
+import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
 import org.bukkit.Bukkit;
@@ -17,28 +19,25 @@ import java.util.stream.Collectors;
 
 public class BukkitKingdomCraft extends AbstractKingdomCraft {
 
-    private final Plugin plugin;
-    private final AbstractScheduler scheduler;
+    private final BukkitKingdomCraftPlugin plugin;
 
-    private MessageManager messageManager;
+    private final MessageManager messageManager;
 
-    public BukkitKingdomCraft(Plugin plugin, BukkitScheduler scheduler, Storage storage) {
+    public BukkitKingdomCraft(BukkitKingdomCraftPlugin plugin, Storage storage) {
         super(storage);
-
         this.plugin = plugin;
-        this.scheduler = scheduler;
 
         this.messageManager = new BukkitMessageManager(plugin);
     }
 
     @Override
-    public AbstractScheduler getScheduler() {
-        return scheduler;
+    public KingdomCraftPlugin getPlugin() {
+        return plugin;
     }
 
     @Override
     public MessageManager getMessageManager() {
-        return this.getMessageManager();
+        return messageManager;
     }
 
     @Override
@@ -59,16 +58,6 @@ public class BukkitKingdomCraft extends AbstractKingdomCraft {
     @Override
     public Player getPlayer(User user) {
         return getPlayer(user.getUniqueId());
-    }
-
-    @Override
-    public void log(String msg) {
-        plugin.getLogger().info(msg);
-    }
-
-    @Override
-    public void log(String msg, Level level) {
-        plugin.getLogger().log(level, msg);
     }
 
 }

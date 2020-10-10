@@ -18,7 +18,7 @@ import java.util.logging.Level;
 
 public interface KingdomCraft {
 
-    AbstractScheduler getScheduler();
+    KingdomCraftPlugin getPlugin();
 
     //
 
@@ -71,10 +71,6 @@ public interface KingdomCraft {
     void save(User user);
 
     //
-
-    void log(String msg);
-
-    void log(String msg, Level level);
 
     void join(Player player);
 

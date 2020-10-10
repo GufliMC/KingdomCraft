@@ -9,7 +9,6 @@ import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.*;
 
 @Entity
@@ -38,13 +37,13 @@ public class BKingdom extends Model implements Kingdom {
     public Set<BRelation> relations;
 
     @OneToMany(mappedBy = "kingdom")
-    public Set<User> members;
+    public Set<BUser> members;
 
     @WhenCreated
-    Instant createdAt;
+    Date createdAt;
 
     @WhenModified
-    Instant updatedAt;
+    Date updatedAt;
 
     // interface
 
@@ -173,6 +172,6 @@ public class BKingdom extends Model implements Kingdom {
     @Override
     @Deprecated
     public Set<User> getMembers() {
-        return members;
+        return new HashSet<>(members);
     }
 }

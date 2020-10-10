@@ -85,7 +85,7 @@ public class ChatHandler implements EventListener {
         if ( section.contains("kingdom") ) {
             Kingdom kd = kdc.getKingdom(section.getString("kingdom"));
             if ( kd == null ) {
-                kdc.log("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.", Level.WARNING);
+                kdc.getPlugin().log("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.", Level.WARNING);
                 return null;
             }
 
@@ -95,7 +95,7 @@ public class ChatHandler implements EventListener {
         }
 
         if ( !section.contains("format") ) {
-            kdc.log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
+            kdc.getPlugin().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
             return null;
         }
         channel.setFormat(section.getString("format"));

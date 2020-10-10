@@ -38,7 +38,7 @@
 
     <dependencies>
 
-        <!-- Spigot API -->
+        <!-- Spigot platform dependencies -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -46,7 +46,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Bukkit API -->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
@@ -54,95 +53,64 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Vault -->
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.21</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>3.4.5</version>
-        </dependency>
-
-
-        <!-- API, java.xml.bind module -->
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>2.3.3</version>
-        </dependency>
-
-        <!-- Runtime, com.sun.xml.bind module -->
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.ebean</groupId>
-            <artifactId>ebean</artifactId>
-            <version>12.3.6</version>
-        </dependency>
-
-        <!-- Query bean support -->
-        <dependency>
-            <groupId>io.ebean</groupId>
-            <artifactId>ebean-querybean</artifactId>
-            <version>12.3.6</version>
-        </dependency>
-
-        <!-- APT Query bean generation for Java -->
-        <dependency>
-            <groupId>io.ebean</groupId>
-            <artifactId>querybean-generator</artifactId>
-            <version>12.3.6</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Apache commons lang3 -->
+        <!-- KingdomCraft common dependencies -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.0</version>
         </dependency>
 
-        <!-- Apache commons io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.5</version>
         </dependency>
 
-        <!-- Apache commons text -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.6</version>
         </dependency>
 
-        <!--
-        Optional but Ebean will read these annotations
-        like @size to determine column lengths etc
-        -->
+        <!-- EBean dependencies -->
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean</artifactId>
+            <version>12.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-querybean</artifactId>
+            <version>12.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>querybean-generator</artifactId>
+            <version>12.4.2</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
-            <!--<version>1.0.0.GA</version>-->
         </dependency>
 
+        <!-- EBean migration dependencies -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+
+        <!-- database drivers -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
@@ -161,7 +129,6 @@
             <version>1.4.200</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
@@ -171,6 +138,10 @@
         <resources>
             <resource>
                 <directory>src/main/resources/</directory>
+                <excludes>
+                    <exclude>dbmigration/model</exclude>
+                </excludes>
+                <!--
                 <includes>
                     <include>*.*</include>
                     <include>dbmigration/*</include>
@@ -178,7 +149,9 @@
                     <include>dbmigration/mysql/*</include>
                     <include>dbmigration/postgresql/*</include>
                     <include>dbmigration/sqlite/*</include>
+                    <include>dbmigration/h2/*</include>
                 </includes>
+                -->
             </resource>
         </resources>
 

@@ -1,21 +1,24 @@
 package com.guflan.kingdomcraft.common.storage;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.api.storage.Storage;
 import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.BUser;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
-import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.migration.MigrationConfig;
+import io.ebean.migration.MigrationException;
 import io.ebean.migration.MigrationRunner;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -25,22 +28,28 @@ import java.util.stream.Collectors;
 
 public class EBeanStorage implements Storage {
 
-    private final AbstractScheduler scheduler;
-    private Database database;
+    private final KingdomCraftPlugin plugin;
 
-    public EBeanStorage(AbstractScheduler scheduler, String url, String driver, String username, String password) {
-        this.scheduler = scheduler;
+    public EBeanStorage(KingdomCraftPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-        ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-
+    public void init(String url, String driver, String username, String password) {
         // run migrations
-        migrate(url, driver, username, password);
+        try {
+            migrate(url, driver, username, password);
+        } catch (MigrationException ex) {
+            if ( ex.getCause() != null ) {
+                ex.getCause().printStackTrace();
+                //plugin.log(ex.getCause().getMessage(), Level.SEVERE);
+            } else {
+                ex.printStackTrace();
+            }
+            return;
+        }
 
         // create database
         connect(url, driver, username, password);
-
-        Thread.currentThread().setContextClassLoader(originalContextClassLoader);
     }
 
     private void migrate(String url, String driver, String username, String password) {
@@ -49,6 +58,13 @@ public class EBeanStorage implements Storage {
         config.setDbDriver(driver);
         config.setDbUsername(username);
         config.setDbPassword(password);
+
+        try {
+            String platform = config.createConnection().getMetaData().getDatabaseProductName().toLowerCase();
+            config.setMigrationPath("dbmigration/" + platform);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         MigrationRunner runner = new MigrationRunner(config);
         runner.run();
@@ -61,9 +77,11 @@ public class EBeanStorage implements Storage {
         dataSourceConfig.setUsername(username);
         dataSourceConfig.setPassword(password);
 
-        io.ebean.config.DatabaseConfig config = new DatabaseConfig();
+        DatabaseConfig config = new DatabaseConfig();
         config.setDataSourceConfig(dataSourceConfig);
-        this.database = DatabaseFactory.create(config);
+        config.setRegister(true);
+
+        DatabaseFactory.create(config);
     }
 
     @Override
@@ -129,7 +147,7 @@ public class EBeanStorage implements Storage {
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
-        }, scheduler.async());
+        }, plugin.getScheduler().async());
     }
 
     private CompletableFuture<Void> makeFuture(Runnable runnable) {
@@ -139,7 +157,7 @@ public class EBeanStorage implements Storage {
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
-        }, scheduler.async());
+        }, plugin.getScheduler().async());
     }
 
 }

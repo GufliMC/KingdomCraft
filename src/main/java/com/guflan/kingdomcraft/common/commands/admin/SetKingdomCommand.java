@@ -38,7 +38,7 @@ public class SetKingdomCommand extends DefaultCommandBase {
             kdc.getMessageManager().send(sender, "noPermission");
         }
 
-        kdc.getScheduler().executeAsync(() -> {
+        kdc.getPlugin().getScheduler().executeAsync(() -> {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if ( target == null ) {

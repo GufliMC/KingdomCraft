@@ -7,6 +7,7 @@ import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "ranks")
@@ -26,10 +27,10 @@ public class BRank implements Rank {
     public int maxMembers;
 
     @WhenCreated
-    public Instant createdAt;
+    public Date createdAt;
 
     @WhenModified
-    public Instant updatedAt;
+    public Date updatedAt;
 
     // interface
 

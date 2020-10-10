@@ -9,6 +9,7 @@ import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,18 +23,20 @@ public class BUser extends Model implements User {
     @Column(unique=true)
     public String name;
 
+    @ManyToOne
     public BRank rank;
 
+    @ManyToOne
     public BKingdom kingdom;
 
     @OneToMany(mappedBy = "user")
     public Set<BKingdomInvite> kingdomInvites;
 
     @WhenCreated
-    public Instant createdAt;
+    public Date createdAt;
 
     @WhenModified
-    public Instant updatedAt;
+    public Date updatedAt;
 
     // interface
 
