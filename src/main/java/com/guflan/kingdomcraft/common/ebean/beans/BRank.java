@@ -2,6 +2,7 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
@@ -13,7 +14,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "ranks")
-public class BRank implements Rank {
+@UniqueConstraint(columnNames = { "name", "kingdom_id" })
+public class BRank extends Model implements Rank {
 
     @Id
     public long id;
@@ -34,6 +36,15 @@ public class BRank implements Rank {
 
     @WhenModified
     public Date updatedAt;
+
+    @Override
+    public boolean delete() {
+        kingdom.ranks.remove(this);
+        if ( kingdom.defaultRank == this ) {
+            kingdom.defaultRank = null;
+        }
+        return super.delete();
+    }
 
     // interface
 

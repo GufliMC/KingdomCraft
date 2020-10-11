@@ -1,23 +1,25 @@
-package com.guflan.kingdomcraft.common.storage;
+package com.guflan.kingdomcraft.common.ebean;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.Relation;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.storage.Storage;
 import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
+import com.guflan.kingdomcraft.common.ebean.beans.BRank;
 import com.guflan.kingdomcraft.common.ebean.beans.BUser;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
+import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.DatabaseFactory;
+import io.ebean.annotation.Transactional;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationException;
 import io.ebean.migration.MigrationRunner;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Set;
 import java.util.UUID;
@@ -96,6 +98,7 @@ public class EBeanStorage implements Storage {
         return kingdom;
     }
 
+
     @Override
     public CompletableFuture<Void> delete(Kingdom kingdom) {
         return makeFuture(() -> {
@@ -104,8 +107,20 @@ public class EBeanStorage implements Storage {
     }
 
     @Override
+    public CompletableFuture<Void> delete(Rank rank) {
+        return makeFuture(() -> {
+            ((BRank) rank).delete();
+        });
+    }
+
+    @Override
     public CompletableFuture<Void> save(Kingdom kingdom) {
         return makeFuture(() -> ((BKingdom) kingdom).save());
+    }
+
+    @Override
+    public CompletableFuture<Void> save(Rank rank) {
+        return makeFuture(() -> ((BRank) rank).save());
     }
 
     // users

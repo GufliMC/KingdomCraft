@@ -34,6 +34,7 @@ create table ranks (
   max_members                   integer not null,
   created_at                    timestamptz not null,
   updated_at                    timestamptz not null,
+  constraint uq_ranks_name_kingdom_id unique (name,kingdom_id),
   constraint pk_ranks primary key (id)
 );
 
@@ -58,29 +59,29 @@ create table users (
   constraint pk_users primary key (id)
 );
 
-alter table kingdoms add constraint fk_kingdoms_default_rank_id foreign key (default_rank_id) references ranks (id) on delete restrict on update restrict;
+alter table kingdoms add constraint fk_kingdoms_default_rank_id foreign key (default_rank_id) references ranks (id) on delete set null on update set null;
 
 create index ix_user_invites_user_id on user_invites (user_id);
-alter table user_invites add constraint fk_user_invites_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
+alter table user_invites add constraint fk_user_invites_user_id foreign key (user_id) references users (id) on delete cascade on update cascade;
 
 create index ix_user_invites_kingdom_id on user_invites (kingdom_id);
-alter table user_invites add constraint fk_user_invites_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict;
+alter table user_invites add constraint fk_user_invites_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade;
 
 create index ix_user_invites_sender_id on user_invites (sender_id);
-alter table user_invites add constraint fk_user_invites_sender_id foreign key (sender_id) references users (id) on delete restrict on update restrict;
+alter table user_invites add constraint fk_user_invites_sender_id foreign key (sender_id) references users (id) on delete cascade on update cascade;
 
 create index ix_ranks_kingdom_id on ranks (kingdom_id);
-alter table ranks add constraint fk_ranks_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict;
+alter table ranks add constraint fk_ranks_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade;
 
 create index ix_kingdom_relations_kingdom_id on kingdom_relations (kingdom_id);
-alter table kingdom_relations add constraint fk_kingdom_relations_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict;
+alter table kingdom_relations add constraint fk_kingdom_relations_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade;
 
 create index ix_kingdom_relations_other_kingdom_id on kingdom_relations (other_kingdom_id);
-alter table kingdom_relations add constraint fk_kingdom_relations_other_kingdom_id foreign key (other_kingdom_id) references kingdoms (id) on delete restrict on update restrict;
+alter table kingdom_relations add constraint fk_kingdom_relations_other_kingdom_id foreign key (other_kingdom_id) references kingdoms (id) on delete cascade on update cascade;
 
 create index ix_users_rank_id on users (rank_id);
-alter table users add constraint fk_users_rank_id foreign key (rank_id) references ranks (id) on delete restrict on update restrict;
+alter table users add constraint fk_users_rank_id foreign key (rank_id) references ranks (id) on delete set null on update set null;
 
 create index ix_users_kingdom_id on users (kingdom_id);
-alter table users add constraint fk_users_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict;
+alter table users add constraint fk_users_kingdom_id foreign key (kingdom_id) references kingdoms (id) on delete set null on update set null;
 

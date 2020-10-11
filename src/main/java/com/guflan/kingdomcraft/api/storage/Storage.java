@@ -1,6 +1,7 @@
 package com.guflan.kingdomcraft.api.storage;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 
 import java.util.Set;
@@ -15,7 +16,11 @@ public interface Storage {
 
     CompletableFuture<Void> delete(Kingdom kingdom);
 
+    CompletableFuture<Void> delete(Rank rank);
+
     CompletableFuture<Void> save(Kingdom kingdom);
+
+    CompletableFuture<Void> save(Rank rank);
 
     // users
 

@@ -1,6 +1,7 @@
 package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.messages.MessageManager;

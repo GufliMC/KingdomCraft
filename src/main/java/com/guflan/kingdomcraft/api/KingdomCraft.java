@@ -2,6 +2,7 @@ package com.guflan.kingdomcraft.api;
 
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
@@ -50,9 +51,13 @@ public interface KingdomCraft {
 
     Kingdom createKingdom(String name);
 
-    void delete(Kingdom kingdom);
+    CompletableFuture<Void> delete(Kingdom kingdom);
 
-    void save(Kingdom kingdom);
+    CompletableFuture<Void> delete(Rank rank);
+
+    CompletableFuture<Void> save(Kingdom kingdom);
+
+    CompletableFuture<Void> save(Rank rank);
 
     //
 
@@ -68,7 +73,7 @@ public interface KingdomCraft {
 
     CompletableFuture<User> getUser(UUID uuid);
 
-    void save(User user);
+    CompletableFuture<Void> save(User user);
 
     //
 

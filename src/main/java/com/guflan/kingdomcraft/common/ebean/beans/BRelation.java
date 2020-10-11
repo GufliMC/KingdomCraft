@@ -1,5 +1,6 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
+import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "kingdom_relations")
-public class BRelation {
+public class BRelation extends Model {
 
     @Id
     public long id;

@@ -4,11 +4,11 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.common.ebean.beans.query.QBRank;
+import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
 import io.ebean.Model;
+import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
-import io.ebean.annotation.DbForeignKey;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.*;
@@ -26,14 +26,15 @@ public class BKingdom extends Model implements Kingdom {
     public String display;
     public String prefix;
     public String suffix;
+
     public boolean inviteOnly;
     public int maxMembers;
 
     @OneToOne
-    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
+    @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
     public BRank defaultRank;
 
-    @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "kingdom")
     public Set<BRank> ranks;
 
     @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
@@ -47,6 +48,15 @@ public class BKingdom extends Model implements Kingdom {
 
     @WhenModified
     Date updatedAt;
+
+    @Override
+    @Transactional
+    public void save() {
+        super.save();
+        for ( BRelation rel : relations) {
+            rel.save();
+        }
+    }
 
     // interface
 
@@ -129,25 +139,13 @@ public class BKingdom extends Model implements Kingdom {
     }
 
     @Override
-    public Rank addRank(String name) {
+    public Rank createRank(String name) {
         BRank rank = new BRank();
         rank.name = name;
         rank.kingdom = this;
 
         ranks.add(rank);
-        if ( defaultRank == null ) {
-            defaultRank = rank;
-        }
-
         return rank;
-    }
-
-    @Override
-    public void deleteRank(Rank rank) {
-        ranks.remove(rank);
-        if ( defaultRank == rank ) {
-            defaultRank = ranks.stream().findFirst().orElse(null);
-        }
     }
 
     @Override

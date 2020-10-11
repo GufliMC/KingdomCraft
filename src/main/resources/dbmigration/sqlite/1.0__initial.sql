@@ -13,7 +13,7 @@ create table kingdoms (
   constraint uq_kingdoms_name unique (name),
   constraint uq_kingdoms_default_rank_id unique (default_rank_id),
   constraint pk_kingdoms primary key (id),
-  foreign key (default_rank_id) references ranks (id) on delete restrict on update restrict
+  foreign key (default_rank_id) references ranks (id) on delete set null on update set null
 );
 
 create table user_invites (
@@ -23,9 +23,9 @@ create table user_invites (
   sender_id                     varchar(255),
   created_at                    timestamp not null,
   constraint pk_user_invites primary key (id),
-  foreign key (user_id) references users (id) on delete restrict on update restrict,
-  foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict,
-  foreign key (sender_id) references users (id) on delete restrict on update restrict
+  foreign key (user_id) references users (id) on delete cascade on update cascade,
+  foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade,
+  foreign key (sender_id) references users (id) on delete cascade on update cascade
 );
 
 create table ranks (
@@ -38,8 +38,9 @@ create table ranks (
   max_members                   integer not null,
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
+  constraint uq_ranks_name_kingdom_id unique (name,kingdom_id),
   constraint pk_ranks primary key (id),
-  foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict
+  foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade
 );
 
 create table kingdom_relations (
@@ -50,8 +51,8 @@ create table kingdom_relations (
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_kingdom_relations primary key (id),
-  foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict,
-  foreign key (other_kingdom_id) references kingdoms (id) on delete restrict on update restrict
+  foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade,
+  foreign key (other_kingdom_id) references kingdoms (id) on delete cascade on update cascade
 );
 
 create table users (
@@ -63,7 +64,7 @@ create table users (
   updated_at                    timestamp not null,
   constraint uq_users_name unique (name),
   constraint pk_users primary key (id),
-  foreign key (rank_id) references ranks (id) on delete restrict on update restrict,
-  foreign key (kingdom_id) references kingdoms (id) on delete restrict on update restrict
+  foreign key (rank_id) references ranks (id) on delete set null on update set null,
+  foreign key (kingdom_id) references kingdoms (id) on delete set null on update set null
 );
 

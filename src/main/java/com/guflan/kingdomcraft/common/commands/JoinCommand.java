@@ -55,7 +55,7 @@ public class JoinCommand extends DefaultCommandBase {
         kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
 
         for ( Player p : kdc.getOnlinePlayers() ) {
-            if ( p == sender || kdc.getUser(p).getKingdom() != kingdom ) continue;
+            if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
             kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
         }
 
