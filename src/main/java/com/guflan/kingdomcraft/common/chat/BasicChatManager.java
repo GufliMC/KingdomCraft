@@ -39,8 +39,15 @@ public class BasicChatManager implements ChatManager {
             return;
         }
 
-        if ( !this.blueprints.contains(blueprint) ) {
-            this.blueprints.add(blueprint);
+        if ( this.blueprints.contains(blueprint) ) {
+            return;
+        }
+
+        this.blueprints.add(blueprint);
+
+        for (Kingdom kd : kdc.getKingdoms() ) {
+            if ( !blueprint.doesTarget(kd) ) continue;
+            addChatChannel(blueprint.create(kd));
         }
     }
 
@@ -125,14 +132,6 @@ public class BasicChatManager implements ChatManager {
 
     @Override
     public void handle(Player player, String message) {
-        System.out.println("1");
-
-        for ( ChatChannel ch : chatChannels ) {
-            System.out.println(ch.getName());
-        }
-
-        System.out.println("-------------");
-
         List<ChatChannel> channels = getVisibleChannels(player);
         channels.sort(Comparator.comparingInt(ch -> -ch.getPrefix().length()));
 
@@ -174,9 +173,9 @@ public class BasicChatManager implements ChatManager {
         result = result.replace("{message}", message);
         result = result.replace("{player}", player.getName());
 
-        String finalResult = result;
+        String finalResult = kdc.getPlaceholderManager().strip(result);
         kdc.getOnlinePlayers().stream().filter(p -> isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
-        System.out.println(kdc.getMessageManager().decolorify(result));
+        System.out.println("[CHAT] " + kdc.getMessageManager().decolorify(finalResult));
     }
 
 }

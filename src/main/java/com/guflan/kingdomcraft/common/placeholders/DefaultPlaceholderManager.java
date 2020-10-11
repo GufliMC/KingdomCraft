@@ -45,13 +45,12 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
             String placeholder = m.group(1).toLowerCase();
             placeholder = placeholder.substring(1, placeholder.length()-1); // remove brackets { and }
 
-            String replacement = null;
-
             PlaceholderReplacer replacer = placeholderReplacers.get(placeholder);
-            if ( replacer != null ) {
-                replacement = replacer.replace(player, placeholder);
+            if ( replacer == null ) {
+                continue;
             }
 
+            String replacement = replacer.replace(player, placeholder);
             if ( replacement == null ) {
                 replacement = "";
             }
@@ -59,6 +58,21 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
             m.appendReplacement(sb, replacement);
         }
         m.appendTail(sb);
+        return sb.toString();
+    }
+
+    @Override
+    public String strip(String str) {
+        StringBuffer sb = new StringBuffer();
+        Pattern p = Pattern.compile("(\\{[^}]+\\})");
+        Matcher m = p.matcher(str);
+
+        while ( m.find() ) {
+            //String placeholder = m.group(1).toLowerCase();
+            m.appendReplacement(sb, "");
+        }
+        m.appendTail(sb);
+
         return sb.toString();
     }
 }
