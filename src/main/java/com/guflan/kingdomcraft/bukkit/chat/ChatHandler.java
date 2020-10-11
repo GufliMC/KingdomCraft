@@ -2,29 +2,27 @@ package com.guflan.kingdomcraft.bukkit.chat;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
+import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.common.chat.DefaultChatChannel;
-import com.guflan.kingdomcraft.common.chat.KingdomChatChannel;
+import com.guflan.kingdomcraft.common.chat.channels.BasicChatChannel;
+import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.event.EventListener;
-import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ChatHandler implements EventListener {
 
-    private final KingdomCraft kdc;
-
-    private ConfigurationSection kingdomChannelConfig;
-
     public ChatHandler(Plugin plugin, KingdomCraft kdc) {
-        this.kdc = kdc;
-
         kdc.getEventManager().addListener(this);
 
         File configFile = new File(plugin.getDataFolder(), "chat.yml");
@@ -40,64 +38,36 @@ public class ChatHandler implements EventListener {
 
         Bukkit.getPluginManager().registerEvents(new ChatListener(kdc), plugin);
 
-        ChatManager cm = kdc.getChatManager();
-
-        if ( config.contains("kingdom-channels") && config.getBoolean("kingdom-channels")) {
-            kingdomChannelConfig = config.getConfigurationSection("kingdom-channel");
-            for ( Kingdom kd : kdc.getKingdoms() ) {
-                kingdomChannelConfig.set("kingdom", kd.getName());
-                ChatChannel ch = parse(kd.getName(), kingdomChannelConfig);
-                if ( ch != null ) {
-                    cm.addChatChannel(ch);
-                }
-            }
-        }
-
         if ( !config.contains("channels") || config.getConfigurationSection("channels") == null ) {
             return;
         }
+        ChatManager cm = kdc.getChatManager();
 
         ConfigurationSection channels = config.getConfigurationSection("channels");
         for ( String name : channels.getKeys(false) ) {
             ConfigurationSection cs = channels.getConfigurationSection(name);
 
-            if ( cs.contains("kingdom") && cs.getString("kingdom").equals("*") ) {
-                for ( Kingdom kd : kdc.getKingdoms() ) {
-                    cs.set("kingdom", kd.getName());
-                    ChatChannel ch = parse(kd.getName(), cs);
-                    if ( ch != null ) {
-                        cm.addChatChannel(ch);
-                    }
-                }
+            if ( !cs.contains("format") ) {
+                kdc.getPlugin().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
                 continue;
             }
 
-            ChatChannel ch = parse(name, cs);
-            if ( ch != null ) {
+            if ( cs.contains("kingdom") ) {
+                ChatChannelBlueprint bp = createBlueprint(name, cs);
+                cm.addBlueprint(bp);
+            } else {
+                ChatChannel ch = new BasicChatChannel(name);
+                setup(ch, cs);
                 cm.addChatChannel(ch);
+
+                if ( cs.contains("default") && cs.getBoolean("default") ) {
+                    cm.setDefaultChatChannel(ch);
+                }
             }
         }
     }
 
-    private ChatChannel parse(String name, ConfigurationSection section) {
-
-        ChatChannel channel;
-        if ( section.contains("kingdom") ) {
-            Kingdom kd = kdc.getKingdom(section.getString("kingdom"));
-            if ( kd == null ) {
-                kdc.getPlugin().log("Cannot create channel with name '" + name + "' because the given kingdom doesn't exist.", Level.WARNING);
-                return null;
-            }
-
-            channel = new KingdomChatChannel(name, kd);
-        } else {
-            channel = new DefaultChatChannel(name);
-        }
-
-        if ( !section.contains("format") ) {
-            kdc.getPlugin().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
-            return null;
-        }
+    private void setup(ChatChannel channel, ConfigurationSection section) {
         channel.setFormat(section.getString("format"));
 
         if ( section.contains("prefix") ) {
@@ -115,17 +85,33 @@ public class ChatHandler implements EventListener {
         if ( section.contains("range") ) {
             channel.setRange(section.getInt("range"));
         }
-
-        return channel;
     }
 
-    @Override
-    public void onKingdomCreate(Kingdom kingdom) {
-        kingdomChannelConfig.set("kingdom", kingdom.getName());
-        ChatChannel ch = parse(kingdom.getName(), kingdomChannelConfig);
-        if ( ch != null ) {
-            kdc.getChatManager().addChatChannel(ch);
-        }
+    private ChatChannelBlueprint createBlueprint(String name, ConfigurationSection section) {
+        String target = section.getString("kingdom");
+        List<String> kingdoms = Arrays.stream(target.split(Pattern.quote(",")))
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        return new ChatChannelBlueprint() {
+            @Override
+            public boolean doesTarget(Kingdom kingdom) {
+                return target.equals("*") || kingdoms.contains(kingdom.getName().toLowerCase());
+            }
+
+            @Override
+            public String getName() {
+                return name;
+            }
+
+            @Override
+            public ChatChannel create(Kingdom kingdom) {
+                ChatChannel ch = new KingdomChatChannel(getName() + "-" + kingdom.getName(), kingdom);
+                setup(ch, section);
+                return ch;
+            }
+        };
     }
+
 
 }

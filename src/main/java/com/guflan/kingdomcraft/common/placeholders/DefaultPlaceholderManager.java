@@ -27,7 +27,7 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
 
     @Override
     public void removePlaceholderReplacer(PlaceholderReplacer placeholderReplacer) {
-        placeholderReplacers.entrySet().removeIf(pr -> pr == placeholderReplacer);
+        placeholderReplacers.entrySet().removeIf(pr -> pr.getValue() == placeholderReplacer);
     }
 
     @Override
@@ -45,15 +45,17 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
             String placeholder = m.group(1).toLowerCase();
             placeholder = placeholder.substring(1, placeholder.length()-1); // remove brackets { and }
 
+            String replacement = null;
+
             PlaceholderReplacer replacer = placeholderReplacers.get(placeholder);
-            if ( replacer == null ) {
-                continue;
+            if ( replacer != null ) {
+                replacement = replacer.replace(player, placeholder);
             }
 
-            String replacement = replacer.replace(player, placeholder);
             if ( replacement == null ) {
                 replacement = "";
             }
+
             m.appendReplacement(sb, replacement);
         }
         m.appendTail(sb);

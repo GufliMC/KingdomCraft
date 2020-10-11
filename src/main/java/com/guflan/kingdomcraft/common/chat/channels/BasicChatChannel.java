@@ -1,8 +1,8 @@
-package com.guflan.kingdomcraft.common.chat;
+package com.guflan.kingdomcraft.common.chat.channels;
 
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 
-public class DefaultChatChannel implements ChatChannel {
+public class BasicChatChannel implements ChatChannel {
 
     private final String name;
 
@@ -14,7 +14,7 @@ public class DefaultChatChannel implements ChatChannel {
 
     private int range;
 
-    public DefaultChatChannel(String name) {
+    public BasicChatChannel(String name) {
         this.name = name;
     }
 

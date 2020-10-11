@@ -1,16 +1,17 @@
 
 enabled: true
 
-kingdom-channels: true
-kingdom-channel:
-  prefix: ''
-  format: '&6[K]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-
 channels:
+  kingdom:
+    prefix: ''
+    format: '&6[K]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
+    kingdom: '*' # every kingdom gets it's own channel
+
   public:
     prefix: '!'
     format: '&6[P]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
     toggleable: false
+    default: true # default channel, when no other channel matches the prefix
     range: 20
 
   hkm:

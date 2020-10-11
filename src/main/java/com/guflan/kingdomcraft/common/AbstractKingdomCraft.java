@@ -10,7 +10,7 @@ import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.api.storage.Storage;
-import com.guflan.kingdomcraft.common.chat.DefaultChatManager;
+import com.guflan.kingdomcraft.common.chat.BasicChatManager;
 import com.guflan.kingdomcraft.common.command.DefaultCommandManager;
 import com.guflan.kingdomcraft.common.event.DefaultEventManager;
 import com.guflan.kingdomcraft.common.placeholders.DefaultPlaceholderManager;
@@ -29,7 +29,7 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     private final DefaultCommandManager commandManager;
     private final DefaultEventManager eventManager;
-    private final DefaultChatManager chatManager;
+    private final BasicChatManager chatManager;
     private final DefaultPlaceholderManager placeholderManager;
 
     //
@@ -40,16 +40,16 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     public AbstractKingdomCraft(Storage storage) {
         this.storage = storage;
 
-        this.commandManager = new DefaultCommandManager(this);
-        this.eventManager = new DefaultEventManager();
-        this.chatManager = new DefaultChatManager(this);
-        this.placeholderManager = new DefaultPlaceholderManager(this);
-
         try {
             kingdoms.addAll(storage.getKingdoms().get());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        this.commandManager = new DefaultCommandManager(this);
+        this.eventManager = new DefaultEventManager();
+        this.chatManager = new BasicChatManager(this);
+        this.placeholderManager = new DefaultPlaceholderManager(this);
     }
 
     //
