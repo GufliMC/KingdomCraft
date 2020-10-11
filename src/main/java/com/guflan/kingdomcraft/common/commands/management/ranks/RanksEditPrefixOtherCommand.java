@@ -1,23 +1,22 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.ranks;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
-public class RanksDeleteOtherCommand extends DefaultCommandBase {
+public class RanksEditPrefixOtherCommand extends DefaultCommandBase {
 
-    public RanksDeleteOtherCommand(KingdomCraft kdc) {
-        super(kdc, "ranks delete", 2);
+    public RanksEditPrefixOtherCommand(KingdomCraft kdc) {
+        super(kdc, "ranks edit prefix", 3);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.delete.other") ) {
+        if ( !sender.hasPermission("kingdom.ranks.edit.prefix.other") ) {
             kdc.getMessageManager().send(sender, "noPermission");
+            return;
         }
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
@@ -32,7 +31,9 @@ public class RanksDeleteOtherCommand extends DefaultCommandBase {
             return;
         }
 
-        kdc.delete(rank);
-        kdc.getMessageManager().send(sender, "cmdRanksDeleteSuccess", rank.getName());
+        rank.setPrefix(args[2]);
+        kdc.save(rank);
+        kdc.getMessageManager().send(sender, "cmdRanksEditOtherSuccess", "prefix",
+                kingdom.getName(), rank.getName(), args[2]);
     }
 }
