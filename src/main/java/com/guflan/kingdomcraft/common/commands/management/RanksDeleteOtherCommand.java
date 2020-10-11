@@ -8,28 +8,27 @@ import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
-public class RanksDeleteCommand extends DefaultCommandBase {
+public class RanksDeleteOtherCommand extends DefaultCommandBase {
 
-    public RanksDeleteCommand(KingdomCraft kdc) {
-        super(kdc, "ranks delete", 1, true);
+    public RanksDeleteOtherCommand(KingdomCraft kdc) {
+        super(kdc, "ranks delete", 2);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.delete") ) {
+        if ( !sender.hasPermission("kingdom.ranks.delete.other") ) {
             kdc.getMessageManager().send(sender, "noPermission");
         }
 
-        User user = kdc.getUser((Player) sender);
-        Kingdom kingdom = user.getKingdom();
+        Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
             return;
         }
 
-        Rank rank = kingdom.getRank(args[0]);
+        Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[1]);
             return;
         }
 

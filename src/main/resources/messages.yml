@@ -127,6 +127,7 @@ cmdRanksCreateNameInvalid: '&cRank names can only contain alphanumeric character
 cmdRanksDeleteSuccess: '&7You deleted the rank &8{0}&7!'
 
 cmdRanksList: '&7List of ranks: &8{0}'
+cmdRanksListOther: '&7List of ranks for kingdom &8{0}&7: &8{1}'
 
 damageKingdom: '&7You can''t hurt members of your own kingdom'
 damageFriendly: '&7You can''t hurt members of a friendly kingdom'
