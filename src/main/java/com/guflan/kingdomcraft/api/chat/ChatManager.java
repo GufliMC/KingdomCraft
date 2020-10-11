@@ -7,6 +7,16 @@ import java.util.List;
 
 public interface ChatManager {
 
+    List<ChatChannelBlueprint> getBlueprints();
+
+    void addBlueprint(ChatChannelBlueprint blueprint);
+
+    void removeBlueprint(ChatChannelBlueprint blueprint);
+
+    ChatChannelBlueprint getBlueprint(String name);
+
+    //
+
     List<ChatChannel> getChatChannels();
 
     ChatChannel getChatChannel(String name);
@@ -14,6 +24,10 @@ public interface ChatManager {
     void addChatChannel(ChatChannel chatChannel);
 
     void removeChatChannel(ChatChannel chatChannel);
+
+    void setDefaultChatChannel(ChatChannel chatChannel);
+
+    //
 
     List<ChatChannel> getKingdomChannels(Kingdom kingdom);
 

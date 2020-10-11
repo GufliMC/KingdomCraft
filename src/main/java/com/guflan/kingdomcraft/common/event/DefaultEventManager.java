@@ -53,4 +53,5 @@ public class DefaultEventManager implements EventManager {
     public void kingdomDelete(Kingdom kingdom) {
         listeners.forEach(l -> l.onKingdomDelete(kingdom));
     }
+
 }

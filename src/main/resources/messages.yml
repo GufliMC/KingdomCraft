@@ -6,6 +6,8 @@
 #
 prefix: ''
 
+errorInvalidChatSetup: '&cIt appears the chat hasn''t been setup properly, your message can''t be send.'
+
 noPermissionCmd: '&cYou don''t have permission to use that command!'
 noPermission: '&cYou don''t have permission to do that!'
 noWorld: '&4KingdomCraft &cis not enabled in this world!'

@@ -2,25 +2,56 @@ package com.guflan.kingdomcraft.common.chat;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
+import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DefaultChatManager implements ChatManager {
+public class BasicChatManager implements ChatManager {
 
     private final KingdomCraft kdc;
 
+    private final List<ChatChannelBlueprint> blueprints = new ArrayList<>();
     private final List<ChatChannel> chatChannels = new ArrayList<>();
 
-    public DefaultChatManager(KingdomCraft kdc) {
+    private ChatChannel defaultChannel;
+
+    public BasicChatManager(KingdomCraft kdc) {
         this.kdc = kdc;
         kdc.getEventManager().addListener(new ChatEventListener(this));
+    }
+
+    @Override
+    public List<ChatChannelBlueprint> getBlueprints() {
+        return blueprints;
+    }
+
+    @Override
+    public void addBlueprint(ChatChannelBlueprint blueprint) {
+        if ( blueprint == null ) {
+            return;
+        }
+
+        if ( !this.blueprints.contains(blueprint) ) {
+            this.blueprints.add(blueprint);
+        }
+    }
+
+    @Override
+    public void removeBlueprint(ChatChannelBlueprint blueprint) {
+        this.blueprints.remove(blueprint);
+    }
+
+    @Override
+    public ChatChannelBlueprint getBlueprint(String name) {
+        return blueprints.stream().filter(c -> c.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     @Override
@@ -50,8 +81,13 @@ public class DefaultChatManager implements ChatManager {
     }
 
     @Override
+    public void setDefaultChatChannel(ChatChannel chatChannel) {
+        this.defaultChannel = chatChannel;
+    }
+
+    @Override
     public List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
-        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel).filter(ch -> ((KingdomChatChannel) ch).getKingdom() == kingdom).collect(Collectors.toList());
+        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel).filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
     }
 
     @Override
@@ -73,7 +109,7 @@ public class DefaultChatManager implements ChatManager {
         User user = kdc.getUser(player);
         if ( channel instanceof KingdomChatChannel ) {
             KingdomChatChannel ch = (KingdomChatChannel) channel;
-            if ( user.getKingdom() != ch.getKingdom() ) {
+            if ( !ch.getKingdoms().contains(user.getKingdom()) ) {
                 return false;
             }
         }
@@ -89,6 +125,13 @@ public class DefaultChatManager implements ChatManager {
 
     @Override
     public void handle(Player player, String message) {
+        System.out.println("1");
+
+        for ( ChatChannel ch : chatChannels ) {
+            System.out.println(ch.getName());
+        }
+
+        System.out.println("-------------");
 
         List<ChatChannel> channels = getVisibleChannels(player);
         channels.sort(Comparator.comparingInt(ch -> -ch.getPrefix().length()));
@@ -103,11 +146,14 @@ public class DefaultChatManager implements ChatManager {
         }
 
         if ( channel == null ) {
-            // TODO idk
-            return;
-        }
+            if ( defaultChannel == null ) {
+                kdc.getMessageManager().send(player, "errorInvalidChatSetup");
+                return;
+            }
 
-        if ( channel.getPrefix() != null ) {
+            channel = defaultChannel;
+        }
+        else if ( channel.getPrefix() != null ) {
             message = message.substring(channel.getPrefix().length()).trim();
         }
 
@@ -120,7 +166,11 @@ public class DefaultChatManager implements ChatManager {
         result = kdc.getPlaceholderManager().handle(player, result);
         result = kdc.getMessageManager().colorify(result);
 
-        message = kdc.getMessageManager().decolorify(message); // TODO check for permission
+        message = kdc.getMessageManager().colorify(message);
+        if ( !player.hasPermission("kingdom.chat.colors") ) {
+            message = kdc.getMessageManager().decolorify(message);
+        }
+
         result = result.replace("{message}", message);
         result = result.replace("{player}", player.getName());
 
