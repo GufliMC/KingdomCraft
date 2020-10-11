@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;

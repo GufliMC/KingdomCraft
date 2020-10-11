@@ -117,8 +117,8 @@ cmdCreateNameInvalid: '&cKingdom names can only contain alphanumeric characters!
 cmdDeleteSuccess: '&7You deleted the kingdom &8{0}&7!'
 cmdDeleteSuccessMembers: '&7Your kingdom has been deleted!'
 
-cmdEditSuccess: '&7Changed {0} to &8{1}&7!'
-cmdEditOtherSuccess: '&7Changed {0} of {2} to &8{1}&7!'
+cmdEditSuccess: '&7Changed {0} of your kingdom to &8{1}&7!'
+cmdEditOtherSuccess: '&7Changed {0} of kingdom &8{1} &7to &8{2}&7!'
 
 cmdRanksCreateAlreadyExists: '&7The rank &8{0} &7already exists!'
 cmdRanksCreateSuccess: '&7You created the rank &8{0}&7!'
@@ -128,6 +128,9 @@ cmdRanksDeleteSuccess: '&7You deleted the rank &8{0}&7!'
 
 cmdRanksList: '&7List of ranks: &8{0}'
 cmdRanksListOther: '&7List of ranks for kingdom &8{0}&7: &8{1}'
+
+cmdRanksEditSuccess: '&7Changed {0} of &8{1} &7to &8{2}&7!'
+cmdRanksEditOtherSuccess: '&7Changed {0} of rank &8{1} &7in kingdom &8{2} &7to &8{3}&7!'
 
 damageKingdom: '&7You can''t hurt members of your own kingdom'
 damageFriendly: '&7You can''t hurt members of a friendly kingdom'
@@ -139,3 +142,4 @@ chatAdvertising: '&7The player &8{0} &7is advertising: {1}'
 
 errorInvalidNumber: '&4{0} &cis not a valid number!'
 errorInvalidString: '&4{0} &cis not a valid string!'
+errorInvalidBoolean: '&4{0} &cis not a valid boolean, must be &4true &cor &4false&c!'

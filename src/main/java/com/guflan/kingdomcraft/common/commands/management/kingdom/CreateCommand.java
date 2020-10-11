@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
@@ -17,6 +17,7 @@ public class CreateCommand extends DefaultCommandBase {
     public void execute(CommandSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.create") && !sender.hasPermission("kingdom.create.other") ) {
             kdc.getMessageManager().send(sender, "noPermissionCmd");
+            return;
         }
 
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {

@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.ranks;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
@@ -8,18 +8,17 @@ import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
-import java.util.stream.Collectors;
+public class RanksEditPrefixCommand extends DefaultCommandBase {
 
-public class RanksListCommand extends DefaultCommandBase {
-
-    public RanksListCommand(KingdomCraft kdc) {
-        super(kdc, "ranks list", 0, true);
+    public RanksEditPrefixCommand(KingdomCraft kdc) {
+        super(kdc, "ranks edit prefix", 2, true);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.list") ) {
+        if ( !sender.hasPermission("kingdom.ranks.edit.prefix") ) {
             kdc.getMessageManager().send(sender, "noPermission");
+            return;
         }
 
         User user = kdc.getUser((Player) sender);
@@ -29,10 +28,14 @@ public class RanksListCommand extends DefaultCommandBase {
             return;
         }
 
-        String list = kingdom.getRanks().stream()
-                .sorted((o1, o2) -> o2.getLevel() - o1.getLevel())
-                .map(Rank::getName)
-                .collect(Collectors.joining(", "));
-        kdc.getMessageManager().send(sender, "cmdRanksList", list);
+        Rank rank = kingdom.getRank(args[0]);
+        if ( rank == null ) {
+            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[0]);
+            return;
+        }
+
+        rank.setPrefix(args[1]);
+        kdc.save(rank);
+        kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "prefix", rank.getName(), args[1]);
     }
 }

@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.ranks;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
@@ -8,16 +8,17 @@ import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
-public class RanksDeleteCommand extends DefaultCommandBase {
+public class RanksEditMaxMembersCommand extends DefaultCommandBase {
 
-    public RanksDeleteCommand(KingdomCraft kdc) {
-        super(kdc, "ranks delete", 1, true);
+    public RanksEditMaxMembersCommand(KingdomCraft kdc) {
+        super(kdc, "ranks edit max-members", 2, true);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.delete") ) {
+        if ( !sender.hasPermission("kingdom.ranks.edit.max-members") ) {
             kdc.getMessageManager().send(sender, "noPermission");
+            return;
         }
 
         User user = kdc.getUser((Player) sender);
@@ -33,7 +34,13 @@ public class RanksDeleteCommand extends DefaultCommandBase {
             return;
         }
 
-        kdc.delete(rank);
-        kdc.getMessageManager().send(sender, "cmdRanksDeleteSuccess", rank.getName());
+        if ( !args[1].matches("[0-9]+") ) {
+            kdc.getMessageManager().send(sender, "errorInvalidNumber", args[1]);
+            return;
+        }
+
+        rank.setMaxMembers(Integer.parseInt(args[1]));
+        kdc.save(rank);
+        kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "max-members", rank.getName(), args[1]);
     }
 }

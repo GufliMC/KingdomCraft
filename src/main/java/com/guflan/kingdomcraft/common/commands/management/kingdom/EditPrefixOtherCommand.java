@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
@@ -38,6 +38,6 @@ public class EditPrefixOtherCommand extends DefaultCommandBase {
         kingdom.setPrefix(args[1]);
         kdc.save(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditSuccess", "prefix", args[1], kingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "prefix", kingdom.getName(), args[1]);
     }
 }

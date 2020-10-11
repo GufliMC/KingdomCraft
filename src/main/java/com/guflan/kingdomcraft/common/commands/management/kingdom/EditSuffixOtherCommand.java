@@ -1,4 +1,4 @@
-package com.guflan.kingdomcraft.common.commands.management;
+package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
@@ -8,10 +8,10 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EditDisplayOtherCommand extends DefaultCommandBase {
+public class EditSuffixOtherCommand extends DefaultCommandBase {
 
-    public EditDisplayOtherCommand(KingdomCraft kdc) {
-        super(kdc, "edit display", 2);
+    public EditSuffixOtherCommand(KingdomCraft kdc) {
+        super(kdc, "edit suffix", 1);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class EditDisplayOtherCommand extends DefaultCommandBase {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.display.other") ) {
+        if ( !sender.hasPermission("kingdom.edit.suffix.other") ) {
             kdc.getMessageManager().send(sender, "noPermission");
             return;
         }
@@ -35,9 +35,9 @@ public class EditDisplayOtherCommand extends DefaultCommandBase {
             return;
         }
 
-        kingdom.setDisplay(args[1]);
+        kingdom.setSuffix(args[1]);
         kdc.save(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditSuccess", "display", args[1], kingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "suffix", kingdom.getName(), args[1]);
     }
 }

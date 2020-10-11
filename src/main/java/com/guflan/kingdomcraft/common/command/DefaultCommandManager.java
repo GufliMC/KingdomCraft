@@ -8,9 +8,10 @@ import com.guflan.kingdomcraft.common.commands.JoinCommand;
 import com.guflan.kingdomcraft.common.commands.ListCommand;
 import com.guflan.kingdomcraft.common.commands.admin.KickCommand;
 import com.guflan.kingdomcraft.common.commands.admin.SetKingdomCommand;
-import com.guflan.kingdomcraft.common.commands.management.*;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
+import com.guflan.kingdomcraft.common.commands.management.kingdom.*;
+import com.guflan.kingdomcraft.common.commands.management.ranks.*;
 import com.guflan.kingdomcraft.common.commands.member.InviteCommand;
 import com.guflan.kingdomcraft.common.commands.member.LeaveCommand;
 import org.apache.commons.text.similarity.LevenshteinDistance;
@@ -56,9 +57,35 @@ public class DefaultCommandManager implements CommandManager {
         registerCommand(new EditSuffixCommand(kdc));
         registerCommand(new EditSuffixOtherCommand(kdc));
 
+        registerCommand(new EditInviteOnlyCommand(kdc));
+        registerCommand(new EditInviteOnlyOtherCommand(kdc));
+
+        registerCommand(new EditMaxMembersCommand(kdc));
+        registerCommand(new EditMaxMembersOtherCommand(kdc));
+
         registerCommand(new RanksListCommand(kdc));
+        registerCommand(new RanksListOtherCommand(kdc));
+
         registerCommand(new RanksCreateCommand(kdc));
+        registerCommand(new RanksCreateOtherCommand(kdc));
+
         registerCommand(new RanksDeleteCommand(kdc));
+        registerCommand(new RanksDeleteOtherCommand(kdc));
+
+        registerCommand(new RanksEditDisplayCommand(kdc));
+        registerCommand(new RanksEditDisplayOtherCommand(kdc));
+
+        registerCommand(new RanksEditPrefixCommand(kdc));
+        registerCommand(new RanksEditPrefixOtherCommand(kdc));
+
+        registerCommand(new RanksEditSuffixCommand(kdc));
+        registerCommand(new RanksEditSuffixOtherCommand(kdc));
+
+        registerCommand(new RanksEditMaxMembersCommand(kdc));
+        registerCommand(new RanksEditMaxMembersOtherCommand(kdc));
+
+        registerCommand(new RanksEditLevelCommand(kdc));
+        registerCommand(new RanksEditLevelOtherCommand(kdc));
 
         // admin
         registerCommand(new KickCommand(kdc));
