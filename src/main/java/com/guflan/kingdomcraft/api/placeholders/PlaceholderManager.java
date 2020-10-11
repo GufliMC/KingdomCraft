@@ -12,4 +12,5 @@ public interface PlaceholderManager {
 
     String handle(Player player, String str);
 
+    String strip(String msg);
 }
