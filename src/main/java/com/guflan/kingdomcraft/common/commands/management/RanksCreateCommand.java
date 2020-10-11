@@ -21,7 +21,7 @@ public class RanksCreateCommand extends DefaultCommandBase {
         }
 
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdCreateNameInvalid", args[0]);
+            kdc.getMessageManager().send(sender, "cmdRanksCreateNameInvalid");
             return;
         }
 
@@ -29,6 +29,11 @@ public class RanksCreateCommand extends DefaultCommandBase {
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
             kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            return;
+        }
+
+        if ( kingdom.getRank(args[0]) != null ) {
+            kdc.getMessageManager().send(sender, "cmdRanksCreateAlreadyExists", args[0]);
             return;
         }
 
@@ -40,6 +45,6 @@ public class RanksCreateCommand extends DefaultCommandBase {
             }
         });
 
-        sender.sendMessage("Created rank " + rank.getName());
+        kdc.getMessageManager().send(sender, "cmdRanksCreateSuccess", rank.getName());
     }
 }

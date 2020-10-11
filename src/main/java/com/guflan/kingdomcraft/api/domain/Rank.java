@@ -22,4 +22,8 @@ public interface Rank {
     int getMaxMembers();
 
     void setMaxMembers(int maxMembers);
+
+    int getLevel();
+
+    void setLevel(int level);
 }

@@ -29,15 +29,11 @@ public class RanksDeleteCommand extends DefaultCommandBase {
 
         Rank rank = kingdom.getRank(args[0]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[0]);
             return;
         }
 
-        kdc.delete(rank).thenRun(() -> {
-            System.out.println(kingdom.getRanks().size());
-            System.out.println(kingdom.getDefaultRank() != null ? kingdom.getDefaultRank().getName() : null);
-        });
-
-        sender.sendMessage("Deleted rank " + rank.getName());
+        kdc.delete(rank);
+        kdc.getMessageManager().send(sender, "cmdRanksDeleteSuccess", args[0]);
     }
 }

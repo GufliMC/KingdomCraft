@@ -15,12 +15,12 @@ public class CreateCommand extends DefaultCommandBase {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.create") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
+        if ( !sender.hasPermission("kingdom.create") && !sender.hasPermission("kingdom.create.other") ) {
+            kdc.getMessageManager().send(sender, "noPermissionCmd");
         }
 
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdCreateNameInvalid", args[0]);
+            kdc.getMessageManager().send(sender, "cmdCreateNameInvalid");
             return;
         }
 
@@ -29,14 +29,19 @@ public class CreateCommand extends DefaultCommandBase {
             return;
         }
 
+        if ( sender instanceof Player && kdc.getUser((Player) sender).getKingdom() != null
+                && !sender.hasPermission("kingdom.create.other") ) {
+            kdc.getMessageManager().send(sender, "noPermissionCmd");
+            return;
+        }
+
         Kingdom kingdom = kdc.createKingdom(args[0]);
         kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName());
 
-        // place player in created kingdom (TODO is this necessary?)
-//        if ( sender instanceof Player) {
-//            User user = kdc.getUser((Player) sender);
-//            user.setKingdom(kingdom);
-//            kdc.save(user);
-//        }
+        if ( sender instanceof Player && kdc.getUser((Player) sender).getKingdom() == null ) {
+            User user = kdc.getUser((Player) sender);
+            user.setKingdom(kingdom);
+            kdc.save(kingdom).thenRun(() -> kdc.save(user));
+        }
     }
 }
