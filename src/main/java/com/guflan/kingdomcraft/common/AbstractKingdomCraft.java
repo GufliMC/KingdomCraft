@@ -4,6 +4,7 @@ import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.event.EventManager;
@@ -123,13 +124,23 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     }
 
     @Override
-    public void delete(Kingdom kingdom) {
-        storage.delete(kingdom);
+    public CompletableFuture<Void> delete(Kingdom kingdom) {
+        return storage.delete(kingdom);
     }
 
     @Override
-    public void save(Kingdom kingdom) {
-        storage.save(kingdom);
+    public CompletableFuture<Void> save(Kingdom kingdom) {
+        return storage.save(kingdom);
+    }
+
+    @Override
+    public CompletableFuture<Void> delete(Rank rank) {
+        return storage.delete(rank);
+    }
+
+    @Override
+    public CompletableFuture<Void> save(Rank rank) {
+        return storage.save(rank);
     }
 
     // users
@@ -175,8 +186,8 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     }
 
     @Override
-    public void save(User user) {
-        storage.save(user);
+    public CompletableFuture<Void> save(User user) {
+        return storage.save(user);
     }
 
     @Override

@@ -36,9 +36,7 @@ public interface Kingdom {
 
     Rank getRank(String name);
 
-    Rank addRank(String name);
-
-    void deleteRank(Rank rank);
+    Rank createRank(String name);
 
     Map<Kingdom, Relation> getRelations();
 

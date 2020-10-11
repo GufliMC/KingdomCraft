@@ -8,21 +8,16 @@ import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
-public class RanksCreateCommand extends DefaultCommandBase {
+public class RanksDeleteCommand extends DefaultCommandBase {
 
-    public RanksCreateCommand(KingdomCraft kdc) {
-        super(kdc, "ranks create", 1);
+    public RanksDeleteCommand(KingdomCraft kdc) {
+        super(kdc, "ranks delete", 1);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.create") ) {
+        if ( !sender.hasPermission("kingdom.ranks.delete") ) {
             kdc.getMessageManager().send(sender, "noPermission");
-        }
-
-        if ( !args[0].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdCreateNameInvalid", args[0]);
-            return;
         }
 
         User user = kdc.getUser((Player) sender);
@@ -32,14 +27,17 @@ public class RanksCreateCommand extends DefaultCommandBase {
             return;
         }
 
-        Rank rank = kingdom.createRank(args[0]);
-        kdc.save(rank).thenRun(() -> {
-            if (kingdom.getDefaultRank() == null) {
-                kingdom.setDefaultRank(rank);
-                kdc.save(kingdom);
-            }
+        Rank rank = kingdom.getRank(args[0]);
+        if ( rank == null ) {
+            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            return;
+        }
+
+        kdc.delete(rank).thenRun(() -> {
+            System.out.println(kingdom.getRanks().size());
+            System.out.println(kingdom.getDefaultRank() != null ? kingdom.getDefaultRank().getName() : null);
         });
 
-        sender.sendMessage("Created rank " + rank.getName());
+        sender.sendMessage("Deleted rank " + rank.getName());
     }
 }

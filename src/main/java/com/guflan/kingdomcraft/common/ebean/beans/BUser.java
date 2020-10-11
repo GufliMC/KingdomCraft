@@ -26,11 +26,11 @@ public class BUser extends Model implements User {
     public String name;
 
     @ManyToOne
-    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
+    @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
     public BRank rank;
 
     @ManyToOne
-    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
+    @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
     public BKingdom kingdom;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

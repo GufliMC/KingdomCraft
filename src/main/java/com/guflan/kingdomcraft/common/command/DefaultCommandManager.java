@@ -58,6 +58,7 @@ public class DefaultCommandManager implements CommandManager {
 
         registerCommand(new RanksListCommand(kdc));
         registerCommand(new RanksCreateCommand(kdc));
+        registerCommand(new RanksDeleteCommand(kdc));
 
         // admin
         registerCommand(new KickCommand(kdc));
