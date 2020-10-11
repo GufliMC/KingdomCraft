@@ -35,6 +35,11 @@ public class DeleteCommand extends DefaultCommandBase {
             }
         }
 
+        for ( Player p : kdc.getOnlinePlayers() ) {
+            if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
+            kdc.getMessageManager().send(p, "cmdDeleteSuccessMembers");
+        }
+
         kdc.delete(kingdom);
         kdc.getMessageManager().send(sender, "cmdDeleteSuccess", kingdom.getName());
     }

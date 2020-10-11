@@ -29,8 +29,10 @@ public class RanksListCommand extends DefaultCommandBase {
             return;
         }
 
-        sender.sendMessage(kingdom.getRanks().stream().map(Rank::getName).collect(Collectors.joining(", ")));
-        //kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName());
-
+        String list = kingdom.getRanks().stream()
+                .sorted((o1, o2) -> o2.getLevel() - o1.getLevel())
+                .map(Rank::getName)
+                .collect(Collectors.joining(", "));
+        kdc.getMessageManager().send(sender, "cmdRanksList", list);
     }
 }

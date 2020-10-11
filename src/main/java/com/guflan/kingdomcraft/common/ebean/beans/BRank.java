@@ -30,6 +30,7 @@ public class BRank extends Model implements Rank {
     public String prefix;
     public String suffix;
     public int maxMembers;
+    public int level;
 
     @WhenCreated
     public Date createdAt;
@@ -96,5 +97,15 @@ public class BRank extends Model implements Rank {
     @Override
     public void setMaxMembers(int maxMembers) {
         this.maxMembers = maxMembers;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
+    }
+
+    @Override
+    public void setLevel(int level) {
+        this.level = level;
     }
 }
