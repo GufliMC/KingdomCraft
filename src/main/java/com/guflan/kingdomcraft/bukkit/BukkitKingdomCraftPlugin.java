@@ -2,7 +2,6 @@ package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.DomainManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraft;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitScheduler;
@@ -10,8 +9,7 @@ import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
-import com.guflan.kingdomcraft.common.ebean.EBeanManager;
-import com.guflan.kingdomcraft.common.ebean.EBeanStorage;
+import com.guflan.kingdomcraft.common.ebean.EBeanContext;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -88,8 +86,8 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 
 		// create database
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
-		EBeanManager dm = new EBeanManager(this);
-		boolean result = dm.init(
+		EBeanContext ec = new EBeanContext(this);
+		boolean result = ec.init(
 				dbConfig.getString("url"),
 				dbConfig.getString("driver"),
 				dbConfig.getString("username"),
@@ -104,7 +102,7 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 			return;
 		}
 
-		this.kdc = new BukkitKingdomCraft(this, dm);
+		this.kdc = new BukkitKingdomCraft(this, ec);
 
 		new BukkitPlaceholderReplacer(kdc);
 		new ChatHandler(this, kdc);

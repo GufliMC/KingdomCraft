@@ -65,8 +65,8 @@ public class TruceCommand extends DefaultCommandBase {
             return;
         }
 
+        kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.TRUCE);
-
         kdc.getMessageManager().send(sender, "cmdTruceAccepted", target.getName());
 
         for ( Player member : kdc.getOnlinePlayers() ) {

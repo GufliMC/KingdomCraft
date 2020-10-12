@@ -71,12 +71,11 @@ public class BUser extends Model implements User {
             return;
         }
 
-        if ( !this.kingdom.equals(kingdom) ) {
+        if ( this.kingdom == null || !this.kingdom.equals(kingdom) ) {
             this.rank = (BRank) kingdom.getDefaultRank();
-        } else {
-            this.kingdom = (BKingdom) kingdom;
         }
 
+        this.kingdom = (BKingdom) kingdom;
     }
 
     @Override

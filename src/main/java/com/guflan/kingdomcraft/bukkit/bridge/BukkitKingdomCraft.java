@@ -1,7 +1,7 @@
 package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.DomainManager;
+import com.guflan.kingdomcraft.api.domain.DomainContext;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.messages.MessageManager;
@@ -20,8 +20,8 @@ public class BukkitKingdomCraft extends AbstractKingdomCraft {
 
     private final List<Player> onlinePlayers = new ArrayList<>();
 
-    public BukkitKingdomCraft(BukkitKingdomCraftPlugin plugin, DomainManager domainManager) {
-        super(domainManager);
+    public BukkitKingdomCraft(BukkitKingdomCraftPlugin plugin, DomainContext context) {
+        super(context);
         this.plugin = plugin;
 
         this.messageManager = new BukkitMessageManager(plugin);

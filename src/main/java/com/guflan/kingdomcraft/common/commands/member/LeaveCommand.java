@@ -28,7 +28,7 @@ public class LeaveCommand extends DefaultCommandBase {
 
         Kingdom oldKingdom = user.getKingdom();
         user.setKingdom(null);
-
+        kdc.save(user);
         kdc.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
 
         for ( Player member : kdc.getOnlinePlayers() ) {

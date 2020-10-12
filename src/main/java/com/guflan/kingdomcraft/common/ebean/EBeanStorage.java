@@ -22,7 +22,6 @@ import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationException;
 import io.ebean.migration.MigrationRunner;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
