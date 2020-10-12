@@ -60,6 +60,7 @@ public class AllyCommand extends DefaultCommandBase {
             return;
         }
 
+        kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.ALLY);
         kdc.getMessageManager().send(sender, "cmdAllyAccepted", target.getName());
 

@@ -65,6 +65,7 @@ public class NeutralCommand extends DefaultCommandBase {
             }
         }
 
+        kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.NEUTRAL);
         kdc.getMessageManager().send(sender, "cmdNeutralAccepted", target.getName());
 

@@ -5,9 +5,8 @@ import com.guflan.kingdomcraft.api.domain.models.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
-public interface DomainManager {
+public interface DomainContext {
 
     // kingdoms
 

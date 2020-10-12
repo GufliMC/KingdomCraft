@@ -3,7 +3,7 @@ package com.guflan.kingdomcraft.common;
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.command.CommandManager;
-import com.guflan.kingdomcraft.api.domain.DomainManager;
+import com.guflan.kingdomcraft.api.domain.DomainContext;
 import com.guflan.kingdomcraft.api.domain.models.*;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.event.EventManager;
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public abstract class AbstractKingdomCraft implements KingdomCraft {
 
@@ -28,10 +27,10 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     //
 
-    private final DomainManager domainManager;
+    private final DomainContext context;
 
-    public AbstractKingdomCraft(DomainManager domainManager) {
-        this.domainManager = domainManager;
+    public AbstractKingdomCraft(DomainContext context) {
+        this.context = context;
 
         this.commandManager = new DefaultCommandManager(this);
         this.eventManager = new DefaultEventManager();
@@ -73,10 +72,10 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
                 }
 
                 if ( user == null ) {
-                    user = domainManager.createUser(player.getUniqueId(), player.getName());
+                    user = context.createUser(player.getUniqueId(), player.getName());
                 }
 
-                domainManager.addCachedUser(user);
+                context.addCachedUser(user);
 
                 // TODO join event
             } catch (InterruptedException | ExecutionException e) {
@@ -87,50 +86,50 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     @Override
     public void quit(Player player) {
-        User user = domainManager.getCachedUser(player.getUniqueId());
-        domainManager.removeCachedUser(user);
+        User user = context.getCachedUser(player.getUniqueId());
+        context.removeCachedUser(user);
     }
 
     // kingdoms
 
     @Override
     public List<Kingdom> getKingdoms() {
-        return domainManager.getCachedKingdoms();
+        return context.getCachedKingdoms();
     }
 
     @Override
     public Kingdom getKingdom(String name) {
-        return domainManager.getCachedKingdom(name);
+        return context.getCachedKingdom(name);
     }
 
     @Override
     public Kingdom createKingdom(String name) {
-        Kingdom kingdom = domainManager.createKingdom(name);
-        domainManager.save(kingdom);
+        Kingdom kingdom = context.createKingdom(name);
+        context.save(kingdom);
         eventManager.kingdomCreate(kingdom);
         return kingdom;
     }
 
     @Override
     public CompletableFuture<Void> delete(Kingdom kingdom) {
-        return domainManager.delete(kingdom);
+        return context.delete(kingdom);
     }
 
     @Override
     public CompletableFuture<Void> save(Kingdom kingdom) {
-        return domainManager.save(kingdom);
+        return context.save(kingdom);
     }
 
     // ranks
 
     @Override
     public CompletableFuture<Void> delete(Rank rank) {
-        return domainManager.delete(rank);
+        return context.delete(rank);
     }
 
     @Override
     public CompletableFuture<Void> save(Rank rank) {
-        return domainManager.save(rank);
+        return context.save(rank);
     }
 
 
@@ -138,69 +137,69 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     @Override
     public List<Relation> getRelations(Kingdom kingdom) {
-        return domainManager.getRelations(kingdom);
+        return context.getRelations(kingdom);
     }
 
     @Override
     public void setRelation(Kingdom kingdom, Kingdom other, RelationType type) {
-        domainManager.setRelation(kingdom, other, type);
+        context.setRelation(kingdom, other, type);
     }
 
     @Override
     public Relation getRelation(Kingdom kingdom, Kingdom other) {
-        return domainManager.getRelation(kingdom, other);
+        return context.getRelation(kingdom, other);
     }
 
     @Override
     public void addRelationRequest(Kingdom kingdom, Kingdom other, RelationType type) {
-        domainManager.addRelationRequest(kingdom, other, type);
+        context.addRelationRequest(kingdom, other, type);
     }
 
     @Override
     public Relation getRelationRequest(Kingdom kingdom, Kingdom other) {
-        return domainManager.getRelationRequest(kingdom, other);
+        return context.getRelationRequest(kingdom, other);
     }
 
     @Override
     public void removeRelationRequest(Kingdom kingdom, Kingdom other) {
-        domainManager.removeRelationRequest(kingdom, other);
+        context.removeRelationRequest(kingdom, other);
     }
 
     // users
 
     @Override
     public List<User> getOnlineUsers() {
-        return domainManager.getCachedUsers();
+        return context.getCachedUsers();
     }
 
     @Override
     public User getOnlineUser(String name) {
-        return domainManager.getCachedUser(name);
+        return context.getCachedUser(name);
     }
 
     @Override
     public User getOnlineUser(UUID uuid) {
-        return domainManager.getCachedUser(uuid);
+        return context.getCachedUser(uuid);
     }
 
     @Override
     public CompletableFuture<List<User>> getUsers() {
-        return domainManager.getUsers();
+        return context.getUsers();
     }
 
     @Override
     public CompletableFuture<User> getUser(String name) {
-        return domainManager.getUser(name);
+        return context.getUser(name);
     }
 
     @Override
     public CompletableFuture<User> getUser(UUID uuid) {
-        return domainManager.getUser(uuid);
+        return context.getUser(uuid);
     }
 
     @Override
     public CompletableFuture<Void> save(User user) {
-        return domainManager.save(user);
+        return context.save(user);
     }
 
     @Override
