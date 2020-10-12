@@ -29,7 +29,7 @@ public class ConnectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        kdc.quit(new BukkitPlayer(e.getPlayer()));
+        kdc.quit(kdc.getPlayer(e.getPlayer().getUniqueId()));
     }
 
     private void join(Player player) {

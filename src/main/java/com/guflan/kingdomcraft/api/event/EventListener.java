@@ -1,7 +1,7 @@
 package com.guflan.kingdomcraft.api.event;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.User;
 
 public interface EventListener {
 

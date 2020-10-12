@@ -1,14 +1,11 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.Relation;
-import com.guflan.kingdomcraft.common.ebean.beans.query.QBRank;
-import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Rank;
+import com.guflan.kingdomcraft.api.domain.models.User;
 import io.ebean.Model;
-import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,6 +13,12 @@ import java.util.*;
 @Entity
 @Table(name = "kingdoms")
 public class BKingdom extends Model implements Kingdom {
+
+    public static List<BKingdom> INSTANCES = new ArrayList<>();
+
+    public BKingdom() {
+        INSTANCES.add(this);
+    }
 
     @Id
     public long id;
@@ -34,29 +37,20 @@ public class BKingdom extends Model implements Kingdom {
     @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
     public BRank defaultRank;
 
-    @OneToMany(mappedBy = "kingdom")
-    public Set<BRank> ranks;
+    @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER)
+    public List<BRank> ranks;
 
-    @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
-    public Set<BRelation> relations;
+//    @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
+//    public List<BRelation> relations;
 
-    @OneToMany(mappedBy = "kingdom")
-    public Set<BUser> members;
+//    @OneToMany(mappedBy = "kingdom")
+//    public List<BUser> members;
 
     @WhenCreated
     Date createdAt;
 
     @WhenModified
     Date updatedAt;
-
-    @Override
-    @Transactional
-    public void save() {
-        super.save();
-        for ( BRelation rel : relations) {
-            rel.save();
-        }
-    }
 
     // interface
 
@@ -144,43 +138,14 @@ public class BKingdom extends Model implements Kingdom {
         rank.name = name;
         rank.kingdom = this;
 
+        ranks = new ArrayList<>(ranks);
         ranks.add(rank);
         return rank;
     }
 
     @Override
-    public Map<Kingdom, Relation> getRelations() {
-        Map<Kingdom, Relation> relationMap = new HashMap<>();
-        for ( BRelation rel : relations ) {
-            relationMap.put(rel.otherKingdom, Relation.fromId(rel.relation));
-        }
-        return relationMap;
-    }
-
-    @Override
-    public Relation getRelation(Kingdom kingdom) {
-        for ( BRelation rel : relations ) {
-            if ( rel.otherKingdom == kingdom ) {
-                return Relation.fromId(rel.relation);
-            }
-        }
-        return Relation.NEUTRAL;
-    }
-
-    @Override
-    public void setRelation(Kingdom kingdom, Relation relation) {
-        relations.removeIf(rel -> rel.otherKingdom == kingdom);
-
-        BRelation rel = new BRelation();
-        rel.kingdom = this;
-        rel.otherKingdom = (BKingdom) kingdom;
-        rel.relation = relation.getId();
-        relations.add(rel);
-    }
-
-    @Override
-    @Deprecated
-    public Set<User> getMembers() {
-        return new HashSet<>(members);
+    public void deleteRank(Rank rank) {
+        ranks = new ArrayList<>(ranks);
+        ranks.remove(rank);
     }
 }

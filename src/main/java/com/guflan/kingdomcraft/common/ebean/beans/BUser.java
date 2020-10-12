@@ -1,8 +1,8 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Rank;
+import com.guflan.kingdomcraft.api.domain.models.User;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
@@ -10,9 +10,8 @@ import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,7 +33,7 @@ public class BUser extends Model implements User {
     public BKingdom kingdom;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public Set<BKingdomInvite> kingdomInvites;
+    public List<BKingdomInvite> kingdomInvites;
 
     @WhenCreated
     public Date createdAt;
@@ -69,15 +68,20 @@ public class BUser extends Model implements User {
         if ( kingdom == null ) {
             this.kingdom = null;
             this.rank = null;
+            return;
+        }
+
+        if ( !this.kingdom.equals(kingdom) ) {
+            this.rank = (BRank) kingdom.getDefaultRank();
         } else {
             this.kingdom = (BKingdom) kingdom;
-            this.rank = (BRank) kingdom.getDefaultRank();
         }
+
     }
 
     @Override
     public void setRank(Rank rank) {
-        if ( rank.getKingdom() != kingdom ) {
+        if ( !rank.getKingdom().equals(kingdom) ) {
             throw new IllegalArgumentException("The given rank does not belong to the user their kingdom.");
         }
         this.rank = (BRank) rank;

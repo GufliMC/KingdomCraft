@@ -32,6 +32,7 @@ create table ranks (
   prefix                        varchar(255),
   suffix                        varchar(255),
   max_members                   integer not null,
+  level                         integer not null,
   created_at                    timestamptz not null,
   updated_at                    timestamptz not null,
   constraint uq_ranks_name_kingdom_id unique (name,kingdom_id),
@@ -43,6 +44,7 @@ create table kingdom_relations (
   kingdom_id                    bigint,
   other_kingdom_id              bigint,
   relation                      integer not null,
+  is_request                    boolean default false not null,
   created_at                    timestamptz not null,
   updated_at                    timestamptz not null,
   constraint pk_kingdom_relations primary key (id)

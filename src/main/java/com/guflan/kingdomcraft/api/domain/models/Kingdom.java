@@ -1,7 +1,6 @@
-package com.guflan.kingdomcraft.api.domain;
+package com.guflan.kingdomcraft.api.domain.models;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public interface Kingdom {
@@ -38,12 +37,6 @@ public interface Kingdom {
 
     Rank createRank(String name);
 
-    Map<Kingdom, Relation> getRelations();
-
-    Relation getRelation(Kingdom kingdom);
-
-    void setRelation(Kingdom kingdom, Relation relation);
-
-    Set<User> getMembers();
+    void deleteRank(Rank rank);
 
 }

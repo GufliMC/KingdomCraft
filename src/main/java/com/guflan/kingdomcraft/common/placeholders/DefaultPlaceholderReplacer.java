@@ -1,8 +1,7 @@
 package com.guflan.kingdomcraft.common.placeholders;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.messages.MessageManager;
+import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 
 public class DefaultPlaceholderReplacer {
