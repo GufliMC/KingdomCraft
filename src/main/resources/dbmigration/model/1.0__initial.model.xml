@@ -28,6 +28,7 @@
             <column name="prefix" type="varchar"/>
             <column name="suffix" type="varchar"/>
             <column name="max_members" type="integer" notnull="true"/>
+            <column name="level" type="integer" notnull="true"/>
             <column name="created_at" type="timestamp" notnull="true"/>
             <column name="updated_at" type="timestamp" notnull="true"/>
             <uniqueConstraint name="uq_ranks_name_kingdom_id" columnNames="name,kingdom_id" oneToOne="false" nullableColumns="name,kingdom_id"/>
@@ -37,6 +38,7 @@
             <column name="kingdom_id" type="bigint" references="kingdoms.id" foreignKeyName="fk_kingdom_relations_kingdom_id" foreignKeyIndex="ix_kingdom_relations_kingdom_id" foreignKeyOnDelete="CASCADE" foreignKeyOnUpdate="RESTRICT"/>
             <column name="other_kingdom_id" type="bigint" references="kingdoms.id" foreignKeyName="fk_kingdom_relations_other_kingdom_id" foreignKeyIndex="ix_kingdom_relations_other_kingdom_id" foreignKeyOnDelete="CASCADE" foreignKeyOnUpdate="RESTRICT"/>
             <column name="relation" type="integer" notnull="true"/>
+            <column name="is_request" type="boolean" defaultValue="false" notnull="true"/>
             <column name="created_at" type="timestamp" notnull="true"/>
             <column name="updated_at" type="timestamp" notnull="true"/>
         </createTable>

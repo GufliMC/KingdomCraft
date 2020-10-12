@@ -79,5 +79,24 @@ public abstract class AbstractScheduler {
         }
     }
 
+    public <T> CompletableFuture<T> makeAsyncFuture(Callable<T> supplier) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return supplier.call();
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        }, async());
+    }
+
+    public CompletableFuture<Void> makeAsyncFuture(Runnable runnable) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        }, async());
+    }
 
 }

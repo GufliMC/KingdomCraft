@@ -12,8 +12,7 @@ import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.common.commands.management.kingdom.*;
 import com.guflan.kingdomcraft.common.commands.management.ranks.*;
-import com.guflan.kingdomcraft.common.commands.member.InviteCommand;
-import com.guflan.kingdomcraft.common.commands.member.LeaveCommand;
+import com.guflan.kingdomcraft.common.commands.member.*;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.ArrayList;
@@ -43,6 +42,11 @@ public class DefaultCommandManager implements CommandManager {
         // member
         registerCommand(new LeaveCommand(kdc));
         registerCommand(new InviteCommand(kdc));
+
+        registerCommand(new AllyCommand(kdc));
+        registerCommand(new EnemyCommand(kdc));
+        registerCommand(new NeutralCommand(kdc));
+        registerCommand(new TruceCommand(kdc));
 
         // management
         registerCommand(new CreateCommand(kdc));

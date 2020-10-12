@@ -1,8 +1,8 @@
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Rank;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 

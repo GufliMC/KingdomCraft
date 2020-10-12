@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.api.chat;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.entity.Player;
 
 import java.util.List;

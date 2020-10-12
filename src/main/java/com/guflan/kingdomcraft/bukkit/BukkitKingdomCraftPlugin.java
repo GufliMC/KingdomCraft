@@ -2,6 +2,7 @@ package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.domain.DomainManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraft;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitScheduler;
@@ -9,6 +10,7 @@ import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
+import com.guflan.kingdomcraft.common.ebean.EBeanManager;
 import com.guflan.kingdomcraft.common.ebean.EBeanStorage;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -84,23 +86,25 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 		ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
-		// create ebean storage instance
-		EBeanStorage storage = new EBeanStorage(this);
-
-		// load database connection
+		// create database
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
-		storage.init(
+		EBeanManager dm = new EBeanManager(this);
+		boolean result = dm.init(
 				dbConfig.getString("url"),
 				dbConfig.getString("driver"),
 				dbConfig.getString("username"),
-				dbConfig.getString("password")
-		);
+				dbConfig.getString("password"));
 
 		// revert class loader to original
 		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
 
+		if ( !result ) {
+			log("Error occured during database initialization. Shutting down plugin.", Level.SEVERE);
+			disable();
+			return;
+		}
 
-		this.kdc = new BukkitKingdomCraft(this, storage);
+		this.kdc = new BukkitKingdomCraft(this, dm);
 
 		new BukkitPlaceholderReplacer(kdc);
 		new ChatHandler(this, kdc);

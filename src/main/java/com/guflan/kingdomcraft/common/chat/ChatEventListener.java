@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.chat;
 
 import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.event.EventListener;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 

@@ -61,16 +61,28 @@ cmdSpawnTeleportStarting: '&7Teleportation will start in &8{0} &7seconds, don''t
 
 cmdSetSpawnSuccess: '&7You changed the spawn of &8{0} &7to &8{1}&7!'
 
-cmdEnemySuccess: '&7You declared war with &8{0}&7!'
-cmdEnemySuccessMembers: '&7Your kingdom is now enemys with &8{0}&7!'
-cmdEnemySuccessTarget: '&7You are now enemys with &8{0}&7!'
-cmdEnemyAlready: '&7You are already enemys with &8{0}&7!'
+cmdEnemySuccess: '&7You are now enemies with &8{0}&7!'
+cmdEnemySuccessMembers: '&7Your kingdom is now enemies with &8{0}&7!'
+cmdEnemyAlready: '&cYou are already enemies with &4{0}&c!'
 
-cmdFriendlySuccess: '&7You defined &8{0} &7as a friendly kingdom!'
-cmdFriendlyAlready: '&8{0} &7is already a friendly kingdom!'
+cmdAllyRequest: '&7You requested an alliance with &8{0}&7!'
+cmdAllyRequestAlready: '&cYou already requested an alliance with &4{0}&c!'
+cmdAllyRequestTarget: '&8{0} &7has requested an alliance with your kingdom!'
+cmdAllyAccepted: '&7You are now allies with &8{0}&7!'
+cmdAllyAlready: '&4{0} &cis already an allied kingdom!'
 
-cmdNeutralSuccess: '&7You defined &8{0} &7as a neutral kingdom!'
-cmdNeutralAlready: '&8{0} &7is already a neutral kingdom!'
+cmdTruceRequest: '&7You requested a truce with &8{0}&7!'
+cmdTruceRequestAlready: '&cYou already requested a truce with &4{0}&c!'
+cmdTruceRequestTarget: '&8{0} &7has requested a truce with your kingdom!'
+cmdTruceAccepted: '&7You are now in a truce with &8{0}&7!'
+cmdTruceAlready: '&4{0} &cis already in a truce with your kingdom!'
+cmdTruceNotEnemies: '&cYou are not enemies with &4{0}&c!'
+
+cmdNeutralRequest: '&7You requested to be neutral with &8{0}&7!'
+cmdNeutralRequestAlready: '&cYou already requested to be neutral with &4{0}&c!'
+cmdNeutralRequestTarget: '&8{0} &7has requested to be neutral with your kingdom!'
+cmdNeutralAccepted: '&7You are now neutral with &8{0}&7!'
+cmdNeutralAlready: '&4{0} &cis already a neutral kingdom!'
 
 cmdInfoKingdom: '&7Kingdom info for &8{0}&7:'
 cmdInfoPlayer: '&7Player info for &8{0}&7:'

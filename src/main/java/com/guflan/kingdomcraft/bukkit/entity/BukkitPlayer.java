@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class BukkitPlayer extends BukkitCommandSender implements Player {
 
-    private org.bukkit.entity.Player player;
+    private final org.bukkit.entity.Player player;
 
     public BukkitPlayer(org.bukkit.entity.Player player) {
         super(player);
@@ -23,4 +23,8 @@ public class BukkitPlayer extends BukkitCommandSender implements Player {
         return this.player.getName();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BukkitPlayer && ((BukkitPlayer) obj).player == player;
+    }
 }

@@ -1,22 +1,16 @@
 package com.guflan.kingdomcraft.bukkit.bridge;
 
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.DomainManager;
+import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.messages.MessageManager;
-import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
-import com.guflan.kingdomcraft.api.storage.Storage;
 import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
-import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class BukkitKingdomCraft extends AbstractKingdomCraft {
 
@@ -24,8 +18,10 @@ public class BukkitKingdomCraft extends AbstractKingdomCraft {
 
     private final MessageManager messageManager;
 
-    public BukkitKingdomCraft(BukkitKingdomCraftPlugin plugin, Storage storage) {
-        super(storage);
+    private final List<Player> onlinePlayers = new ArrayList<>();
+
+    public BukkitKingdomCraft(BukkitKingdomCraftPlugin plugin, DomainManager domainManager) {
+        super(domainManager);
         this.plugin = plugin;
 
         this.messageManager = new BukkitMessageManager(plugin);
@@ -43,17 +39,12 @@ public class BukkitKingdomCraft extends AbstractKingdomCraft {
 
     @Override
     public List<Player> getOnlinePlayers() {
-        return plugin.getServer().getOnlinePlayers().stream().map(BukkitPlayer::new).collect(Collectors.toList());
+        return onlinePlayers;
     }
 
     @Override
     public Player getPlayer(UUID uuid) {
-        org.bukkit.entity.Player bplayer = Bukkit.getPlayer(uuid);
-        if ( bplayer == null ) {
-            return null;
-        }
-
-        return new BukkitPlayer(bplayer);
+        return onlinePlayers.stream().filter(p -> p.getUniqueId().equals(uuid)).findFirst().orElse(null);
     }
 
     @Override
@@ -61,4 +52,15 @@ public class BukkitKingdomCraft extends AbstractKingdomCraft {
         return getPlayer(user.getUniqueId());
     }
 
+    @Override
+    public void join(Player player) {
+        super.join(player);
+        onlinePlayers.add(player);
+    }
+
+    @Override
+    public void quit(Player player) {
+        super.quit(player);
+        onlinePlayers.remove(player);
+    }
 }

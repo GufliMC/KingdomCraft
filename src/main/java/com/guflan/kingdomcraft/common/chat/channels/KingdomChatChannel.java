@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.common.chat.channels;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 
 import java.util.Arrays;
 import java.util.List;
