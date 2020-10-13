@@ -37,6 +37,11 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
 
     @Override
     public String handle(Player player, String str) {
+        return handle(player, str, "");
+    }
+
+    @Override
+    public String handle(Player player, String str, String prefix) {
         StringBuffer sb = new StringBuffer();
         Pattern p = Pattern.compile("(\\{[^}]+\\})");
         Matcher m = p.matcher(str);
@@ -44,6 +49,11 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
         while ( m.find() ) {
             String placeholder = m.group(1).toLowerCase();
             placeholder = placeholder.substring(1, placeholder.length()-1); // remove brackets { and }
+
+            if ( !placeholder.startsWith(prefix) ) {
+                continue;
+            }
+            placeholder = placeholder.replaceFirst(Pattern.quote(prefix),"");
 
             PlaceholderReplacer replacer = placeholderReplacers.get(placeholder);
             if ( replacer == null ) {
