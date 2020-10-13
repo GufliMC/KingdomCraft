@@ -2,11 +2,13 @@ package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.config.Config;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraft;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitScheduler;
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
+import com.guflan.kingdomcraft.bukkit.config.BukkitConfig;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
 import com.guflan.kingdomcraft.common.ebean.EBeanContext;
@@ -43,6 +45,8 @@ import java.util.logging.Level;
 public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraftPlugin {
 
 	private final BukkitScheduler scheduler;
+
+	private BukkitConfig config;
 	private KingdomCraft kdc;
 
 	public BukkitKingdomCraftPlugin() {
@@ -103,6 +107,7 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 		}
 
 		this.kdc = new BukkitKingdomCraft(this, ec);
+		this.config = new BukkitConfig(config);
 
 		new BukkitPlaceholderReplacer(kdc);
 		new ChatHandler(this, kdc);
@@ -124,6 +129,10 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 
 	public KingdomCraft getKingdomCraft() {
 		return kdc;
+	}
+
+	public Config getConfiguration() {
+		return this.config;
 	}
 
 	//

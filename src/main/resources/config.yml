@@ -10,7 +10,7 @@
 
 settings:
 
-    # a list of worlds this plugin is enabled in, leave empty to allow all worlds
+    # a list of worlds this plugin is enabled in, remove to allow all worlds
     worlds:
     - world
     - world_nether
@@ -26,15 +26,15 @@ settings:
     # prefix with CONSOLE to execute this in the console
     # e.g. CONSOLE money give {player} 1000
     events:
-        on_kingdom_join:
+        kingdom_join:
         - k spawn
         - CONSOLE clearinv {player}
 
-        on_kingdom_leave:
+        kingdom_leave:
         - spawn
         - CONSOLE clearinv {player}
 
-        on_respawn:
+        respawn:
         - k spawn
 
     messages:
