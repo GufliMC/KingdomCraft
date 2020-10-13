@@ -3,6 +3,7 @@ package com.guflan.kingdomcraft.bukkit.placeholders;
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,8 +17,8 @@ public class BukkitPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
                     ItemStack stack = Bukkit.getPlayer(player.getUniqueId()).getItemInHand();
-                    if ( stack.getItemMeta() == null ) {
-                        return "";
+                    if ( stack.getItemMeta() == null || stack.getItemMeta().getDisplayName() == null ) {
+                        return WordUtils.capitalizeFully(stack.getType().toString().replace("_", " "), ' ');
                     }
                     return stack.getItemMeta().getDisplayName();
                 },
