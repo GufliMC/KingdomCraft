@@ -76,8 +76,7 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
                 }
 
                 context.addCachedUser(user);
-
-                // TODO join event
+                eventManager.join(player);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -88,6 +87,7 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     public void quit(Player player) {
         User user = context.getCachedUser(player.getUniqueId());
         context.removeCachedUser(user);
+        eventManager.quit(player);
     }
 
     // kingdoms
