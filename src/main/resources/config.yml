@@ -16,15 +16,23 @@ settings:
     - world_nether
     - world_the_end
 
+    friendly-fire-relationships:
+    - ally
+    - truce
+
+
+
     # commands to be executed when an event happens
     # prefix with CONSOLE to execute this in the console
     # e.g. CONSOLE money give {player} 1000
     events:
         on_kingdom_join:
         - k spawn
+        - CONSOLE clearinv {player}
 
         on_kingdom_leave:
         - spawn
+        - CONSOLE clearinv {player}
 
         on_respawn:
         - k spawn
@@ -33,7 +41,8 @@ settings:
         join: '&e{kingdom_prefix}{rank_prefix}{player} &ejoined the server.'
         leave: '&e{kingdom_prefix}{rank_prefix}{player} &equit the server.'
         death: '&e{kingdom_prefix}{rank_prefix}{player} &edied.'
-        kill: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_player} &ewith weapon {killer_weapon}&e.'
+        kill: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by
+            {killer_kingdom_prefix}{killer_rank_prefix}{killer_player} &ewith weapon {killer_weapon}&e.'
 
 # DO NOT CHANGE THIS SECTION IF YOU DO NOT KNOW WHAT YOU ARE DOING!
 database:

@@ -2,6 +2,8 @@ package com.guflan.kingdomcraft.api.event;
 
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
+import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 
 public interface EventManager {
 
@@ -11,9 +13,9 @@ public interface EventManager {
 
     // kingdoms
 
-    void join(User player);
+    void join(Player player);
 
-    void leave(User player);
+    void quit(Player player);
 
     void kingdomJoin(User player);
 
@@ -22,5 +24,7 @@ public interface EventManager {
     void kingdomCreate(Kingdom kingdom);
 
     void kingdomDelete(Kingdom kingdom);
+
+    void playerAttack(PlayerAttackPlayerEvent event);
 
 }
