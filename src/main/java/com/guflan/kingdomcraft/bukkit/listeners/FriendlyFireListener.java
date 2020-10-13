@@ -1,10 +1,14 @@
 package com.guflan.kingdomcraft.bukkit.listeners;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.domain.models.Relation;
+import com.guflan.kingdomcraft.api.domain.models.RelationType;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.events.PlayerAttackPlayerEvent;
+import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -18,10 +22,12 @@ import org.bukkit.event.entity.EntityEvent;
 
 public class FriendlyFireListener implements Listener {
 
+    private final BukkitKingdomCraftPlugin plugin;
     private final KingdomCraft kdc;
 
-    public FriendlyFireListener(KingdomCraft kdc) {
-        this.kdc = kdc;
+    public FriendlyFireListener(BukkitKingdomCraftPlugin plugin) {
+        this.plugin = plugin;
+        this.kdc = plugin.getKingdomCraft();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -36,6 +42,7 @@ public class FriendlyFireListener implements Listener {
 
     private <T extends EntityEvent & Cancellable> void handleEvent(T e, Entity entity, Entity damager) {
         //if ( !isWorldEnabled(entity.getWorld()) ) return;
+
 
         Player p;
         if ( entity instanceof Player) {
@@ -85,37 +92,19 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
-        // TODO
-
-        /*
-        KingdomFlagHandler kfh = plugin.getApi().getFlagHandler();
-
-        // only if friendlyfire is explicitly turned off go on
-        if ( !kfh.hasFlag(k1, KingdomFlag.FRIENDLYFIRE) || kfh.getFlag(k1, KingdomFlag.FRIENDLYFIRE) ) {
-            return;
-        }
-
-        // disable pvp for players in the same kingdom
-        if ( k1 == k2 ) {
-            notify(u1, "damageKingdom");
-
-            e.setCancelled(true);
-            if ( damager instanceof Projectile ) {
-                damager.remove();
-            }
-            return;
-        }
-
-        // disable attacking a friendly player
-        if ( plugin.getCfg().has("friendlyfire-flag-include-friendly-kingdoms") && plugin.getCfg().getBoolean("friendlyfire-flag-include-friendly-kingdoms")
-                && plugin.getApi().getRelationHandler().getRelation(k1, k2) == KingdomRelation.FRIENDLY ) {
-            notify(u1, "damageFriendly");
-
-            e.setCancelled(true);
-            if ( damager instanceof Projectile ) {
-                damager.remove();
+        if ( k1 != k2 ) {
+            Relation rel = kdc.getRelation(k1, k2);
+            RelationType type = rel == null ? RelationType.NEUTRAL : rel.getType();
+            if ( !plugin.getConfiguration().getFriendlyFireRelationTypes().contains(type) ) {
+                return;
             }
         }
-         */
+
+        // TODO notify
+
+        e.setCancelled(true);
+        if ( damager instanceof Projectile ) {
+            damager.remove();
+        }
     }
 }
