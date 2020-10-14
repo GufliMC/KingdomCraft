@@ -28,9 +28,9 @@ public interface EventListener {
 
     default void onQuit(Player player) {}
 
-    default void onKingdomJoin(User player) {}
+    default void onKingdomJoin(Player player) {}
 
-    default void onKingdomLeave(User player, Kingdom oldKingdom) {}
+    default void onKingdomLeave(Player player, Kingdom oldKingdom) {}
 
     default void onKingdomCreate(Kingdom kingdom) {}
 

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 public class InviteCommand extends DefaultCommandBase {
 
-    public InviteCommand(KingdomCraft kdc) {
+    public InviteCommand(KingdomCraftHandler kdc) {
         super(kdc, "invite", 1, true);
     }
 

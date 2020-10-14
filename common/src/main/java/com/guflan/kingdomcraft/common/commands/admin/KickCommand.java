@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.admin;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class KickCommand extends DefaultCommandBase {
 
-    public KickCommand(KingdomCraft kdc) {
+    public KickCommand(KingdomCraftHandler kdc) {
         super(kdc, "kick", 1);
     }
 
@@ -84,6 +84,11 @@ public class KickCommand extends DefaultCommandBase {
 
                 target.setKingdom(null);
                 kdc.save(target);
+
+                Player tplayer = kdc.getPlayer(target);
+                if ( tplayer != null ) {
+                    kdc.getEventManager().kingdomLeave(tplayer, kingdom);
+                }
 
                 Player targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.api.entity.Player;
@@ -25,7 +25,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class InfoCommand extends DefaultCommandBase {
 
-    public InfoCommand(KingdomCraft kdc) {
+    public InfoCommand(KingdomCraftHandler kdc) {
         super(kdc, "info", 0, true);
     }
 

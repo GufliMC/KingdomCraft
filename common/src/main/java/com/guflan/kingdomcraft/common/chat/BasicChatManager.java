@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
@@ -33,14 +33,14 @@ import java.util.stream.Collectors;
 
 public class BasicChatManager implements ChatManager {
 
-    private final KingdomCraft kdc;
+    private final KingdomCraftHandler kdc;
 
     private final List<ChatChannelBlueprint> blueprints = new ArrayList<>();
     private final List<ChatChannel> chatChannels = new ArrayList<>();
 
     private ChatChannel defaultChannel;
 
-    public BasicChatManager(KingdomCraft kdc) {
+    public BasicChatManager(KingdomCraftHandler kdc) {
         this.kdc = kdc;
         kdc.getEventManager().addListener(new ChatEventListener(this));
     }

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.Rank;
 import com.guflan.kingdomcraft.api.domain.models.User;
@@ -27,7 +27,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class RanksCreateCommand extends DefaultCommandBase {
 
-    public RanksCreateCommand(KingdomCraft kdc) {
+    public RanksCreateCommand(KingdomCraftHandler kdc) {
         super(kdc, "ranks create", 1, true);
     }
 

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.Rank;
 import com.guflan.kingdomcraft.api.domain.models.User;
@@ -27,7 +27,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class RanksEditSuffixCommand extends DefaultCommandBase {
 
-    public RanksEditSuffixCommand(KingdomCraft kdc) {
+    public RanksEditSuffixCommand(KingdomCraftHandler kdc) {
         super(kdc, "ranks edit suffix", 2, true);
     }
 

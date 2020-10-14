@@ -17,7 +17,6 @@
 
 package com.guflan.kingdomcraft.bukkit.config;
 
-import com.guflan.kingdomcraft.api.config.Config;
 import com.guflan.kingdomcraft.api.domain.models.RelationType;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -25,24 +24,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BukkitConfig implements Config {
+public class Config {
 
     private final List<String> worlds;
     private final List<RelationType> friendlyFireRelationTypes;
 
+    private final boolean respawnAtKingdom;
+
     private final List<String> onKingdomJoinCommands;
     private final List<String> onKingdomLeaveCommands;
-    private final List<String> onRespawnCommands;
 
     private final String onJoinMessage;
     private final String onLeaveMessage;
     private final String onDeathMessage;
     private final String onKillMessage;
 
-    public BukkitConfig(ConfigurationSection cs) {
+    public Config(ConfigurationSection cs) {
 
         if ( cs.contains("worlds") ) {
-            worlds = cs.getStringList("worlds");
+            worlds = cs.getStringList("worlds").stream().map(String::toLowerCase).collect(Collectors.toList());
         } else {
             worlds = new ArrayList<>();
         }
@@ -66,10 +66,10 @@ public class BukkitConfig implements Config {
             onKingdomLeaveCommands = new ArrayList<>();
         }
 
-        if ( cs.contains("events.respawn") ) {
-            onRespawnCommands = cs.getStringList("events.respawn");
+        if ( cs.contains("respawn_at_kingdom") ) {
+            respawnAtKingdom = cs.getBoolean("respawn_at_kingdom");
         } else {
-            onRespawnCommands = new ArrayList<>();
+            respawnAtKingdom = false;
         }
 
         if ( cs.contains("messages.join") ) {
@@ -98,47 +98,42 @@ public class BukkitConfig implements Config {
 
     }
 
-    @Override
     public List<String> getWorlds() {
         return worlds;
     }
 
-    @Override
+    public boolean isWorldEnabled(String world) {
+        return worlds.contains(world.toLowerCase());
+    }
+
     public List<RelationType> getFriendlyFireRelationTypes() {
         return friendlyFireRelationTypes;
     }
 
-    @Override
     public List<String> getOnKingdomJoinCommands() {
         return onKingdomJoinCommands;
     }
 
-    @Override
     public List<String> getOnKingdomLeaveCommands() {
         return onKingdomLeaveCommands;
     }
 
-    @Override
-    public List<String> getOnRespawnCommands() {
-        return onRespawnCommands;
+    public boolean respawnAtKingdom() {
+        return respawnAtKingdom;
     }
 
-    @Override
     public String getOnJoinMessage() {
         return onJoinMessage;
     }
 
-    @Override
     public String getOnLeaveMessage() {
         return onLeaveMessage;
     }
 
-    @Override
     public String getOnDeathMessage() {
         return onDeathMessage;
     }
 
-    @Override
     public String getOnKillMessage() {
         return onKillMessage;
     }

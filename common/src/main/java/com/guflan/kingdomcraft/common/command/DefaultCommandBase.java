@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 
@@ -26,24 +26,24 @@ import java.util.List;
 
 public abstract class DefaultCommandBase implements CommandBase {
 
-    protected final KingdomCraft kdc;
+    protected final KingdomCraftHandler kdc;
 
     private final List<String> commands = new ArrayList<>();
 
     private boolean isPlayerOnly;
     private int expectedArguments = 0;
 
-    public DefaultCommandBase(KingdomCraft kdc, String command) {
+    public DefaultCommandBase(KingdomCraftHandler kdc, String command) {
         this.kdc = kdc;
         this.commands.add(command);
     }
 
-    public DefaultCommandBase(KingdomCraft kdc, String command, int expectedArguments) {
+    public DefaultCommandBase(KingdomCraftHandler kdc, String command, int expectedArguments) {
         this(kdc, command);
         this.expectedArguments = expectedArguments;
     }
 
-    public DefaultCommandBase(KingdomCraft kdc, String command, int expectedArguments, boolean isPlayerOnly) {
+    public DefaultCommandBase(KingdomCraftHandler kdc, String command, int expectedArguments, boolean isPlayerOnly) {
         this(kdc, command, expectedArguments);
         this.isPlayerOnly = isPlayerOnly;
     }

@@ -17,36 +17,27 @@
 
 package com.guflan.kingdomcraft.bukkit.bridge;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.domain.DomainContext;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.DefaultKingdomCraftHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class BukkitKingdomCraft extends AbstractKingdomCraft {
-
-    private final BukkitKingdomCraftPlugin plugin;
+public class BukkitKingdomCraftHandler extends DefaultKingdomCraftHandler {
 
     private final MessageManager messageManager;
 
     private final List<Player> onlinePlayers = new ArrayList<>();
 
-    public BukkitKingdomCraft(BukkitKingdomCraftPlugin plugin, DomainContext context) {
-        super(context);
-        this.plugin = plugin;
+    public BukkitKingdomCraftHandler(BukkitKingdomCraftPlugin plugin, DomainContext context) {
+        super(plugin, context);
 
         this.messageManager = new BukkitMessageManager(plugin);
-    }
-
-    @Override
-    public KingdomCraftPlugin getPlugin() {
-        return plugin;
     }
 
     @Override

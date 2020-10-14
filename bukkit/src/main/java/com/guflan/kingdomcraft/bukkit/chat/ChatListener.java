@@ -27,16 +27,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private final KingdomCraft kdc;
-
-    public ChatListener(KingdomCraft kdc) {
-        this.kdc = kdc;
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = new BukkitPlayer(event.getPlayer());
-        kdc.getChatManager().handle(player, event.getMessage());
+        KingdomCraft.getChatManager().handle(player, event.getMessage());
         event.setCancelled(true);
     }
 }

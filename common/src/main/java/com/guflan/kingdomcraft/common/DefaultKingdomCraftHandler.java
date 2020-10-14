@@ -17,7 +17,8 @@
 
 package com.guflan.kingdomcraft.common;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
+import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.domain.DomainContext;
@@ -35,7 +36,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public abstract class AbstractKingdomCraft implements KingdomCraft {
+public abstract class DefaultKingdomCraftHandler extends KingdomCraftHandler {
 
     private final DefaultCommandManager commandManager;
     private final DefaultEventManager eventManager;
@@ -46,7 +47,8 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     private final DomainContext context;
 
-    public AbstractKingdomCraft(DomainContext context) {
+    public DefaultKingdomCraftHandler(KingdomCraftPlugin plugin, DomainContext context) {
+        super(plugin);
         this.context = context;
 
         this.commandManager = new DefaultCommandManager(this);

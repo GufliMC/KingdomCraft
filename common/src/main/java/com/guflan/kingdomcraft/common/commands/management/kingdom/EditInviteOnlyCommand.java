@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -26,7 +26,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class EditInviteOnlyCommand extends DefaultCommandBase {
 
-    public EditInviteOnlyCommand(KingdomCraft kdc) {
+    public EditInviteOnlyCommand(KingdomCraftHandler kdc) {
         super(kdc, "edit invite-only", 1, true);
     }
 

@@ -16,11 +16,13 @@ settings:
     - world_nether
     - world_the_end
 
+    # include these relationships in the friendly fire check
     friendly-fire-relationships:
     - ally
     - truce
 
-
+    # Respawn at the kingdom spawn when you die
+    respawn_at_kingdom: true
 
     # commands to be executed when an event happens
     # prefix with CONSOLE to execute this in the console
@@ -33,9 +35,6 @@ settings:
         kingdom_leave:
         - spawn
         - CONSOLE clearinv {player}
-
-        respawn:
-        - k spawn
 
     messages:
         join: '&e{kingdom_prefix}{rank_prefix}{player} &ejoined the server.'

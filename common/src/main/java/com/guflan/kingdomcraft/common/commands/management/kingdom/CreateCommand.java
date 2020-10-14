@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -26,7 +26,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class CreateCommand extends DefaultCommandBase {
 
-    public CreateCommand(KingdomCraft kdc) {
+    public CreateCommand(KingdomCraftHandler kdc) {
         super(kdc, "create", 1);
     }
 
@@ -54,6 +54,9 @@ public class CreateCommand extends DefaultCommandBase {
         }
 
         Kingdom kingdom = kdc.createKingdom(args[0]);
+
+        kdc.getEventManager().kingdomCreate(kingdom);
+
         kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName());
 
         if ( sender instanceof Player && kdc.getUser((Player) sender).getKingdom() == null ) {

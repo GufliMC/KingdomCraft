@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.Rank;
 import com.guflan.kingdomcraft.api.domain.models.User;
@@ -27,7 +27,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class RanksEditLevelCommand extends DefaultCommandBase {
 
-    public RanksEditLevelCommand(KingdomCraft kdc) {
+    public RanksEditLevelCommand(KingdomCraftHandler kdc) {
         super(kdc, "ranks edit level", 2, true);
     }
 

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -26,7 +26,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class DeleteCommand extends DefaultCommandBase {
 
-    public DeleteCommand(KingdomCraft kdc) {
+    public DeleteCommand(KingdomCraftHandler kdc) {
         super(kdc, "delete", 1);
     }
 
@@ -56,6 +56,8 @@ public class DeleteCommand extends DefaultCommandBase {
             if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
             kdc.getMessageManager().send(p, "cmdDeleteSuccessMembers");
         }
+
+        kdc.getEventManager().kingdomDelete(kingdom);
 
         kdc.delete(kingdom);
         kdc.getMessageManager().send(sender, "cmdDeleteSuccess", kingdom.getName());

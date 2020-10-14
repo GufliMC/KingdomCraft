@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class EditDisplayOtherCommand extends DefaultCommandBase {
 
-    public EditDisplayOtherCommand(KingdomCraft kdc) {
+    public EditDisplayOtherCommand(KingdomCraftHandler kdc) {
         super(kdc, "edit display", 2);
     }
 
