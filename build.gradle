@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2' }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.net.minecrell:licenser:0.4.1'
+    }
+}
+
+defaultTasks 'licenseFormat', 'build'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'net.minecrell.licenser'
+
+    group = 'com.guflan.kingdomcraft'
+    version = '6.0'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    jar {
+        from '../LICENSE.txt'
+    }
+
+    project.ext.apiVersion = version
+    project.ext.fullVersion = version
+
+    license {
+        header = rootProject.file('HEADER.txt')
+        include '**/*.java'
+        newLine = true
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://repo.lucko.me/' }
+    }
+}

@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+}
+
+dependencies {
+    compile project(':common')
+
+    compileOnly('org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT')
+    compileOnly('org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT')
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'pluginVersion': project.ext.fullVersion
+        include 'plugin.yml'
+    }
+}
+
+shadowJar {
+    archiveBaseName.set("KingdomCraft")
+    archiveVersion.set("${project.ext.fullVersion}")
+
+    dependencies {
+        exclude(
+                'org.spigotmc:spigot-api',
+                'org.bukkit:bukkit'
+        )
+    }
+}
+
+artifacts {
+    archives shadowJar
+}

@@ -1,0 +1,53 @@
+/*
+ * This file is part of KingdomCraft.
+ *
+ * KingdomCraft is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * KingdomCraft is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.guflan.kingdomcraft.common.chat;
+
+import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
+import com.guflan.kingdomcraft.api.chat.ChatManager;
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.event.EventListener;
+import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
+
+public class ChatEventListener implements EventListener {
+
+    private final ChatManager chatManager;
+
+    public ChatEventListener(ChatManager chatManager) {
+        this.chatManager = chatManager;
+    }
+
+    @Override
+    public void onKingdomDelete(Kingdom kingdom) {
+        chatManager.getKingdomChannels(kingdom).forEach(ch -> {
+            KingdomChatChannel kch = ((KingdomChatChannel) ch);
+            kch.getKingdoms().remove(kingdom);
+            if ( kch.getKingdoms().isEmpty() ) {
+                chatManager.removeChatChannel(kch);
+            }
+        });
+    }
+
+    @Override
+    public void onKingdomCreate(Kingdom kingdom) {
+        for (ChatChannelBlueprint bp : chatManager.getBlueprints() ) {
+            if ( !bp.doesTarget(kingdom) ) continue;
+            chatManager.addChatChannel(bp.create(kingdom));
+        }
+    }
+
+}
