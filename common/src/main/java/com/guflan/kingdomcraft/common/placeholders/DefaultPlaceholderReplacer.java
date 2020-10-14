@@ -17,13 +17,13 @@
 
 package com.guflan.kingdomcraft.common.placeholders;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 
 public class DefaultPlaceholderReplacer {
 
-    public DefaultPlaceholderReplacer(KingdomCraft kdc, PlaceholderManager pm) {
+    public DefaultPlaceholderReplacer(KingdomCraftHandler kdc, PlaceholderManager pm) {
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);

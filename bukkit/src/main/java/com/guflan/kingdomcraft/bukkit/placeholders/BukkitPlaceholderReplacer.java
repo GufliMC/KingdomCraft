@@ -19,14 +19,14 @@ package com.guflan.kingdomcraft.bukkit.placeholders;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 public class BukkitPlaceholderReplacer {
 
-    public BukkitPlaceholderReplacer(KingdomCraft kdc) {
-        PlaceholderManager pm = kdc.getPlaceholderManager();
+    public BukkitPlaceholderReplacer() {
+        PlaceholderManager pm = KingdomCraft.getPlaceholderManager();
 
         pm.addPlaceholderReplacer((player, placeholder) -> Bukkit.getPlayer(player.getUniqueId()).getLocation().getWorld().toString(),
                 "world");

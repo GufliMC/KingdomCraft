@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class EditSuffixOtherCommand extends DefaultCommandBase {
 
-    public EditSuffixOtherCommand(KingdomCraft kdc) {
+    public EditSuffixOtherCommand(KingdomCraftHandler kdc) {
         super(kdc, "edit suffix", 1);
     }
 

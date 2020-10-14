@@ -1,20 +1,3 @@
-/*
- * This file is part of KingdomCraft.
- *
- * KingdomCraft is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * KingdomCraft is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
- */
-
 package com.guflan.kingdomcraft.api;
 
 import com.guflan.kingdomcraft.api.chat.ChatManager;
@@ -29,84 +12,140 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public interface KingdomCraft {
+public class KingdomCraft {
 
-    KingdomCraftPlugin getPlugin();
+    public static KingdomCraftHandler INSTANCE;
+
+    public final KingdomCraftPlugin getPlugin() {
+        return INSTANCE.getPlugin();
+    }
 
     // managers
 
-    MessageManager getMessageManager();
+    public static MessageManager getMessageManager() {
+        return INSTANCE.getMessageManager();
+    }
 
-    CommandManager getCommandManager();
+    public static CommandManager getCommandManager() {
+        return INSTANCE.getCommandManager();
+    }
 
-    EventManager getEventManager();
+    public static EventManager getEventManager() {
+        return INSTANCE.getEventManager();
+    }
 
-    ChatManager getChatManager();
+    public static ChatManager getChatManager() {
+        return INSTANCE.getChatManager();
+    }
 
-    PlaceholderManager getPlaceholderManager();
+    public static PlaceholderManager getPlaceholderManager() {
+        return INSTANCE.getPlaceholderManager();
+    }
 
     // players
 
-    List<Player> getOnlinePlayers();
+    public static List<Player> getOnlinePlayers() {
+        return INSTANCE.getOnlinePlayers();
+    }
 
-    Player getPlayer(UUID uuid);
+    public static Player getPlayer(UUID uuid) {
+        return INSTANCE.getPlayer(uuid);
+    }
 
-    Player getPlayer(User user);
+    public static Player getPlayer(User user) {
+        return INSTANCE.getPlayer(user);
+    }
 
-    User getUser(Player player);
+    public static User getUser(Player player) {
+        return INSTANCE.getUser(player);
+    }
 
     // kingdoms
 
-    List<Kingdom> getKingdoms();
+    public static List<Kingdom> getKingdoms() {
+        return INSTANCE.getKingdoms();
+    }
 
-    Kingdom getKingdom(String name);
+    public static Kingdom getKingdom(String name) {
+        return INSTANCE.getKingdom(name);
+    }
 
-    Kingdom createKingdom(String name);
+    public static Kingdom createKingdom(String name) {
+        return INSTANCE.createKingdom(name);
+    }
 
-    CompletableFuture<Void> delete(Kingdom kingdom);
+    public static CompletableFuture<Void> delete(Kingdom kingdom) {
+        return INSTANCE.delete(kingdom);
+    }
 
-    CompletableFuture<Void> save(Kingdom kingdom);
+    public static CompletableFuture<Void> save(Kingdom kingdom) {
+        return INSTANCE.save(kingdom);
+    }
 
     // ranks
 
-    CompletableFuture<Void> delete(Rank rank);
+    public static CompletableFuture<Void> delete(Rank rank) {
+        return INSTANCE.delete(rank);
+    }
 
-    CompletableFuture<Void> save(Rank rank);
+    public static CompletableFuture<Void> save(Rank rank) {
+        return INSTANCE.save(rank);
+    }
 
     // relations
 
-    List<Relation> getRelations(Kingdom kingdom);
+    public static List<Relation> getRelations(Kingdom kingdom) {
+        return INSTANCE.getRelations(kingdom);
+    }
 
-    void setRelation(Kingdom kingdom, Kingdom other, RelationType type);
+    public static void setRelation(Kingdom kingdom, Kingdom other, RelationType type) {
+        INSTANCE.setRelation(kingdom, other, type);
+    }
 
-    Relation getRelation(Kingdom kingdom, Kingdom other);
+    public static Relation getRelation(Kingdom kingdom, Kingdom other) {
+        return INSTANCE.getRelation(kingdom, other);
+    }
 
-    void addRelationRequest(Kingdom kingdom, Kingdom other, RelationType type);
+    public static void addRelationRequest(Kingdom kingdom, Kingdom other, RelationType type) {
+        INSTANCE.addRelationRequest(kingdom, other, type);
+    }
 
-    Relation getRelationRequest(Kingdom kingdom, Kingdom other);
+    public static Relation getRelationRequest(Kingdom kingdom, Kingdom other) {
+        return INSTANCE.getRelationRequest(kingdom, other);
+    }
 
-    void removeRelationRequest(Kingdom kingdom, Kingdom other);
+    public static void removeRelationRequest(Kingdom kingdom, Kingdom other) {
+        INSTANCE.removeRelationRequest(kingdom, other);
+    }
 
     // users
 
-    List<User> getOnlineUsers();
+    public static List<User> getOnlineUsers() {
+        return INSTANCE.getOnlineUsers();
+    }
 
-    User getOnlineUser(String name);
+    public static User getOnlineUser(String name) {
+        return INSTANCE.getOnlineUser(name);
+    }
 
-    User getOnlineUser(UUID uuid);
+    public static User getOnlineUser(UUID uuid) {
+        return INSTANCE.getOnlineUser(uuid);
+    }
 
-    CompletableFuture<List<User>> getUsers();
+    public static CompletableFuture<List<User>> getUsers() {
+        return INSTANCE.getUsers();
+    }
 
-    CompletableFuture<User> getUser(String name);
+    public static CompletableFuture<User> getUser(String name) {
+        return INSTANCE.getUser(name);
+    }
 
-    CompletableFuture<User> getUser(UUID uuid);
+    public static CompletableFuture<User> getUser(UUID uuid) {
+        return INSTANCE.getUser(uuid);
+    }
 
-    CompletableFuture<Void> save(User user);
-
-    //
-
-    void join(Player player);
-
-    void quit(Player player);
+    public static CompletableFuture<Void> save(User user){
+        return INSTANCE.save(user);
+    }
 
 }

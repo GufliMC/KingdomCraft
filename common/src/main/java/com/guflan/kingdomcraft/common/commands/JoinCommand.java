@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class JoinCommand extends DefaultCommandBase {
 
-    public JoinCommand(KingdomCraft plugin) {
+    public JoinCommand(KingdomCraftHandler plugin) {
         super(plugin, "join", 1, true);
     }
 
@@ -70,20 +70,13 @@ public class JoinCommand extends DefaultCommandBase {
         user.setKingdom(kingdom);
         kdc.save(user);
 
+        kdc.getEventManager().kingdomJoin((Player) sender);
+
         kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
 
         for ( Player p : kdc.getOnlinePlayers() ) {
             if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
             kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
         }
-
-        kdc.getEventManager().kingdomJoin(user);
-
-        // TODO teleport to spawn
-		/*
-		if ( kingdom.getSpawn() != null && plugin.getCfg().getBoolean("spawn-on-kingdom-join") ) {
-			p.teleport(kingdom.getSpawn());
-		}
-		*/
     }
 }

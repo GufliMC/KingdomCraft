@@ -34,9 +34,9 @@ public interface EventManager {
 
     void quit(Player player);
 
-    void kingdomJoin(User player);
+    void kingdomJoin(Player player);
 
-    void kingdomLeave(User player, Kingdom oldKingdom);
+    void kingdomLeave(Player player, Kingdom oldKingdom);
 
     void kingdomCreate(Kingdom kingdom);
 

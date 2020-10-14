@@ -54,12 +54,12 @@ public class DefaultEventManager implements EventManager {
     }
 
     @Override
-    public void kingdomJoin(User player) {
+    public void kingdomJoin(Player player) {
         listeners.forEach(l -> l.onKingdomJoin(player));
     }
 
     @Override
-    public void kingdomLeave(User player, Kingdom oldKingdom) {
+    public void kingdomLeave(Player player, Kingdom oldKingdom) {
         listeners.forEach(l -> l.onKingdomLeave(player, oldKingdom));
     }
 

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -26,7 +26,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class LeaveCommand extends DefaultCommandBase {
 
-    public LeaveCommand(KingdomCraft kdc) {
+    public LeaveCommand(KingdomCraftHandler kdc) {
         super(kdc, "leave", 0, true);
     }
 
@@ -46,13 +46,14 @@ public class LeaveCommand extends DefaultCommandBase {
         Kingdom oldKingdom = user.getKingdom();
         user.setKingdom(null);
         kdc.save(user);
+
+        kdc.getEventManager().kingdomLeave((Player) sender, oldKingdom);
+
         kdc.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
 
         for ( Player member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != oldKingdom ) continue;
             kdc.getMessageManager().send(member, "cmdLeaveSuccessMembers", user.getName());
         }
-
-        // TODO teleport to spawn
     }
 }

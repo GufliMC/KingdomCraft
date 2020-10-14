@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.Rank;
 import com.guflan.kingdomcraft.api.domain.models.User;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class RanksListCommand extends DefaultCommandBase {
 
-    public RanksListCommand(KingdomCraft kdc) {
+    public RanksListCommand(KingdomCraftHandler kdc) {
         super(kdc, "ranks list", 0, true);
     }
 

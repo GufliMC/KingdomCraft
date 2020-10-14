@@ -17,14 +17,14 @@
 
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class EditMaxMembersOtherCommand extends DefaultCommandBase {
 
-    public EditMaxMembersOtherCommand(KingdomCraft kdc) {
+    public EditMaxMembersOtherCommand(KingdomCraftHandler kdc) {
         super(kdc, "edit max-members", 2);
     }
 

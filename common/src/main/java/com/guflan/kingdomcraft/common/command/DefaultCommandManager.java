@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -40,10 +40,10 @@ import java.util.stream.Collectors;
 
 public class DefaultCommandManager implements CommandManager {
 
-    private final KingdomCraft kdc;
+    private final KingdomCraftHandler kdc;
     private final List<CommandBase> commands = new ArrayList<>();
 
-    public DefaultCommandManager(KingdomCraft kdc) {
+    public DefaultCommandManager(KingdomCraftHandler kdc) {
         this.kdc = kdc;
         registerAll();
     }

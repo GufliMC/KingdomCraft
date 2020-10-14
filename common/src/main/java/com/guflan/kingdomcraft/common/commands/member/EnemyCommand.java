@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.Relation;
 import com.guflan.kingdomcraft.api.domain.models.RelationType;
@@ -28,7 +28,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class EnemyCommand extends DefaultCommandBase {
 
-    public EnemyCommand(KingdomCraft kdc) {
+    public EnemyCommand(KingdomCraftHandler kdc) {
         super(kdc, "enemy", 1, true);
     }
 

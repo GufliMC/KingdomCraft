@@ -23,12 +23,12 @@ import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.event.EventListener;
+import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.chat.channels.BasicChatChannel;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.Arrays;
@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
 
 public class ChatHandler implements EventListener {
 
-    public ChatHandler(Plugin plugin, KingdomCraft kdc) {
-        kdc.getEventManager().addListener(this);
+    public ChatHandler(BukkitKingdomCraftPlugin plugin) {
+        KingdomCraft.getEventManager().addListener(this);
 
         File configFile = new File(plugin.getDataFolder(), "chat.yml");
         if ( !configFile.exists() ) {
@@ -53,19 +53,19 @@ public class ChatHandler implements EventListener {
             return;
         }
 
-        Bukkit.getPluginManager().registerEvents(new ChatListener(kdc), plugin);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), plugin);
 
         if ( !config.contains("channels") || config.getConfigurationSection("channels") == null ) {
             return;
         }
-        ChatManager cm = kdc.getChatManager();
+        ChatManager cm = KingdomCraft.getChatManager();
 
         ConfigurationSection channels = config.getConfigurationSection("channels");
         for ( String name : channels.getKeys(false) ) {
             ConfigurationSection cs = channels.getConfigurationSection(name);
 
             if ( !cs.contains("format") ) {
-                kdc.getPlugin().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
+                plugin.log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
                 continue;
             }
 

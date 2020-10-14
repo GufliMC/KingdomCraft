@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.admin;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.User;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class SetKingdomCommand extends DefaultCommandBase {
 
-    public SetKingdomCommand(KingdomCraft kdc) {
+    public SetKingdomCommand(KingdomCraftHandler kdc) {
         super(kdc, "setkingdom", 2);
     }
 
@@ -71,6 +71,11 @@ public class SetKingdomCommand extends DefaultCommandBase {
 
                 target.setKingdom(kingdom);
                 kdc.save(target);
+
+                Player tplayer = kdc.getPlayer(target);
+                if ( tplayer != null ) {
+                    kdc.getEventManager().kingdomJoin(tplayer);
+                }
 
                 Player targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {

@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.domain.models.Rank;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
@@ -25,7 +25,7 @@ import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
 
 public class RanksDeleteOtherCommand extends DefaultCommandBase {
 
-    public RanksDeleteOtherCommand(KingdomCraft kdc) {
+    public RanksDeleteOtherCommand(KingdomCraftHandler kdc) {
         super(kdc, "ranks delete", 2);
     }
 

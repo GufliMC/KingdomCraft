@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.placeholders;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.entity.Player;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderReplacer;
@@ -31,7 +31,7 @@ public class DefaultPlaceholderManager implements PlaceholderManager {
 
     private final Map<String, PlaceholderReplacer> placeholderReplacers = new HashMap<>();
 
-    public DefaultPlaceholderManager(KingdomCraft bridge) {
+    public DefaultPlaceholderManager(KingdomCraftHandler bridge) {
         new DefaultPlaceholderReplacer(bridge, this);
     }
 

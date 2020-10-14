@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
+import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.domain.models.Kingdom;
 import com.guflan.kingdomcraft.api.entity.CommandSender;
 import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class ListCommand extends DefaultCommandBase {
 
-    public ListCommand(KingdomCraft kdc) {
+    public ListCommand(KingdomCraftHandler kdc) {
         super(kdc, "list", 0);
     }
 
@@ -41,7 +41,7 @@ public class ListCommand extends DefaultCommandBase {
 
         List<String> kingdoms = kdc.getKingdoms().stream()
                 .sorted(Comparator.comparing(Kingdom::isInviteOnly))
-                .map(k -> (k.isInviteOnly() ? "&c" : "a") + k.getName())
+                .map(k -> (k.isInviteOnly() ? "&c" : "&a") + k.getName())
                 .collect(Collectors.toList());
 
         kdc.getMessageManager().send(sender, "cmdList", String.join("&7, ", kingdoms));

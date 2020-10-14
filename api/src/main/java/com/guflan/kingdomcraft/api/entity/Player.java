@@ -25,4 +25,13 @@ public interface Player extends CommandSender {
 
     String getName();
 
+    // cache
+
+    void set(String key, Object value);
+
+    boolean has(String key);
+
+    Object get(String key);
+
+    <T> T get(String key, Class<T> clazz);
 }
