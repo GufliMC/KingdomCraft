@@ -1,0 +1,9 @@
+name: 'KingdomCraft'
+author: iGufGuf
+version: ${pluginVersion}
+description: 'The Ultimate Kingdom Plugin'
+softdepend: [Vault, WorldEdit, WorldGuard]
+main: com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin
+commands:
+    kingdomcraft:
+      aliases: [k, kd, kdc, kingdoms, kingdom]

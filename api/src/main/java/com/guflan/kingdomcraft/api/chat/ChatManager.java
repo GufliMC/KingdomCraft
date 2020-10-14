@@ -1,0 +1,62 @@
+/*
+ * This file is part of KingdomCraft.
+ *
+ * KingdomCraft is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * KingdomCraft is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.guflan.kingdomcraft.api.chat;
+
+import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.entity.Player;
+
+import java.util.List;
+
+public interface ChatManager {
+
+    List<ChatChannelBlueprint> getBlueprints();
+
+    void addBlueprint(ChatChannelBlueprint blueprint);
+
+    void removeBlueprint(ChatChannelBlueprint blueprint);
+
+    ChatChannelBlueprint getBlueprint(String name);
+
+    //
+
+    List<ChatChannel> getChatChannels();
+
+    ChatChannel getChatChannel(String name);
+
+    void addChatChannel(ChatChannel chatChannel);
+
+    void removeChatChannel(ChatChannel chatChannel);
+
+    void setDefaultChatChannel(ChatChannel chatChannel);
+
+    //
+
+    List<ChatChannel> getKingdomChannels(Kingdom kingdom);
+
+    List<ChatChannel> getPublicChannels();
+
+    List<ChatChannel> getVisibleChannels(Player player);
+
+    boolean isVisible(Player player, ChatChannel channel);
+
+    void handle(Player player, String message);
+
+    void send(Player player, ChatChannel channel, String message);
+
+
+}
