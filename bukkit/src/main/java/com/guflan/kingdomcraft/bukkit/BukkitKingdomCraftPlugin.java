@@ -19,12 +19,15 @@ package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.api.KingdomCraftHandler;
 import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.scheduler.AbstractScheduler;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitKingdomCraftHandler;
 import com.guflan.kingdomcraft.bukkit.bridge.BukkitScheduler;
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
+import com.guflan.kingdomcraft.bukkit.commands.SetSpawnCommand;
 import com.guflan.kingdomcraft.bukkit.config.Config;
+import com.guflan.kingdomcraft.bukkit.data.BukkitData;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.friendlyfire.FriendlyFireListener;
 import com.guflan.kingdomcraft.bukkit.listeners.PlayerListener;
@@ -46,6 +49,7 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 	private final BukkitScheduler scheduler;
 
 	private Config config;
+	private BukkitData data;
 
 	public BukkitKingdomCraftPlugin() {
 		this.scheduler = new BukkitScheduler(this);
@@ -122,6 +126,10 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new ConnectionListener(handler), this);
 		pm.registerEvents(new PlayerListener(this), this);
 		pm.registerEvents(new FriendlyFireListener(this), this);
+
+		// commands
+		CommandManager cm = handler.getCommandManager();
+		cm.registerCommand(new SetSpawnCommand(handler, this));
 	}
 
 	private void disable() {
@@ -130,6 +138,10 @@ public class BukkitKingdomCraftPlugin extends JavaPlugin implements KingdomCraft
 
 	public Config getConfiguration() {
 		return this.config;
+	}
+
+	public BukkitData getData() {
+		return data;
 	}
 
 	//

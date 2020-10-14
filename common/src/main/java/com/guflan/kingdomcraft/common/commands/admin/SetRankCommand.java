@@ -93,6 +93,8 @@ public class SetRankCommand extends DefaultCommandBase {
                     return;
                 }
 
+                // TODO hierarchy check
+
                 target.setRank(rank);
                 kdc.save(target);
 

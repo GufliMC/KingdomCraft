@@ -39,5 +39,7 @@ public class InfoCommand extends DefaultCommandBase {
         User user = kdc.getUser((Player) sender);
         sender.sendMessage("kingdom: " + (user.getKingdom() == null ? "null" : user.getKingdom().getDisplay()));
         sender.sendMessage("rank: " + (user.getRank() == null ? "null" : user.getRank().getDisplay()));
+
+        // TODO
     }
 }

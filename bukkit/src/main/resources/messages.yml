@@ -59,7 +59,8 @@ cmdSpawnWorldNotFound: '&7The world for the spawn of &8{0} &7can''t be found!'
 cmdSpawnTeleported: '&7You have been teleported to &8{0}&7!'
 cmdSpawnTeleportStarting: '&7Teleportation will start in &8{0} &7seconds, don''t move!'
 
-cmdSetSpawnSuccess: '&7You changed the spawn of &8{0} &7to &8{1}&7!'
+cmdSetSpawnSuccess: '&7You changed the spawn of your kingdom &7to &8{1}&7!'
+cmdSetSpawnOtherSuccess: '&7You changed the spawn of &8{0} &7to &8{1}&7!'
 
 cmdEnemySuccess: '&7You are now enemies with &8{0}&7!'
 cmdEnemySuccessMembers: '&7Your kingdom is now enemies with &8{0}&7!'
