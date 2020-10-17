@@ -38,6 +38,12 @@ public abstract class KingdomCraftConfig {
     protected String onDeathMessage;
     protected String onKillMessage;
 
+    protected int teleportDelay;
+
+    public int getTeleportDelay() {
+        return teleportDelay;
+    }
+
     public List<String> getWorlds() {
         return worlds;
     }

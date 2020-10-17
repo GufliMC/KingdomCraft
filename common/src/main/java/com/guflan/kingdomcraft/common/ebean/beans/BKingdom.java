@@ -18,10 +18,13 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import io.ebean.Model;
-import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.DbForeignKey;
+import io.ebean.annotation.WhenCreated;
+import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,12 +34,6 @@ import java.util.List;
 @Entity
 @Table(name = "kingdoms")
 public class BKingdom extends Model implements Kingdom {
-
-    public static List<BKingdom> INSTANCES = new ArrayList<>();
-
-    public BKingdom() {
-        INSTANCES.add(this);
-    }
 
     @Id
     public long id;
@@ -58,8 +55,9 @@ public class BKingdom extends Model implements Kingdom {
     @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER)
     public List<BRank> ranks;
 
-//    @OneToMany(mappedBy = "kingdom", cascade = CascadeType.ALL)
-//    public List<BRelation> relations;
+
+    @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER)
+    public List<BKingdomAttribute> attributes;
 
 //    @OneToMany(mappedBy = "kingdom")
 //    public List<BUser> members;
@@ -156,14 +154,24 @@ public class BKingdom extends Model implements Kingdom {
         rank.name = name;
         rank.kingdom = this;
 
-        ranks = new ArrayList<>(ranks);
         ranks.add(rank);
         return rank;
     }
 
     @Override
-    public void deleteRank(Rank rank) {
-        ranks = new ArrayList<>(ranks);
-        ranks.remove(rank);
+    public KingdomAttribute getOrCreateAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElseGet(() -> {
+            BKingdomAttribute attribute = new BKingdomAttribute();
+            attribute.kingdom = this;
+            attribute.name = name;
+
+            attributes.add(attribute);
+            return attribute;
+        });
+    }
+
+    @Override
+    public KingdomAttribute getAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
     }
 }

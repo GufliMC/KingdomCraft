@@ -41,6 +41,18 @@ public class BukkitConfig extends KingdomCraftConfig  {
             friendlyFireRelationTypes = new ArrayList<>();
         }
 
+        if ( cs.contains("respawn-at-kingdom") ) {
+            respawnAtKingdom = cs.getBoolean("respawn-at-kingdom");
+        } else {
+            respawnAtKingdom = false;
+        }
+
+        if ( cs.contains("teleport-delay") ) {
+            teleportDelay = cs.getInt("teleport-delay");
+        } else {
+            teleportDelay = 0;
+        }
+
         if ( cs.contains("events.kingdom_join") ) {
             onKingdomJoinCommands = cs.getStringList("events.kingdom_join");
         } else {
@@ -51,12 +63,6 @@ public class BukkitConfig extends KingdomCraftConfig  {
             onKingdomLeaveCommands = cs.getStringList("events.kingdom_leave");
         } else {
             onKingdomLeaveCommands = new ArrayList<>();
-        }
-
-        if ( cs.contains("respawn_at_kingdom") ) {
-            respawnAtKingdom = cs.getBoolean("respawn_at_kingdom");
-        } else {
-            respawnAtKingdom = false;
         }
 
         if ( cs.contains("messages.join") ) {

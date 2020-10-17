@@ -19,6 +19,7 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
@@ -27,6 +28,7 @@ import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ranks")
@@ -47,6 +49,9 @@ public class BRank extends Model implements Rank {
     public String suffix;
     public int maxMembers;
     public int level;
+
+    @OneToMany(mappedBy = "rank", fetch = FetchType.EAGER)
+    public List<BRankAttribute> attributes;
 
     @WhenCreated
     public Date createdAt;
@@ -123,5 +128,17 @@ public class BRank extends Model implements Rank {
     @Override
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    @Override
+    public RankAttribute getOrCreateAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElseGet(() -> {
+            BRankAttribute attribute = new BRankAttribute();
+            attribute.rank = this;
+            attribute.name = name;
+
+            attributes.add(attribute);
+            return attribute;
+        });
     }
 }

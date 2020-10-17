@@ -24,7 +24,6 @@ import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
-import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.common.chat.ChatDispatcher;
 import com.guflan.kingdomcraft.common.chat.ChatManagerImpl;
@@ -62,6 +61,8 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
 
     public AbstractKingdomCraft(KingdomCraftPlugin plugin, KingdomCraftConfig config, EBeanContext context) {
+        KingdomCraftProvider.register(this);
+
         this.plugin = plugin;
         this.config = config;
         this.context = context;
@@ -76,8 +77,6 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
         this.chatDispatcher = new ChatDispatcher(this, chatManager);
 
         this.placeholderManager = new PlaceholderManagerImpl(this);
-
-        KingdomCraftProvider.register(this);
     }
 
     //
@@ -191,6 +190,30 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     @Override
     public CompletableFuture<Void> save(Rank rank) {
         return context.save(rank);
+    }
+
+    // attributes
+
+    @Override
+    public CompletableFuture<Void> delete(KingdomAttribute property) {
+        return context.delete(property);
+    }
+
+    @Override
+    public CompletableFuture<Void> save(KingdomAttribute property) {
+        return context.save(property);
+    }
+
+    // attributes
+
+    @Override
+    public CompletableFuture<Void> delete(RankAttribute property) {
+        return context.delete(property);
+    }
+
+    @Override
+    public CompletableFuture<Void> save(RankAttribute property) {
+        return context.save(property);
     }
 
 

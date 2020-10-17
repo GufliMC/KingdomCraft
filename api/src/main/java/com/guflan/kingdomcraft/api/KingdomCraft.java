@@ -54,6 +54,18 @@ public interface KingdomCraft {
 
     CompletableFuture<Void> save(Rank rank);
 
+    // attributes
+
+    CompletableFuture<Void> delete(KingdomAttribute property);
+
+    CompletableFuture<Void> save(KingdomAttribute property);
+
+    // attributes
+
+    CompletableFuture<Void> delete(RankAttribute property);
+
+    CompletableFuture<Void> save(RankAttribute property);
+
     // relations
 
     List<Relation> getRelations(Kingdom kingdom);

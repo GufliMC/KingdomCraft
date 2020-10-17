@@ -81,6 +81,7 @@ public class EBeanContext {
     // ranks
 
     public CompletableFuture<Void> delete(Rank rank) {
+        ((BKingdom) rank.getKingdom()).ranks.remove(rank);
         return storage.delete(rank);
     }
 
@@ -88,6 +89,28 @@ public class EBeanContext {
         return storage.save(rank);
     }
 
+    // kingdom attributes
+
+    public CompletableFuture<Void> delete(KingdomAttribute attribute) {
+        ((BKingdom) attribute.getKingdom()).attributes.remove(attribute);
+        return storage.delete(attribute);
+    }
+
+    public CompletableFuture<Void> save(KingdomAttribute attribute) {
+        return storage.save(attribute);
+    }
+
+    // rank attributes
+
+    public CompletableFuture<Void> delete(RankAttribute attribute) {
+        ((BRank) attribute.getRank()).attributes.remove(attribute);
+        return storage.delete(attribute);
+    }
+
+    public CompletableFuture<Void> save(RankAttribute attribute) {
+        return storage.save(attribute);
+    }
+    
     // relations
 
     public List<Relation> getRelations(Kingdom kingdom) {

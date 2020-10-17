@@ -43,4 +43,6 @@ public interface Rank {
     int getLevel();
 
     void setLevel(int level);
+
+    RankAttribute getOrCreateAttribute(String name);
 }

@@ -25,6 +25,7 @@ import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
 import com.guflan.kingdomcraft.bukkit.listeners.PlayerListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
+import com.guflan.kingdomcraft.bukkit.util.Teleporter;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.EBeanContext;
@@ -124,8 +125,8 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new PlayerListener(this), this);
 		pm.registerEvents(new FriendlyFireListener(this), this);
 
-		// commands
-		// TODO
+		// utils
+		Teleporter.register(this);
 	}
 
 	private void disable() {
