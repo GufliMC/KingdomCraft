@@ -18,13 +18,13 @@
 package com.guflan.kingdomcraft.bukkit.friendlyfire;
 
 import com.guflan.kingdomcraft.api.KingdomCraft;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.Relation;
-import com.guflan.kingdomcraft.api.domain.models.RelationType;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.api.domain.RelationType;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.events.PlayerAttackPlayerEvent;
-import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
@@ -37,9 +37,9 @@ import org.bukkit.event.entity.EntityEvent;
 
 public class FriendlyFireListener implements Listener {
 
-    private final BukkitKingdomCraftPlugin plugin;
+    private final KingdomCraftBukkitPlugin plugin;
 
-    public FriendlyFireListener(BukkitKingdomCraftPlugin plugin) {
+    public FriendlyFireListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -54,23 +54,23 @@ public class FriendlyFireListener implements Listener {
     }
 
     private <T extends EntityEvent & Cancellable> void handleEvent(T e, Entity entity, Entity damager) {
-        if ( !plugin.getConfiguration().isWorldEnabled(entity.getWorld().getName()) ) {
+        if ( !plugin.getKdc().getConfig().isWorldEnabled(entity.getWorld().getName()) ) {
             return;
         }
 
 
-        Player p;
-        if ( entity instanceof Player) {
-            p = KingdomCraft.getPlayer(entity.getUniqueId());
+        PlatformPlayer p;
+        if ( entity instanceof PlatformPlayer) {
+            p = plugin.getKdc().getPlayer(entity.getUniqueId());
         } else {
             return;
         }
 
-        Player d;
-        if ( damager instanceof Player ) {
-            d = KingdomCraft.getPlayer(damager.getUniqueId());
-        } else if ( damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Player) {
-            d = KingdomCraft.getPlayer(((Player) ((Projectile) damager).getShooter()).getUniqueId());
+        PlatformPlayer d;
+        if ( damager instanceof PlatformPlayer) {
+            d = plugin.getKdc().getPlayer(damager.getUniqueId());
+        } else if ( damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof PlatformPlayer) {
+            d = plugin.getKdc().getPlayer(((PlatformPlayer) ((Projectile) damager).getShooter()).getUniqueId());
         }
         else {
             return;
@@ -82,7 +82,7 @@ public class FriendlyFireListener implements Listener {
         }
 
         PlayerAttackPlayerEvent event = new PlayerAttackPlayerEvent(p, d);
-        KingdomCraft.getEventManager().playerAttack(event);
+        plugin.getKdc().getEventDispatcher().dispatchPlayerAttack(event);
 
         if ( event.getResult() == PlayerAttackPlayerEvent.Result.DENY ) {
             e.setCancelled(true);
@@ -93,8 +93,8 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
-        User u1 = KingdomCraft.getUser(p);
-        User u2 = KingdomCraft.getUser(d);
+        User u1 = plugin.getKdc().getUser(p);
+        User u2 = plugin.getKdc().getUser(d);
 
         if ( d.hasPermission("kingdom.friendlyfire.bypass") ) {
             return;
@@ -108,9 +108,9 @@ public class FriendlyFireListener implements Listener {
         }
 
         if ( k1 != k2 ) {
-            Relation rel = KingdomCraft.getRelation(k1, k2);
+            Relation rel = plugin.getKdc().getRelation(k1, k2);
             RelationType type = rel == null ? RelationType.NEUTRAL : rel.getType();
-            if ( !plugin.getConfiguration().getFriendlyFireRelationTypes().contains(type) ) {
+            if ( !plugin.getKdc().getConfig().getFriendlyFireRelationTypes().contains(type) ) {
                 return;
             }
         }
@@ -126,7 +126,7 @@ public class FriendlyFireListener implements Listener {
         }
 
         if ( System.currentTimeMillis() - lastNotification > 5000 ) {
-            KingdomCraft.getMessageManager().send(d, "friendlyFire");
+            plugin.getKdc().getMessageManager().send(d, "friendlyFire");
             d.set("LAST_FRIENDLYFIRE_NOTIFICATION", System.currentTimeMillis());
         }
     }

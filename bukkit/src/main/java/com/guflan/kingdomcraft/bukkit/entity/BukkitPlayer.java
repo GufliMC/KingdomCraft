@@ -17,13 +17,13 @@
 
 package com.guflan.kingdomcraft.bukkit.entity;
 
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class BukkitPlayer extends BukkitCommandSender implements Player {
+public class BukkitPlayer extends BukkitSender implements PlatformPlayer {
 
     private final Map<String, Object> cache = new HashMap<>();
     private final org.bukkit.entity.Player player;

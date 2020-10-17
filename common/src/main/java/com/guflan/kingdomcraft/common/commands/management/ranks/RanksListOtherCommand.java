@@ -17,22 +17,22 @@
 
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.Rank;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.stream.Collectors;
 
-public class RanksListOtherCommand extends DefaultCommandBase {
+public class RanksListOtherCommand extends CommandBaseImpl {
 
-    public RanksListOtherCommand(KingdomCraftHandler kdc) {
+    public RanksListOtherCommand(AbstractKingdomCraft kdc) {
         super(kdc, "ranks list", 1);
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.ranks.list.other") ) {
             kdc.getMessageManager().send(sender, "noPermission");
             return;

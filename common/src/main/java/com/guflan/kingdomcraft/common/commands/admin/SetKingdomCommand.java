@@ -17,32 +17,32 @@
 
 package com.guflan.kingdomcraft.common.commands.admin;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-public class SetKingdomCommand extends DefaultCommandBase {
+public class SetKingdomCommand extends CommandBaseImpl {
 
-    public SetKingdomCommand(KingdomCraftHandler kdc) {
+    public SetKingdomCommand(AbstractKingdomCraft kdc) {
         super(kdc, "setkingdom", 2);
     }
 
     @Override
-    public List<String> autocomplete(CommandSender sender, String[] args) {
+    public List<String> autocomplete(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.setkingdom") ) {
             return null;
         }
 
         // first argument (users)
         if ( args.length == 1 ) {
-            return kdc.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+            return kdc.getOnlinePlayers().stream().map(PlatformPlayer::getName).collect(Collectors.toList());
         }
 
         // second argument (kingdoms)
@@ -50,7 +50,7 @@ public class SetKingdomCommand extends DefaultCommandBase {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.setkingdom") ) {
             kdc.getMessageManager().send(sender, "noPermission");
         }
@@ -69,15 +69,19 @@ public class SetKingdomCommand extends DefaultCommandBase {
                     return;
                 }
 
+                Kingdom oldKingdom = target.getKingdom();
                 target.setKingdom(kingdom);
                 kdc.save(target);
 
-                Player tplayer = kdc.getPlayer(target);
+                PlatformPlayer tplayer = kdc.getPlayer(target);
                 if ( tplayer != null ) {
-                    kdc.getEventManager().kingdomJoin(tplayer);
+                    if ( oldKingdom != null ) {
+                        kdc.getEventDispatcher().dispatchKingdomLeave(tplayer, oldKingdom);
+                    }
+                    kdc.getEventDispatcher().dispatchKingdomJoin(tplayer);
                 }
 
-                Player targetPlayer = kdc.getPlayer(target);
+                PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
                     kdc.getMessageManager().send(targetPlayer, "cmdSetKingdomTarget", kingdom.getName());
                 }

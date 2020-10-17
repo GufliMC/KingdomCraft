@@ -17,12 +17,11 @@
 
 package com.guflan.kingdomcraft.common.ebean;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.DomainStorage;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.Rank;
-import com.guflan.kingdomcraft.api.domain.models.Relation;
-import com.guflan.kingdomcraft.api.domain.models.User;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.ebean.beans.BRank;
 import com.guflan.kingdomcraft.common.ebean.beans.BRelation;
 import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
@@ -47,7 +46,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class EBeanStorage implements DomainStorage {
+public class EBeanStorage {
 
     private final KingdomCraftPlugin plugin;
 
@@ -105,66 +104,54 @@ public class EBeanStorage implements DomainStorage {
         DatabaseFactory.create(config);
     }
 
-    // interface
-
-    @Override
     public CompletableFuture<List<Kingdom>> getKingdoms() {
         return plugin.getScheduler().makeAsyncFuture(() ->
                 new QBKingdom().findList().stream().map(k -> (Kingdom) k).collect(Collectors.toList()));
     }
 
-    @Override
     public CompletableFuture<Kingdom> getKingdom(String name) {
         return plugin.getScheduler().makeAsyncFuture(() -> new QBKingdom().name.eq(name).findOne());
     }
 
-    @Override
     public CompletableFuture<Void> delete(Kingdom kingdom) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             ((BKingdom) kingdom).delete();
         });
     }
 
-    @Override
     public CompletableFuture<Void> save(Kingdom kingdom) {
         return plugin.getScheduler().makeAsyncFuture(() -> ((BKingdom) kingdom).save());
     }
 
     // ranks
 
-    @Override
     public CompletableFuture<Void> delete(Rank rank) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             ((BRank) rank).delete();
         });
     }
 
-    @Override
     public CompletableFuture<Void> save(Rank rank) {
         return plugin.getScheduler().makeAsyncFuture(() -> ((BRank) rank).save());
     }
 
     // relations
 
-    @Override
     public CompletableFuture<List<Relation>> getRelations() {
         return plugin.getScheduler().makeAsyncFuture(() -> new QBRelation().findList().stream().map(r -> (Relation) r).collect(Collectors.toList()));
     }
 
-    @Override
     public CompletableFuture<List<Relation>> getRelations(Kingdom kingdom) {
         return plugin.getScheduler().makeAsyncFuture(() -> new QBRelation().kingdom.eq((BKingdom) kingdom).or().otherKingdom.eq((BKingdom) kingdom)
                 .findList().stream().map(r -> (Relation) r).collect(Collectors.toList()));
     }
 
-    @Override
     public CompletableFuture<Void> save(Relation relation) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             ((BRelation) relation).save();
         });
     }
 
-    @Override
     public CompletableFuture<Void> delete(Relation relation) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             ((BRelation) relation).delete();
@@ -173,27 +160,22 @@ public class EBeanStorage implements DomainStorage {
 
     // users
 
-    @Override
     public CompletableFuture<List<User>> getUsers() {
         return plugin.getScheduler().makeAsyncFuture(() -> new QBUser().findList().stream().map(u -> (User) u).collect(Collectors.toList()));
     }
 
-    @Override
     public CompletableFuture<User> getUser(String name) {
         return plugin.getScheduler().makeAsyncFuture(() -> new QBUser().name.eq(name).findOne());
     }
 
-    @Override
     public CompletableFuture<User> getUser(UUID uuid) {
         return plugin.getScheduler().makeAsyncFuture(() -> new QBUser().id.eq(uuid.toString()).findOne());
     }
 
-    @Override
     public CompletableFuture<Void> save(User user) {
         return plugin.getScheduler().makeAsyncFuture(() -> ((BUser) user).save());
     }
 
-    @Override
     public CompletableFuture<Void> delete(User user) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             ((BUser) user).delete();

@@ -17,20 +17,19 @@
 
 package com.guflan.kingdomcraft.api.event;
 
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 
 public interface EventListener {
 
-    default void onJoin(Player player) {}
+    default void onJoin(PlatformPlayer player) {}
 
-    default void onQuit(Player player) {}
+    default void onQuit(PlatformPlayer player) {}
 
-    default void onKingdomJoin(Player player) {}
+    default void onKingdomJoin(PlatformPlayer player) {}
 
-    default void onKingdomLeave(Player player, Kingdom oldKingdom) {}
+    default void onKingdomLeave(PlatformPlayer player, Kingdom oldKingdom) {}
 
     default void onKingdomCreate(Kingdom kingdom) {}
 

@@ -17,38 +17,38 @@
 
 package com.guflan.kingdomcraft.common.commands.admin;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.Rank;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-public class SetRankCommand extends DefaultCommandBase {
+public class SetRankCommand extends CommandBaseImpl {
 
-    public SetRankCommand(KingdomCraftHandler kdc) {
+    public SetRankCommand(AbstractKingdomCraft kdc) {
         super(kdc, "setrank", 2);
     }
 
     @Override
-    public List<String> autocomplete(CommandSender sender, String[] args) {
+    public List<String> autocomplete(PlatformSender sender, String[] args) {
 
         // first argument (players)
         if ( args.length == 1 ) {
             if ( sender.hasPermission("kingdom.setrank.other") ) {
                 return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() != null)
-                        .map(Player::getName).collect(Collectors.toList());
+                        .map(PlatformPlayer::getName).collect(Collectors.toList());
             }
 
-            User user = kdc.getUser((Player) sender);
+            User user = kdc.getUser((PlatformPlayer) sender);
             if ( sender.hasPermission("kingdom.setrank") && user.getKingdom() != null ) {
                 return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() == user.getKingdom())
-                        .map(Player::getName).collect(Collectors.toList()); // TODO hierarchy check
+                        .map(PlatformPlayer::getName).collect(Collectors.toList()); // TODO hierarchy check
             }
             return null;
         }
@@ -62,7 +62,7 @@ public class SetRankCommand extends DefaultCommandBase {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.setrank") && !sender.hasPermission("kingdom.setrank.other") ) {
             kdc.getMessageManager().send(sender, "noPermission");
             return;
@@ -82,7 +82,7 @@ public class SetRankCommand extends DefaultCommandBase {
                 }
 
                 Kingdom kingdom = target.getKingdom();
-                if ( !sender.hasPermission("kingdom.setrank.other") && sender instanceof Player && kdc.getUser((Player) sender).getKingdom() != kingdom) {
+                if ( !sender.hasPermission("kingdom.setrank.other") && sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() != kingdom) {
                     kdc.getMessageManager().send(sender, "noPermission");
                     return;
                 }
@@ -98,7 +98,7 @@ public class SetRankCommand extends DefaultCommandBase {
                 target.setRank(rank);
                 kdc.save(target);
 
-                Player targetPlayer = kdc.getPlayer(target);
+                PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
                     kdc.getMessageManager().send(targetPlayer, "cmdSetRankTargetChange", rank.getName());
                 }

@@ -1,8 +1,7 @@
 package com.guflan.kingdomcraft.bukkit.data;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.json.simple.JSONObject;
@@ -18,12 +17,12 @@ import java.util.regex.Pattern;
 
 public class BukkitData {
 
-    private final KingdomCraftPlugin plugin;
+    private final KingdomCraftBukkitPlugin plugin;
     private final File dataFile;
 
     private JSONObject data;
 
-    public BukkitData(BukkitKingdomCraftPlugin plugin) {
+    public BukkitData(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
 
         dataFile = new File(plugin.getDataFolder(), ".data");

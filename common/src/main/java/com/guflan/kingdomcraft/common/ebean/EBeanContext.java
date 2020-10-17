@@ -17,12 +17,11 @@
 
 package com.guflan.kingdomcraft.common.ebean;
 
-import com.guflan.kingdomcraft.api.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.api.domain.DomainContext;
-import com.guflan.kingdomcraft.api.domain.models.*;
+import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.BRank;
 import com.guflan.kingdomcraft.common.ebean.beans.BRelation;
-import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.BUser;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public class EBeanContext implements DomainContext {
+public class EBeanContext {
 
     private final List<BKingdom> kingdoms = new ArrayList<>();
     private final List<BRelation> relations = new ArrayList<>();
@@ -54,28 +53,23 @@ public class EBeanContext implements DomainContext {
         return true;
     }
 
-    @Override
     public List<Kingdom> getCachedKingdoms() {
         return new ArrayList<>(kingdoms);
     }
 
-    @Override
     public Kingdom getCachedKingdom(String name) {
         return kingdoms.stream().filter(k -> k.getName().equals(name)).findFirst().orElse(null);
     }
 
-    @Override
     public CompletableFuture<Void> delete(Kingdom kingdom) {
         kingdoms.remove(kingdom);
         return storage.delete(kingdom);
     }
 
-    @Override
     public CompletableFuture<Void> save(Kingdom kingdom) {
         return storage.save(kingdom);
     }
 
-    @Override
     public Kingdom createKingdom(String name) {
         BKingdom kingdom = new BKingdom();
         kingdom.name = name;
@@ -86,24 +80,20 @@ public class EBeanContext implements DomainContext {
 
     // ranks
 
-    @Override
     public CompletableFuture<Void> delete(Rank rank) {
         return storage.delete(rank);
     }
 
-    @Override
     public CompletableFuture<Void> save(Rank rank) {
         return storage.save(rank);
     }
 
     // relations
 
-    @Override
     public List<Relation> getRelations(Kingdom kingdom) {
         return relations.stream().filter(r -> r.kingdom.equals(kingdom) || r.otherKingdom.equals(kingdom)).collect(Collectors.toList());
     }
 
-    @Override
     public Relation getRelation(Kingdom kingdom, Kingdom other) {
         return relations.stream().filter(r -> (r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
                 || (r.kingdom.equals(other) && r.otherKingdom.equals(kingdom))).filter(r -> !r.isRequest()).findFirst().orElse(null);
@@ -118,7 +108,6 @@ public class EBeanContext implements DomainContext {
         return rel;
     }
 
-    @Override
     public void setRelation(Kingdom kingdom, Kingdom other, RelationType type) {
         Relation rel = getRelation(kingdom, other);
         if ( rel != null ) {
@@ -132,20 +121,17 @@ public class EBeanContext implements DomainContext {
         relations.add(brel);
     }
 
-    @Override
     public void addRelationRequest(Kingdom kingdom, Kingdom other, RelationType type) {
         BRelation brel = createRelation(kingdom, other, type, true);
         storage.save(brel);
         relations.add(brel);
     }
 
-    @Override
     public Relation getRelationRequest(Kingdom kingdom, Kingdom other) {
         return relations.stream().filter(r -> r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
                 .filter(Relation::isRequest).findFirst().orElse(null);
     }
 
-    @Override
     public void removeRelationRequest(Kingdom kingdom, Kingdom other) {
         Relation rel = getRelationRequest(kingdom, other);
         if ( rel == null ) {
@@ -164,22 +150,18 @@ public class EBeanContext implements DomainContext {
 
     // users
 
-    @Override
     public List<User> getCachedUsers() {
         return new ArrayList<>(users);
     }
 
-    @Override
     public User getCachedUser(String name) {
         return users.stream().filter(u -> u.name.equals(name)).findFirst().orElse(null);
     }
 
-    @Override
     public User getCachedUser(UUID uuid) {
         return users.stream().filter(u -> u.id.equals(uuid.toString())).findFirst().orElse(null);
     }
 
-    @Override
     public CompletableFuture<List<User>> getUsers() {
         return storage.getUsers().thenApply(users -> {
             users.forEach(this::fit);
@@ -187,7 +169,6 @@ public class EBeanContext implements DomainContext {
         });
     }
 
-    @Override
     public CompletableFuture<User> getUser(String name) {
         User user = getCachedUser(name);
         if ( user != null ) {
@@ -200,7 +181,6 @@ public class EBeanContext implements DomainContext {
         });
     }
 
-    @Override
     public CompletableFuture<User> getUser(UUID uuid) {
         User user = getCachedUser(uuid);
         if ( user != null ) {
@@ -213,17 +193,14 @@ public class EBeanContext implements DomainContext {
         });
     }
 
-    @Override
     public CompletableFuture<Void> delete(User user) {
         return storage.delete(user);
     }
 
-    @Override
     public CompletableFuture<Void> save(User user) {
         return storage.save(user);
     }
 
-    @Override
     public User createUser(UUID uuid, String name) {
         BUser user = new BUser();
         user.id = uuid.toString();
@@ -231,14 +208,12 @@ public class EBeanContext implements DomainContext {
         return user;
     }
 
-    @Override
     public void addCachedUser(User user) {
         if ( !users.contains(user) ) {
             users.add((BUser) user);
         }
     }
 
-    @Override
     public void removeCachedUser(User user) {
         users.remove(user);
     }
