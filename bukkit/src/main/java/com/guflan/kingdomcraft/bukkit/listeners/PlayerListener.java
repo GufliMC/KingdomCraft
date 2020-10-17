@@ -40,15 +40,19 @@ public class PlayerListener implements Listener, EventListener {
     public void onQuit(PlayerQuitEvent e) {
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
         String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
-        msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
-        e.setQuitMessage(msg);
+        if ( msg != null ) {
+            msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
+            e.setQuitMessage(msg);
+        }
     }
 
     @Override
     public void onJoin(PlatformPlayer player) {
         String msg = plugin.getKdc().getConfig().getOnJoinMessage();
-        msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
-        Bukkit.broadcastMessage(msg);
+        if ( msg != null ) {
+            msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
+            Bukkit.broadcastMessage(msg);
+        }
     }
 
     // respawn

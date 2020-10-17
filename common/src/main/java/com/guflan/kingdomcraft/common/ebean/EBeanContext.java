@@ -175,10 +175,7 @@ public class EBeanContext {
             return CompletableFuture.completedFuture(user);
         }
 
-        return storage.getUser(name).thenApply(u -> {
-            fit(u);
-            return u;
-        });
+        return fit(storage.getUser(name));
     }
 
     public CompletableFuture<User> getUser(UUID uuid) {
@@ -187,10 +184,7 @@ public class EBeanContext {
             return CompletableFuture.completedFuture(user);
         }
 
-        return storage.getUser(uuid).thenApply(u -> {
-            fit(u);
-            return u;
-        });
+        return fit(storage.getUser(uuid));
     }
 
     public CompletableFuture<Void> delete(User user) {
@@ -216,6 +210,15 @@ public class EBeanContext {
 
     public void removeCachedUser(User user) {
         users.remove(user);
+    }
+
+    private CompletableFuture<User> fit(CompletableFuture<User> future) {
+        return future.thenApply(u -> {
+            if ( u != null ) {
+                fit(u);
+            }
+            return u;
+        });
     }
 
     private void fit(User user) {

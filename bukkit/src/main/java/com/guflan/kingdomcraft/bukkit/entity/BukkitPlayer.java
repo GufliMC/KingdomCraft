@@ -17,23 +17,21 @@
 
 package com.guflan.kingdomcraft.bukkit.entity;
 
-import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.common.entity.AbstractPlatformPlayer;
+import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-public class BukkitPlayer extends BukkitSender implements PlatformPlayer {
+public class BukkitPlayer extends BukkitSender implements AbstractPlatformPlayer {
 
-    private final Map<String, Object> cache = new HashMap<>();
-    private final org.bukkit.entity.Player player;
+    private final Player player;
 
-    public BukkitPlayer(org.bukkit.entity.Player player) {
+    public BukkitPlayer(Player player) {
         super(player);
         this.player = player;
     }
 
-    public org.bukkit.entity.Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -52,28 +50,6 @@ public class BukkitPlayer extends BukkitSender implements PlatformPlayer {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof BukkitPlayer && ((BukkitPlayer) obj).player == player;
-    }
-
-    // cache
-
-    @Override
-    public void set(String key, Object value) {
-        cache.put(key, value);
-    }
-
-    @Override
-    public boolean has(String key) {
-        return cache.containsKey(key);
-    }
-
-    @Override
-    public Object get(String key) {
-        return cache.get(key);
-    }
-
-    @Override
-    public <T> T get(String key, Class<T> clazz) {
-        return (T) cache.get(key);
     }
 
 }

@@ -59,6 +59,10 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
 
     @Override
     public String handle(PlatformPlayer player, String str, String prefix) {
+        if ( str == null ) {
+            return null;
+        }
+
         StringBuffer sb = new StringBuffer();
         Pattern p = Pattern.compile("(\\{[^}]+\\})");
         Matcher m = p.matcher(str);

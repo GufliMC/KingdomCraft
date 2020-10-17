@@ -15,27 +15,35 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.bukkit.entity;
+package com.guflan.kingdomcraft.common.entity;
 
-import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import org.bukkit.command.CommandSender;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
-public class BukkitSender implements PlatformSender {
+import java.util.HashMap;
+import java.util.Map;
 
-    protected final CommandSender commandSender;
+public interface AbstractPlatformPlayer extends PlatformPlayer {
 
-    public BukkitSender(CommandSender commandSender) {
-        this.commandSender = commandSender;
+    Map<String, Object> cache = new HashMap<>();
+
+    @Override
+    default void set(String key, Object value) {
+        cache.put(key, value);
     }
 
     @Override
-    public boolean hasPermission(String permission) {
-        return commandSender.hasPermission(permission);
+    default boolean has(String key) {
+        return cache.containsKey(key);
     }
 
     @Override
-    public void sendMessage(String msg) {
-        commandSender.sendMessage(msg);
+    default Object get(String key) {
+        return cache.get(key);
+    }
+
+    @Override
+    default <T> T get(String key, Class<T> clazz) {
+        return (T) cache.get(key);
     }
 
 }
