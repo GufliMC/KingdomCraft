@@ -29,11 +29,11 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
+public class CommandHandler implements CommandExecutor, TabCompleter {
 
     private final KingdomCraftBukkitPlugin plugin;
 
-    public BukkitCommandExecutor(KingdomCraftBukkitPlugin plugin) {
+    public CommandHandler(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
     }
 

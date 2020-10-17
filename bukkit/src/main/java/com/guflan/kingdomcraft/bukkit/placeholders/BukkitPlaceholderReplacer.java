@@ -29,17 +29,19 @@ public class BukkitPlaceholderReplacer {
     public BukkitPlaceholderReplacer(KingdomCraftBukkitPlugin plugin) {
         PlaceholderManager pm = plugin.getKdc().getPlaceholderManager();
 
-        pm.addPlaceholderReplacer((player, placeholder) -> Bukkit.getPlayer(player.getUniqueId()).getLocation().getWorld().toString(),
-                "world");
+        pm.addPlaceholderReplacer((player, placeholder) -> Bukkit.getPlayer(player.getUniqueId())
+                    .getLocation().getWorld().toString(),
+            "world");
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
-                    ItemStack stack = Bukkit.getPlayer(player.getUniqueId()).getItemInHand();
-                    if ( stack.getItemMeta() == null || stack.getItemMeta().getDisplayName() == null ) {
-                        return WordUtils.capitalizeFully(stack.getType().toString().replace("_", " "), ' ');
-                    }
-                    return stack.getItemMeta().getDisplayName();
-                },
-                "item", "weapon");
+                ItemStack stack = Bukkit.getPlayer(player.getUniqueId()).getItemInHand();
+                if ( stack.getItemMeta() == null || stack.getItemMeta().getDisplayName() == null ) {
+                    String name = stack.getType().toString().replace("_", " ");
+                    return WordUtils.capitalizeFully(name, ' ');
+                }
+                return stack.getItemMeta().getDisplayName();
+            },
+            "item", "weapon");
     }
 
 }

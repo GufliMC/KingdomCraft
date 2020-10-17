@@ -43,7 +43,7 @@ public abstract class KingdomCraftConfig {
     }
 
     public boolean isWorldEnabled(String world) {
-        return worlds.contains(world.toLowerCase());
+        return worlds.isEmpty() || worlds.contains(world.toLowerCase());
     }
 
     public List<RelationType> getFriendlyFireRelationTypes() {

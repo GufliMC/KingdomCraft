@@ -18,7 +18,7 @@
 package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
-import com.guflan.kingdomcraft.bukkit.command.BukkitCommandExecutor;
+import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfig;
 import com.guflan.kingdomcraft.bukkit.friendlyfire.FriendlyFireListener;
 import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
@@ -29,7 +29,6 @@ import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.EBeanContext;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
-import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -114,7 +113,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		new ChatHandler(this);
 
 		// commands
-		BukkitCommandExecutor commandHandler = new BukkitCommandExecutor(this);
+		CommandHandler commandHandler = new CommandHandler(this);
 		PluginCommand command = getCommand("kingdomcraft");
 		command.setExecutor(commandHandler);
 		command.setTabCompleter(commandHandler);
