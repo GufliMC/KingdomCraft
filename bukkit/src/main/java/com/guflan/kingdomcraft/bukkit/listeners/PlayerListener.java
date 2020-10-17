@@ -1,12 +1,12 @@
 package com.guflan.kingdomcraft.bukkit.listeners;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventListener;
-import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,35 +19,35 @@ import java.util.List;
 
 public class PlayerListener implements Listener, EventListener {
 
-    private final BukkitKingdomCraftPlugin plugin;
+    private final KingdomCraftBukkitPlugin plugin;
 
-    public PlayerListener(BukkitKingdomCraftPlugin plugin) {
+    public PlayerListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
-        KingdomCraft.getEventManager().addListener(this);
+        plugin.getKdc().getEventManager().addListener(this);
     }
 
     // join & quit messages
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        if ( plugin.getConfiguration().getOnJoinMessage() != null
-                && !plugin.getConfiguration().getOnJoinMessage().equals("") ) {
+        if ( plugin.getKdc().getConfig().getOnJoinMessage() != null
+                && !plugin.getKdc().getConfig().getOnJoinMessage().equals("") ) {
             e.setJoinMessage(null);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        Player player = KingdomCraft.getPlayer(e.getPlayer().getUniqueId());
-        String msg = plugin.getConfiguration().getOnLeaveMessage();
-        msg = KingdomCraft.getPlaceholderManager().handle(player, msg);
+        PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
+        String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
+        msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
         e.setQuitMessage(msg);
     }
 
     @Override
-    public void onJoin(Player player) {
-        String msg = plugin.getConfiguration().getOnJoinMessage();
-        msg = KingdomCraft.getPlaceholderManager().handle(player, msg);
+    public void onJoin(PlatformPlayer player) {
+        String msg = plugin.getKdc().getConfig().getOnJoinMessage();
+        msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
         Bukkit.broadcastMessage(msg);
     }
 
@@ -55,7 +55,7 @@ public class PlayerListener implements Listener, EventListener {
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        if ( plugin.getConfiguration().respawnAtKingdom() ) {
+        if ( plugin.getKdc().getConfig().respawnAtKingdom() ) {
             // TODO
         }
     }
@@ -63,29 +63,29 @@ public class PlayerListener implements Listener, EventListener {
     // kingdom join & kingdom leave commands
 
     @Override
-    public void onKingdomJoin(Player player) {
-        if ( plugin.getConfiguration().getOnKingdomJoinCommands().isEmpty() ) {
+    public void onKingdomJoin(PlatformPlayer player) {
+        if ( plugin.getKdc().getConfig().getOnKingdomJoinCommands().isEmpty() ) {
             return;
         }
-        execute(player, plugin.getConfiguration().getOnKingdomJoinCommands());
+        execute(player, plugin.getKdc().getConfig().getOnKingdomJoinCommands());
     }
 
     @Override
-    public void onKingdomLeave(Player player, Kingdom oldKingdom) {
-        if ( plugin.getConfiguration().getOnKingdomLeaveCommands().isEmpty() ) {
+    public void onKingdomLeave(PlatformPlayer player, Kingdom oldKingdom) {
+        if ( plugin.getKdc().getConfig().getOnKingdomLeaveCommands().isEmpty() ) {
             return;
         }
-        execute(player, plugin.getConfiguration().getOnKingdomLeaveCommands());
+        execute(player, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
     }
 
-    private void execute(Player player, List<String> commands) {
+    private void execute(PlatformPlayer player, List<String> commands) {
         if ( !(player instanceof BukkitPlayer) ) {
             return;
         }
-        org.bukkit.entity.Player bplayer = ((BukkitPlayer) player).getPlayer();
+        Player bplayer = ((BukkitPlayer) player).getPlayer();
 
         for ( String cmd : commands ) {
-            cmd = KingdomCraft.getPlaceholderManager().handle(player, cmd);
+            cmd = plugin.getKdc().getPlaceholderManager().handle(player, cmd);
 
             if ( cmd.startsWith("CONSOLE") ) {
                 cmd = cmd.substring("CONSOLE".length()).trim();
@@ -101,28 +101,30 @@ public class PlayerListener implements Listener, EventListener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         if ( event.getEntity().getKiller() != null ) {
-            if ( plugin.getConfiguration().getOnKillMessage() == null || plugin.getConfiguration().getOnKillMessage().equals("") ) {
+            if ( plugin.getKdc().getConfig().getOnKillMessage() == null
+                    || plugin.getKdc().getConfig().getOnKillMessage().equals("") ) {
                 return;
             }
 
-            Player p = KingdomCraft.getPlayer(event.getEntity().getUniqueId());
-            Player k = KingdomCraft.getPlayer(event.getEntity().getKiller().getUniqueId());
+            PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
+            PlatformPlayer k = plugin.getKdc().getPlayer(event.getEntity().getKiller().getUniqueId());
 
-            String msg = plugin.getConfiguration().getOnKillMessage();
-            msg = KingdomCraft.getPlaceholderManager().handle(p, msg);
-            msg = KingdomCraft.getPlaceholderManager().handle(k, msg, "killer_");
+            String msg = plugin.getKdc().getConfig().getOnKillMessage();
+            msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
+            msg = plugin.getKdc().getPlaceholderManager().handle(k, msg, "killer_");
             event.setDeathMessage(msg);
             return;
         }
 
-        if ( plugin.getConfiguration().getOnDeathMessage() == null || plugin.getConfiguration().getOnDeathMessage().equals("") ) {
+        if ( plugin.getKdc().getConfig().getOnDeathMessage() == null
+                || plugin.getKdc().getConfig().getOnDeathMessage().equals("") ) {
             return;
         }
 
-        Player p = KingdomCraft.getPlayer(event.getEntity().getUniqueId());
+        PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
 
-        String msg = plugin.getConfiguration().getOnDeathMessage();
-        msg = KingdomCraft.getPlaceholderManager().handle(p, msg);
+        String msg = plugin.getKdc().getConfig().getOnDeathMessage();
+        msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
         event.setDeathMessage(msg);
     }
 

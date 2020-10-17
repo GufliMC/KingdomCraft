@@ -17,18 +17,22 @@
 
 package com.guflan.kingdomcraft.api.messages;
 
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
 public interface MessageManager {
+
+	void registerMessage(String name, String msg);
+
+	void unregisterMessage(String name);
 
 	String getMessage(String name);
 
 	String getMessage(String name, String... placeholders);
 
-	void send(Player player, String name, String... placeholders);
+	void send(PlatformPlayer player, String name, String... placeholders);
 
-	void send(CommandSender sender, String name, String... placeholders);
+	void send(PlatformSender sender, String name, String... placeholders);
 
 	String colorify(String msg);
 

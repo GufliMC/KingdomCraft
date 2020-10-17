@@ -17,9 +17,9 @@
 
 package com.guflan.kingdomcraft.bukkit.command;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
-import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
-import com.guflan.kingdomcraft.bukkit.entity.BukkitCommandSender;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitSender;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,9 +31,9 @@ import java.util.List;
 
 public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
 
-    private final BukkitKingdomCraftPlugin plugin;
+    private final KingdomCraftBukkitPlugin plugin;
 
-    public BukkitCommandExecutor(BukkitKingdomCraftPlugin plugin) {
+    public BukkitCommandExecutor(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -42,7 +42,7 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
 
         if ( sender instanceof Player ) {
             World world = ((Player) sender).getWorld();
-            if ( !plugin.getConfiguration().isWorldEnabled(world.getName()) ) {
+            if ( !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) ) {
                 // TODO
                 return false;
             }
@@ -53,19 +53,19 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        KingdomCraft.getCommandManager().execute(wrap(sender), args);
+        plugin.getKdc().getCommandDispatcher().execute(wrap(sender), args);
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return KingdomCraft.getCommandManager().autocomplete(wrap(sender), args);
+        return plugin.getKdc().getCommandDispatcher().autocomplete(wrap(sender), args);
     }
 
-    private com.guflan.kingdomcraft.api.entity.CommandSender wrap(CommandSender sender) {
+    private PlatformSender wrap(CommandSender sender) {
         if ( sender instanceof Player) {
-            return KingdomCraft.getPlayer(((Player) sender).getUniqueId());
+            return plugin.getKdc().getPlayer(((Player) sender).getUniqueId());
         }
-        return new BukkitCommandSender(sender);
+        return new BukkitSender(sender);
     }
 }

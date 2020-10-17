@@ -17,10 +17,10 @@
 
 package com.guflan.kingdomcraft.api.placeholders;
 
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
 public interface PlaceholderReplacer {
 
-    String replace(Player player, String placeholder);
+    String replace(PlatformPlayer player, String placeholder);
 
 }

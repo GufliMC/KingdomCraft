@@ -17,24 +17,24 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JoinCommand extends DefaultCommandBase {
+public class JoinCommand extends CommandBaseImpl {
 
-    public JoinCommand(KingdomCraftHandler plugin) {
-        super(plugin, "join", 1, true);
+    public JoinCommand(AbstractKingdomCraft kdc) {
+        super(kdc, "join", 1, true);
     }
 
     @Override
-    public List<String> autocomplete(CommandSender sender, String[] args) {
+    public List<String> autocomplete(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.join") ) {
             return null;
         }
@@ -42,7 +42,7 @@ public class JoinCommand extends DefaultCommandBase {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.join") ) {
             kdc.getMessageManager().send(sender, "noPermissionCmd");
             return;
@@ -54,7 +54,7 @@ public class JoinCommand extends DefaultCommandBase {
             return;
         }
 
-        User user = kdc.getUser((Player) sender);
+        User user = kdc.getUser((PlatformPlayer) sender);
         if ( user.getKingdom() != null ) {
             kdc.getMessageManager().send(sender, "cmdJoinAlready");
             return;
@@ -70,11 +70,11 @@ public class JoinCommand extends DefaultCommandBase {
         user.setKingdom(kingdom);
         kdc.save(user);
 
-        kdc.getEventManager().kingdomJoin((Player) sender);
+        kdc.getEventDispatcher().dispatchKingdomJoin((PlatformPlayer) sender);
 
         kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
 
-        for ( Player p : kdc.getOnlinePlayers() ) {
+        for ( PlatformPlayer p : kdc.getOnlinePlayers() ) {
             if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
             kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
         }

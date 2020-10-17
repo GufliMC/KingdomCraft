@@ -17,29 +17,29 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.Relation;
-import com.guflan.kingdomcraft.api.domain.models.RelationType;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.api.domain.RelationType;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
-public class TruceCommand extends DefaultCommandBase {
+public class TruceCommand extends CommandBaseImpl {
 
-    public TruceCommand(KingdomCraftHandler kdc) {
+    public TruceCommand(AbstractKingdomCraft kdc) {
         super(kdc, "truce", 1, true);
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.truce") ) {
             kdc.getMessageManager().send(sender, "noPermissionCmd");
             return;
         }
 
-        User user = kdc.getUser((Player) sender);
+        User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
             kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
@@ -75,7 +75,7 @@ public class TruceCommand extends DefaultCommandBase {
             kdc.addRelationRequest(kingdom, target, RelationType.TRUCE);
             kdc.getMessageManager().send(sender, "cmdTruceRequest", target.getName());
 
-            for ( Player member : kdc.getOnlinePlayers() ) {
+            for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
                 if ( kdc.getUser(member).getKingdom() != target ) continue;
                 kdc.getMessageManager().send(sender, "cmdTruceRequestTarget", kingdom.getName());
             }
@@ -86,7 +86,7 @@ public class TruceCommand extends DefaultCommandBase {
         kdc.setRelation(target, kingdom, RelationType.TRUCE);
         kdc.getMessageManager().send(sender, "cmdTruceAccepted", target.getName());
 
-        for ( Player member : kdc.getOnlinePlayers() ) {
+        for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
             kdc.getMessageManager().send(sender, "cmdTruceAccepted", kingdom.getName());
         }

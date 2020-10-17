@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.api.command;
 
-import com.guflan.kingdomcraft.api.entity.CommandSender;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
 
 import java.util.List;
 
@@ -28,9 +28,9 @@ public interface CommandBase {
     boolean isPlayerOnly();
     int getExpectedArguments();
 
-    void execute(CommandSender sender, String[] args);
+    void execute(PlatformSender sender, String[] args);
 
-    default List<String> autocomplete(CommandSender sender, String[] args) {
+    default List<String> autocomplete(PlatformSender sender, String[] args) {
         return null;
     }
 

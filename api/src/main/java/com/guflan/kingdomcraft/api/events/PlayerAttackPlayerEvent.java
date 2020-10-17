@@ -17,25 +17,25 @@
 
 package com.guflan.kingdomcraft.api.events;
 
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
 public class PlayerAttackPlayerEvent {
 
-    private final Player player;
-    private final Player attacker;
+    private final PlatformPlayer player;
+    private final PlatformPlayer attacker;
 
     private Result result = Result.NEUTRAL;
 
-    public PlayerAttackPlayerEvent(Player player, Player attacker) {
+    public PlayerAttackPlayerEvent(PlatformPlayer player, PlatformPlayer attacker) {
         this.player = player;
         this.attacker = attacker;
     }
 
-    public Player getPlayer() {
+    public PlatformPlayer getPlayer() {
         return player;
     }
 
-    public Player getAttacker() {
+    public PlatformPlayer getAttacker() {
         return attacker;
     }
 

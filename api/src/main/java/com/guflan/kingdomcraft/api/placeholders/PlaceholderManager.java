@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.api.placeholders;
 
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
 public interface PlaceholderManager {
 
@@ -27,9 +27,9 @@ public interface PlaceholderManager {
 
     void removePlaceholderReplacer(String placeholder);
 
-    String handle(Player player, String str);
+    String handle(PlatformPlayer player, String str);
 
-    String handle(Player player, String str, String prefix);
+    String handle(PlatformPlayer player, String str, String prefix);
 
     String strip(String msg);
 }

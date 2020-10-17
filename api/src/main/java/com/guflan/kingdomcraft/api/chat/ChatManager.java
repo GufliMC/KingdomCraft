@@ -17,20 +17,17 @@
 
 package com.guflan.kingdomcraft.api.chat;
 
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.entity.Player;
-
 import java.util.List;
 
 public interface ChatManager {
 
-    List<ChatChannelBlueprint> getBlueprints();
+    List<ChatChannelFactory> getChatChannelFactories();
 
-    void addBlueprint(ChatChannelBlueprint blueprint);
+    void addChatChannelFactory(ChatChannelFactory factory);
 
-    void removeBlueprint(ChatChannelBlueprint blueprint);
+    void removeChatChannelFactory(ChatChannelFactory factory);
 
-    ChatChannelBlueprint getBlueprint(String name);
+    ChatChannelFactory getChatChannelFactory(String name);
 
     //
 
@@ -44,19 +41,5 @@ public interface ChatManager {
 
     void setDefaultChatChannel(ChatChannel chatChannel);
 
-    //
-
-    List<ChatChannel> getKingdomChannels(Kingdom kingdom);
-
-    List<ChatChannel> getPublicChannels();
-
-    List<ChatChannel> getVisibleChannels(Player player);
-
-    boolean isVisible(Player player, ChatChannel channel);
-
-    void handle(Player player, String message);
-
-    void send(Player player, ChatChannel channel, String message);
-
-
+    ChatChannel getDefaultChatChannel();
 }

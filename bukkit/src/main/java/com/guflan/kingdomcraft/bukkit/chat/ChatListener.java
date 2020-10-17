@@ -17,8 +17,8 @@
 
 package com.guflan.kingdomcraft.bukkit.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
-import com.guflan.kingdomcraft.api.entity.Player;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,10 +27,16 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
+    private final KingdomCraftBukkitPlugin plugin;
+
+    public ChatListener(KingdomCraftBukkitPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        Player player = new BukkitPlayer(event.getPlayer());
-        KingdomCraft.getChatManager().handle(player, event.getMessage());
+        PlatformPlayer player = new BukkitPlayer(event.getPlayer());
+        plugin.getKdc().getChatDispatcher().handle(player, event.getMessage());
         event.setCancelled(true);
     }
 }

@@ -17,26 +17,26 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
-public class InfoCommand extends DefaultCommandBase {
+public class InfoCommand extends CommandBaseImpl {
 
-    public InfoCommand(KingdomCraftHandler kdc) {
+    public InfoCommand(AbstractKingdomCraft kdc) {
         super(kdc, "info", 0, true);
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.info") ) {
             kdc.getMessageManager().send(sender, "noPermissionCmd");
             return;
         }
 
-        User user = kdc.getUser((Player) sender);
+        User user = kdc.getUser((PlatformPlayer) sender);
         sender.sendMessage("kingdom: " + (user.getKingdom() == null ? "null" : user.getKingdom().getDisplay()));
         sender.sendMessage("rank: " + (user.getRank() == null ? "null" : user.getRank().getDisplay()));
 

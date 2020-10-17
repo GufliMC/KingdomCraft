@@ -17,16 +17,17 @@
 
 package com.guflan.kingdomcraft.bukkit.placeholders;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkit;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.apache.commons.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 public class BukkitPlaceholderReplacer {
 
-    public BukkitPlaceholderReplacer() {
-        PlaceholderManager pm = KingdomCraft.getPlaceholderManager();
+    public BukkitPlaceholderReplacer(KingdomCraftBukkitPlugin plugin) {
+        PlaceholderManager pm = plugin.getKdc().getPlaceholderManager();
 
         pm.addPlaceholderReplacer((player, placeholder) -> Bukkit.getPlayer(player.getUniqueId()).getLocation().getWorld().toString(),
                 "world");

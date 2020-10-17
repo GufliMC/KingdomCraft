@@ -17,29 +17,29 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
-import com.guflan.kingdomcraft.api.KingdomCraftHandler;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
-import com.guflan.kingdomcraft.api.domain.models.Relation;
-import com.guflan.kingdomcraft.api.domain.models.RelationType;
-import com.guflan.kingdomcraft.api.domain.models.User;
-import com.guflan.kingdomcraft.api.entity.CommandSender;
-import com.guflan.kingdomcraft.api.entity.Player;
-import com.guflan.kingdomcraft.common.command.DefaultCommandBase;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.api.domain.RelationType;
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
-public class AllyCommand extends DefaultCommandBase {
+public class AllyCommand extends CommandBaseImpl {
 
-    public AllyCommand(KingdomCraftHandler kdc) {
+    public AllyCommand(AbstractKingdomCraft kdc) {
         super(kdc, "ally", 1, true);
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.ally") ) {
             kdc.getMessageManager().send(sender, "noPermissionCmd");
             return;
         }
 
-        User user = kdc.getUser((Player) sender);
+        User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
             kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
@@ -70,7 +70,7 @@ public class AllyCommand extends DefaultCommandBase {
             kdc.addRelationRequest(kingdom, target, RelationType.ALLY);
             kdc.getMessageManager().send(sender, "cmdAllyRequest", target.getName());
 
-            for ( Player member : kdc.getOnlinePlayers() ) {
+            for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
                 if ( kdc.getUser(member).getKingdom() != target ) continue;
                 kdc.getMessageManager().send(sender, "cmdAllyRequestTarget", kingdom.getName());
             }
@@ -81,7 +81,7 @@ public class AllyCommand extends DefaultCommandBase {
         kdc.setRelation(target, kingdom, RelationType.ALLY);
         kdc.getMessageManager().send(sender, "cmdAllyAccepted", target.getName());
 
-        for ( Player member : kdc.getOnlinePlayers() ) {
+        for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
             kdc.getMessageManager().send(sender, "cmdAllyAccepted", kingdom.getName());
         }

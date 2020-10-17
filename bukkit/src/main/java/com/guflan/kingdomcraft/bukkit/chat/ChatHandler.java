@@ -17,13 +17,12 @@
 
 package com.guflan.kingdomcraft.bukkit.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
-import com.guflan.kingdomcraft.api.chat.ChatChannelBlueprint;
+import com.guflan.kingdomcraft.api.chat.ChatChannelFactory;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.domain.models.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.event.EventListener;
-import com.guflan.kingdomcraft.bukkit.BukkitKingdomCraftPlugin;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.common.chat.channels.BasicChatChannel;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 import org.bukkit.Bukkit;
@@ -39,8 +38,8 @@ import java.util.stream.Collectors;
 
 public class ChatHandler implements EventListener {
 
-    public ChatHandler(BukkitKingdomCraftPlugin plugin) {
-        KingdomCraft.getEventManager().addListener(this);
+    public ChatHandler(KingdomCraftBukkitPlugin plugin) {
+        plugin.getKdc().getEventManager().addListener(this);
 
         File configFile = new File(plugin.getDataFolder(), "chat.yml");
         if ( !configFile.exists() ) {
@@ -53,12 +52,12 @@ public class ChatHandler implements EventListener {
             return;
         }
 
-        Bukkit.getPluginManager().registerEvents(new ChatListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(plugin), plugin);
 
         if ( !config.contains("channels") || config.getConfigurationSection("channels") == null ) {
             return;
         }
-        ChatManager cm = KingdomCraft.getChatManager();
+        ChatManager cm = plugin.getKdc().getChatManager();
 
         ConfigurationSection channels = config.getConfigurationSection("channels");
         for ( String name : channels.getKeys(false) ) {
@@ -70,8 +69,8 @@ public class ChatHandler implements EventListener {
             }
 
             if ( cs.contains("kingdom") ) {
-                ChatChannelBlueprint bp = createBlueprint(name, cs);
-                cm.addBlueprint(bp);
+                ChatChannelFactory bp = createBlueprint(name, cs);
+                cm.addChatChannelFactory(bp);
             } else {
                 ChatChannel ch = new BasicChatChannel(name);
                 setup(ch, cs);
@@ -104,13 +103,13 @@ public class ChatHandler implements EventListener {
         }
     }
 
-    private ChatChannelBlueprint createBlueprint(String name, ConfigurationSection section) {
+    private ChatChannelFactory createBlueprint(String name, ConfigurationSection section) {
         String target = section.getString("kingdom");
         List<String> kingdoms = Arrays.stream(target.split(Pattern.quote(",")))
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
 
-        return new ChatChannelBlueprint() {
+        return new ChatChannelFactory() {
             @Override
             public boolean doesTarget(Kingdom kingdom) {
                 return target.equals("*") || kingdoms.contains(kingdom.getName().toLowerCase());
