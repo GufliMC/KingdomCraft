@@ -53,6 +53,7 @@ public interface Kingdom {
 
     Rank createRank(String name);
 
-    void deleteRank(Rank rank);
+    KingdomAttribute getOrCreateAttribute(String name);
 
+    KingdomAttribute getAttribute(String name);
 }

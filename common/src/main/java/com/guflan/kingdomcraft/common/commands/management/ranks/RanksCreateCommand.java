@@ -56,12 +56,20 @@ public class RanksCreateCommand extends CommandBaseImpl {
         }
 
         Rank rank = kingdom.createRank(args[0]);
-        kdc.save(rank).thenRun(() -> {
+
+        if ( kingdom.getDefaultRank() == null ) {
+            kingdom.setDefaultRank(rank);
+        }
+        kdc.save(rank.getKingdom());
+
+        /*
+        kdc.save(rank.getKingdom()).thenRun(() -> {
             if (kingdom.getDefaultRank() == null) {
                 kingdom.setDefaultRank(rank);
                 kdc.save(kingdom);
             }
         });
+         */
 
         kdc.getMessageManager().send(sender, "cmdRanksCreateSuccess", rank.getName());
     }

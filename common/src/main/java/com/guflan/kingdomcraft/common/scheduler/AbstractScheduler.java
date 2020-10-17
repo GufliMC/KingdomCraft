@@ -66,6 +66,16 @@ public abstract class AbstractScheduler {
         return () -> future.cancel(false);
     }
 
+    public SchedulerTask syncLater(Runnable task, long delay, TimeUnit unit) {
+        ScheduledFuture<?> future = this.scheduler.schedule(() -> this.sync().execute(task), delay, unit);
+        return () -> future.cancel(false);
+    }
+
+    public SchedulerTask syncRepeating(Runnable task, long interval, TimeUnit unit) {
+        ScheduledFuture<?> future = this.scheduler.scheduleAtFixedRate(() -> this.sync().execute(task), interval, interval, unit);
+        return () -> future.cancel(false);
+    }
+
     private static final class CustomExecutor implements Executor {
         private final ExecutorService delegate;
 

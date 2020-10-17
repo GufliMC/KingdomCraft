@@ -13,6 +13,8 @@ noPermission: '&cYou don''t have permission to do that!'
 noWorld: '&4KingdomCraft &cis not enabled in this world!'
 noCommand: '&7We couldn''t recognize &8{0} &7as a command, use &8/k help &7for a list of commands!'
 
+teleporting: '&7Teleporting in &8{0} &7seconds, don''t move!'
+
 cmdDefaultSenderNoKingdom: '&7You''re not in a kingdom!'
 cmdDefaultTargetNoKingodm: '&8{0} &7is not in a kingdom!'
 cmdDefaultKingdomNotExist: '&7The kingdom &8{0} &7does not exist!'
@@ -54,12 +56,11 @@ cmdInviteAlready: '&7The player &8{0} &7is already invited for your kingdom!'
 cmdInviteTarget: '&7You have been invited to join &8{0}&7!'
 cmdInviteSender: '&7You invited &8{0} &7to join &8{1}&7!'
 
-cmdSpawnNotExists: '&7The spawn of &8{0} &7has not been setup yet!'
-cmdSpawnWorldNotFound: '&7The world for the spawn of &8{0} &7can''t be found!'
-cmdSpawnTeleported: '&7You have been teleported to &8{0}&7!'
-cmdSpawnTeleportStarting: '&7Teleportation will start in &8{0} &7seconds, don''t move!'
+cmdSpawnNotExists: '&7The kingdom spawn has not been setup yet!'
+cmdSpawnOtherNotExists: '&7The spawn of kingdom &8{0} &7has not been setup yet!'
+cmdSpawnSuccess: '&7You have been teleported to &8{0}&7!'
 
-cmdSetSpawnSuccess: '&7You changed the spawn of your kingdom &7to &8{1}&7!'
+cmdSetSpawnSuccess: '&7You changed the spawn of your kingdom &7to &8{0}&7!'
 cmdSetSpawnOtherSuccess: '&7You changed the spawn of &8{0} &7to &8{1}&7!'
 
 cmdEnemySuccess: '&7You are now enemies with &8{0}&7!'

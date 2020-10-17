@@ -17,15 +17,9 @@
 
 package com.guflan.kingdomcraft.common.ebean;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.Relation;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.common.ebean.beans.BRank;
-import com.guflan.kingdomcraft.common.ebean.beans.BRelation;
-import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
-import com.guflan.kingdomcraft.common.ebean.beans.BUser;
+import com.guflan.kingdomcraft.common.ebean.beans.*;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
@@ -133,6 +127,30 @@ public class EBeanStorage {
 
     public CompletableFuture<Void> save(Rank rank) {
         return plugin.getScheduler().makeAsyncFuture(() -> ((BRank) rank).save());
+    }
+
+    // kingdom attributes
+
+    public CompletableFuture<Void> delete(KingdomAttribute attribute) {
+        return plugin.getScheduler().makeAsyncFuture(() -> {
+            ((BKingdomAttribute) attribute).delete();
+        });
+    }
+
+    public CompletableFuture<Void> save(KingdomAttribute attribute) {
+        return plugin.getScheduler().makeAsyncFuture(() -> ((BKingdomAttribute) attribute).save());
+    }
+
+    // rankattributes
+
+    public CompletableFuture<Void> delete(RankAttribute attribute) {
+        return plugin.getScheduler().makeAsyncFuture(() -> {
+            ((BRankAttribute) attribute).delete();
+        });
+    }
+
+    public CompletableFuture<Void> save(RankAttribute attribute) {
+        return plugin.getScheduler().makeAsyncFuture(() -> ((BRankAttribute) attribute).save());
     }
 
     // relations

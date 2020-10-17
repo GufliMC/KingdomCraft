@@ -17,8 +17,13 @@
 
 package com.guflan.kingdomcraft.bukkit.command;
 
+import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkit;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import com.guflan.kingdomcraft.bukkit.commands.SetSpawnCommand;
+import com.guflan.kingdomcraft.bukkit.commands.SpawnCommand;
+import com.guflan.kingdomcraft.bukkit.commands.SpawnOtherCommand;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitSender;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -35,6 +40,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
     public CommandHandler(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
+
+        // register commands
+        KingdomCraftBukkit kdc = plugin.getKdc();
+        CommandManager cm = kdc.getCommandManager();
+
+        cm.registerCommand(new SetSpawnCommand(kdc));
+
+        cm.registerCommand(new SpawnCommand(kdc));
+        cm.registerCommand(new SpawnOtherCommand(kdc));
     }
 
     @Override

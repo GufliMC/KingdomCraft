@@ -2,7 +2,6 @@ package com.guflan.kingdomcraft.bukkit.commands;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
-import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkit;
@@ -13,10 +12,10 @@ import org.bukkit.Location;
 
 import java.text.DecimalFormat;
 
-public class SetSpawnCommand extends CommandBaseImpl {
+public class SetSpawnOtherCommand extends CommandBaseImpl {
 
-    public SetSpawnCommand(KingdomCraftBukkit kdc) {
-        super(kdc, "setspawn", 0, true);
+    public SetSpawnOtherCommand(KingdomCraftBukkit kdc) {
+        super(kdc, "setspawn", 1, true);
     }
 
     @Override
@@ -26,22 +25,21 @@ public class SetSpawnCommand extends CommandBaseImpl {
             return;
         }
 
-        User user = kdc.getUser((PlatformPlayer) sender);
-        Kingdom kingdom = user.getKingdom();
+        Kingdom kingdom = kdc.getKingdom(args[0]);
         if (kingdom == null) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
             return;
         }
 
         KingdomAttribute attribute = kingdom.getOrCreateAttribute("spawn");
 
-        Location loc = Bukkit.getPlayer(user.getUniqueId()).getLocation();
+        Location loc = Bukkit.getPlayer(((PlatformPlayer) sender).getUniqueId()).getLocation();
         attribute.setValue(LocationSerializer.serialize(loc));
         kdc.save(attribute);
 
         DecimalFormat df = new DecimalFormat("#");
         String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-        kdc.getMessageManager().send(sender, "cmdSetSpawnSuccess", str);
+        kdc.getMessageManager().send(sender, "cmdSetSpawnOtherSuccess", kingdom.getName(), str);
     }
 }
