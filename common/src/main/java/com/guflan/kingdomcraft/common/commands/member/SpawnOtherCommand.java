@@ -1,45 +1,36 @@
-package com.guflan.kingdomcraft.bukkit.commands;
+package com.guflan.kingdomcraft.common.commands.member;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkit;
-import com.guflan.kingdomcraft.bukkit.util.LocationSerializer;
-import com.guflan.kingdomcraft.bukkit.util.Teleporter;
+import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
-import org.bukkit.Location;
+import com.guflan.kingdomcraft.common.util.Teleporter;
 
 import java.text.DecimalFormat;
 
-public class SpawnCommand extends CommandBaseImpl {
+public class SpawnOtherCommand extends CommandBaseImpl {
 
-    public SpawnCommand(KingdomCraftBukkit kdc) {
-        super(kdc, "spawn", 0, true);
+    public SpawnOtherCommand(AbstractKingdomCraft kdc) {
+        super(kdc, "spawn", 1, true);
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.spawn") ) {
+        if ( !sender.hasPermission("kingdom.spawn.other") ) {
             kdc.getMessageManager().send(sender, "noPermissionCmd");
             return;
         }
 
-        User user = kdc.getUser((PlatformPlayer) sender);
-        Kingdom kingdom = user.getKingdom();
-        if (kingdom == null) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+        Kingdom kingdom = kdc.getKingdom(args[0]);
+        if ( kingdom == null ) {
+            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
             return;
         }
 
-        KingdomAttribute attribute = kingdom.getAttribute("spawn");
-        if ( attribute == null ) {
-            kdc.getMessageManager().send(sender, "cmdSpawnNotExists");
-            return;
-        }
-
-        Location loc = LocationSerializer.deserialize(attribute.getValue());
+        PlatformLocation loc = kingdom.getSpawn();
         if ( loc == null ) {
             kdc.getMessageManager().send(sender, "cmdSpawnNotExists");
             return;

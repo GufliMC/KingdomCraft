@@ -17,6 +17,8 @@
 
 package com.guflan.kingdomcraft.bukkit.entity;
 
+import com.guflan.kingdomcraft.api.entity.PlatformLocation;
+import com.guflan.kingdomcraft.bukkit.util.LocationConverter;
 import com.guflan.kingdomcraft.common.entity.AbstractPlatformPlayer;
 import org.bukkit.entity.Player;
 
@@ -35,6 +37,11 @@ public class BukkitPlayer extends BukkitSender implements AbstractPlatformPlayer
         return player;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BukkitPlayer && ((BukkitPlayer) obj).player == player;
+    }
+
     //
 
     @Override
@@ -48,8 +55,12 @@ public class BukkitPlayer extends BukkitSender implements AbstractPlatformPlayer
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof BukkitPlayer && ((BukkitPlayer) obj).player == player;
+    public void teleport(PlatformLocation location) {
+        player.teleport(LocationConverter.convert(location));
     }
 
+    @Override
+    public PlatformLocation getLocation() {
+        return LocationConverter.convert(player.getLocation());
+    }
 }

@@ -34,6 +34,7 @@ import com.guflan.kingdomcraft.common.ebean.EBeanContext;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
 import com.guflan.kingdomcraft.common.event.EventManagerImpl;
 import com.guflan.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
+import com.guflan.kingdomcraft.common.util.Teleporter;
 
 import java.util.List;
 import java.util.UUID;
@@ -62,6 +63,7 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     public AbstractKingdomCraft(KingdomCraftPlugin plugin, KingdomCraftConfig config, EBeanContext context) {
         KingdomCraftProvider.register(this);
+        Teleporter.register(this);
 
         this.plugin = plugin;
         this.config = config;

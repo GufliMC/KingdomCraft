@@ -17,6 +17,8 @@
 
 package com.guflan.kingdomcraft.api.domain;
 
+import com.guflan.kingdomcraft.api.entity.PlatformLocation;
+
 import java.util.List;
 
 public interface Kingdom {
@@ -56,4 +58,8 @@ public interface Kingdom {
     KingdomAttribute getOrCreateAttribute(String name);
 
     KingdomAttribute getAttribute(String name);
+
+    PlatformLocation getSpawn();
+
+    void setSpawn(PlatformLocation location);
 }

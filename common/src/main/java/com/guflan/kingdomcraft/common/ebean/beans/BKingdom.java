@@ -20,11 +20,10 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import io.ebean.Model;
+import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
-import io.ebean.annotation.DbForeignKey;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -44,6 +43,8 @@ public class BKingdom extends Model implements Kingdom {
     public String display;
     public String prefix;
     public String suffix;
+
+    public PlatformLocation spawn;
 
     public boolean inviteOnly;
     public int maxMembers;
@@ -173,5 +174,15 @@ public class BKingdom extends Model implements Kingdom {
     @Override
     public KingdomAttribute getAttribute(String name) {
         return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public PlatformLocation getSpawn() {
+        return this.spawn;
+    }
+
+    @Override
+    public void setSpawn(PlatformLocation location) {
+        this.spawn = location;
     }
 }
