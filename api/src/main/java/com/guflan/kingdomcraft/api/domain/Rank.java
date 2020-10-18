@@ -17,6 +17,8 @@
 
 package com.guflan.kingdomcraft.api.domain;
 
+import java.util.List;
+
 public interface Rank {
 
 
@@ -44,5 +46,13 @@ public interface Rank {
 
     void setLevel(int level);
 
-    RankAttribute getOrCreateAttribute(String name);
+    RankAttribute getAttribute(String name);
+
+    RankAttribute createAttribute(String name);
+
+    List<RankPermissionGroup> getPermissionGroups();
+
+    RankPermissionGroup getPermissionGroup(String name);
+
+    RankPermissionGroup createPermissionGroup(String name);
 }

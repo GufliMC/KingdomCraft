@@ -24,6 +24,9 @@ public class CommandDispatcher {
             return;
         }
 
+        String invalidBase = null;
+        String invalidArguments = ""; // TODO
+
         for ( CommandBase cb : commandManager.commands ) {
             for ( String cmd : cb.getCommands() ) {
                 if ( !String.join(" ", args).toLowerCase().startsWith(cmd.toLowerCase()) ) {
@@ -32,7 +35,7 @@ public class CommandDispatcher {
 
                 int argsLength = cmd.split(Pattern.quote(" ")).length;
                 if ( args.length - argsLength != cb.getExpectedArguments() ) {
-                    // TODO invalid arguments
+                    invalidBase = cmd;
                     continue;
                 }
 
@@ -47,7 +50,11 @@ public class CommandDispatcher {
             }
         }
 
-        System.out.println("not found");
+        if ( invalidBase != null ) {
+            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalidUsage",
+                    invalidBase + " " + invalidArguments);
+            return;
+        }
 
         // suggest a command if the command doesn't exist
         int bestScore = Integer.MAX_VALUE;
@@ -67,10 +74,10 @@ public class CommandDispatcher {
         }
 
         if ( bestCommand != null ) {
-            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultHint",
+            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalidHint",
                     "/k " + bestCommand.getCommands().get(0));
         } else {
-            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultNotFound");
+            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalid");
         }
     }
 

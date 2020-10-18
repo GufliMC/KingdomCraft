@@ -4,7 +4,7 @@
 # Created by: iGufGuf
 #
 #
-prefix: ''
+prefix: '&c&lKingdomCraft &8> &7'
 
 errorInvalidChatSetup: '&cIt appears the chat hasn''t been setup properly, your message can''t be send.'
 
@@ -15,14 +15,15 @@ noCommand: '&7We couldn''t recognize &8{0} &7as a command, use &8/k help &7for a
 
 teleporting: '&7Teleporting in &8{0} &7seconds, don''t move!'
 
+cmdDefaultInvalid: '&7Invalid command, try &8/k help'
+cmdDefaultInvalidHint: '&7Invalid command, did you mean: &8{0}'
+cmdDefaultInvalidUsage: '&7Invalid usage, try: &8{0}'
+
 cmdDefaultSenderNoKingdom: '&7You''re not in a kingdom!'
 cmdDefaultTargetNoKingodm: '&8{0} &7is not in a kingdom!'
 cmdDefaultKingdomNotExist: '&7The kingdom &8{0} &7does not exist!'
 cmdDefaultRankNotExist: '&7The rank &8{0} &7does not exist!'
 cmdDefaultUsage: '&7Invalid arguments, use &8/k help &7for information about each command!'
-cmdDefaultUsageExplain: '&7Invalid arguments, please try: &8{0}'
-cmdDefaultHint: '&7Invalid command, did you mean: &8{0}'
-cmdDefaultNotFound: '&7Invalid command, try &8/k help'
 cmdDefaultNoPlayer: '&The player &8{0} &7does not exist!'
 cmdDefaultNotOnline: '&7The player &8{0} &7is not online!'
 cmdDefaultSameKingdom: '&cYou cannot do that to your own kingdom!'
