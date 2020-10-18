@@ -25,6 +25,10 @@ public interface PlatformPlayer extends PlatformSender {
 
     String getName();
 
+    void teleport(PlatformLocation location);
+
+    PlatformLocation getLocation();
+
     // cache
 
     void set(String key, Object value);

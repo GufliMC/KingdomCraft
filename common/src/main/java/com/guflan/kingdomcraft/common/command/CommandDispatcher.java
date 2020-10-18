@@ -67,11 +67,11 @@ public class CommandDispatcher {
         }
 
         if ( bestCommand != null ) {
-            // TODO send message
-            sender.sendMessage("Did you mean: /k " + bestCommand.getCommands().get(0));
-            return;
+            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultHint",
+                    "/k " + bestCommand.getCommands().get(0));
+        } else {
+            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultNotFound");
         }
-
     }
 
     public List<String> autocomplete(PlatformSender sender, String[] args) {

@@ -5,6 +5,7 @@ create table kingdoms (
   display                       varchar(255),
   prefix                        varchar(255),
   suffix                        varchar(255),
+  spawn                         varchar(255),
   invite_only                   int default 0 not null,
   max_members                   integer not null,
   default_rank_id               integer,
@@ -14,6 +15,16 @@ create table kingdoms (
   constraint uq_kingdoms_default_rank_id unique (default_rank_id),
   constraint pk_kingdoms primary key (id),
   foreign key (default_rank_id) references ranks (id) on delete set null on update set null
+);
+
+create table kingdom_attributes (
+  id                            integer not null,
+  kingdom_id                    integer,
+  name                          varchar(255),
+  value                         varchar(255),
+  constraint uq_kingdom_attributes_kingdom_id_name unique (kingdom_id,name),
+  constraint pk_kingdom_attributes primary key (id),
+  foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade
 );
 
 create table user_invites (
@@ -42,6 +53,16 @@ create table ranks (
   constraint uq_ranks_name_kingdom_id unique (name,kingdom_id),
   constraint pk_ranks primary key (id),
   foreign key (kingdom_id) references kingdoms (id) on delete cascade on update cascade
+);
+
+create table rank_attributes (
+  id                            integer not null,
+  rank_id                       integer,
+  name                          varchar(255),
+  value                         varchar(255),
+  constraint uq_rank_attributes_rank_id_name unique (rank_id,name),
+  constraint pk_rank_attributes primary key (id),
+  foreign key (rank_id) references ranks (id) on delete cascade on update cascade
 );
 
 create table kingdom_relations (

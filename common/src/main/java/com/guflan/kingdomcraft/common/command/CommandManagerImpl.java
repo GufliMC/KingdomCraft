@@ -34,10 +34,12 @@ import java.util.List;
 
 public class CommandManagerImpl implements CommandManager {
 
+    final AbstractKingdomCraft kdc;
     final List<CommandBase> commands = new ArrayList<>();
 
     public CommandManagerImpl(AbstractKingdomCraft kdc) {
-        registerDefaults(kdc);
+        this.kdc = kdc;
+        registerDefaults();
     }
 
     @Override
@@ -50,7 +52,7 @@ public class CommandManagerImpl implements CommandManager {
         commands.remove(command);
     }
 
-    public void registerDefaults(AbstractKingdomCraft kdc) {
+    public void registerDefaults() {
         commands.clear();
 
         // all
@@ -66,6 +68,9 @@ public class CommandManagerImpl implements CommandManager {
         registerCommand(new EnemyCommand(kdc));
         registerCommand(new NeutralCommand(kdc));
         registerCommand(new TruceCommand(kdc));
+
+        registerCommand(new SpawnCommand(kdc));
+        registerCommand(new SetSpawnCommand(kdc));
 
         // management
         registerCommand(new CreateCommand(kdc));
@@ -113,6 +118,9 @@ public class CommandManagerImpl implements CommandManager {
         // admin
         registerCommand(new KickCommand(kdc));
         registerCommand(new SetKingdomCommand(kdc));
+
+        registerCommand(new SpawnOtherCommand(kdc));
+        registerCommand(new SetSpawnOtherCommand(kdc));
 
 
         // TODO
