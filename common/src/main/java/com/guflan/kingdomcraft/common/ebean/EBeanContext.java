@@ -110,6 +110,17 @@ public class EBeanContext {
     public CompletableFuture<Void> save(RankAttribute attribute) {
         return storage.save(attribute);
     }
+
+    // permission groups
+
+    public CompletableFuture<Void> delete(RankPermissionGroup permissionGroup) {
+        ((BRank) permissionGroup.getRank()).permissionGroups.remove(permissionGroup);
+        return storage.delete(permissionGroup);
+    }
+
+    public CompletableFuture<Void> save(RankPermissionGroup permissionGroup) {
+        return storage.save(permissionGroup);
+    }
     
     // relations
 

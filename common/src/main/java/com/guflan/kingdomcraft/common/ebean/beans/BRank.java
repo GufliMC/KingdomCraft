@@ -20,6 +20,7 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankAttribute;
+import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
@@ -27,6 +28,7 @@ import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +54,9 @@ public class BRank extends Model implements Rank {
 
     @OneToMany(mappedBy = "rank", fetch = FetchType.EAGER)
     public List<BRankAttribute> attributes;
+
+    @OneToMany(mappedBy = "rank", fetch = FetchType.EAGER)
+    public List<BRankPermissionGroup> permissionGroups;
 
     @WhenCreated
     public Date createdAt;
@@ -131,7 +136,12 @@ public class BRank extends Model implements Rank {
     }
 
     @Override
-    public RankAttribute getOrCreateAttribute(String name) {
+    public RankAttribute getAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public RankAttribute createAttribute(String name) {
         return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElseGet(() -> {
             BRankAttribute attribute = new BRankAttribute();
             attribute.rank = this;
@@ -139,6 +149,28 @@ public class BRank extends Model implements Rank {
 
             attributes.add(attribute);
             return attribute;
+        });
+    }
+
+    @Override
+    public List<RankPermissionGroup> getPermissionGroups() {
+        return new ArrayList<>(permissionGroups);
+    }
+
+    @Override
+    public RankPermissionGroup getPermissionGroup(String name) {
+        return permissionGroups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public RankPermissionGroup createPermissionGroup(String name) {
+        return permissionGroups.stream().filter(p -> p.getName().equals(name)).findFirst().orElseGet(() -> {
+            BRankPermissionGroup permissionGroup = new BRankPermissionGroup();
+            permissionGroup.rank = this;
+            permissionGroup.name = name;
+
+            permissionGroups.add(permissionGroup);
+            return permissionGroup;
         });
     }
 }

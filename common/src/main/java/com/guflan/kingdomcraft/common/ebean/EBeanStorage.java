@@ -141,7 +141,7 @@ public class EBeanStorage {
         return plugin.getScheduler().makeAsyncFuture(() -> ((BKingdomAttribute) attribute).save());
     }
 
-    // rankattributes
+    // rank attributes
 
     public CompletableFuture<Void> delete(RankAttribute attribute) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
@@ -151,6 +151,18 @@ public class EBeanStorage {
 
     public CompletableFuture<Void> save(RankAttribute attribute) {
         return plugin.getScheduler().makeAsyncFuture(() -> ((BRankAttribute) attribute).save());
+    }
+
+    // permission groups
+
+    public CompletableFuture<Void> delete(RankPermissionGroup permissionGroup) {
+        return plugin.getScheduler().makeAsyncFuture(() -> {
+            ((BRankPermissionGroup) permissionGroup).delete();
+        });
+    }
+
+    public CompletableFuture<Void> save(RankPermissionGroup permissionGroup) {
+        return plugin.getScheduler().makeAsyncFuture(() -> ((BRankPermissionGroup) permissionGroup).save());
     }
 
     // relations
