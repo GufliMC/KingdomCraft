@@ -24,12 +24,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class BukkitPlayer extends BukkitSender implements AbstractPlatformPlayer {
+public class BukkitPlayer extends AbstractPlatformPlayer {
 
     private final Player player;
 
     public BukkitPlayer(Player player) {
-        super(player);
         this.player = player;
     }
 
@@ -62,5 +61,15 @@ public class BukkitPlayer extends BukkitSender implements AbstractPlatformPlayer
     @Override
     public PlatformLocation getLocation() {
         return LocationConverter.convert(player.getLocation());
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
+    @Override
+    public void sendMessage(String msg) {
+        player.sendMessage(msg);
     }
 }

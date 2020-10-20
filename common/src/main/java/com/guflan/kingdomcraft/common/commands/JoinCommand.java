@@ -18,6 +18,7 @@
 package com.guflan.kingdomcraft.common.commands;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.KingdomInvite;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
@@ -60,9 +61,12 @@ public class JoinCommand extends CommandBaseImpl {
             return;
         }
 
-        if ( kingdom.isInviteOnly() && !user.hasInvite(kingdom) ) {
-            kdc.getMessageManager().send(sender, "cmdJoinInviteOnly", kingdom.getName());
-            return;
+        if ( kingdom.isInviteOnly() ) {
+            KingdomInvite invite = user.getInvite(kingdom);
+            if ( invite == null || !invite.isValid() ) {
+                kdc.getMessageManager().send(sender, "cmdJoinNoInvite", kingdom.getName());
+                return;
+            }
         }
 
         // TODO check for max members
@@ -70,7 +74,10 @@ public class JoinCommand extends CommandBaseImpl {
         user.setKingdom(kingdom);
 
         // async saving
-        kdc.getPlugin().getScheduler().executeAsync(user::save);
+        kdc.getPlugin().getScheduler().executeAsync(() -> {
+            user.save();
+            user.clearInvites();
+        });
 
         kdc.getEventDispatcher().dispatchKingdomJoin((PlatformPlayer) sender);
 

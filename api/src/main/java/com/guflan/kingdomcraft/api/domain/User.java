@@ -17,6 +17,7 @@
 
 package com.guflan.kingdomcraft.api.domain;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface User extends Model {
@@ -33,8 +34,12 @@ public interface User extends Model {
 
     void setRank(Rank rank);
 
-    boolean hasInvite(Kingdom kingdom);
+    List<KingdomInvite> getInvites();
 
-    void addInvite(User sender);
+    KingdomInvite getInvite(Kingdom kingdom);
+
+    KingdomInvite addInvite(User sender);
+
+    void clearInvites();
 
 }

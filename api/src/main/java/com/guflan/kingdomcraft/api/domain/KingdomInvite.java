@@ -29,4 +29,6 @@ public interface KingdomInvite extends Model {
 
     Date getCreatedAt();
 
+    boolean isValid();
+
 }

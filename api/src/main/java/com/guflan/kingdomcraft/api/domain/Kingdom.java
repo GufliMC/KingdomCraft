@@ -62,4 +62,6 @@ public interface Kingdom extends Model {
     PlatformLocation getSpawn();
 
     void setSpawn(PlatformLocation location);
+
+    int getMemberCount();
 }

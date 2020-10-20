@@ -199,4 +199,9 @@ public class BKingdom extends Model implements Kingdom {
     public void setSpawn(PlatformLocation location) {
         this.spawn = location;
     }
+
+    @Override
+    public int getMemberCount() {
+        return 0;
+    }
 }

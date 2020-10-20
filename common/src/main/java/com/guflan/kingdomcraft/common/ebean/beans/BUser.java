@@ -18,8 +18,10 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.KingdomInvite;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
+import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
@@ -27,6 +29,7 @@ import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -118,19 +121,19 @@ public class BUser extends Model implements User {
     }
 
     @Override
-    public boolean hasInvite(Kingdom kingdom) {
-        for ( BKingdomInvite invite : kingdomInvites ) {
-            if ( invite.kingdom == kingdom && invite.user.getKingdom() == kingdom ) {
-                return true; // TODO time check
-            }
-        }
-        return false;
+    public List<KingdomInvite> getInvites() {
+        return new ArrayList<>(kingdomInvites);
     }
 
     @Override
-    public void addInvite(User sender) {
+    public KingdomInvite getInvite(Kingdom kingdom) {
+        return kingdomInvites.stream().filter(ki -> ki.kingdom == kingdom).findFirst().orElse(null);
+    }
+
+    @Override
+    public KingdomInvite addInvite(User sender) {
         if ( sender.getKingdom() == null ) {
-            return;
+            throw new IllegalArgumentException("Cannot add an invite from a player without a kingdom.");
         }
 
         BKingdomInvite invite = new BKingdomInvite();
@@ -139,6 +142,12 @@ public class BUser extends Model implements User {
         invite.user = this;
 
         this.kingdomInvites.add(invite);
+        return invite;
     }
 
+    @Override
+    public void clearInvites() {
+        DB.deleteAll(kingdomInvites);
+        kingdomInvites.clear();
+    }
 }

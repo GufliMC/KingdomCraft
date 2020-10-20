@@ -178,4 +178,9 @@ public class BRank extends Model implements Rank {
             return permissionGroup;
         });
     }
+
+    @Override
+    public int getMemberCount() {
+        return 0;
+    }
 }

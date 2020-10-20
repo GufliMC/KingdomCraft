@@ -19,10 +19,7 @@ package com.guflan.kingdomcraft.common.ebean;
 
 import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
-import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
-import com.guflan.kingdomcraft.common.ebean.beans.BRank;
-import com.guflan.kingdomcraft.common.ebean.beans.BRelation;
-import com.guflan.kingdomcraft.common.ebean.beans.BUser;
+import com.guflan.kingdomcraft.common.ebean.beans.*;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
@@ -266,6 +263,9 @@ public class StorageContext {
             if ( buser.rank != null ){
                 buser.rank = (BRank) buser.kingdom.getRank(buser.rank.getName());
             }
+        }
+        for ( BKingdomInvite ki : buser.kingdomInvites ) {
+            ki.kingdom = (BKingdom) getKingdom(ki.kingdom.getName());
         }
     }
 
