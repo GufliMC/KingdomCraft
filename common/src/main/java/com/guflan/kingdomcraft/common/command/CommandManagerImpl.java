@@ -46,12 +46,20 @@ public class CommandManagerImpl implements CommandManager {
 
     @Override
     public void registerCommand(CommandBase command) {
+        if ( commands.contains(command) ) {
+            return;
+        }
         commands.add(command);
     }
 
     @Override
     public void unregisterCommand(CommandBase command) {
         commands.remove(command);
+    }
+
+    @Override
+    public List<CommandBase> getCommands() {
+        return new ArrayList<>(commands);
     }
 
     public void registerDefaults() {
