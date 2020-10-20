@@ -1,0 +1,28 @@
+
+# players without a kingdom will have this group by default
+default:
+  permissions:
+  - kingdom.join
+
+# these groups must be linked to ranks
+king:
+  permissions:
+  - kingdom.kick
+  - kingdom.setspawn
+  - kingdom.neutral
+  - kingdom.ally
+  - kingdom.enemy
+  - kingdom.truce
+  inheritances:
+  - duke
+
+duke:
+  permissions:
+  - kingdom.setrank
+  - kingdom.invite
+  inheritances:
+  - member
+
+member:
+  permissions:
+    - kingdom.spawn

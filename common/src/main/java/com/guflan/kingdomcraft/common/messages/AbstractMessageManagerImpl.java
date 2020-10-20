@@ -94,13 +94,13 @@ public abstract class AbstractMessageManagerImpl implements MessageManager {
 	@Override
 	public void send(PlatformPlayer player, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
-		player.sendMessage(prefix + getMessage(name, placeholders));
+		player.sendMessage(colorify(prefix) + getMessage(name, placeholders));
 	}
 
 	@Override
 	public void send(PlatformSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
-		sender.sendMessage(prefix + getMessage(name, placeholders));
+		sender.sendMessage(colorify(prefix) + getMessage(name, placeholders));
 	}
 
 }

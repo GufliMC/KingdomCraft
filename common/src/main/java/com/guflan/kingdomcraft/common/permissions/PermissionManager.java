@@ -47,7 +47,7 @@ public class PermissionManager {
                 continue;
             }
 
-            perms.putAll(g.getPermissionsAsMap());
+            fillPermissionsMap(g, passed, perms);
         }
     }
 

@@ -34,15 +34,11 @@ public class ConnectionListener implements Listener {
 
     public ConnectionListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
-
-        for ( Player player : Bukkit.getOnlinePlayers() ) {
-            join(player);
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onLogin(PlayerLoginEvent e) {
-        join(e.getPlayer());
+        plugin.getKdc().onJoin(new BukkitPlayer(e.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -50,10 +46,5 @@ public class ConnectionListener implements Listener {
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
         plugin.getKdc().onQuit(player);
     }
-
-    private void join(Player player) {
-        plugin.getKdc().onJoin(new BukkitPlayer(player));
-    }
-
 
 }
