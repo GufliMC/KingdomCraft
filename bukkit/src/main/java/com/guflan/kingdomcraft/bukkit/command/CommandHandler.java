@@ -17,9 +17,7 @@
 
 package com.guflan.kingdomcraft.bukkit.command;
 
-import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkit;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitSender;
 import org.bukkit.World;
@@ -37,12 +35,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
     public CommandHandler(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
-
-        // register commands
-        KingdomCraftBukkit kdc = plugin.getKdc();
-        CommandManager cm = kdc.getCommandManager();
-
-        // TODO
     }
 
     @Override
@@ -51,7 +43,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         if ( sender instanceof Player ) {
             World world = ((Player) sender).getWorld();
             if ( !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) ) {
-                // TODO
                 return false;
             }
         }

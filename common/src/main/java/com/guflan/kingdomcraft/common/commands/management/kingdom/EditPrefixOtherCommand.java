@@ -19,7 +19,7 @@ package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class EditPrefixOtherCommand extends CommandBaseImpl {
 
-    public EditPrefixOtherCommand(AbstractKingdomCraft kdc) {
+    public EditPrefixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 2);
     }
 
@@ -53,7 +53,9 @@ public class EditPrefixOtherCommand extends CommandBaseImpl {
         }
 
         kingdom.setPrefix(args[1]);
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "prefix", kingdom.getName(), args[1]);
     }

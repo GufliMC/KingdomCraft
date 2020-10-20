@@ -1,19 +1,18 @@
 package com.guflan.kingdomcraft.common.commands.member;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.text.DecimalFormat;
 
 public class SetSpawnCommand extends CommandBaseImpl {
 
-    public SetSpawnCommand(AbstractKingdomCraft kdc) {
+    public SetSpawnCommand(KingdomCraftImpl kdc) {
         super(kdc, "setspawn", 0, true);
     }
 
@@ -33,7 +32,9 @@ public class SetSpawnCommand extends CommandBaseImpl {
 
         PlatformLocation loc = ((PlatformPlayer) sender).getLocation();
         kingdom.setSpawn(loc);
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         DecimalFormat df = new DecimalFormat("#");
         String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());

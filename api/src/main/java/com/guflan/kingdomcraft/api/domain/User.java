@@ -19,7 +19,7 @@ package com.guflan.kingdomcraft.api.domain;
 
 import java.util.UUID;
 
-public interface User {
+public interface User extends Model {
 
     UUID getUniqueId();
 

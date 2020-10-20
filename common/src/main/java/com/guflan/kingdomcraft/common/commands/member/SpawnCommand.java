@@ -1,12 +1,11 @@
 package com.guflan.kingdomcraft.common.commands.member;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 import com.guflan.kingdomcraft.common.util.Teleporter;
 
@@ -14,7 +13,7 @@ import java.text.DecimalFormat;
 
 public class SpawnCommand extends CommandBaseImpl {
 
-    public SpawnCommand(AbstractKingdomCraft kdc) {
+    public SpawnCommand(KingdomCraftImpl kdc) {
         super(kdc, "spawn", 0, true);
     }
 

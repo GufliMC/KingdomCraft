@@ -58,6 +58,20 @@ public class BUser extends Model implements User {
     @WhenModified
     public Date updatedAt;
 
+    //
+
+    @Override
+    public boolean delete() {
+
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+
+        super.save();
+    }
+
     // interface
 
     @Override

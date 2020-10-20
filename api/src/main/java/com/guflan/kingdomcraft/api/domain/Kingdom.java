@@ -21,7 +21,7 @@ import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 
 import java.util.List;
 
-public interface Kingdom {
+public interface Kingdom extends Model {
 
     String getName();
 

@@ -22,12 +22,12 @@ import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class RanksEditLevelCommand extends CommandBaseImpl {
 
-    public RanksEditLevelCommand(AbstractKingdomCraft kdc) {
+    public RanksEditLevelCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit level", 2, true);
     }
 
@@ -57,7 +57,10 @@ public class RanksEditLevelCommand extends CommandBaseImpl {
         }
 
         rank.setLevel(Integer.parseInt(args[1]));
-        kdc.save(rank);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(rank::save);
+
         kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "level", rank.getName(), args[1]);
     }
 }

@@ -2,7 +2,7 @@ package com.guflan.kingdomcraft.common.util;
 
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.scheduler.SchedulerTask;
 
 import java.util.concurrent.CompletableFuture;
@@ -12,8 +12,8 @@ public class Teleporter {
 
     private final static String TELEPORT_KEY = "teleporter";
 
-    private static AbstractKingdomCraft kdc;
-    public static void register(AbstractKingdomCraft kdc) {
+    private static KingdomCraftImpl kdc;
+    public static void register(KingdomCraftImpl kdc) {
         Teleporter.kdc = kdc;
     }
 

@@ -19,7 +19,7 @@ package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class EditDisplayOtherCommand extends CommandBaseImpl {
 
-    public EditDisplayOtherCommand(AbstractKingdomCraft kdc) {
+    public EditDisplayOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit display", 2);
     }
 
@@ -53,7 +53,9 @@ public class EditDisplayOtherCommand extends CommandBaseImpl {
         }
 
         kingdom.setDisplay(args[1]);
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "display", kingdom.getName(), args[1]);
     }

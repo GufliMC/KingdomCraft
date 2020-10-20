@@ -48,11 +48,11 @@ public class ConnectionListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
-        plugin.getKdc().quit(player);
+        plugin.getKdc().onQuit(player);
     }
 
     private void join(Player player) {
-        plugin.getKdc().join(new BukkitPlayer(player));
+        plugin.getKdc().onJoin(new BukkitPlayer(player));
     }
 
 

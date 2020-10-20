@@ -19,12 +19,12 @@ package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class EditMaxMembersOtherCommand extends CommandBaseImpl {
 
-    public EditMaxMembersOtherCommand(AbstractKingdomCraft kdc) {
+    public EditMaxMembersOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit max-members", 2);
     }
 
@@ -47,7 +47,9 @@ public class EditMaxMembersOtherCommand extends CommandBaseImpl {
         }
 
         kingdom.setMaxMembers(Integer.parseInt(args[1]));
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "max-members", kingdom.getName(), kingdom.getMaxMembers() + "");
     }

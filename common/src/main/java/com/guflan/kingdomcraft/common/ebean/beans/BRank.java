@@ -73,6 +73,11 @@ public class BRank extends Model implements Rank {
         return super.delete();
     }
 
+    @Override
+    public void save() {
+        super.save();
+    }
+
     // interface
 
     @Override

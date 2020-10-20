@@ -21,12 +21,12 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class EditPrefixCommand extends CommandBaseImpl {
 
-    public EditPrefixCommand(AbstractKingdomCraft kdc) {
+    public EditPrefixCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 1, true);
     }
 
@@ -45,7 +45,9 @@ public class EditPrefixCommand extends CommandBaseImpl {
         }
 
         kingdom.setPrefix(args[0]);
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         kdc.getMessageManager().send(sender, "cmdEditSuccess", "prefix", args[0]);
     }

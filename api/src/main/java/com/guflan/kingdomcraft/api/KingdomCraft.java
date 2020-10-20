@@ -44,28 +44,6 @@ public interface KingdomCraft {
 
     Kingdom createKingdom(String name);
 
-    CompletableFuture<Void> delete(Kingdom kingdom);
-
-    CompletableFuture<Void> save(Kingdom kingdom);
-
-    // ranks
-
-    CompletableFuture<Void> delete(Rank rank);
-
-    CompletableFuture<Void> save(Rank rank);
-
-    // attributes
-
-    CompletableFuture<Void> delete(KingdomAttribute property);
-
-    CompletableFuture<Void> save(KingdomAttribute property);
-
-    // attributes
-
-    CompletableFuture<Void> delete(RankAttribute property);
-
-    CompletableFuture<Void> save(RankAttribute property);
-
     // relations
 
     List<Relation> getRelations(Kingdom kingdom);
@@ -93,7 +71,5 @@ public interface KingdomCraft {
     CompletableFuture<User> getUser(String name);
 
     CompletableFuture<User> getUser(UUID uuid);
-
-    CompletableFuture<Void> save(User user);
 
 }

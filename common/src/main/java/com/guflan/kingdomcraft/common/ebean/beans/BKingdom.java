@@ -21,6 +21,7 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
+import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import io.ebean.Model;
 import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
@@ -68,6 +69,19 @@ public class BKingdom extends Model implements Kingdom {
 
     @WhenModified
     Date updatedAt;
+
+    //
+
+    @Override
+    public boolean delete() {
+        StorageContext.kingdoms.remove(this);
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+        super.save();
+    }
 
     // interface
 

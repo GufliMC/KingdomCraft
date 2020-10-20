@@ -1,6 +1,6 @@
 package com.guflan.kingdomcraft.api.domain;
 
-public interface Attribute {
+public interface Attribute extends Model {
 
     String getName();
 

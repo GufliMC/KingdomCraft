@@ -22,12 +22,12 @@ import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class RanksDeleteCommand extends CommandBaseImpl {
 
-    public RanksDeleteCommand(AbstractKingdomCraft kdc) {
+    public RanksDeleteCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks delete", 1, true);
     }
 
@@ -51,7 +51,9 @@ public class RanksDeleteCommand extends CommandBaseImpl {
             return;
         }
 
-        kdc.delete(rank);
+        // async deleting
+        kdc.getPlugin().getScheduler().executeAsync(rank::delete);
+
         kdc.getMessageManager().send(sender, "cmdRanksDeleteSuccess", rank.getName());
     }
 }
