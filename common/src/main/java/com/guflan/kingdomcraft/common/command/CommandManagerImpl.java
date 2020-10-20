@@ -20,10 +20,7 @@ package com.guflan.kingdomcraft.common.command;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.commands.HelpCommand;
-import com.guflan.kingdomcraft.common.commands.InfoCommand;
-import com.guflan.kingdomcraft.common.commands.JoinCommand;
-import com.guflan.kingdomcraft.common.commands.ListCommand;
+import com.guflan.kingdomcraft.common.commands.*;
 import com.guflan.kingdomcraft.common.commands.admin.KickCommand;
 import com.guflan.kingdomcraft.common.commands.admin.SetKingdomCommand;
 import com.guflan.kingdomcraft.common.commands.admin.SetRankCommand;
@@ -72,6 +69,7 @@ public class CommandManagerImpl implements CommandManager {
         registerCommand(new InfoCommand(kdc));
 
         registerCommand(new JoinCommand(kdc));
+        registerCommand(new ChatChannelCommand(kdc));
 
         // member
         registerCommand(new LeaveCommand(kdc));

@@ -42,4 +42,8 @@ public interface User extends Model {
 
     void clearInvites();
 
+    UserChatChannel addChatChannel(String channel);
+
+    UserChatChannel getChatChannel(String channel);
+
 }
