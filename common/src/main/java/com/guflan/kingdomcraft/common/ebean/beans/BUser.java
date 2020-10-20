@@ -17,10 +17,7 @@
 
 package com.guflan.kingdomcraft.common.ebean.beans;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.KingdomInvite;
-import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.*;
 import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
@@ -52,8 +49,11 @@ public class BUser extends Model implements User {
     @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
     public BKingdom kingdom;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     public List<BKingdomInvite> kingdomInvites;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    public List<BUserChatChannel> chatChannels;
 
     @WhenCreated
     public Date createdAt;
@@ -149,5 +149,25 @@ public class BUser extends Model implements User {
     public void clearInvites() {
         DB.deleteAll(kingdomInvites);
         kingdomInvites.clear();
+    }
+
+    @Override
+    public UserChatChannel addChatChannel(String channel) {
+        BUserChatChannel ucc = (BUserChatChannel) getChatChannel(channel);
+        if ( ucc != null ) {
+            return ucc;
+        }
+
+        ucc = new BUserChatChannel();
+        ucc.user = this;
+        ucc.channel = channel;
+
+        chatChannels.add(ucc);
+        return ucc;
+    }
+
+    @Override
+    public UserChatChannel getChatChannel(String channel) {
+        return chatChannels.stream().filter(cs -> cs.channel.endsWith(channel)).findFirst().orElse(null);
     }
 }

@@ -8,8 +8,6 @@ prefix: '&6KingdomCraft &2> &a'
 
 # Common messages
 
-errorInvalidChatSetup: '&cIt appears the chat hasn''t been setup properly, your message can''t be send.'
-
 noPermission: '&cYou don''t have permission to do that!'
 
 teleporting: '&aTeleporting in &2{0} &aseconds, don''t move!'
@@ -18,7 +16,8 @@ damageKingdom: '&aYou can''t hurt members of your own kingdom'
 damageFriendly: '&aYou can''t hurt members of a friendly kingdom'
 teleportCancel: '&cTeleportation cancelled!'
 
-chatNoKingdom: '&cYou need a kingdom to start chatting!'
+chatNoChannel: '&cThere is not available chat channel to send your message!'
+chatChannelDisabled: '&cYou disabled the &4{0} &cchannel!'
 
 # Command error messages
 
@@ -121,12 +120,11 @@ cmdLeaveSuccessMembers: '&2{0} &ahas left your kingdom!'
 cmdList: '&aList of kingdoms: {0}'
 cmdListNormal: '&aThere are &2{0} &aonline players:'
 
-# /k channel
-cmdChannelNoperm: '&aYou don''t have permissions to &2{0}&a!'
-cmdChannelEnable: '&aYou &2enabled &athe channel &2{0}&a!'
-cmdChannelDisable: '&aYou &2disabled &athe channel &2{0}&a!'
-cmdChannelToggle: '&aYou can''t toggle &2{0}&a!'
-cmdChannelNotExist: '&aThe channel &2{0} &adoes not exist!'
+# /k chatchannel
+cmdChatChannelEnable: '&aYou enabled the channel &2{0}&a!'
+cmdChatChannelDisable: '&aYou disabled the channel &2{0}&a!'
+cmdChatChannelNoToggle: '&aYou can''t disable &2{0}&a!'
+cmdChatChannelNotExist: '&aThe channel &2{0} &adoes not exist!'
 
 # /k invite
 cmdInviteAlreadyKingdom: '&cThe player &4{0} &cis already in your kingdom!'

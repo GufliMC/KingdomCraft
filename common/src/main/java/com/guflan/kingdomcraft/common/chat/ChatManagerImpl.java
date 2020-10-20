@@ -23,6 +23,7 @@ import com.guflan.kingdomcraft.api.chat.ChatChannelFactory;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.UserChatChannel;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 
@@ -117,7 +118,8 @@ public class ChatManagerImpl implements ChatManager {
     //
 
     List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
-        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel).filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
+        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel)
+                .filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
     }
 
     List<ChatChannel> getPublicChannels() {
@@ -125,10 +127,11 @@ public class ChatManagerImpl implements ChatManager {
     }
 
     List<ChatChannel> getVisibleChannels(PlatformPlayer player) {
-        return getChatChannels().stream().filter(ch -> isVisible(player, ch)).collect(Collectors.toList());
+        return getChatChannels().stream().filter(ch -> canSee(player, ch)).collect(Collectors.toList());
     }
 
-    boolean isVisible(PlatformPlayer player, ChatChannel channel) {
+    @Override
+    public boolean canAccess(PlatformPlayer player, ChatChannel channel) {
 //        if ( player.isAdmin() ) {
 //            return true;
 //        }
@@ -145,7 +148,26 @@ public class ChatManagerImpl implements ChatManager {
             return false;
         }
 
-        // TODO if channel is toggled off -> return false
+        return true;
+    }
+
+    @Override
+    public boolean canSee(PlatformPlayer player, ChatChannel channel) {
+//        if ( player.isAdmin() ) {
+//            return true;
+//        }
+
+        if ( !canAccess(player, channel) ) {
+            return false;
+        }
+
+        User user = kdc.getUser(player);
+        if ( channel.isToggleable() ) {
+            UserChatChannel ucc = user.getChatChannel(channel.getName());
+            if ( ucc != null && !ucc.isEnabled() ) {
+                return false;
+            }
+        }
 
         return true;
     }

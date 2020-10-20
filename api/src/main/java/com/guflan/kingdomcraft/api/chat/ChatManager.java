@@ -17,6 +17,8 @@
 
 package com.guflan.kingdomcraft.api.chat;
 
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+
 import java.util.List;
 
 public interface ChatManager {
@@ -42,4 +44,9 @@ public interface ChatManager {
     void setDefaultChatChannel(ChatChannel chatChannel);
 
     ChatChannel getDefaultChatChannel();
+
+    //
+    boolean canAccess(PlatformPlayer player, ChatChannel chatChannel);
+
+    boolean canSee(PlatformPlayer player, ChatChannel chatChannel);
 }

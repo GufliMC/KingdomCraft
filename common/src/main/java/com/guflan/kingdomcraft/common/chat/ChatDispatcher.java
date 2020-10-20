@@ -6,6 +6,7 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChatDispatcher {
 
@@ -18,8 +19,10 @@ public class ChatDispatcher {
     }
 
     public void handle(PlatformPlayer player, String message) {
-        List<ChatChannel> channels = chatManager.getVisibleChannels(player);
-        channels.sort(Comparator.comparingInt(ch -> -ch.getPrefix().length()));
+        List<ChatChannel> channels = chatManager.getChatChannels().stream()
+                .filter(c -> chatManager.canAccess(player, c))
+                .sorted(Comparator.comparingInt(ch -> ch.getPrefix() == null ? 0 : -ch.getPrefix().length()))
+                .collect(Collectors.toList());
 
         ChatChannel channel = null;
         for ( ChatChannel ch : channels ) {
@@ -32,14 +35,18 @@ public class ChatDispatcher {
 
         if ( channel == null ) {
             if ( chatManager.getDefaultChatChannel() == null ) {
-                kdc.getMessageManager().send(player, "errorInvalidChatSetup");
+                kdc.getMessageManager().send(player, "chatNoChannel");
                 return;
             }
 
             channel = chatManager.getDefaultChatChannel();
-        }
-        else if ( channel.getPrefix() != null ) {
-            message = message.substring(channel.getPrefix().length()).trim();
+        } else {
+            if ( !chatManager.canSee(player, channel) ) {
+                kdc.getMessageManager().send(player, "chatChannelDisabled", channel.getName());
+            }
+            if ( channel.getPrefix() != null ) {
+                message = message.substring(channel.getPrefix().length()).trim();
+            }
         }
 
         send(player, channel, message);
@@ -59,7 +66,7 @@ public class ChatDispatcher {
         result = result.replace("{player}", player.getName());
 
         String finalResult = kdc.getPlaceholderManager().strip(result);
-        kdc.getOnlinePlayers().stream().filter(p -> chatManager.isVisible(p, channel))
+        kdc.getOnlinePlayers().stream().filter(p -> chatManager.canSee(p, channel))
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
                 .forEach(p -> p.sendMessage(finalResult));
 
