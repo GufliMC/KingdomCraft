@@ -68,7 +68,7 @@ public class ChatHandler {
             }
 
             if ( cs.contains("kingdom") ) {
-                ChatChannelFactory bp = createBlueprint(name, cs);
+                ChatChannelFactory bp = createFactory(name, cs);
                 cm.addChatChannelFactory(bp);
             } else {
                 ChatChannel ch = new BasicChatChannel(name);
@@ -102,7 +102,7 @@ public class ChatHandler {
         }
     }
 
-    private ChatChannelFactory createBlueprint(String name, ConfigurationSection section) {
+    private ChatChannelFactory createFactory(String name, ConfigurationSection section) {
         String target = section.getString("kingdom");
         List<String> kingdoms = Arrays.stream(target.split(Pattern.quote(",")))
                 .map(String::toLowerCase)
@@ -110,7 +110,7 @@ public class ChatHandler {
 
         return new ChatChannelFactory() {
             @Override
-            public boolean doesTarget(Kingdom kingdom) {
+            public boolean shouldCreate(Kingdom kingdom) {
                 return target.equals("*") || kingdoms.contains(kingdom.getName().toLowerCase());
             }
 

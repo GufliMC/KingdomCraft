@@ -19,10 +19,6 @@ public class PermissionsListener implements Listener, EventListener {
         this.handler = handler;
 
         plugin.getKdc().getEventManager().addListener(this);
-
-        for (PlatformPlayer p : plugin.getKdc().getOnlinePlayers()) {
-            handler.update(p);
-        }
     }
 
     @EventHandler

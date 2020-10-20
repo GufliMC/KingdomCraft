@@ -28,7 +28,6 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,8 +63,9 @@ public class ChatManagerImpl implements ChatManager {
         this.factories.add(factory);
 
         for (Kingdom kd : kdc.getKingdoms() ) {
-            if ( !factory.doesTarget(kd) ) continue;
-            addChatChannel(factory.create(kd));
+            if ( factory.shouldCreate(kd) ) {
+                addChatChannel(factory.create(kd));
+            }
         }
     }
 

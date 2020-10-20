@@ -55,29 +55,20 @@ public class StorageContext {
         this.plugin = plugin;
     }
 
-    public boolean init(String url, String driver, String username, String password) {
+    public void init(String url, String driver, String username, String password) {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl(url);
         dataSourceConfig.setDriver(driver);
         dataSourceConfig.setUsername(username);
         dataSourceConfig.setPassword(password);
 
-        try {
-            DataSourcePool pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
+        DataSourcePool pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
 
-            // run migrations
-            migrate(pool);
+        // run migrations
+        migrate(pool);
 
-            // create database
-            connect(pool);
-        } catch (MigrationException ex) {
-            if ( ex.getCause() != null ) {
-                plugin.log(ex.getCause().getMessage(), Level.SEVERE);
-            } else {
-                plugin.log(ex.getMessage(), Level.SEVERE);
-            }
-            return false;
-        }
+        // create database
+        connect(pool);
 
         // load cache
         kingdoms.addAll(new QBKingdom().findList());
@@ -86,8 +77,6 @@ public class StorageContext {
             reassign(rel);
             relations.add(rel);
         });
-
-        return true;
     }
 
     private void migrate(DataSourcePool pool) {
@@ -98,8 +87,8 @@ public class StorageContext {
             conn = pool.getConnection();
             String platform = conn.getMetaData().getDatabaseProductName().toLowerCase();
             config.setMigrationPath("dbmigration/" + platform);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
 
         MigrationRunner runner = new MigrationRunner(config);
