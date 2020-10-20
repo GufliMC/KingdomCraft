@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
+import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.Model;
 import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
@@ -202,6 +203,11 @@ public class BKingdom extends Model implements Kingdom {
 
     @Override
     public int getMemberCount() {
-        return 0;
+        return new QBUser().kingdom.eq(this).findCount();
+    }
+
+    @Override
+    public List<String> getMembers() {
+        return new QBUser().kingdom.eq(this).select("name").findSingleAttributeList();
     }
 }

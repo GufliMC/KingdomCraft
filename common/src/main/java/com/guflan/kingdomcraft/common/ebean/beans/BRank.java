@@ -21,6 +21,8 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
+import com.guflan.kingdomcraft.common.ebean.beans.query.QBRank;
+import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
@@ -181,6 +183,6 @@ public class BRank extends Model implements Rank {
 
     @Override
     public int getMemberCount() {
-        return 0;
+        return new QBUser().rank.eq(this).findCount();
     }
 }

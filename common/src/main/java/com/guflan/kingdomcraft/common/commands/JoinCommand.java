@@ -69,23 +69,28 @@ public class JoinCommand extends CommandBaseImpl {
             }
         }
 
-        // TODO check for max members
-
-        user.setKingdom(kingdom);
-
-        // async saving
         kdc.getPlugin().getScheduler().executeAsync(() -> {
-            user.save();
-            user.clearInvites();
+            if ( kingdom.getMaxMembers() > 0 && kingdom.getMaxMembers() >= kingdom.getMemberCount() ) {
+                kdc.getMessageManager().send(sender, "cmdJoinFull", kingdom.getName());
+                return;
+            }
+
+            user.setKingdom(kingdom);
+
+            // async saving
+            kdc.getPlugin().getScheduler().executeAsync(() -> {
+                user.save();
+                user.clearInvites();
+            });
+
+            kdc.getEventDispatcher().dispatchKingdomJoin((PlatformPlayer) sender);
+
+            kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
+
+            for ( PlatformPlayer p : kdc.getOnlinePlayers() ) {
+                if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
+                kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
+            }
         });
-
-        kdc.getEventDispatcher().dispatchKingdomJoin((PlatformPlayer) sender);
-
-        kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
-
-        for ( PlatformPlayer p : kdc.getOnlinePlayers() ) {
-            if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
-            kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
-        }
     }
 }
