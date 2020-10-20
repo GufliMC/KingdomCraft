@@ -45,7 +45,10 @@ public class JoinQuitListener implements Listener, EventListener {
         if ( msg != null ) {
             msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
             msg = plugin.getKdc().getMessageManager().colorify(msg);
-            Bukkit.broadcastMessage(msg);
+
+            for (PlatformPlayer p : plugin.getKdc().getOnlinePlayers()) {
+                p.sendMessage(msg);
+            }
         }
     }
 
@@ -55,7 +58,10 @@ public class JoinQuitListener implements Listener, EventListener {
         if ( msg != null ) {
             msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
             msg = plugin.getKdc().getMessageManager().colorify(msg);
-            Bukkit.broadcastMessage(msg);
+
+            for (PlatformPlayer p : plugin.getKdc().getOnlinePlayers()) {
+                p.sendMessage(msg);
+            }
         }
     }
 }
