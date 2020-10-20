@@ -192,7 +192,6 @@ public class KingdomCraftImpl implements KingdomCraft {
     public Kingdom createKingdom(String name) {
         Kingdom kingdom = context.createKingdom(name);
         eventDispatcher.dispatchKingdomCreate(kingdom);
-        plugin.getScheduler().async().execute(kingdom::save);
         return kingdom;
     }
 

@@ -197,7 +197,7 @@ public class StorageContext {
     }
 
     public User getOnlineUser(String name) {
-        return users.stream().filter(u -> u.name.equals(name)).findFirst().orElse(null);
+        return users.stream().filter(u -> u.name.equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public User getOnlineUser(UUID uuid) {
