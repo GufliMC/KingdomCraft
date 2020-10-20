@@ -17,10 +17,14 @@
 
 package com.guflan.kingdomcraft.api.command;
 
+import java.util.List;
+
 public interface CommandManager {
 
     void registerCommand(CommandBase command);
 
     void unregisterCommand(CommandBase command);
+
+    List<CommandBase> getCommands();
 
 }
