@@ -29,20 +29,29 @@ public class JoinQuitListener implements Listener, EventListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
-        String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
-        if ( msg != null ) {
-            msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
-            msg = plugin.getKdc().getMessageManager().colorify(msg);
-            e.setQuitMessage(msg);
+        if ( plugin.getKdc().getConfig().getOnLeaveMessage() != null
+                && !plugin.getKdc().getConfig().getOnLeaveMessage().equals("") ) {
+            e.setQuitMessage(null);
         }
     }
+
+    // kingdomcraft events
 
     @Override
     public void onJoin(PlatformPlayer player) {
         String msg = plugin.getKdc().getConfig().getOnJoinMessage();
+        if ( msg != null ) {
+            msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
+            msg = plugin.getKdc().getMessageManager().colorify(msg);
+            Bukkit.broadcastMessage(msg);
+        }
+    }
+
+    @Override
+    public void onQuit(PlatformPlayer player) {
+        String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
         if ( msg != null ) {
             msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
             msg = plugin.getKdc().getMessageManager().colorify(msg);
