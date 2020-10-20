@@ -65,6 +65,9 @@ public class CreateCommand extends CommandBaseImpl {
                 kingdom.save();
                 user.save();
             });
+            return;
         }
+
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
     }
 }
