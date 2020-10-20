@@ -18,7 +18,6 @@
 package com.guflan.kingdomcraft.common.chat;
 
 import com.guflan.kingdomcraft.api.chat.ChatChannelFactory;
-import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.event.EventListener;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
@@ -45,7 +44,7 @@ public class ChatEventListener implements EventListener {
     @Override
     public void onKingdomCreate(Kingdom kingdom) {
         for (ChatChannelFactory bp : chatManager.getChatChannelFactories() ) {
-            if ( !bp.doesTarget(kingdom) ) continue;
+            if ( !bp.shouldCreate(kingdom) ) continue;
             chatManager.addChatChannel(bp.create(kingdom));
         }
     }

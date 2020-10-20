@@ -33,6 +33,7 @@ import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
+import io.ebean.migration.MigrationException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -89,23 +90,32 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
-		// create database
-		ConfigurationSection dbConfig = config.getConfigurationSection("database");
-		StorageContext context = new StorageContext(this);
-		boolean result = context.init(
+		// load database
+		StorageContext context;
+		try {
+			context = new StorageContext(this);
+
+			ConfigurationSection dbConfig = config.getConfigurationSection("database");
+			context.init(
 				dbConfig.getString("url"),
 				dbConfig.getString("driver"),
 				dbConfig.getString("username"),
-				dbConfig.getString("password"));
+				dbConfig.getString("password")
+			);
+		} catch (MigrationException ex) {
+			if ( ex.getCause() != null ) {
+				log(ex.getCause().getMessage(), Level.SEVERE);
+			} else {
+				log(ex.getMessage(), Level.SEVERE);
+			}
 
-		// revert class loader to original
-		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
-
-		if ( !result ) {
 			log("Error occured during database initialization. Shutting down plugin.", Level.SEVERE);
 			disable();
 			return;
 		}
+
+		// revert class loader to original
+		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
 
 		// initialize handler
 		KingdomCraftConfig cfg = new BukkitConfig(config.getConfigurationSection("settings"));

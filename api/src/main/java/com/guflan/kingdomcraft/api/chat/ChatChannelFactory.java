@@ -21,7 +21,7 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 
 public interface ChatChannelFactory {
 
-    boolean doesTarget(Kingdom kingdom);
+    boolean shouldCreate(Kingdom kingdom);
 
     String getName();
 
