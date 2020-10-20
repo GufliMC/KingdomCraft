@@ -47,8 +47,8 @@ public class KingdomJoinQuitListener implements EventListener {
         for ( String cmd : commands ) {
             cmd = plugin.getKdc().getPlaceholderManager().handle(player, cmd);
 
-            if ( cmd.startsWith("CONSOLE") ) {
-                cmd = cmd.substring("CONSOLE".length()).trim();
+            if ( cmd.toLowerCase().startsWith("console") ) {
+                cmd = cmd.substring(7).trim();
                 System.out.println(cmd);
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
             } else {
