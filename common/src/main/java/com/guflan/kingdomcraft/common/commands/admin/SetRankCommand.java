@@ -76,21 +76,32 @@ public class SetRankCommand extends CommandBaseImpl {
                     return;
                 }
 
-                if (target.getKingdom() == null) {
+                Kingdom kingdom = target.getKingdom();
+                if ( kingdom == null ) {
                     kdc.getMessageManager().send(sender, "cmdDefaultTargetNoKingdom", target.getName());
                     return;
                 }
 
-                Kingdom kingdom = target.getKingdom();
-                if ( !sender.hasPermission("kingdom.setrank.other") && sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() != kingdom) {
-                    kdc.getMessageManager().send(sender, "noPermission");
+                Rank rank = kingdom.getRanks().stream().filter(r -> r.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
+                if ( rank == null ) {
+                    kdc.getMessageManager().send(sender, "cmdSetRankNotExist", args[1]);
                     return;
                 }
 
-                Rank rank = kingdom.getRanks().stream().filter(r -> r.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
-                if (rank == null) {
-                    kdc.getMessageManager().send(sender, "cmdSetRankNotExist", args[1]);
-                    return;
+                if ( !sender.hasPermission("kingdom.setrank.other") ) {
+                    User user = kdc.getUser((PlatformPlayer) sender);
+                    if ( user.getKingdom() != kingdom ) {
+                        kdc.getMessageManager().send(sender, "noPermissionCmd");
+                        return;
+                    }
+                    if ( user.getRank() == null || user.getRank().getLevel() <= rank.getLevel() ) {
+                        kdc.getMessageManager().send(sender, "cmdSetRankLowLevelTarget");
+                        return;
+                    }
+                    if ( target.getRank() != null && user.getRank().getLevel() <= target.getRank().getLevel() ) {
+                        kdc.getMessageManager().send(sender, "cmdSetRankLowLevelCurrent", target.getName());
+                        return;
+                    }
                 }
 
                 if ( target.getRank() == rank ) {
@@ -98,7 +109,11 @@ public class SetRankCommand extends CommandBaseImpl {
                     return;
                 }
 
-                // TODO hierarchy check
+                if ( !sender.hasPermission("kingdom.setrank.other") && rank.getMaxMembers() > 0
+                        && rank.getMaxMembers() >= rank.getMemberCount() ) {
+                    kdc.getMessageManager().send(sender, "cmdSetRankFull", rank.getName());
+                    return;
+                }
 
                 Rank oldRank = target.getRank();
                 target.setRank(rank);

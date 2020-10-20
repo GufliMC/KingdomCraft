@@ -35,6 +35,7 @@ import io.ebean.migration.MigrationRunner;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -43,10 +44,10 @@ import java.util.stream.Collectors;
 
 public class StorageContext {
 
-    public static final List<BKingdom> kingdoms = new ArrayList<>();
-    public static final List<BRelation> relations = new ArrayList<>();
+    public static final List<BKingdom> kingdoms = Collections.synchronizedList(new ArrayList<>());
+    public static final List<BRelation> relations = Collections.synchronizedList(new ArrayList<>());
 
-    public static final List<BUser> users = new ArrayList<>();
+    public static final List<BUser> users = Collections.synchronizedList(new ArrayList<>());
 
     private final KingdomCraftPlugin plugin;
 

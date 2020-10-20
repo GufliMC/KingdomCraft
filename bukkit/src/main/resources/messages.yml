@@ -35,6 +35,8 @@ cmdChannelDisable: '&7You &8disabled &7the channel &8{0}&7!'
 cmdChannelToggle: '&7You can''t toggle &8{0}&7!'
 cmdChannelNotExist: '&7The channel &8{0} &7does not exist!'
 
+cmdSetRankLowLevelTarget: '&cYour rank level is lower than the target rank!'
+cmdSetRankLowLevelCurrent: '&cYour rank level is lower than the current rank of &4{0}&c!'
 cmdSetRankNotExist: '&7The rank &8{0} &7does not exist!'
 cmdSetRankAlready: '&c{0} &4already has rank &4{1}&c!'
 cmdSetRankSenderChange: '&7You changed the rank of &8{0} &7to &8{1}&7!'
