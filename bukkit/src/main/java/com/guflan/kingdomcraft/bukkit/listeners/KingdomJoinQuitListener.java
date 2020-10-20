@@ -43,11 +43,13 @@ public class KingdomJoinQuitListener implements EventListener {
         }
         Player bplayer = ((BukkitPlayer) player).getPlayer();
 
+        plugin.log("Executing kingdom join/leave commands: ");
         for ( String cmd : commands ) {
             cmd = plugin.getKdc().getPlaceholderManager().handle(player, cmd);
 
             if ( cmd.startsWith("CONSOLE") ) {
                 cmd = cmd.substring("CONSOLE".length()).trim();
+                System.out.println(cmd);
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
             } else {
                 bplayer.chat("/" + cmd);
