@@ -25,7 +25,7 @@ public class CommandDispatcher {
         }
 
         String invalidBase = null;
-        String invalidArguments = ""; // TODO
+        String invalidArguments = "";
 
         for ( CommandBase cb : commandManager.commands ) {
             for ( String cmd : cb.getCommands() ) {
