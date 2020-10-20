@@ -268,7 +268,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public void onJoin(PlatformPlayer player) {
         onlinePlayers.add(player);
-        plugin.getScheduler().async().execute(() -> {
+        plugin.getScheduler().executeAsync(() -> {
             try {
                 User user = getUser(player.getUniqueId()).get();
                 if ( user == null ) {
@@ -277,6 +277,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
                 if ( user == null ) {
                     user = context.createUser(player.getUniqueId(), player.getName());
+                    plugin.getScheduler().executeAsync(user::save);
                 }
 
                 context.addOnlineUser(user);

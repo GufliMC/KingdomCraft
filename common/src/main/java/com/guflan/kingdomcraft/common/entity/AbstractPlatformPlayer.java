@@ -22,27 +22,27 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface AbstractPlatformPlayer extends PlatformPlayer {
+public abstract class AbstractPlatformPlayer implements PlatformPlayer {
 
-    Map<String, Object> cache = new HashMap<>();
+    final Map<String, Object> cache = new HashMap<>();
 
     @Override
-    default void set(String key, Object value) {
+    public void set(String key, Object value) {
         cache.put(key, value);
     }
 
     @Override
-    default boolean has(String key) {
+    public boolean has(String key) {
         return cache.containsKey(key);
     }
 
     @Override
-    default Object get(String key) {
+    public Object get(String key) {
         return cache.get(key);
     }
 
     @Override
-    default <T> T get(String key, Class<T> clazz) {
+    public <T> T get(String key, Class<T> clazz) {
         return (T) cache.get(key);
     }
 

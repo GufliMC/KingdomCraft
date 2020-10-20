@@ -55,4 +55,6 @@ public interface Rank extends Model {
     RankPermissionGroup getPermissionGroup(String name);
 
     RankPermissionGroup createPermissionGroup(String name);
+
+    int getMemberCount();
 }

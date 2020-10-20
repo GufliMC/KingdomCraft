@@ -17,6 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
+import com.guflan.kingdomcraft.api.domain.KingdomInvite;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
@@ -39,7 +40,6 @@ public class InviteCommand extends CommandBaseImpl {
         }
 
         User user = kdc.getUser((PlatformPlayer) sender);
-
         if (user.getKingdom() == null) {
             kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
             return;
@@ -54,23 +54,29 @@ public class InviteCommand extends CommandBaseImpl {
                 }
 
                 if (target.getKingdom() == user.getKingdom()) {
+                    kdc.getMessageManager().send(sender, "cmdInviteAlreadyKingdom", target.getName());
+                    return;
+                }
+
+                KingdomInvite invite = target.getInvite(user.getKingdom());
+                if ( invite != null && invite.isValid() && invite.getSender().equals(user) ) {
                     kdc.getMessageManager().send(sender, "cmdInviteAlready", target.getName());
                     return;
                 }
 
-                if (target.hasInvite(user.getKingdom())) {
-                    kdc.getMessageManager().send(sender, "cmdInviteAlready", target.getName());
-                    return;
+                if ( invite != null ) {
+                    kdc.getPlugin().getScheduler().executeAsync(invite::delete);
                 }
 
-                target.addInvite(user);
+                invite = target.addInvite(user);
 
                 // async saving
-                kdc.getPlugin().getScheduler().executeAsync(target::save);
+                kdc.getPlugin().getScheduler().executeAsync(invite::save);
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if (targetPlayer != null ) {
-                    kdc.getMessageManager().send(targetPlayer, "cmdInviteTarget", user.getKingdom().getName());
+                    kdc.getMessageManager().send(targetPlayer, "cmdInviteTarget", user.getName(),
+                            user.getKingdom().getName());
                 }
 
                 kdc.getMessageManager().send(sender, "cmdInviteSender", target.getName(), user.getKingdom().getName());

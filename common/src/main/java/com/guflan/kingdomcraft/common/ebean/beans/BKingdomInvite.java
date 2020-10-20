@@ -17,6 +17,9 @@
 
 package com.guflan.kingdomcraft.common.ebean.beans;
 
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.KingdomInvite;
+import com.guflan.kingdomcraft.api.domain.User;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
@@ -27,7 +30,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "user_invites")
-public class BKingdomInvite extends Model {
+public class BKingdomInvite extends Model implements KingdomInvite {
 
     @Id
     public long id;
@@ -51,14 +54,40 @@ public class BKingdomInvite extends Model {
 
     @Override
     public boolean delete() {
-
+        user.kingdomInvites.remove(this);
         return super.delete();
     }
 
     @Override
     public void save() {
-
         super.save();
     }
 
+    // interface
+
+    @Override
+    public User getPlayer() {
+        return user;
+    }
+
+    @Override
+    public User getSender() {
+        return sender;
+    }
+
+    @Override
+    public Kingdom getKingdom() {
+        return kingdom;
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public boolean isValid() {
+        return sender.getKingdom().equals(kingdom)
+                && System.currentTimeMillis() - createdAt.getTime() <= 1000 * 60 * 60; // 1h
+    }
 }
