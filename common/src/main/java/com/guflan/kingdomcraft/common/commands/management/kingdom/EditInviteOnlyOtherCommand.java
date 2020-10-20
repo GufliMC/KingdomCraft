@@ -19,12 +19,12 @@ package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class EditInviteOnlyOtherCommand extends CommandBaseImpl {
 
-    public EditInviteOnlyOtherCommand(AbstractKingdomCraft kdc) {
+    public EditInviteOnlyOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit invite-only", 2);
     }
 
@@ -48,7 +48,9 @@ public class EditInviteOnlyOtherCommand extends CommandBaseImpl {
         }
 
         kingdom.setInviteOnly(Boolean.parseBoolean(args[1]));
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "invite-only", kingdom.getName(), kingdom.isInviteOnly() + "");
     }

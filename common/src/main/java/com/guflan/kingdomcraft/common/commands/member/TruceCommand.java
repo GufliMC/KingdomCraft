@@ -23,12 +23,12 @@ import com.guflan.kingdomcraft.api.domain.RelationType;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class TruceCommand extends CommandBaseImpl {
 
-    public TruceCommand(AbstractKingdomCraft kdc) {
+    public TruceCommand(KingdomCraftImpl kdc) {
         super(kdc, "truce", 1, true);
     }
 

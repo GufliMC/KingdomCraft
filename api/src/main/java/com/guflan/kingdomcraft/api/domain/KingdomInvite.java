@@ -19,7 +19,7 @@ package com.guflan.kingdomcraft.api.domain;
 
 import java.util.Date;
 
-public interface KingdomInvite {
+public interface KingdomInvite extends Model {
 
     User getPlayer();
 

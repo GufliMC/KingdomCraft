@@ -20,14 +20,14 @@ package com.guflan.kingdomcraft.common.commands.member;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.concurrent.ExecutionException;
 
 public class InviteCommand extends CommandBaseImpl {
 
-    public InviteCommand(AbstractKingdomCraft kdc) {
+    public InviteCommand(KingdomCraftImpl kdc) {
         super(kdc, "invite", 1, true);
     }
 
@@ -64,7 +64,9 @@ public class InviteCommand extends CommandBaseImpl {
                 }
 
                 target.addInvite(user);
-                kdc.save(target);
+
+                // async saving
+                kdc.getPlugin().getScheduler().executeAsync(target::save);
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if (targetPlayer != null ) {

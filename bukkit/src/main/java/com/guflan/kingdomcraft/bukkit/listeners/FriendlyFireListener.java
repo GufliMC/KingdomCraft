@@ -15,9 +15,8 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.bukkit.friendlyfire;
+package com.guflan.kingdomcraft.bukkit.listeners;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Relation;
 import com.guflan.kingdomcraft.api.domain.RelationType;

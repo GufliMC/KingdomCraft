@@ -26,6 +26,10 @@ public interface MessageManager {
 
 	void unregisterMessage(String name);
 
+	String getPrefix();
+
+	void setPrefix(String prefix);
+
 	String getMessage(String name);
 
 	String getMessage(String name, String... placeholders);

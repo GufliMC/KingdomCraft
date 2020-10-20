@@ -26,6 +26,19 @@ public class BRankPermissionGroup extends Model implements RankPermissionGroup {
 
     public String name;
 
+    //
+
+    @Override
+    public boolean delete() {
+        rank.permissionGroups.remove(this);
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+        super.save();
+    }
+
     // interface
 
     public Rank getRank() {

@@ -21,12 +21,12 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class LeaveCommand extends CommandBaseImpl {
 
-    public LeaveCommand(AbstractKingdomCraft kdc) {
+    public LeaveCommand(KingdomCraftImpl kdc) {
         super(kdc, "leave", 0, true);
     }
 
@@ -45,7 +45,10 @@ public class LeaveCommand extends CommandBaseImpl {
 
         Kingdom oldKingdom = user.getKingdom();
         user.setKingdom(null);
-        kdc.save(user);
+
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(user::save);
 
         kdc.getEventDispatcher().dispatchKingdomLeave((PlatformPlayer) sender, oldKingdom);
 

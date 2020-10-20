@@ -22,12 +22,12 @@ import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class RanksEditSuffixCommand extends CommandBaseImpl {
 
-    public RanksEditSuffixCommand(AbstractKingdomCraft kdc) {
+    public RanksEditSuffixCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit suffix", 2, true);
     }
 
@@ -52,7 +52,10 @@ public class RanksEditSuffixCommand extends CommandBaseImpl {
         }
 
         rank.setSuffix(args[1]);
-        kdc.save(rank);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(rank::save);
+
         kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "suffix", rank.getName(), args[1]);
     }
 }

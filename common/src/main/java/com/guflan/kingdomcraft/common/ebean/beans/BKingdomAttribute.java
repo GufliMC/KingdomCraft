@@ -27,6 +27,19 @@ public class BKingdomAttribute extends Model implements KingdomAttribute {
     public String name;
     public String value;
 
+    //
+
+    @Override
+    public boolean delete() {
+        kingdom.attributes.remove(this);
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+        super.save();
+    }
+
     // interface
 
     @Override

@@ -20,12 +20,12 @@ package com.guflan.kingdomcraft.common.commands;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class InfoCommand extends CommandBaseImpl {
 
-    public InfoCommand(AbstractKingdomCraft kdc) {
+    public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", 0, true);
     }
 

@@ -20,12 +20,12 @@ package com.guflan.kingdomcraft.common.commands.management.ranks;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class RanksCreateOtherCommand extends CommandBaseImpl {
 
-    public RanksCreateOtherCommand(AbstractKingdomCraft kdc) {
+    public RanksCreateOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks create", 2);
     }
 
@@ -53,10 +53,16 @@ public class RanksCreateOtherCommand extends CommandBaseImpl {
         }
 
         Rank rank = kingdom.createRank(args[1]);
-        kdc.save(rank).thenRun(() -> {
-            if (kingdom.getDefaultRank() == null) {
-                kingdom.setDefaultRank(rank);
-                kdc.save(kingdom);
+        if ( kingdom.getDefaultRank() == null ) {
+            kingdom.setDefaultRank(rank);
+        }
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(() -> {
+            rank.save();
+
+            if ( kingdom.getDefaultRank() == rank ) {
+                kingdom.save();
             }
         });
 

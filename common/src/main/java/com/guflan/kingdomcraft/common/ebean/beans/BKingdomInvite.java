@@ -17,6 +17,7 @@
 
 package com.guflan.kingdomcraft.common.ebean.beans;
 
+import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
@@ -26,7 +27,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "user_invites")
-public class BKingdomInvite {
+public class BKingdomInvite extends Model {
 
     @Id
     public long id;
@@ -45,5 +46,19 @@ public class BKingdomInvite {
 
     @WhenCreated
     public Date createdAt;
+
+    //
+
+    @Override
+    public boolean delete() {
+
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+
+        super.save();
+    }
 
 }

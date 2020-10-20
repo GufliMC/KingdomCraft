@@ -27,6 +27,19 @@ public class BRankAttribute extends Model implements RankAttribute {
     public String name;
     public String value;
 
+    //
+
+    @Override
+    public boolean delete() {
+        rank.attributes.remove(this);
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+        super.save();
+    }
+
     // interface
 
     @Override

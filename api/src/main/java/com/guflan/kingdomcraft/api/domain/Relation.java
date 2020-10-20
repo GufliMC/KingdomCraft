@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.api.domain;
 
-public interface Relation {
+public interface Relation extends Model {
 
     Kingdom getKingdom1();
 

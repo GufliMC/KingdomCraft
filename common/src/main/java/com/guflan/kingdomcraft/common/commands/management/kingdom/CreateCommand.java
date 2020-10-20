@@ -21,12 +21,12 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class CreateCommand extends CommandBaseImpl {
 
-    public CreateCommand(AbstractKingdomCraft kdc) {
+    public CreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "create", 1);
     }
 
@@ -59,7 +59,12 @@ public class CreateCommand extends CommandBaseImpl {
         if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
             User user = kdc.getUser((PlatformPlayer) sender);
             user.setKingdom(kingdom);
-            kdc.save(kingdom).thenRun(() -> kdc.save(user));
+
+            // async saving
+            kdc.getPlugin().getScheduler().executeAsync(() -> {
+                kingdom.save();
+                user.save();
+            });
         }
     }
 }

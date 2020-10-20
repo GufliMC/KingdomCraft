@@ -24,28 +24,30 @@ import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
+import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.common.chat.ChatDispatcher;
 import com.guflan.kingdomcraft.common.chat.ChatManagerImpl;
 import com.guflan.kingdomcraft.common.command.CommandDispatcher;
 import com.guflan.kingdomcraft.common.command.CommandManagerImpl;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
-import com.guflan.kingdomcraft.common.ebean.EBeanContext;
+import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
 import com.guflan.kingdomcraft.common.event.EventManagerImpl;
 import com.guflan.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.guflan.kingdomcraft.common.util.Teleporter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public abstract class AbstractKingdomCraft implements KingdomCraft {
+public class KingdomCraftImpl implements KingdomCraft {
 
     private final KingdomCraftPlugin plugin;
     private final KingdomCraftConfig config;
-    private final EBeanContext context;
+    private final StorageContext context;
 
     //
 
@@ -60,14 +62,22 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     private final PlaceholderManagerImpl placeholderManager;
 
+    private final MessageManager messageManager;
 
-    public AbstractKingdomCraft(KingdomCraftPlugin plugin, KingdomCraftConfig config, EBeanContext context) {
-        KingdomCraftProvider.register(this);
-        Teleporter.register(this);
+    //
+
+    private final List<PlatformPlayer> onlinePlayers = new ArrayList<>();
+
+    public KingdomCraftImpl(KingdomCraftPlugin plugin,
+                            KingdomCraftConfig config,
+                            StorageContext context,
+                            MessageManager messageManager) {
 
         this.plugin = plugin;
         this.config = config;
         this.context = context;
+
+        this.messageManager = messageManager;
 
         this.commandManager = new CommandManagerImpl(this);
         this.commandDispatcher = new CommandDispatcher(commandManager);
@@ -79,6 +89,9 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
         this.chatDispatcher = new ChatDispatcher(this, chatManager);
 
         this.placeholderManager = new PlaceholderManagerImpl(this);
+
+        KingdomCraftProvider.register(this);
+        Teleporter.register(this);
     }
 
     //
@@ -91,10 +104,21 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
         return config;
     }
 
+    // messages
+
+    @Override
+    public MessageManager getMessageManager() {
+        return messageManager;
+    }
+
+    // placeholders
+
     @Override
     public PlaceholderManager getPlaceholderManager() {
         return placeholderManager;
     }
+
+    // chat
 
     @Override
     public ChatManager getChatManager() {
@@ -105,6 +129,8 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
         return chatDispatcher;
     }
 
+    // events
+
     @Override
     public EventManager getEventManager() {
         return eventManager;
@@ -113,6 +139,8 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     public EventDispatcher getEventDispatcher() {
         return this.eventDispatcher;
     }
+
+    // commands
 
     @Override
     public CommandManager getCommandManager() {
@@ -123,101 +151,42 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
         return commandDispatcher;
     }
 
-    //
+    // players
 
-    public void join(PlatformPlayer player) {
-        plugin.getScheduler().async().execute(() -> {
-            try {
-                User user = getUser(player.getUniqueId()).get();
-                if ( user == null ) {
-                    user = getUser(player.getName()).get();
-                }
-
-                if ( user == null ) {
-                    user = context.createUser(player.getUniqueId(), player.getName());
-                }
-
-                context.addCachedUser(user);
-                eventDispatcher.dispatchJoin(player);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        });
+    @Override
+    public List<PlatformPlayer> getOnlinePlayers() {
+        return onlinePlayers;
     }
 
-    public void quit(PlatformPlayer player) {
-        User user = context.getCachedUser(player.getUniqueId());
-        context.removeCachedUser(user);
-        eventDispatcher.dispatchQuit(player);
+    @Override
+    public PlatformPlayer getPlayer(UUID uuid) {
+        return onlinePlayers.stream().filter(p -> p.getUniqueId().equals(uuid)).findFirst().orElse(null);
+    }
+
+    @Override
+    public PlatformPlayer getPlayer(User user) {
+        return getPlayer(user.getUniqueId());
     }
 
     // kingdoms
 
     @Override
     public List<Kingdom> getKingdoms() {
-        return context.getCachedKingdoms();
+        return context.getKingdoms();
     }
 
     @Override
     public Kingdom getKingdom(String name) {
-        return context.getCachedKingdom(name);
+        return context.getKingdom(name);
     }
 
     @Override
     public Kingdom createKingdom(String name) {
         Kingdom kingdom = context.createKingdom(name);
-        context.save(kingdom);
         eventDispatcher.dispatchKingdomCreate(kingdom);
+        plugin.getScheduler().async().execute(kingdom::save);
         return kingdom;
     }
-
-    @Override
-    public CompletableFuture<Void> delete(Kingdom kingdom) {
-        eventDispatcher.dispatchKingdomDelete(kingdom);
-        return context.delete(kingdom);
-    }
-
-    @Override
-    public CompletableFuture<Void> save(Kingdom kingdom) {
-        return context.save(kingdom);
-    }
-
-    // ranks
-
-    @Override
-    public CompletableFuture<Void> delete(Rank rank) {
-        return context.delete(rank);
-    }
-
-    @Override
-    public CompletableFuture<Void> save(Rank rank) {
-        return context.save(rank);
-    }
-
-    // attributes
-
-    @Override
-    public CompletableFuture<Void> delete(KingdomAttribute property) {
-        return context.delete(property);
-    }
-
-    @Override
-    public CompletableFuture<Void> save(KingdomAttribute property) {
-        return context.save(property);
-    }
-
-    // attributes
-
-    @Override
-    public CompletableFuture<Void> delete(RankAttribute property) {
-        return context.delete(property);
-    }
-
-    @Override
-    public CompletableFuture<Void> save(RankAttribute property) {
-        return context.save(property);
-    }
-
 
     // relations
 
@@ -255,17 +224,17 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
 
     @Override
     public List<User> getOnlineUsers() {
-        return context.getCachedUsers();
+        return context.getOnlineUsers();
     }
 
     @Override
     public User getOnlineUser(String name) {
-        return context.getCachedUser(name);
+        return context.getOnlineUser(name);
     }
 
     @Override
     public User getOnlineUser(UUID uuid) {
-        return context.getCachedUser(uuid);
+        return context.getOnlineUser(uuid);
     }
 
     @Override
@@ -284,12 +253,37 @@ public abstract class AbstractKingdomCraft implements KingdomCraft {
     }
 
     @Override
-    public CompletableFuture<Void> save(User user) {
-        return context.save(user);
-    }
-
-    @Override
     public User getUser(PlatformPlayer player) {
         return getOnlineUser(player.getUniqueId());
+    }
+
+    //
+
+    public void onJoin(PlatformPlayer player) {
+        onlinePlayers.add(player);
+        plugin.getScheduler().async().execute(() -> {
+            try {
+                User user = getUser(player.getUniqueId()).get();
+                if ( user == null ) {
+                    user = getUser(player.getName()).get();
+                }
+
+                if ( user == null ) {
+                    user = context.createUser(player.getUniqueId(), player.getName());
+                }
+
+                context.addOnlineUser(user);
+                eventDispatcher.dispatchJoin(player);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void onQuit(PlatformPlayer player) {
+        onlinePlayers.add(player);
+        User user = context.getOnlineUser(player.getUniqueId());
+        context.removeOnlineUser(user);
+        eventDispatcher.dispatchQuit(player);
     }
 }

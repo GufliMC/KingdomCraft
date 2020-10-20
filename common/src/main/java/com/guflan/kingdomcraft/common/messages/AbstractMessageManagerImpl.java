@@ -15,20 +15,12 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.bukkit.messages;
+package com.guflan.kingdomcraft.common.messages;
 
-import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.messages.MessageManager;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -52,27 +44,10 @@ import java.util.regex.Pattern;
  * along with KingdomCraft.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-public class BukkitMessageManager implements MessageManager {
+public abstract class AbstractMessageManagerImpl implements MessageManager {
 
-	private final String prefix;
+	private String prefix;
 	private final Map<String, String> messages = new HashMap<>();
-
-	public BukkitMessageManager(Plugin kingdomCraft) {
-		InputStream in = kingdomCraft.getResource("messages.yml");
-		try {
-			YamlConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
-
-			prefix = config.getString("prefix");
-			config.set("prefix", null);
-
-			for ( String key : config.getKeys(false) ) {
-				messages.put(key, config.getString(key));
-			}
-		} catch (Exception ex) {
-			System.out.println("!!! ERROR !!! \nCouldn't retrieve default language! This can cause wrong message display!\n\n");
-			throw ex;
-		}
-	}
 
 	@Override
 	public void registerMessage(String name, String msg) {
@@ -84,6 +59,16 @@ public class BukkitMessageManager implements MessageManager {
 		messages.remove(name);
 	}
 
+	@Override
+	public String getPrefix() {
+		return prefix;
+	}
+
+	@Override
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
 	private boolean isEmpty(String name) {
 		return !messages.containsKey(name) || messages.get(name).replaceAll(Pattern.quote(" "), "").equals("");
 	}
@@ -91,7 +76,7 @@ public class BukkitMessageManager implements MessageManager {
 	@Override
 	public String getMessage(String name) {
 		if ( !messages.containsKey(name) ) return null;
-		return ChatColor.translateAlternateColorCodes('&', StringEscapeUtils.unescapeJava(messages.get(name)));
+		return colorify(messages.get(name));
 	}
 
 	@Override
@@ -118,13 +103,4 @@ public class BukkitMessageManager implements MessageManager {
 		sender.sendMessage(prefix + getMessage(name, placeholders));
 	}
 
-	@Override
-	public String colorify(String msg) {
-		return ChatColor.translateAlternateColorCodes('&', msg);
-	}
-
-	@Override
-	public String decolorify(String msg) {
-		return ChatColor.stripColor(msg);
-	}
 }

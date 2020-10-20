@@ -17,10 +17,9 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.Comparator;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class ListCommand extends CommandBaseImpl {
 
-    public ListCommand(AbstractKingdomCraft kdc) {
+    public ListCommand(KingdomCraftImpl kdc) {
         super(kdc, "list", 0);
     }
 

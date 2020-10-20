@@ -19,7 +19,7 @@ package com.guflan.kingdomcraft.common.command;
 
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.commands.InfoCommand;
 import com.guflan.kingdomcraft.common.commands.JoinCommand;
 import com.guflan.kingdomcraft.common.commands.ListCommand;
@@ -34,10 +34,10 @@ import java.util.List;
 
 public class CommandManagerImpl implements CommandManager {
 
-    final AbstractKingdomCraft kdc;
+    final KingdomCraftImpl kdc;
     final List<CommandBase> commands = new ArrayList<>();
 
-    public CommandManagerImpl(AbstractKingdomCraft kdc) {
+    public CommandManagerImpl(KingdomCraftImpl kdc) {
         this.kdc = kdc;
         registerDefaults();
     }

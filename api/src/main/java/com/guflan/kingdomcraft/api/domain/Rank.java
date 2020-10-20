@@ -19,7 +19,7 @@ package com.guflan.kingdomcraft.api.domain;
 
 import java.util.List;
 
-public interface Rank {
+public interface Rank extends Model {
 
 
     String getName();

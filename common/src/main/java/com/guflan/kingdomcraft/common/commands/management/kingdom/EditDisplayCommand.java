@@ -21,12 +21,12 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class EditDisplayCommand extends CommandBaseImpl {
 
-    public EditDisplayCommand(AbstractKingdomCraft kdc) {
+    public EditDisplayCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit display", 1, true);
     }
 
@@ -45,7 +45,9 @@ public class EditDisplayCommand extends CommandBaseImpl {
         }
 
         kingdom.setDisplay(args[0]);
-        kdc.save(kingdom);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
 
         kdc.getMessageManager().send(sender, "cmdEditSuccess", "display", args[0]);
     }

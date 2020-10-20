@@ -22,7 +22,7 @@ import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public class SetRankCommand extends CommandBaseImpl {
 
-    public SetRankCommand(AbstractKingdomCraft kdc) {
+    public SetRankCommand(KingdomCraftImpl kdc) {
         super(kdc, "setrank", 2);
     }
 
@@ -96,7 +96,9 @@ public class SetRankCommand extends CommandBaseImpl {
                 // TODO hierarchy check
 
                 target.setRank(rank);
-                kdc.save(target);
+
+                // async saving
+                kdc.getPlugin().getScheduler().executeAsync(target::save);
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {

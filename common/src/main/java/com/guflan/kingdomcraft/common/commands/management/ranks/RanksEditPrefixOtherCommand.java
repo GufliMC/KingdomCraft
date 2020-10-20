@@ -20,12 +20,12 @@ package com.guflan.kingdomcraft.common.commands.management.ranks;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class RanksEditPrefixOtherCommand extends CommandBaseImpl {
 
-    public RanksEditPrefixOtherCommand(AbstractKingdomCraft kdc) {
+    public RanksEditPrefixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit prefix", 3);
     }
 
@@ -49,7 +49,10 @@ public class RanksEditPrefixOtherCommand extends CommandBaseImpl {
         }
 
         rank.setPrefix(args[2]);
-        kdc.save(rank);
+
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(rank::save);
+
         kdc.getMessageManager().send(sender, "cmdRanksEditOtherSuccess", "prefix",
                 kingdom.getName(), rank.getName(), args[2]);
     }

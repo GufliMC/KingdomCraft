@@ -17,17 +17,18 @@
 
 package com.guflan.kingdomcraft.bukkit;
 
+import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfig;
-import com.guflan.kingdomcraft.bukkit.friendlyfire.FriendlyFireListener;
-import com.guflan.kingdomcraft.bukkit.listeners.ConnectionListener;
-import com.guflan.kingdomcraft.bukkit.listeners.PlayerListener;
-import com.guflan.kingdomcraft.bukkit.placeholders.BukkitPlaceholderReplacer;
+import com.guflan.kingdomcraft.bukkit.listeners.*;
+import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
+import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
-import com.guflan.kingdomcraft.common.ebean.EBeanContext;
+import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,9 +43,9 @@ import java.util.logging.Level;
 
 public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraftPlugin {
 
-	private final BukkitScheduler scheduler;
+	private KingdomCraftImpl kdc;
 
-	private KingdomCraftBukkit kdc;
+	private final BukkitScheduler scheduler;
 
 	public KingdomCraftBukkitPlugin() {
 		this.scheduler = new BukkitScheduler(this);
@@ -78,7 +79,6 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 			return;
 		}
 
-
 		// For some reason, required ebean classes are not in the classpath of the current classloader.
 		// Fix this by changing the class loader to the one of the current class.
 		ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -86,8 +86,8 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// create database
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
-		EBeanContext ec = new EBeanContext(this);
-		boolean result = ec.init(
+		StorageContext context = new StorageContext(this);
+		boolean result = context.init(
 				dbConfig.getString("url"),
 				dbConfig.getString("driver"),
 				dbConfig.getString("username"),
@@ -104,10 +104,11 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// initialize handler
 		KingdomCraftConfig cfg = new BukkitConfig(config);
-		this.kdc = new KingdomCraftBukkit(this, cfg, ec);
+		MessageManager messageManager = new MessageManagerImpl(this);
+		this.kdc = new KingdomCraftImpl(this, cfg, context, messageManager);
 
 		// placeholders
-		new BukkitPlaceholderReplacer(this);
+		new PlaceholderReplacer(this);
 
 		// chat
 		new ChatHandler(this);
@@ -121,15 +122,20 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// listeners
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
-		pm.registerEvents(new PlayerListener(this), this);
 		pm.registerEvents(new FriendlyFireListener(this), this);
+		pm.registerEvents(new JoinQuitListener(this), this);
+		pm.registerEvents(new RespawnListener(this), this);
+		pm.registerEvents(new DeathListener(this), this);
+
+		// kingdom events
+		new KingdomJoinQuitListener(this);
 	}
 
 	private void disable() {
 		this.getPluginLoader().disablePlugin(this);
 	}
 
-	public KingdomCraftBukkit getKdc() {
+	public KingdomCraftImpl getKdc() {
 		return kdc;
 	}
 

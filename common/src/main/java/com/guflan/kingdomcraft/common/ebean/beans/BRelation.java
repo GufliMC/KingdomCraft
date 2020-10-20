@@ -54,6 +54,20 @@ public class BRelation extends Model implements Relation {
     @WhenModified
     public Date updatedAt;
 
+    //
+
+    @Override
+    public boolean delete() {
+
+        return super.delete();
+    }
+
+    @Override
+    public void save() {
+
+        super.save();
+    }
+
     // interface
 
     @Override

@@ -22,12 +22,12 @@ import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.common.AbstractKingdomCraft;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class RanksCreateCommand extends CommandBaseImpl {
 
-    public RanksCreateCommand(AbstractKingdomCraft kdc) {
+    public RanksCreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks create", 1, true);
     }
 
@@ -56,20 +56,18 @@ public class RanksCreateCommand extends CommandBaseImpl {
         }
 
         Rank rank = kingdom.createRank(args[0]);
-
         if ( kingdom.getDefaultRank() == null ) {
             kingdom.setDefaultRank(rank);
         }
-        kdc.save(rank.getKingdom());
 
-        /*
-        kdc.save(rank.getKingdom()).thenRun(() -> {
-            if (kingdom.getDefaultRank() == null) {
-                kingdom.setDefaultRank(rank);
-                kdc.save(kingdom);
+        // async saving
+        kdc.getPlugin().getScheduler().executeAsync(() -> {
+            rank.save();
+
+            if ( kingdom.getDefaultRank() == rank ) {
+                kingdom.save();
             }
         });
-         */
 
         kdc.getMessageManager().send(sender, "cmdRanksCreateSuccess", rank.getName());
     }
