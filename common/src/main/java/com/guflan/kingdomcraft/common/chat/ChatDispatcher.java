@@ -59,7 +59,10 @@ public class ChatDispatcher {
         result = result.replace("{player}", player.getName());
 
         String finalResult = kdc.getPlaceholderManager().strip(result);
-        kdc.getOnlinePlayers().stream().filter(p -> chatManager.isVisible(p, channel)).forEach(p -> p.sendMessage(finalResult));
+        kdc.getOnlinePlayers().stream().filter(p -> chatManager.isVisible(p, channel))
+                .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
+                .forEach(p -> p.sendMessage(finalResult));
+
         System.out.println("[CHAT] " + kdc.getMessageManager().decolorify(finalResult));
     }
 
