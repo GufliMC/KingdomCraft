@@ -20,6 +20,7 @@ package com.guflan.kingdomcraft.common.command;
 import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
+import com.guflan.kingdomcraft.common.commands.HelpCommand;
 import com.guflan.kingdomcraft.common.commands.InfoCommand;
 import com.guflan.kingdomcraft.common.commands.JoinCommand;
 import com.guflan.kingdomcraft.common.commands.ListCommand;
@@ -66,23 +67,35 @@ public class CommandManagerImpl implements CommandManager {
         commands.clear();
 
         // all
+        registerCommand(new HelpCommand(kdc));
         registerCommand(new ListCommand(kdc));
-        registerCommand(new JoinCommand(kdc));
         registerCommand(new InfoCommand(kdc));
+
+        registerCommand(new JoinCommand(kdc));
 
         // member
         registerCommand(new LeaveCommand(kdc));
+        registerCommand(new SpawnCommand(kdc));
         registerCommand(new InviteCommand(kdc));
+
+        registerCommand(new SetSpawnCommand(kdc));
 
         registerCommand(new AllyCommand(kdc));
         registerCommand(new EnemyCommand(kdc));
         registerCommand(new NeutralCommand(kdc));
         registerCommand(new TruceCommand(kdc));
 
-        registerCommand(new SpawnCommand(kdc));
-        registerCommand(new SetSpawnCommand(kdc));
+        // admin
+        registerCommand(new SetRankCommand(kdc));
+        registerCommand(new SetKingdomCommand(kdc));
+        registerCommand(new KickCommand(kdc));
 
-        // management
+        registerCommand(new SpawnOtherCommand(kdc));
+        registerCommand(new SetSpawnOtherCommand(kdc));
+
+        /* Management */
+
+        // kingdoms
         registerCommand(new CreateCommand(kdc));
         registerCommand(new DeleteCommand(kdc));
 
@@ -101,6 +114,7 @@ public class CommandManagerImpl implements CommandManager {
         registerCommand(new EditMaxMembersCommand(kdc));
         registerCommand(new EditMaxMembersOtherCommand(kdc));
 
+        // ranks
         registerCommand(new RanksListCommand(kdc));
         registerCommand(new RanksListOtherCommand(kdc));
 
@@ -125,6 +139,7 @@ public class CommandManagerImpl implements CommandManager {
         registerCommand(new RanksEditLevelCommand(kdc));
         registerCommand(new RanksEditLevelOtherCommand(kdc));
 
+        // groups
         registerCommand(new GroupsListCommand(kdc));
         registerCommand(new GroupsListOtherCommand(kdc));
 
@@ -133,15 +148,6 @@ public class CommandManagerImpl implements CommandManager {
 
         registerCommand(new GroupsRemoveCommand(kdc));
         registerCommand(new GroupsRemoveOtherCommand(kdc));
-
-        // admin
-        registerCommand(new KickCommand(kdc));
-        registerCommand(new SetKingdomCommand(kdc));
-        registerCommand(new SetRankCommand(kdc));
-
-        registerCommand(new SpawnOtherCommand(kdc));
-        registerCommand(new SetSpawnOtherCommand(kdc));
-
 
         // TODO
     }

@@ -29,6 +29,9 @@ public class EditDisplayOtherCommand extends CommandBaseImpl {
 
     public EditDisplayOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit display", 2);
+        setArgumentsHint("<kingdom> <display>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdEditDisplayOtherExplanation"));
+        setPermissions("kingdom.edit.display.other");
     }
 
     @Override
@@ -41,14 +44,9 @@ public class EditDisplayOtherCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.display.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

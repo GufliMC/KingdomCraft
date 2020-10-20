@@ -31,19 +31,16 @@ public class RanksListCommand extends CommandBaseImpl {
 
     public RanksListCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks list", 0, true);
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksListExplanation"));
+        setPermissions("kingdom.ranks.list");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.list") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

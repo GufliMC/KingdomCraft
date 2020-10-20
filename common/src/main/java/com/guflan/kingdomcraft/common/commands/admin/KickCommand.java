@@ -32,6 +32,9 @@ public class KickCommand extends CommandBaseImpl {
 
     public KickCommand(KingdomCraftImpl kdc) {
         super(kdc, "kick", 1);
+        setArgumentsHint("<player>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdKickExplanation"));
+        setPermissions("kingdom.kick", "kingdom.kick.other");
     }
 
     @Override
@@ -50,22 +53,17 @@ public class KickCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.kick") && !sender.hasPermission("kingdom.kick.other")) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         kdc.getPlugin().getScheduler().executeAsync(() -> {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultNoPlayer", args[0]);
+                    kdc.getMessageManager().send(sender, "cmdErrorNoPlayer", args[0]);
                     return;
                 }
 
                 Kingdom kingdom = target.getKingdom();
                 if (kingdom == null) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultTargetNoKingdom", target.getName());
+                    kdc.getMessageManager().send(sender, "cmdErrorTargetNoKingdom", target.getName());
                     return;
                 }
 
@@ -74,7 +72,7 @@ public class KickCommand extends CommandBaseImpl {
 
                     // kick other kingdom
                     if (kingdom != user.getKingdom() && !sender.hasPermission("kingdom.kick.other")) {
-                        kdc.getMessageManager().send(sender, "noPermissionCmd");
+                        kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
                         return;
                     }
 

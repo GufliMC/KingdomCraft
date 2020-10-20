@@ -30,18 +30,16 @@ public class InviteCommand extends CommandBaseImpl {
 
     public InviteCommand(KingdomCraftImpl kdc) {
         super(kdc, "invite", 1, true);
+        setArgumentsHint("<player>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdInviteExplanation"));
+        setPermissions("kingdom.invite");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.invite") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         if (user.getKingdom() == null) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
@@ -49,7 +47,7 @@ public class InviteCommand extends CommandBaseImpl {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultNoPlayer");
+                    kdc.getMessageManager().send(sender, "cmdErrorNoPlayer");
                     return;
                 }
 

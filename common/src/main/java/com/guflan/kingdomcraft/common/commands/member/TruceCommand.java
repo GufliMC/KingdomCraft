@@ -30,25 +30,23 @@ public class TruceCommand extends CommandBaseImpl {
 
     public TruceCommand(KingdomCraftImpl kdc) {
         super(kdc, "truce", 1, true);
+        setArgumentsHint("<kingdom>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdTruceExplanation"));
+        setPermissions("kingdom.truce");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.truce") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Kingdom target = kdc.getKingdom(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

@@ -27,24 +27,22 @@ public class RanksEditPrefixOtherCommand extends CommandBaseImpl {
 
     public RanksEditPrefixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit prefix", 3);
+        setArgumentsHint("<kingdom> <rank> <value>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksEditPrefixOtherExplanation"));
+        setPermissions("kingdom.ranks.edit.prefix.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.edit.prefix.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[1]);
+            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[1]);
             return;
         }
 

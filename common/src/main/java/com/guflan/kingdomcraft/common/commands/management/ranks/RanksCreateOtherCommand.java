@@ -27,15 +27,13 @@ public class RanksCreateOtherCommand extends CommandBaseImpl {
 
     public RanksCreateOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks create", 2);
+        setArgumentsHint("<kingdom> <name>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksCreateOtherExplanation"));
+        setPermissions("kingdom.ranks.create.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.create.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         if ( !args[1].matches("[a-zA-Z0-9]+") ) {
             kdc.getMessageManager().send(sender, "cmdRanksCreateNameInvalid");
             return;
@@ -43,7 +41,7 @@ public class RanksCreateOtherCommand extends CommandBaseImpl {
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

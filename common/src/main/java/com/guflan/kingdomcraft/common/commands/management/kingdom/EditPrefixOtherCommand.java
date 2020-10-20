@@ -29,6 +29,9 @@ public class EditPrefixOtherCommand extends CommandBaseImpl {
 
     public EditPrefixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 2);
+        setArgumentsHint("<kingdom> <prefix>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitPrefixOtherExplanation"));
+        setPermissions("kingdom.edit.prefix.other");
     }
 
     @Override
@@ -41,14 +44,9 @@ public class EditPrefixOtherCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.prefix.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

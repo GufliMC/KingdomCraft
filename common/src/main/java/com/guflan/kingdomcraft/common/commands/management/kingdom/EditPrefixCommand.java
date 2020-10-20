@@ -28,19 +28,17 @@ public class EditPrefixCommand extends CommandBaseImpl {
 
     public EditPrefixCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 1, true);
+        setArgumentsHint("<prefix>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitPrefixExplanation"));
+        setPermissions("kingdom.edit.prefix");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.prefix") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

@@ -26,18 +26,16 @@ public class EditInviteOnlyOtherCommand extends CommandBaseImpl {
 
     public EditInviteOnlyOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit invite-only", 2);
+        setArgumentsHint("<kingdom> [true/false]");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdInviteOnlyOtherExplanation"));
+        setPermissions("kingdom.edit.invite-only.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.invite-only.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

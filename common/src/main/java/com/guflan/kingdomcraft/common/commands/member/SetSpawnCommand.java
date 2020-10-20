@@ -14,19 +14,16 @@ public class SetSpawnCommand extends CommandBaseImpl {
 
     public SetSpawnCommand(KingdomCraftImpl kdc) {
         super(kdc, "setspawn", 0, true);
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdSetSpawnExplanation"));
+        setPermissions("kingdom.setspawn");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.setspawn") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if (kingdom == null) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

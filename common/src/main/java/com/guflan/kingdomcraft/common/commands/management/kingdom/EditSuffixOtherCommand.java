@@ -29,6 +29,9 @@ public class EditSuffixOtherCommand extends CommandBaseImpl {
 
     public EditSuffixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit suffix", 1);
+        setArgumentsHint("<kingdom> <suffix>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitSuffixOtherExplanation"));
+        setPermissions("kingdom.edit.suffix.other");
     }
 
     @Override
@@ -41,14 +44,9 @@ public class EditSuffixOtherCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.suffix.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

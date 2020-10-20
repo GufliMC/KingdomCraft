@@ -28,18 +28,15 @@ public class LeaveCommand extends CommandBaseImpl {
 
     public LeaveCommand(KingdomCraftImpl kdc) {
         super(kdc, "leave", 0, true);
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdLeaveExplanation"));
+        setPermissions("kingdom.leave");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.leave") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         if (user.getKingdom() == null) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

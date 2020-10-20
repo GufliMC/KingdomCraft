@@ -27,24 +27,22 @@ public class RanksDeleteOtherCommand extends CommandBaseImpl {
 
     public RanksDeleteOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks delete", 2);
+        setArgumentsHint("<kingdom> <rank>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksDeleteOtherExplanation"));
+        setPermissions("kingdom.ranks.delete.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.delete.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[1]);
+            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[1]);
             return;
         }
 

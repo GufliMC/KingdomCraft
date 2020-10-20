@@ -28,19 +28,17 @@ public class EditMaxMembersCommand extends CommandBaseImpl {
 
     public EditMaxMembersCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit max-members", 1, true);
+        setArgumentsHint("<amount>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitMaxMembersExplanation"));
+        setPermissions("kingdom.edit.max-members");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.max-members") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

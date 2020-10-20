@@ -28,6 +28,11 @@ public interface CommandBase {
     boolean isPlayerOnly();
     int getExpectedArguments();
 
+    String getArgumentsHint();
+    String getExplanationMessage();
+
+    String[] getPermissions();
+
     void execute(PlatformSender sender, String[] args);
 
     default List<String> autocomplete(PlatformSender sender, String[] args) {

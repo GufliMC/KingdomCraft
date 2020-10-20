@@ -28,19 +28,17 @@ public class EditDisplayCommand extends CommandBaseImpl {
 
     public EditDisplayCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit display", 1, true);
+        setArgumentsHint("<display>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdEditDisplayExplanation"));
+        setPermissions("kingdom.edit.display");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.display") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

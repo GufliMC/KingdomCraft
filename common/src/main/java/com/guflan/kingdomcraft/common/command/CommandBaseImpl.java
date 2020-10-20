@@ -31,7 +31,12 @@ public abstract class CommandBaseImpl implements CommandBase {
     private final List<String> commands = new ArrayList<>();
 
     private boolean isPlayerOnly;
-    private int expectedArguments = 0;
+    private int expectedArguments = -1;
+
+    private String argumentsHint;
+    private String explanationMessage;
+
+    private String[] permissions;
 
     public CommandBaseImpl(KingdomCraftImpl kdc, String command) {
         this.kdc = kdc;
@@ -61,6 +66,33 @@ public abstract class CommandBaseImpl implements CommandBase {
     @Override
     public int getExpectedArguments() {
         return expectedArguments;
+    }
+
+    @Override
+    public String getArgumentsHint() {
+        return argumentsHint;
+    }
+
+    protected void setArgumentsHint(String argumentsHint) {
+        this.argumentsHint = argumentsHint;
+    }
+
+    @Override
+    public String getExplanationMessage() {
+        return explanationMessage;
+    }
+
+    protected void setExplanationMessage(String explanationMessage) {
+        this.explanationMessage = explanationMessage;
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String... permissions) {
+        this.permissions = permissions;
     }
 
     @Override

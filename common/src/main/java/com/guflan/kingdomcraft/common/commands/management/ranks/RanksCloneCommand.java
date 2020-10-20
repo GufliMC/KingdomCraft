@@ -31,30 +31,28 @@ public class RanksCloneCommand extends CommandBaseImpl {
 
     public RanksCloneCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks clone", 3, true);
+        setArgumentsHint("<from-kingdom> <to-kingdom> <rank>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksCloneExplanation"));
+        setPermissions("kingdom.ranks.clone");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.create") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom from = kdc.getKingdom(args[0]);
         if ( from == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Kingdom to = kdc.getKingdom(args[1]);
         if ( to == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[1]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[1]);
             return;
         }
 
         Rank rank = from.getRank(args[2]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[2]);
+            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[2]);
             return;
         }
 

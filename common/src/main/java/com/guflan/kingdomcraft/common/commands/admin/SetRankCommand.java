@@ -33,6 +33,9 @@ public class SetRankCommand extends CommandBaseImpl {
 
     public SetRankCommand(KingdomCraftImpl kdc) {
         super(kdc, "setrank", 2);
+        setArgumentsHint("<player> <rank>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdSetRankExplanation"));
+        setPermissions("kingdom.setrank", "kingdom.setrank.other");
     }
 
     @Override
@@ -63,22 +66,17 @@ public class SetRankCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.setrank") && !sender.hasPermission("kingdom.setrank.other") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         kdc.getPlugin().getScheduler().executeAsync(() -> {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultNoPlayer", args[0]);
+                    kdc.getMessageManager().send(sender, "cmdErrorNoPlayer", args[0]);
                     return;
                 }
 
                 Kingdom kingdom = target.getKingdom();
                 if ( kingdom == null ) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultTargetNoKingdom", target.getName());
+                    kdc.getMessageManager().send(sender, "cmdErrorTargetNoKingdom", target.getName());
                     return;
                 }
 
@@ -91,7 +89,7 @@ public class SetRankCommand extends CommandBaseImpl {
                 if ( !sender.hasPermission("kingdom.setrank.other") ) {
                     User user = kdc.getUser((PlatformPlayer) sender);
                     if ( user.getKingdom() != kingdom ) {
-                        kdc.getMessageManager().send(sender, "noPermissionCmd");
+                        kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
                         return;
                     }
                     if ( user.getRank() == null || user.getRank().getLevel() <= rank.getLevel() ) {

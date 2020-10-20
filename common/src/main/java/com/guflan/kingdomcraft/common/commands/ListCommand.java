@@ -35,7 +35,7 @@ public class ListCommand extends CommandBaseImpl {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         if ( !sender.hasPermission("kingdom.list") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
+            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
             return;
         }
 
