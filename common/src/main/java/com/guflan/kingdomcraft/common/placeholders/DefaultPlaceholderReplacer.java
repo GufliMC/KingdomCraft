@@ -25,6 +25,8 @@ public class DefaultPlaceholderReplacer {
 
     public DefaultPlaceholderReplacer(KingdomCraft kdc, PlaceholderManager pm) {
 
+        pm.addPlaceholderReplacer((player, placeholder) -> player.getName(), "player", "username");
+
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
             return user.getKingdom() != null ? kdc.getMessageManager().colorify(user.getKingdom().getDisplay()) : "";
