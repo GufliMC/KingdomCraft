@@ -18,6 +18,7 @@
 package com.guflan.kingdomcraft.api.event;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 
@@ -34,6 +35,8 @@ public interface EventListener {
     default void onKingdomCreate(Kingdom kingdom) {}
 
     default void onKingdomDelete(Kingdom kingdom) {}
+
+    default void onRankChange(PlatformPlayer player, Rank oldRank) {}
 
     default void onPlayerAttack(PlayerAttackPlayerEvent event) {}
 }

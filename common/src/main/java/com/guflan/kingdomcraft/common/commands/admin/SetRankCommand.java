@@ -55,7 +55,7 @@ public class SetRankCommand extends CommandBaseImpl {
 
         // second argument (users)
         User user = kdc.getOnlineUser(args[0]);
-        if ( user.getKingdom() == null ) {
+        if ( user == null || user.getKingdom() == null ) {
             return null;
         }
         return user.getKingdom().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
@@ -93,8 +93,14 @@ public class SetRankCommand extends CommandBaseImpl {
                     return;
                 }
 
+                if ( target.getRank() == rank ) {
+                    kdc.getMessageManager().send(sender, "cmdSetRankAlready", target.getName(), rank.getName());
+                    return;
+                }
+
                 // TODO hierarchy check
 
+                Rank oldRank = target.getRank();
                 target.setRank(rank);
 
                 // async saving
@@ -102,6 +108,7 @@ public class SetRankCommand extends CommandBaseImpl {
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
+                    kdc.getEventDispatcher().dispatchRankChange(targetPlayer, oldRank);
                     kdc.getMessageManager().send(targetPlayer, "cmdSetRankTargetChange", rank.getName());
                 }
 
