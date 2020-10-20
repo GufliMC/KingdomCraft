@@ -66,7 +66,8 @@ public abstract class AbstractMessageManagerImpl implements MessageManager {
 		if ( message == null ) return null;
 
 		for ( int i = 0; i < placeholders.length; i++ ) {
-			message = message.replace("{" + i + "}", colorify(placeholders[i]));
+			message = message.replace("{" + i + "}",
+					placeholders[i] == null ? "" : colorify(placeholders[i]));
 		}
 
 		return message;
