@@ -289,9 +289,10 @@ public class KingdomCraftImpl implements KingdomCraft {
     }
 
     public void onQuit(PlatformPlayer player) {
-        onlinePlayers.add(player);
+        eventDispatcher.dispatchQuit(player);
+
         User user = context.getOnlineUser(player.getUniqueId());
         context.removeOnlineUser(user);
-        eventDispatcher.dispatchQuit(player);
+        onlinePlayers.remove(player);
     }
 }
