@@ -69,8 +69,17 @@ public class SetKingdomCommand extends CommandBaseImpl {
                     return;
                 }
 
+                if ( target.getKingdom() == kingdom ) {
+                    kdc.getMessageManager().send(sender, "cmdSetKingdomAlready", target.getName(), kingdom.getName());
+                    return;
+                }
+
                 Kingdom oldKingdom = target.getKingdom();
                 target.setKingdom(kingdom);
+
+                if ( kingdom.getDefaultRank() != null ) {
+                    target.setRank(kingdom.getDefaultRank());
+                }
 
                 // async saving
                 kdc.getPlugin().getScheduler().executeAsync(target::save);

@@ -1,6 +1,7 @@
 package com.guflan.kingdomcraft.common.event;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventListener;
 import com.guflan.kingdomcraft.api.events.PlayerAttackPlayerEvent;
@@ -48,6 +49,10 @@ public class EventDispatcher {
 
     public void dispatchPlayerAttack(PlayerAttackPlayerEvent event) {
         execute(l -> l.onPlayerAttack(event));
+    }
+
+    public void dispatchRankChange(PlatformPlayer player, Rank oldRank) {
+        execute(l -> l.onRankChange(player, oldRank));
     }
 
 }
