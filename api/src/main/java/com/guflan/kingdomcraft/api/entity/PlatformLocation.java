@@ -73,6 +73,11 @@ public class PlatformLocation {
         this.pitch = pitch;
     }
 
+    public double distanceTo(PlatformLocation l) {
+        return Math.sqrt(Math.pow(x - l.x, 2) + Math.pow(y - l.y, 2) + Math.pow(z - l.z, 2));
+
+    }
+
     public String serialize() {
         DecimalFormat df = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.ROOT));
         return worldName + " , "
