@@ -34,6 +34,7 @@ import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
 import com.guflan.kingdomcraft.common.event.EventManagerImpl;
+import com.guflan.kingdomcraft.common.permissions.PermissionManager;
 import com.guflan.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.guflan.kingdomcraft.common.util.Teleporter;
 
@@ -61,8 +62,8 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final ChatDispatcher chatDispatcher;
 
     private final PlaceholderManagerImpl placeholderManager;
-
     private final MessageManager messageManager;
+    private final PermissionManager permissionManager;
 
     //
 
@@ -89,6 +90,7 @@ public class KingdomCraftImpl implements KingdomCraft {
         this.chatDispatcher = new ChatDispatcher(this, chatManager);
 
         this.placeholderManager = new PlaceholderManagerImpl(this);
+        this.permissionManager = new PermissionManager();
 
         KingdomCraftProvider.register(this);
         Teleporter.register(this);
@@ -116,6 +118,12 @@ public class KingdomCraftImpl implements KingdomCraft {
     @Override
     public PlaceholderManager getPlaceholderManager() {
         return placeholderManager;
+    }
+
+    // permissions
+
+    public PermissionManager getPermissionManager() {
+        return permissionManager;
     }
 
     // chat

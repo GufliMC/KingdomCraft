@@ -21,7 +21,6 @@ import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatChannelFactory;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.event.EventListener;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.common.chat.channels.BasicChatChannel;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
@@ -36,10 +35,10 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class ChatHandler implements EventListener {
+public class ChatHandler {
 
     public ChatHandler(KingdomCraftBukkitPlugin plugin) {
-        plugin.getKdc().getEventManager().addListener(this);
+        plugin.getServer().getPluginManager().registerEvents(new ChatListener(plugin), plugin);
 
         File configFile = new File(plugin.getDataFolder(), "chat.yml");
         if ( !configFile.exists() ) {

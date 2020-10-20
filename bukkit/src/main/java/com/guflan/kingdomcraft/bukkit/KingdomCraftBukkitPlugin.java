@@ -21,8 +21,11 @@ import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfig;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
 import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
+import com.guflan.kingdomcraft.bukkit.permissions.PermissionHandler;
+import com.guflan.kingdomcraft.bukkit.permissions.PermissionsListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
@@ -30,10 +33,12 @@ import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -103,15 +108,22 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		}
 
 		// initialize handler
-		KingdomCraftConfig cfg = new BukkitConfig(config);
+		KingdomCraftConfig cfg = new BukkitConfig(config.getConfigurationSection("settings"));
 		MessageManager messageManager = new MessageManagerImpl(this);
 		this.kdc = new KingdomCraftImpl(this, cfg, context, messageManager);
+
+		for ( Player p : Bukkit.getOnlinePlayers() ) {
+			this.kdc.onJoin(new BukkitPlayer(p));
+		}
 
 		// placeholders
 		new PlaceholderReplacer(this);
 
 		// chat
 		new ChatHandler(this);
+
+		// permissions
+		new PermissionHandler(this);
 
 		// commands
 		CommandHandler commandHandler = new CommandHandler(this);

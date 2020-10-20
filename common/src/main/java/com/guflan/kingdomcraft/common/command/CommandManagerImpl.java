@@ -25,6 +25,8 @@ import com.guflan.kingdomcraft.common.commands.JoinCommand;
 import com.guflan.kingdomcraft.common.commands.ListCommand;
 import com.guflan.kingdomcraft.common.commands.admin.KickCommand;
 import com.guflan.kingdomcraft.common.commands.admin.SetKingdomCommand;
+import com.guflan.kingdomcraft.common.commands.admin.SetRankCommand;
+import com.guflan.kingdomcraft.common.commands.management.groups.*;
 import com.guflan.kingdomcraft.common.commands.management.kingdom.*;
 import com.guflan.kingdomcraft.common.commands.management.ranks.*;
 import com.guflan.kingdomcraft.common.commands.member.*;
@@ -115,9 +117,19 @@ public class CommandManagerImpl implements CommandManager {
         registerCommand(new RanksEditLevelCommand(kdc));
         registerCommand(new RanksEditLevelOtherCommand(kdc));
 
+        registerCommand(new GroupsListCommand(kdc));
+        registerCommand(new GroupsListOtherCommand(kdc));
+
+        registerCommand(new GroupsAddCommand(kdc));
+        registerCommand(new GroupsAddOtherCommand(kdc));
+
+        registerCommand(new GroupsRemoveCommand(kdc));
+        registerCommand(new GroupsRemoveOtherCommand(kdc));
+
         // admin
         registerCommand(new KickCommand(kdc));
         registerCommand(new SetKingdomCommand(kdc));
+        registerCommand(new SetRankCommand(kdc));
 
         registerCommand(new SpawnOtherCommand(kdc));
         registerCommand(new SetSpawnOtherCommand(kdc));

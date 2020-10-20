@@ -27,6 +27,7 @@ cmdDefaultUsage: '&7Invalid arguments, use &8/k help &7for information about eac
 cmdDefaultNoPlayer: '&The player &8{0} &7does not exist!'
 cmdDefaultNotOnline: '&7The player &8{0} &7is not online!'
 cmdDefaultSameKingdom: '&cYou cannot do that to your own kingdom!'
+cmdDefaultPermissionGroupNotExist: '&7The permission group &8{0} &7does not exist.'
 
 cmdChannelNoperm: '&7You don''t have permissions to &8{0}&7!'
 cmdChannelEnable: '&7You &8enabled &7the channel &8{0}&7!'
@@ -151,6 +152,17 @@ cmdRanksListOther: '&7List of ranks for kingdom &8{0}&7: &8{1}'
 
 cmdRanksEditSuccess: '&7Changed {0} of &8{1} &7to &8{2}&7!'
 cmdRanksEditOtherSuccess: '&7Changed {0} of rank &8{1} &7in kingdom &8{2} &7to &8{3}&7!'
+
+cmdGroupsAddAlreadyExists: '&cThe group &4{0} &calready belongs to rank &4{1}&c!'
+cmdGroupsAddSuccess: '&7Added group &8{0} &7to rank &8{1}&7!'
+cmdGroupsAddOtherSuccess: '&7Added group &8{0} &7to rank &8{1} &7of kingdom &8{2}&7!'
+
+cmdGroupsRemoveNotExist: '&cThe group &4{0} &cdoes not belong to rank &4{1}&c!'
+cmdGroupsRemoveSuccess: '&7The group &8{0} &7was removed from rank &8{1}&7!'
+cmdGroupsRemoveOtherSuccess: '&7The group &8{0} &7was removed from rank &8{1} &7of kingdom &8{2}!'
+
+cmdGroupsList: '&7Permission groups belonging to rank &8{0}&7: &8{1}'
+cmdGroupsListOther: '&7Permission groups belonging to rank &8{0} &7of kingdom &8{1}&7: &8{2}'
 
 damageKingdom: '&7You can''t hurt members of your own kingdom'
 damageFriendly: '&7You can''t hurt members of a friendly kingdom'
