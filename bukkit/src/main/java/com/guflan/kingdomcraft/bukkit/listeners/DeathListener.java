@@ -30,6 +30,7 @@ public class DeathListener implements Listener {
             String msg = plugin.getKdc().getConfig().getOnKillMessage();
             msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
             msg = plugin.getKdc().getPlaceholderManager().handle(k, msg, "killer_");
+            msg = plugin.getKdc().getMessageManager().colorify(msg);
             event.setDeathMessage(msg);
             return;
         }
@@ -43,6 +44,7 @@ public class DeathListener implements Listener {
 
         String msg = plugin.getKdc().getConfig().getOnDeathMessage();
         msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
+        msg = plugin.getKdc().getMessageManager().colorify(msg);
         event.setDeathMessage(msg);
     }
 }

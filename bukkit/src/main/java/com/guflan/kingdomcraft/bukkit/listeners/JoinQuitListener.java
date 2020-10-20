@@ -35,6 +35,7 @@ public class JoinQuitListener implements Listener, EventListener {
         String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
         if ( msg != null ) {
             msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
+            msg = plugin.getKdc().getMessageManager().colorify(msg);
             e.setQuitMessage(msg);
         }
     }
@@ -44,6 +45,7 @@ public class JoinQuitListener implements Listener, EventListener {
         String msg = plugin.getKdc().getConfig().getOnJoinMessage();
         if ( msg != null ) {
             msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
+            msg = plugin.getKdc().getMessageManager().colorify(msg);
             Bukkit.broadcastMessage(msg);
         }
     }
