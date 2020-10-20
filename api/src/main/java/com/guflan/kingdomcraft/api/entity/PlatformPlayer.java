@@ -17,9 +17,13 @@
 
 package com.guflan.kingdomcraft.api.entity;
 
+import com.guflan.kingdomcraft.api.gui.AbstractInventory;
+
 import java.util.UUID;
 
 public interface PlatformPlayer extends PlatformSender {
+
+    String CUSTOM_GUI_KEY = "CUSTOM_GUI";
 
     UUID getUniqueId();
 
@@ -28,6 +32,16 @@ public interface PlatformPlayer extends PlatformSender {
     void teleport(PlatformLocation location);
 
     PlatformLocation getLocation();
+
+    // gui
+
+    default AbstractInventory<?> getInventory() {
+        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, AbstractInventory.class) : null;
+    }
+
+    default void openInventory(AbstractInventory<?> inventory) {
+        set(CUSTOM_GUI_KEY, inventory);
+    }
 
     // cache
 

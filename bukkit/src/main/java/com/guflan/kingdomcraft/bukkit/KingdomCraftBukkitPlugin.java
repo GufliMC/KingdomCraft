@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfig;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
+import com.guflan.kingdomcraft.bukkit.gui.InventoryListener;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
 import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
 import com.guflan.kingdomcraft.bukkit.permissions.PermissionHandler;
@@ -148,6 +149,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new JoinQuitListener(this), this);
 		pm.registerEvents(new RespawnListener(this), this);
 		pm.registerEvents(new DeathListener(this), this);
+		pm.registerEvents(new InventoryListener(this), this);
 
 		// kingdom events
 		new KingdomJoinQuitListener(this);
