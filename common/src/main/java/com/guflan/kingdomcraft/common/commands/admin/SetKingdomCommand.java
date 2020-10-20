@@ -32,14 +32,13 @@ public class SetKingdomCommand extends CommandBaseImpl {
 
     public SetKingdomCommand(KingdomCraftImpl kdc) {
         super(kdc, "setkingdom", 2);
+        setArgumentsHint("<player> <kingdom>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdSetKingdomExplanation"));
+        setPermissions("kingdom.setkingdom");
     }
 
     @Override
     public List<String> autocomplete(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.setkingdom") ) {
-            return null;
-        }
-
         // first argument (users)
         if ( args.length == 1 ) {
             return kdc.getOnlinePlayers().stream().map(PlatformPlayer::getName).collect(Collectors.toList());
@@ -51,21 +50,17 @@ public class SetKingdomCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.setkingdom") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-        }
-
         kdc.getPlugin().getScheduler().executeAsync(() -> {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if ( target == null ) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultNoPlayer", args[0]);
+                    kdc.getMessageManager().send(sender, "cmdErrorNoPlayer", args[0]);
                     return;
                 }
 
                 Kingdom kingdom = kdc.getKingdom(args[1]);
                 if ( kingdom == null ) {
-                    kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+                    kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
                     return;
                 }
 

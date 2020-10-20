@@ -13,18 +13,16 @@ public class SetSpawnOtherCommand extends CommandBaseImpl {
 
     public SetSpawnOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "setspawn", 1, true);
+        setArgumentsHint("<kingdom>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdSetSpawnOtherExplanation"));
+        setPermissions("kingdom.setspawn.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.setspawn") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if (kingdom == null) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

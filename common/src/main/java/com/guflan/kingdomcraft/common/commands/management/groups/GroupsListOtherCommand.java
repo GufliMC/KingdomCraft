@@ -32,24 +32,22 @@ public class GroupsListOtherCommand extends CommandBaseImpl {
 
     public GroupsListOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups list", 2);
+        setArgumentsHint("<kingdom> <rank>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdGroupsListOtherExplanation"));
+        setPermissions("kingdom.groups.list.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.edit.display") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultRankNotExist", args[1]);
+            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[1]);
             return;
         }
 

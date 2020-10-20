@@ -28,15 +28,13 @@ public class CreateCommand extends CommandBaseImpl {
 
     public CreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "create", 1);
+        setArgumentsHint("<name>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdCreateExplanation"));
+        setPermissions("kingdom.create", "kingdom.create.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.create") && !sender.hasPermission("kingdom.create.other") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
             kdc.getMessageManager().send(sender, "cmdCreateNameInvalid");
             return;
@@ -49,7 +47,7 @@ public class CreateCommand extends CommandBaseImpl {
 
         if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() != null
                 && !sender.hasPermission("kingdom.create.other") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
+            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
             return;
         }
 

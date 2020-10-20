@@ -28,18 +28,16 @@ public class DeleteCommand extends CommandBaseImpl {
 
     public DeleteCommand(KingdomCraftImpl kdc) {
         super(kdc, "delete", 1);
+        setArgumentsHint("<kingdom>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdDeleteExplanation"));
+        setPermissions("kingdom.delete", "kingdom.delete.other");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.delete") && !sender.hasPermission("kingdom.delete.other")) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 

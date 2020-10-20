@@ -27,14 +27,13 @@ public class InfoCommand extends CommandBaseImpl {
 
     public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", 0, true);
+        setArgumentsHint("<[player/kingdom]>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdInfoExplanation"));
+        setPermissions("kingdom.info");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.info") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
 
         User user = kdc.getUser((PlatformPlayer) sender);
         sender.sendMessage("kingdom: " + (user.getKingdom() == null ? "null" : user.getKingdom().getDisplay()));

@@ -28,19 +28,17 @@ public class EditInviteOnlyCommand extends CommandBaseImpl {
 
     public EditInviteOnlyCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit invite-only", 1, true);
+        setArgumentsHint("[true/false]");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdEditInviteOnlyExplanation"));
+        setPermissions("kingdom.edit.invite-only");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.edit.invite-only") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

@@ -34,14 +34,22 @@ public class CommandDispatcher {
                 }
 
                 int argsLength = cmd.split(Pattern.quote(" ")).length;
-                if ( args.length - argsLength != cb.getExpectedArguments() ) {
+                if ( cb.getExpectedArguments() != -1 && args.length - argsLength != cb.getExpectedArguments() ) {
                     invalidBase = cmd;
+                    invalidArguments = cb.getArgumentsHint();
                     continue;
                 }
 
                 if ( cb.isPlayerOnly() && !(sender instanceof PlatformPlayer) ) {
                     sender.sendMessage("This command cannot be executed in the console!");
                     return;
+                }
+
+                if ( cb.getPermissions() != null && cb.getPermissions().length > 0 ) {
+                    if (Arrays.stream(cb.getPermissions()).noneMatch(sender::hasPermission)) {
+                        commandManager.kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+                        return;
+                    }
                 }
 
                 String[] cmdArgs = Arrays.copyOfRange(args, argsLength, args.length);
@@ -52,7 +60,7 @@ public class CommandDispatcher {
 
         if ( invalidBase != null ) {
             commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalidUsage",
-                    invalidBase + " " + invalidArguments);
+                    "/k " + invalidBase + " " + invalidArguments);
             return;
         }
 
@@ -93,6 +101,12 @@ public class CommandDispatcher {
 
         List<String> result = new ArrayList<>();
         outer: for ( CommandBase cb : commandManager.commands ) {
+            if ( cb.getPermissions() != null && cb.getPermissions().length > 0 ) {
+                if ( Arrays.stream(cb.getPermissions()).noneMatch(sender::hasPermission) ) {
+                    continue;
+                }
+            }
+
             for ( String cmd : cb.getCommands() ) {
                 // check full command match
                 if ( String.join(" ", args).toLowerCase().startsWith(cmd.toLowerCase()) ) {

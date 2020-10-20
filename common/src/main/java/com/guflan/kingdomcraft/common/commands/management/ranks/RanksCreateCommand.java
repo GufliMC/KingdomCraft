@@ -29,15 +29,13 @@ public class RanksCreateCommand extends CommandBaseImpl {
 
     public RanksCreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks create", 1, true);
+        setArgumentsHint("<name>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksCreateExplanation"));
+        setPermissions("kingdom.ranks.create");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.ranks.create") ) {
-            kdc.getMessageManager().send(sender, "noPermission");
-            return;
-        }
-
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
             kdc.getMessageManager().send(sender, "cmdRanksCreateNameInvalid");
             return;
@@ -46,7 +44,7 @@ public class RanksCreateCommand extends CommandBaseImpl {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultSenderNoKingdom");
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 

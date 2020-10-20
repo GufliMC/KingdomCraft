@@ -32,26 +32,21 @@ public class JoinCommand extends CommandBaseImpl {
 
     public JoinCommand(KingdomCraftImpl kdc) {
         super(kdc, "join", 1, true);
+        setArgumentsHint("<kingdom>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdJoinExplanation"));
+        setPermissions("kingdom.join");
     }
 
     @Override
     public List<String> autocomplete(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.join") ) {
-            return null;
-        }
         return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.join") ) {
-            kdc.getMessageManager().send(sender, "noPermissionCmd");
-            return;
-        }
-
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
