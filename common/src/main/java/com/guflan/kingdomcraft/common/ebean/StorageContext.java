@@ -62,11 +62,14 @@ public class StorageContext {
         dataSourceConfig.setUsername(username);
         dataSourceConfig.setPassword(password);
 
-        DataSourcePool pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
-
-        // run migrations
         try {
+            DataSourcePool pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
+
+            // run migrations
             migrate(pool);
+
+            // create database
+            connect(pool);
         } catch (MigrationException ex) {
             if ( ex.getCause() != null ) {
                 plugin.log(ex.getCause().getMessage(), Level.SEVERE);
@@ -76,11 +79,7 @@ public class StorageContext {
             return false;
         }
 
-        // create database
-        connect(pool);
-
         // load cache
-
         kingdoms.addAll(new QBKingdom().findList());
 
         new QBRelation().findList().forEach(rel ->  {
