@@ -43,9 +43,9 @@ public class ChatEventListener implements EventListener {
 
     @Override
     public void onKingdomCreate(Kingdom kingdom) {
-        for (ChatChannelFactory bp : chatManager.getChatChannelFactories() ) {
-            if ( !bp.shouldCreate(kingdom) ) continue;
-            chatManager.addChatChannel(bp.create(kingdom));
+        for (ChatChannelFactory f : chatManager.factories ) {
+            if ( !f.shouldCreate(kingdom) ) continue;
+            chatManager.addChatChannel(f.create(kingdom));
         }
     }
 

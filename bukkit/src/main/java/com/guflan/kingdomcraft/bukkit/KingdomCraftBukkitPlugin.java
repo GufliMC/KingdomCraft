@@ -18,19 +18,19 @@
 package com.guflan.kingdomcraft.bukkit;
 
 import com.guflan.kingdomcraft.api.messages.MessageManager;
-import com.guflan.kingdomcraft.bukkit.chat.ChatHandler;
+import com.guflan.kingdomcraft.bukkit.listeners.ChatListener;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
-import com.guflan.kingdomcraft.bukkit.config.BukkitConfig;
+import com.guflan.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.bukkit.gui.InventoryListener;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
 import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
 import com.guflan.kingdomcraft.bukkit.permissions.PermissionHandler;
-import com.guflan.kingdomcraft.bukkit.permissions.PermissionsListener;
 import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
+import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
@@ -58,29 +58,33 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		this.scheduler = new BukkitScheduler(this);
 	}
 
+	public KingdomCraftImpl getKdc() {
+		return kdc;
+	}
+
+	@Override
+	public AbstractScheduler getScheduler() {
+		return scheduler;
+	}
+
+	@Override
+	public void log(String msg) {
+		getLogger().info(msg);
+	}
+
+	@Override
+	public void log(String msg, Level level) {
+		getLogger().log(level, msg);
+	}
+
+	//
+
 	@Override
 	public void onEnable() {
 		// LOAD CONFIG
 
-		YamlConfiguration config = new YamlConfiguration();
-
-		File configFile = new File(this.getDataFolder(), "config.yml");
-		if ( !configFile.exists() ) {
-			saveResource("config.yml", true);
-		}
-
-		try {
-			config.load(configFile);
-		} catch (IOException | InvalidConfigurationException e) {
-			e.printStackTrace();
-			getLogger().warning("Database section not found in config.yml!");
-			disable();
-			return;
-		}
-
-		// DATABASE
-
-		if ( !config.contains("database") ) {
+		ConfigurationSection config = initConfig("config.yml");
+		if ( config == null || !config.contains("database") ) {
 			getLogger().warning("Database section not found in config.yml!");
 			disable();
 			return;
@@ -119,22 +123,15 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
 
 		// initialize handler
-		KingdomCraftConfig cfg = new BukkitConfig(config.getConfigurationSection("settings"));
+		KingdomCraftConfig settings = new KingdomCraftConfig(new BukkitConfiguration(config.getConfigurationSection("settings")));
+		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
+
 		MessageManager messageManager = new MessageManagerImpl(this);
-		this.kdc = new KingdomCraftImpl(this, cfg, context, messageManager);
+		this.kdc = new KingdomCraftImpl(this, settings, chatConfig, context, messageManager);
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
 			this.kdc.onJoin(new BukkitPlayer(p));
 		}
-
-		// placeholders
-		new PlaceholderReplacer(this);
-
-		// chat
-		new ChatHandler(this);
-
-		// permissions
-		new PermissionHandler(this);
 
 		// commands
 		CommandHandler commandHandler = new CommandHandler(this);
@@ -153,30 +150,38 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// kingdom events
 		new KingdomJoinQuitListener(this);
+
+		// placeholders
+		new PlaceholderReplacer(this);
+
+		// chat
+		if ( chatConfig.contains("enabled") && chatConfig.getBoolean("enabled") ) {
+			pm.registerEvents(new ChatListener(this), this);
+		}
+
+		// permissions
+		new PermissionHandler(this);
 	}
 
 	private void disable() {
 		this.getPluginLoader().disablePlugin(this);
 	}
 
-	public KingdomCraftImpl getKdc() {
-		return kdc;
+	private ConfigurationSection initConfig(String name) {
+		File configFile = new File(this.getDataFolder(), name);
+		if ( !configFile.exists() ) {
+			saveResource(name, true);
+		}
+
+		YamlConfiguration config = new YamlConfiguration();
+		try {
+			config.load(configFile);
+		} catch (IOException | InvalidConfigurationException e) {
+			log(e.getMessage(), Level.WARNING);
+			return null;
+		}
+
+		return config;
 	}
 
-	//
-
-	@Override
-	public AbstractScheduler getScheduler() {
-		return scheduler;
-	}
-
-	@Override
-	public void log(String msg) {
-		getLogger().info(msg);
-	}
-
-	@Override
-	public void log(String msg, Level level) {
-		getLogger().log(level, msg);
-	}
 }

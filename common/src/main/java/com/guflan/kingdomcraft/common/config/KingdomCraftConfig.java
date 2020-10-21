@@ -23,64 +23,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class KingdomCraftConfig {
+public class KingdomCraftConfig {
 
-    protected List<String> worlds;
-    protected List<RelationType> friendlyFireRelationTypes;
+    private final Configuration config;
 
-    protected boolean respawnAtKingdom;
-
-    protected List<String> onKingdomJoinCommands;
-    protected List<String> onKingdomLeaveCommands;
-
-    protected String onJoinMessage;
-    protected String onLeaveMessage;
-    protected String onDeathMessage;
-    protected String onKillMessage;
-
-    protected int teleportDelay;
+    public KingdomCraftConfig(Configuration config) {
+        this.config = config;
+    }
 
     public int getTeleportDelay() {
-        return teleportDelay;
+        return config.contains("teleport-delay") ? config.getInt("teleport-delay") : 0;
     }
 
     public List<String> getWorlds() {
-        return worlds;
+        return config.contains("worlds") ? config.getStringList("worlds") : new ArrayList<>();
     }
 
     public boolean isWorldEnabled(String world) {
+        List<String> worlds = getWorlds();
         return worlds.isEmpty() || worlds.contains(world.toLowerCase());
     }
 
     public List<RelationType> getFriendlyFireRelationTypes() {
-        return friendlyFireRelationTypes;
+        return config.contains("friendly-fire-relationships") ?
+                config.getStringList("friendly-fire-relationships").stream()
+                        .map(s -> RelationType.valueOf(s.toUpperCase())).collect(Collectors.toList())
+                : new ArrayList<>();
     }
 
     public List<String> getOnKingdomJoinCommands() {
-        return onKingdomJoinCommands;
+        return config.contains("events.kingdom_join") ? config.getStringList("events.kingdom_join") : new ArrayList<>();
     }
 
     public List<String> getOnKingdomLeaveCommands() {
-        return onKingdomLeaveCommands;
+        return config.contains("events.kingdom_leave") ? config.getStringList("events.kingdom_leave") : new ArrayList<>();
     }
 
     public boolean respawnAtKingdom() {
-        return respawnAtKingdom;
+        return config.contains("respawn-at-kingdom") && config.getBoolean("respawn-at-kingdom");
     }
 
     public String getOnJoinMessage() {
-        return onJoinMessage;
+        return config.contains("messages.join") ? config.getString("messages.join") : null;
     }
 
     public String getOnLeaveMessage() {
-        return onLeaveMessage;
+        return config.contains("messages.leave") ? config.getString("messages.leave") : null;
     }
 
     public String getOnDeathMessage() {
-        return onDeathMessage;
+        return config.contains("messages.death") ? config.getString("messages.death") : null;
     }
 
     public String getOnKillMessage() {
-        return onKillMessage;
+        return config.contains("messages.kill") ? config.getString("messages.kill") : null;
     }
 }
