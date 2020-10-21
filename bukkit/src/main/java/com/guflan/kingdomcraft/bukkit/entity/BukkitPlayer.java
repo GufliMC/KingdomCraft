@@ -76,10 +76,10 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
     }
 
     @Override
-    public void openInventory(Inventory<?> inventory) {
-        if ( inventory instanceof BukkitInventory ) {
+    public void openInventory(Inventory<?, ?> inventory) {
+        if ( inventory.getHandle() instanceof org.bukkit.inventory.Inventory) {
+            player.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
             super.openInventory(inventory);
-            player.openInventory(((BukkitInventory) inventory).getInventory());
         }
     }
 }

@@ -42,9 +42,11 @@ public class InventoryListener implements Listener {
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getWhoClicked().getUniqueId());
         Inventory<?, ?> inv = player.getInventory();
 
+        if ( inv == null || inv.getHandle() == null ) {
+            return;
+        }
+
         if ( !inv.getHandle().equals(e.getClickedInventory()) ) {
-            player.set(PlatformPlayer.CUSTOM_GUI_KEY, null);
-            player.sendMessage("DIFFERENT INVENTORY THAN ONE IN CACHE CLICKED!!!");
             return;
         }
 
@@ -69,7 +71,12 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        boolean playSound = inv.dispatchClick(player, type, e.getSlot());
+        boolean playSound = false;
+
+        try {
+            playSound = inv.dispatchClick(player, type, e.getSlot());
+        } catch (Exception ignore) {}
+
         if ( !playSound ) {
             return;
         }

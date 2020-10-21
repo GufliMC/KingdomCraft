@@ -66,7 +66,6 @@ public class CommandManagerImpl implements CommandManager {
         // all
         registerCommand(new HelpCommand(kdc));
         registerCommand(new ListCommand(kdc));
-        registerCommand(new InfoCommand(kdc));
 
         registerCommand(new JoinCommand(kdc));
         registerCommand(new ChatChannelCommand(kdc));

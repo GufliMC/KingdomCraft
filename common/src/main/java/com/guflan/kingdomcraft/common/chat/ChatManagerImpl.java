@@ -145,8 +145,9 @@ public class ChatManagerImpl implements ChatManager {
             return;
         }
 
-        for ( String name : config.getKeys(false) ) {
-            Configuration cs = config.getConfigurationSection(name);
+        Configuration channels = config.getConfigurationSection("channels");
+        for ( String name : channels.getKeys(false) ) {
+            Configuration cs = channels.getConfigurationSection(name);
 
             if ( !cs.contains("format") ) {
                 kdc.getPlugin().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
