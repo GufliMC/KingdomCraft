@@ -26,6 +26,8 @@ import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
 
 public class DeleteCommand extends CommandBaseImpl {
 
+    private final static String DELETE_KEY = "KINGDOM_DELETE_REQUEST";
+
     public DeleteCommand(KingdomCraftImpl kdc) {
         super(kdc, "delete", 1);
         setArgumentsHint("<kingdom>");
@@ -35,6 +37,23 @@ public class DeleteCommand extends CommandBaseImpl {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
+        if ( sender instanceof PlatformPlayer && args[0].equalsIgnoreCase("confirm") ) {
+            PlatformPlayer player = (PlatformPlayer) sender;
+            if ( !player.has(DELETE_KEY) ) {
+                kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+                return;
+            }
+
+            DeleteRequest req = player.get(DELETE_KEY, DeleteRequest.class);
+            if ( System.currentTimeMillis() - req.timestamp < 1000 * 60 ) {
+                kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+                return;
+            }
+
+            delete(player, req.kingdom);
+            return;
+        }
+
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
             kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
@@ -43,21 +62,43 @@ public class DeleteCommand extends CommandBaseImpl {
 
         if ( sender instanceof PlatformPlayer) {
             User user = kdc.getUser((PlatformPlayer) sender);
-
             if ( user.getKingdom() != kingdom && !sender.hasPermission("kingdom.delete.other")) {
                 kdc.getMessageManager().send(sender, "noPermission");
                 return;
             }
         }
 
-        for ( PlatformPlayer p : kdc.getOnlinePlayers() ) {
-            if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
-            kdc.getMessageManager().send(p, "cmdDeleteSuccessMembers");
+        if ( !(sender instanceof PlatformPlayer) ) {
+            delete(sender, kingdom);
+        } else {
+            ((PlatformPlayer) sender).set(DELETE_KEY, new DeleteRequest(kingdom));
+            kdc.getMessageManager().send(sender, "cmdDeleteConfirm", kingdom.getName());
+        }
+    }
+
+    private void delete(PlatformSender sender, Kingdom kingdom) {
+        for (PlatformPlayer p : kdc.getOnlinePlayers()) {
+            User user = kdc.getUser(p);
+            if ( user.getKingdom() == kingdom) {
+                user.setKingdom(null);
+                kdc.getMessageManager().send(p, "cmdDeleteSuccessMembers");
+            }
         }
 
         // async deleting
         kdc.getPlugin().getScheduler().executeAsync(kingdom::delete);
-
         kdc.getMessageManager().send(sender, "cmdDeleteSuccess", kingdom.getName());
+    }
+
+    private static class DeleteRequest {
+
+        final Kingdom kingdom;
+        final long timestamp;
+
+        public DeleteRequest(Kingdom kingdom) {
+            this.kingdom = kingdom;
+            this.timestamp = System.currentTimeMillis();
+        }
+
     }
 }

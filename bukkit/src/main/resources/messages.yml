@@ -195,6 +195,7 @@ cmdCreateNameInvalid: '&cKingdom names can only contain alphanumeric characters!
 # /k delete
 cmdDeleteSuccess: '&aYou deleted the kingdom &2{0}&a!'
 cmdDeleteSuccessMembers: '&aYour kingdom has been deleted!'
+cmdDeleteConfirm: '&aType &2/k delete confirm &ato delete &2{0}&a!'
 
 # /k edit
 cmdEditSuccess: '&aChanged {0} of your kingdom to &2{1}&a!'
@@ -207,6 +208,7 @@ cmdRanksCreateNameInvalid: '&cRank names can only contain alphanumeric character
 
 # /k ranks delete
 cmdRanksDeleteSuccess: '&aYou deleted the rank &2{0}&a!'
+cmdRanksDeleteConfirm: '&aType &2/k delete confirm &ato delete &2{0}&a!'
 
 # /k ranks list
 cmdRanksList: '&aList of ranks: &2{0}'
