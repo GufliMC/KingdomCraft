@@ -67,6 +67,7 @@ cmdInviteExplanation: 'Invite a player to your kingdom'
 cmdReloadExplanation: 'Reload KingdomCraft'
 cmdTpHereExplanation: 'Teleport everyone of your kingdom to you'
 cmdTpHereOtherExplanation: 'Teleport everyone of a kingdom to you'
+cmdChatExplanation: 'Send a message in the specified chat channel'
 
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
 cmdGroupsAddOtherExplanation: 'Add a permission group to a rank'
@@ -241,3 +242,7 @@ cmdRanksCloneSuccess: '&aCloned rank &2{0} &afrom &2{1} &ato &2{2}&a!'
 cmdTpHere: '&aTeleported everyone of your kingdom to you!'
 cmdTphereTarget: '&aYou''ve been teleported to &2{0}&a!'
 cmdTpHereOther: '&aTeleported everyone of kingdom &2{0} &ato you!'
+
+# /k chat
+cmdChatNoChannel: '&cThe chat channel &4{0} &cdoes not exist!'
+cmdChatEmptyMessage: '&cYou can''t send an empty message!'
