@@ -65,6 +65,8 @@ cmdKickExplanation: 'Kick a player from your kingdom'
 cmdSetKingdomExplanation: 'Place a player in a kingdom'
 cmdInviteExplanation: 'Invite a player to your kingdom'
 cmdReloadExplanation: 'Reload KingdomCraft'
+cmdTpHereExplanation: 'Teleport everyone of your kingdom to you'
+cmdTpHereOtherExplanation: 'Teleport everyone of a kingdom to you'
 
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
 cmdGroupsAddOtherExplanation: 'Add a permission group to a rank'
@@ -234,3 +236,8 @@ cmdGroupsListOther: '&aPermission groups belonging to rank &2{0} &aof kingdom &2
 
 # /k ranks clone
 cmdRanksCloneSuccess: '&aCloned rank &2{0} &afrom &2{1} &ato &2{2}&a!'
+
+# /k tphere
+cmdTpHere: '&aTeleported everyone of your kingdom to you!'
+cmdTphereTarget: '&aYou''ve been teleported to &2{0}&a!'
+cmdTpHereOther: '&aTeleported everyone of kingdom &2{0} &ato you!'
