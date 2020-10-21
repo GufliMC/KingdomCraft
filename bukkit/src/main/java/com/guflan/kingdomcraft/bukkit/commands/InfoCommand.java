@@ -96,7 +96,25 @@ public class InfoCommand extends CommandBaseImpl {
         String title = ChatColor.DARK_GRAY + player.getName();
         BukkitInventory inv = new BukkitInventory(title, 3 * 9);
 
-        ItemStack playerItem = getUserItem(user);
+        ItemStack playerItem = new ItemStack(Material.SKULL_ITEM);
+
+        SkullMeta skullMeta = (SkullMeta) playerItem.getItemMeta();
+        skullMeta.setOwner(user.getName());
+
+        skullMeta.setDisplayName(ChatColor.GREEN + user.getName());
+        List<String> userLore = new ArrayList<>();
+        userLore.add("");
+
+        if ( kdc.getPlayer(user) != null ) {
+            userLore.add(getText("LastSeen", getText("LastSeenNow")));
+        } else {
+            userLore.add(getText("LastSeen", format(user.getUpdatedAt())));
+        }
+
+        userLore.add(getText("FirstSeen", format(user.getCreatedAt())));
+
+        skullMeta.setLore(userLore);
+        playerItem.setItemMeta(skullMeta);
 
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
@@ -107,7 +125,22 @@ public class InfoCommand extends CommandBaseImpl {
 
         inv.setItem(12, new BukkitInventoryItem(playerItem));
 
-        ItemStack kingdomItem = getKingdomItem(user);
+        ItemStack kingdomItem = new ItemStack(Material.BANNER);
+
+        BannerMeta bannerMeta = (BannerMeta) kingdomItem.getItemMeta();
+        bannerMeta.setBaseColor(DyeColor.CYAN);
+
+        bannerMeta.setDisplayName(ChatColor.WHITE + kdc.getMessageManager().colorify(kingdom.getDisplay()));
+        List<String> kingdomLore = new ArrayList<>();
+
+        if ( user.getRank() != null ) {
+            kingdomLore.add("");
+            kingdomLore.add(getText("Rank", user.getRank().getDisplay()));
+        }
+
+        bannerMeta.setLore(kingdomLore);
+        kingdomItem.setItemMeta(bannerMeta);
+        
         inv.setItem(14, new BukkitInventoryItem(kingdomItem, (p, clickType) -> {
             showKingdomInventory(player, kingdom);
             return true;
@@ -129,33 +162,31 @@ public class InfoCommand extends CommandBaseImpl {
         bannerMeta.setBaseColor(DyeColor.CYAN);
         bannerMeta.setDisplayName(ChatColor.WHITE + kdc.getMessageManager().colorify(kingdom.getDisplay()));
 
-        List<String> lore = new ArrayList<>();
-        lore.add("");
+        List<String> kingdomLore = new ArrayList<>();
+        kingdomLore.add("");
 
         if ( user.getKingdom() == kingdom && kingdom.getSpawn() != null) {
             DecimalFormat df = new DecimalFormat("#");
             PlatformLocation loc = kingdom.getSpawn();
-            lore.add(ChatColor.GRAY + "Spawn: " + ChatColor.GOLD + df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ()));
+            kingdomLore.add(getText("Spawn",df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ())));
         }
 
         if ( kingdom.getMaxMembers() > 0 ) {
-            lore.add(ChatColor.GRAY + "Total members: "
-                    + ChatColor.GOLD + kingdom.getMemberCount()
-                    + ChatColor.WHITE + " / "
-                    + ChatColor.GOLD + kingdom.getMaxMembers());
+            kingdomLore.add(getText("TotalMembersLimited", kingdom.getMemberCount() + "", kingdom.getMaxMembers() + ""));
         } else {
-            lore.add(ChatColor.GRAY + "Total members: " + ChatColor.GOLD + kingdom.getMemberCount());
+            kingdomLore.add(getText("TotalMembers", kingdom.getMemberCount() + ""));
         }
 
-        lore.add(ChatColor.GRAY + "Invite only: " + ChatColor.GOLD + kingdom.isInviteOnly());
+        kingdomLore.add(getText("InviteOnly", kingdom.isInviteOnly() + ""));
 
         if ( kingdom.getDefaultRank() != null ) {
-            lore.add(ChatColor.GRAY + "Default rank: " + ChatColor.GOLD + kingdom.getDefaultRank().getDisplay());
+            kingdomLore.add(getText("DefaultRank", kingdom.getDefaultRank().getDisplay()));
         }
 
-        lore.add("");
-        lore.add(ChatColor.GRAY + "Created at: " + ChatColor.GOLD + format(kingdom.getCreatedAt()));
-        bannerMeta.setLore(lore);
+        kingdomLore.add("");
+        kingdomLore.add(getText("CreatedAt", format(kingdom.getCreatedAt())));
+
+        bannerMeta.setLore(kingdomLore);
         kingdomItem.setItemMeta(bannerMeta);
         inv.setItem(11, new BukkitInventoryItem(kingdomItem));
 
@@ -163,7 +194,7 @@ public class InfoCommand extends CommandBaseImpl {
 
         ItemStack enemiesItem = new ItemStack(Material.IRON_SWORD);
         ItemMeta enemiesMeta = enemiesItem.getItemMeta();
-        enemiesMeta.setDisplayName(ChatColor.RED + "Enemies");
+        enemiesMeta.setDisplayName(getText("Enemies"));
         List<String> enemiesLore = new ArrayList<>();
 
         kdc.getRelations(kingdom).stream().filter(rel -> rel.getType() == RelationType.ENEMY).forEach(rel -> {
@@ -183,7 +214,7 @@ public class InfoCommand extends CommandBaseImpl {
 
         ItemStack truceItem = new ItemStack(Material.YELLOW_FLOWER);
         ItemMeta truceMeta = enemiesItem.getItemMeta();
-        truceMeta.setDisplayName(ChatColor.GREEN + "Truce");
+        truceMeta.setDisplayName(getText("Truce"));
         List<String> truceLore = new ArrayList<>();
 
         kdc.getRelations(kingdom).stream().filter(rel -> rel.getType() == RelationType.TRUCE).forEach(rel -> {
@@ -203,7 +234,7 @@ public class InfoCommand extends CommandBaseImpl {
 
         ItemStack alliesItem = new ItemStack(Material.DIAMOND);
         ItemMeta alliesMeta = enemiesItem.getItemMeta();
-        alliesMeta.setDisplayName(ChatColor.AQUA + "Allies");
+        alliesMeta.setDisplayName(getText("Allies"));
         List<String> alliesLore = new ArrayList<>();
 
         kdc.getRelations(kingdom).stream().filter(rel -> rel.getType() == RelationType.ALLY).forEach(rel -> {
@@ -228,15 +259,12 @@ public class InfoCommand extends CommandBaseImpl {
             rankLore.add("");
 
             if ( rank.getMaxMembers() > 0 ) {
-                rankLore.add(ChatColor.GRAY + "Total members: "
-                        + ChatColor.GOLD + rank.getMemberCount()
-                        + ChatColor.WHITE + " / "
-                        + ChatColor.GOLD + rank.getMaxMembers());
+                rankLore.add(getText("TotalMembersLimited", rank.getMemberCount() + "", rank.getMaxMembers() + ""));
             } else {
-                rankLore.add(ChatColor.GRAY + "Total members: " + ChatColor.GOLD + rank.getMemberCount());
+                rankLore.add(getText("TotalMembers", rank.getMemberCount() + ""));
             }
 
-            rankLore.add(ChatColor.GRAY + "Level: " + ChatColor.GOLD + rank.getLevel());
+            rankLore.add(getText("Level", rank.getLevel() + ""));
             rankMeta.setLore(rankLore);
             rankItem.setItemMeta(rankMeta);
             rankItems.add(new BukkitInventoryItem(rankItem));
@@ -246,46 +274,8 @@ public class InfoCommand extends CommandBaseImpl {
         player.openInventory(inv);
     }
 
-    ItemStack getUserItem(User user) {
-        ItemStack playerItem = new ItemStack(Material.SKULL_ITEM);
-
-        SkullMeta skullMeta = (SkullMeta) playerItem.getItemMeta();
-        skullMeta.setOwner(user.getName());
-
-        skullMeta.setDisplayName(ChatColor.GREEN + user.getName());
-        List<String> lore = new ArrayList<>();
-        lore.add("");
-        lore.add(ChatColor.GRAY + "Last seen: " + ChatColor.GOLD +
-                (kdc.getPlayer(user) != null ? "now" : format(user.getUpdatedAt())));
-        lore.add(ChatColor.GRAY + "First seen: " + ChatColor.GOLD + format(user.getCreatedAt()));
-
-        skullMeta.setLore(lore);
-        playerItem.setItemMeta(skullMeta);
-        return playerItem;
-    }
-
-    ItemStack getKingdomItem(User user) {
-        Kingdom kingdom = user.getKingdom();
-        ItemStack kingdomItem = new ItemStack(Material.BANNER);
-
-        BannerMeta bannerMeta = (BannerMeta) kingdomItem.getItemMeta();
-        bannerMeta.setBaseColor(DyeColor.CYAN);
-
-        bannerMeta.setDisplayName(ChatColor.WHITE + kdc.getMessageManager().colorify(kingdom.getDisplay()));
-        List<String> lore = new ArrayList<>();
-
-        if ( user.getRank() != null ) {
-            lore.add("");
-            lore.add(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + kdc.getMessageManager().colorify(user.getRank().getDisplay()));
-        }
-
-        bannerMeta.setLore(lore);
-        kingdomItem.setItemMeta(bannerMeta);
-        return kingdomItem;
-    }
-
     private String format(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat format = new SimpleDateFormat(kdc.getMessageManager().getMessage("cmdInfoDateFormat"));
         return format.format(date);
     }
 
@@ -312,5 +302,14 @@ public class InfoCommand extends CommandBaseImpl {
         if ( items.size() > 7 ) {
             placeItems(inv, row+1, items.subList(7, items.size()-1));
         }
+
+    }
+
+    private String getText(String key) {
+        return kdc.getMessageManager().getMessage("cmdInfo" + key);
+    }
+
+    private String getText(String key, String... placeholders) {
+        return kdc.getMessageManager().getMessage("cmdInfo" + key, placeholders);
     }
 }
