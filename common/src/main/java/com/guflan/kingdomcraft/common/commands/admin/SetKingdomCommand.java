@@ -64,6 +64,11 @@ public class SetKingdomCommand extends CommandBaseImpl {
                     return;
                 }
 
+                if ( kingdom.getDefaultRank() == null ) {
+                    kdc.getMessageManager().send(sender, "cmdErrorKingdomNoDefaultRank", kingdom.getName());
+                    return;
+                }
+
                 if ( target.getKingdom() == kingdom ) {
                     kdc.getMessageManager().send(sender, "cmdSetKingdomAlready", target.getName(), kingdom.getName());
                     return;
