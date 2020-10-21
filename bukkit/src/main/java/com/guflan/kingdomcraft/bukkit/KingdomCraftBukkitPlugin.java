@@ -147,6 +147,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new DeathListener(this), this);
 		pm.registerEvents(new InventoryListener(this), this);
 		pm.registerEvents(new PermissionsListener(this), this);
+		pm.registerEvents(new MoveListener(this), this);
 
 		// chat
 		if ( chatConfig.contains("enabled") && chatConfig.getBoolean("enabled") ) {
