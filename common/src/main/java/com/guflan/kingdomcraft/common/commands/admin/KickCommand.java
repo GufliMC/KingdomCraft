@@ -69,15 +69,16 @@ public class KickCommand extends CommandBaseImpl {
 
                 if ( sender instanceof PlatformPlayer) {
                     User user = kdc.getUser((PlatformPlayer) sender);
-
-                    // kick other kingdom
-                    if (kingdom != user.getKingdom() && !sender.hasPermission("kingdom.kick.other")) {
-                        kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
-                        return;
+                    if ( !sender.hasPermission("kingdom.kick.other") ) {
+                        if (kingdom != user.getKingdom() ) {
+                            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+                            return;
+                        }
+                        if (user.getRank() == null || user.getRank().getLevel() <= target.getRank().getLevel()) {
+                            kdc.getMessageManager().send(sender, "cmdKickLowLevel", target.getName());
+                            return;
+                        }
                     }
-
-                    // kick own kingdom
-                    // TODO hierarchy check
                 }
 
                 target.setKingdom(null);

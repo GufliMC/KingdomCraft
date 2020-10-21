@@ -35,6 +35,7 @@ cmdErrorNoPlayer: '&cThe player &4{0} &cdoes not exist!'
 cmdErrorNotOnline: '&cThe player &4{0} &cis not online!'
 cmdErrorSameKingdom: '&cYou cannot do that to your own kingdom!'
 cmdErrorPermissionGroupNotExist: '&cThe permission group &4{0} &cdoes not exist.'
+cmdErrorKingdomNoDefaultRank: '&cThe kingdom &4{0} &chas no default rank!'
 
 cmdErrorInvalidString: '&4{0} &cis not a valid!'
 cmdErrorInvalidNumber: '&4{0} &cis not a valid number!'
@@ -171,6 +172,7 @@ cmdNeutralAlready: '&4{0} &cis already a neutral kingdom!'
 # /k kick
 cmdKickTarget: '&aYou have been kicked out of &2{0}&a!'
 cmdKickSender: '&aYou kicked &2{0} &aout of &2{1}&a!'
+cmdKickLowLevel: '&cYour rank level is lower than the rank of &4{0}&c!'
 
 # /k setrank
 cmdSetRankLowLevelTarget: '&cYour rank level is lower than the target rank!'

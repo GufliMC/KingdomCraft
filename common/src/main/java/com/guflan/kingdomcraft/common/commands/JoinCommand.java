@@ -50,6 +50,11 @@ public class JoinCommand extends CommandBaseImpl {
             return;
         }
 
+        if ( kingdom.getDefaultRank() == null ) {
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNoDefaultRank", kingdom.getName());
+            return;
+        }
+
         User user = kdc.getUser((PlatformPlayer) sender);
         if ( user.getKingdom() != null ) {
             kdc.getMessageManager().send(sender, "cmdJoinAlready");

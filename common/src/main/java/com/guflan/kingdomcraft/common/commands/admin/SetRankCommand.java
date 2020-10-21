@@ -51,7 +51,11 @@ public class SetRankCommand extends CommandBaseImpl {
             User user = kdc.getUser((PlatformPlayer) sender);
             if ( sender.hasPermission("kingdom.setrank") && user.getKingdom() != null ) {
                 return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() == user.getKingdom())
-                        .map(PlatformPlayer::getName).collect(Collectors.toList()); // TODO hierarchy check
+                        .filter(p -> {
+                            User u = kdc.getUser(p);
+                            return u.getRank().getLevel() < user.getRank().getLevel();
+                        })
+                        .map(PlatformPlayer::getName).collect(Collectors.toList());
             }
             return null;
         }
@@ -61,7 +65,9 @@ public class SetRankCommand extends CommandBaseImpl {
         if ( user == null || user.getKingdom() == null ) {
             return null;
         }
-        return user.getKingdom().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        return user.getKingdom().getRanks().stream()
+                .filter(rank -> rank.getMaxMembers() == 0 || rank.getMemberCount() < rank.getMaxMembers())
+                .map(Rank::getName).collect(Collectors.toList());
     }
 
     @Override
