@@ -17,10 +17,10 @@
 
 package com.guflan.kingdomcraft.common.placeholders;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderReplacer;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
 
     private final Map<String, PlaceholderReplacer> placeholderReplacers = new HashMap<>();
 
-    public PlaceholderManagerImpl(KingdomCraft kdc) {
+    public PlaceholderManagerImpl(KingdomCraftImpl kdc) {
         new DefaultPlaceholderReplacer(kdc, this);
     }
 
