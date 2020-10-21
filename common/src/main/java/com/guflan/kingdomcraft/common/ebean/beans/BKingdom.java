@@ -210,4 +210,9 @@ public class BKingdom extends Model implements Kingdom {
     public List<String> getMembers() {
         return new QBUser().kingdom.eq(this).select("name").findSingleAttributeList();
     }
+
+    @Override
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 }

@@ -16,11 +16,11 @@ public class InventoryItem<T> {
         this(handle, null);
     }
 
-    public void dispatchClick(PlatformPlayer player, InventoryClickType type) {
+    public boolean dispatchClick(PlatformPlayer player, InventoryClickType type) {
         if ( callback == null ) {
-            return;
+            return false;
         }
-        callback.onClick(player, type);
+        return callback.onClick(player, type);
     }
 
     public T getHandle() {

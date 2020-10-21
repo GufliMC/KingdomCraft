@@ -19,6 +19,7 @@ package com.guflan.kingdomcraft.api.domain;
 
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Kingdom extends Model {
@@ -66,4 +67,7 @@ public interface Kingdom extends Model {
     int getMemberCount();
 
     List<String> getMembers();
+
+    Date getCreatedAt();
+
 }

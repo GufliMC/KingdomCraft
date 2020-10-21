@@ -17,9 +17,12 @@
 
 package com.guflan.kingdomcraft.bukkit.command;
 
+import com.guflan.kingdomcraft.api.command.CommandManager;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import com.guflan.kingdomcraft.bukkit.commands.InfoCommand;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitSender;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,10 +34,13 @@ import java.util.List;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
-    private final KingdomCraftBukkitPlugin plugin;
+    private final KingdomCraftImpl kdc;
 
     public CommandHandler(KingdomCraftBukkitPlugin plugin) {
-        this.plugin = plugin;
+        this.kdc = plugin.getKdc();
+
+        CommandManager cm = plugin.getKdc().getCommandManager();
+        cm.registerCommand(new InfoCommand(kdc));
     }
 
     @Override
@@ -42,7 +48,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
         if ( sender instanceof Player ) {
             World world = ((Player) sender).getWorld();
-            if ( !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) ) {
+            if ( !kdc.getConfig().isWorldEnabled(world.getName()) ) {
                 return false;
             }
         }
@@ -52,18 +58,18 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        plugin.getKdc().getCommandDispatcher().execute(wrap(sender), args);
+        kdc.getCommandDispatcher().execute(wrap(sender), args);
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return plugin.getKdc().getCommandDispatcher().autocomplete(wrap(sender), args);
+        return kdc.getCommandDispatcher().autocomplete(wrap(sender), args);
     }
 
     private PlatformSender wrap(CommandSender sender) {
         if ( sender instanceof Player) {
-            return plugin.getKdc().getPlayer(((Player) sender).getUniqueId());
+            return kdc.getPlayer(((Player) sender).getUniqueId());
         }
         return new BukkitSender(sender);
     }

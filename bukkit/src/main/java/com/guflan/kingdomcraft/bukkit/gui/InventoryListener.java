@@ -69,7 +69,10 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        inv.dispatchClick(player, type, e.getSlot());
+        boolean playSound = inv.dispatchClick(player, type, e.getSlot());
+        if ( !playSound ) {
+            return;
+        }
 
         // play a sound
         Sound sound;

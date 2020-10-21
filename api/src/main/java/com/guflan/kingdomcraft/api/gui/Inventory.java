@@ -21,7 +21,7 @@ public class Inventory<T extends InventoryItem<?>, U> {
         this(handle, null);
     }
 
-    public void dispatchClick(PlatformPlayer player, InventoryClickType clickType, int slot) {
+    public boolean dispatchClick(PlatformPlayer player, InventoryClickType clickType, int slot) {
         T item = items.get(slot);
 
         if ( callback != null ) {
@@ -29,8 +29,9 @@ public class Inventory<T extends InventoryItem<?>, U> {
         }
 
         if ( item != null ) {
-            item.dispatchClick(player, clickType);
+            return item.dispatchClick(player, clickType);
         }
+        return false;
     }
 
     public void dispatchClose(PlatformPlayer player) {
