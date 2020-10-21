@@ -10,10 +10,9 @@ prefix: '&6KingdomCraft &2> &a'
 
 noPermission: '&cYou don''t have permission to do that!'
 
-teleporting: '&aTeleporting in &2{0} &aseconds, don''t move!'
+friendlyFire: '&cFriendly fire is disabled!'
 
-damageKingdom: '&aYou can''t hurt members of your own kingdom'
-damageFriendly: '&aYou can''t hurt members of a friendly kingdom'
+teleport: '&aTeleporting in &2{0} &aseconds, don''t move!'
 teleportCancel: '&cTeleportation cancelled!'
 
 chatNoChannel: '&cThere is not available chat channel to send your message!'
