@@ -2,16 +2,18 @@ package com.guflan.kingdomcraft.api.gui;
 
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 
-public abstract class AbstractInventoryItem {
+public class InventoryItem<T> {
 
+    protected T handle;
     protected InventoryItemCallback callback;
 
-    public AbstractInventoryItem() {
-
+    public InventoryItem(T handle, InventoryItemCallback callback) {
+        this.handle = handle;
+        this.callback = callback;
     }
 
-    public AbstractInventoryItem(InventoryItemCallback callback) {
-        this.callback = callback;
+    public InventoryItem(T handle) {
+        this(handle, null);
     }
 
     public void dispatchClick(PlatformPlayer player, InventoryClickType type) {
@@ -19,5 +21,9 @@ public abstract class AbstractInventoryItem {
             return;
         }
         callback.onClick(player, type);
+    }
+
+    public T getHandle() {
+        return handle;
     }
 }

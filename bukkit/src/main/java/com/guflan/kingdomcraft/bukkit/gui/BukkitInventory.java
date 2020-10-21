@@ -1,17 +1,13 @@
 package com.guflan.kingdomcraft.bukkit.gui;
 
-import com.guflan.kingdomcraft.api.gui.AbstractInventory;
+import com.guflan.kingdomcraft.api.gui.Inventory;
 import com.guflan.kingdomcraft.api.gui.InventoryCallback;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.Inventory;
 
-public class BukkitInventory extends AbstractInventory<BukkitInventoryItem> {
-
-    private final Inventory inventory;
+public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.inventory.Inventory> {
 
     public BukkitInventory(String name, int size, InventoryCallback callback) {
-        super(callback);
-        inventory = Bukkit.createInventory(null, size, name);
+        super(Bukkit.createInventory(null, size, name), callback);
     }
 
     public BukkitInventory(String name, int size) {
@@ -21,10 +17,7 @@ public class BukkitInventory extends AbstractInventory<BukkitInventoryItem> {
     @Override
     public void setItem(int slot, BukkitInventoryItem item) {
         super.setItem(slot, item);
-        inventory.setItem(slot, item.getItemStack());
+        handle.setItem(slot, item.getHandle());
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
 }
