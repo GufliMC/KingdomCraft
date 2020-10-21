@@ -25,13 +25,11 @@ import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.bukkit.gui.InventoryListener;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
 import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
-import com.guflan.kingdomcraft.bukkit.permissions.PermissionHandler;
 import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.Configuration;
-import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
 import io.ebean.migration.MigrationException;
@@ -123,11 +121,12 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
 
 		// initialize handler
-		KingdomCraftConfig settings = new KingdomCraftConfig(new BukkitConfiguration(config.getConfigurationSection("settings")));
+		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
 		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
+		Configuration groupsConfig = new BukkitConfiguration(initConfig("groups.yml"));
 
 		MessageManager messageManager = new MessageManagerImpl(this);
-		this.kdc = new KingdomCraftImpl(this, settings, chatConfig, context, messageManager);
+		this.kdc = new KingdomCraftImpl(this, context, messageManager, pluginConfig, chatConfig, groupsConfig);
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
 			this.kdc.onJoin(new BukkitPlayer(p));
@@ -147,20 +146,18 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new RespawnListener(this), this);
 		pm.registerEvents(new DeathListener(this), this);
 		pm.registerEvents(new InventoryListener(this), this);
-
-		// kingdom events
-		new KingdomJoinQuitListener(this);
-
-		// placeholders
-		new PlaceholderReplacer(this);
+		pm.registerEvents(new PermissionsListener(this), this);
 
 		// chat
 		if ( chatConfig.contains("enabled") && chatConfig.getBoolean("enabled") ) {
 			pm.registerEvents(new ChatListener(this), this);
 		}
 
-		// permissions
-		new PermissionHandler(this);
+		// kingdom events
+		new KingdomJoinQuitListener(this);
+
+		// placeholders
+		new PlaceholderReplacer(this);
 	}
 
 	private void disable() {
