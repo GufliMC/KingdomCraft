@@ -17,6 +17,7 @@
 
 package com.guflan.kingdomcraft.api.domain;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,5 +46,9 @@ public interface User extends Model {
     UserChatChannel addChatChannel(String channel);
 
     UserChatChannel getChatChannel(String channel);
+
+    Date getCreatedAt();
+
+    Date getUpdatedAt();
 
 }

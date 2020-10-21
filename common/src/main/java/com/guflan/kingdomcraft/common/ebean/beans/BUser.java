@@ -170,4 +170,14 @@ public class BUser extends Model implements User {
     public UserChatChannel getChatChannel(String channel) {
         return chatChannels.stream().filter(cs -> cs.channel.endsWith(channel)).findFirst().orElse(null);
     }
+
+    @Override
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 }
