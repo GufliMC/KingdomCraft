@@ -71,16 +71,17 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final List<PlatformPlayer> onlinePlayers = new ArrayList<>();
 
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
-                            KingdomCraftConfig config,
-                            Configuration chatConfig,
                             StorageContext context,
-                            MessageManager messageManager) {
+                            MessageManager messageManager,
+                            Configuration config,
+                            Configuration chatConfig,
+                            Configuration groupsConfig) {
 
         this.plugin = plugin;
-        this.config = config;
         this.context = context;
-
         this.messageManager = messageManager;
+
+        this.config = new KingdomCraftConfig(config);
 
         this.commandManager = new CommandManagerImpl(this);
         this.commandDispatcher = new CommandDispatcher(commandManager);
@@ -92,7 +93,7 @@ public class KingdomCraftImpl implements KingdomCraft {
         this.chatDispatcher = new ChatDispatcher(this, chatManager);
 
         this.placeholderManager = new PlaceholderManagerImpl(this);
-        this.permissionManager = new PermissionManager();
+        this.permissionManager = new PermissionManager(this, groupsConfig);
 
         KingdomCraftProvider.register(this);
         Teleporter.register(this);
