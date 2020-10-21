@@ -1,8 +1,9 @@
 package com.guflan.kingdomcraft.bukkit.gui;
 
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
-import com.guflan.kingdomcraft.api.gui.AbstractInventory;
+import com.guflan.kingdomcraft.api.gui.Inventory;
 import com.guflan.kingdomcraft.api.gui.InventoryClickType;
+import com.guflan.kingdomcraft.api.gui.InventoryItem;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class InventoryListener implements Listener {
 
@@ -38,13 +40,9 @@ public class InventoryListener implements Listener {
         if ( !(e.getWhoClicked() instanceof Player) ) return;
 
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getWhoClicked().getUniqueId());
-        AbstractInventory<?> inv = player.getInventory();
+        Inventory<?, ?> inv = player.getInventory();
 
-        if ( !(inv instanceof BukkitInventory) ) {
-            return;
-        }
-
-        if ( !((BukkitInventory) inv).getInventory().equals(e.getClickedInventory()) ) {
+        if ( !inv.getHandle().equals(e.getClickedInventory()) ) {
             player.set(PlatformPlayer.CUSTOM_GUI_KEY, null);
             player.sendMessage("DIFFERENT INVENTORY THAN ONE IN CACHE CLICKED!!!");
             return;
@@ -86,7 +84,7 @@ public class InventoryListener implements Listener {
     }
 
     private void handleClose(PlatformPlayer player) {
-        AbstractInventory<?> inv = player.getInventory();
+        Inventory<?, ?> inv = player.getInventory();
         if ( inv != null ) {
             inv.dispatchClose(player);
             player.set(PlatformPlayer.CUSTOM_GUI_KEY, null);

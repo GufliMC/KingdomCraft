@@ -18,7 +18,7 @@
 package com.guflan.kingdomcraft.bukkit.entity;
 
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
-import com.guflan.kingdomcraft.api.gui.AbstractInventory;
+import com.guflan.kingdomcraft.api.gui.Inventory;
 import com.guflan.kingdomcraft.bukkit.gui.BukkitInventory;
 import com.guflan.kingdomcraft.bukkit.util.LocationConverter;
 import com.guflan.kingdomcraft.common.entity.AbstractPlatformPlayer;
@@ -76,7 +76,7 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
     }
 
     @Override
-    public void openInventory(AbstractInventory<?> inventory) {
+    public void openInventory(Inventory<?> inventory) {
         if ( inventory instanceof BukkitInventory ) {
             super.openInventory(inventory);
             player.openInventory(((BukkitInventory) inventory).getInventory());

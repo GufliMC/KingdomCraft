@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.api.entity;
 
-import com.guflan.kingdomcraft.api.gui.AbstractInventory;
+import com.guflan.kingdomcraft.api.gui.Inventory;
 
 import java.util.UUID;
 
@@ -35,11 +35,11 @@ public interface PlatformPlayer extends PlatformSender {
 
     // gui
 
-    default AbstractInventory<?> getInventory() {
-        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, AbstractInventory.class) : null;
+    default Inventory<?, ?> getInventory() {
+        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, Inventory.class) : null;
     }
 
-    default void openInventory(AbstractInventory<?> inventory) {
+    default void openInventory(Inventory<?, ?> inventory) {
         set(CUSTOM_GUI_KEY, inventory);
     }
 
