@@ -10,6 +10,10 @@
 
 settings:
 
+    nokingdom:
+        prefix: '&7[&eHobo&7]'
+        suffix: ''
+
     # a list of worlds this plugin is enabled in, remove to allow all worlds
     worlds:
     - world

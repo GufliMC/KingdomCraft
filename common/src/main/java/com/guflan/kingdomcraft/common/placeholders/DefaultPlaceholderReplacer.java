@@ -17,13 +17,13 @@
 
 package com.guflan.kingdomcraft.common.placeholders;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 
 public class DefaultPlaceholderReplacer {
 
-    public DefaultPlaceholderReplacer(KingdomCraft kdc, PlaceholderManager pm) {
+    public DefaultPlaceholderReplacer(KingdomCraftImpl kdc, PlaceholderManager pm) {
 
         pm.addPlaceholderReplacer((player, placeholder) -> player.getName(), "player", "username");
 
@@ -47,11 +47,23 @@ public class DefaultPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getKingdom() != null ? kdc.getMessageManager().colorify(user.getKingdom().getPrefix()) : "";
+            String prefix;
+            if ( user.getKingdom() == null ) {
+                prefix = kdc.getConfig().getNoKingdomPrefix();
+            } else {
+                prefix = user.getKingdom().getPrefix();
+            }
+            return kdc.getMessageManager().colorify(prefix);
         }, "kingdom_prefix");
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getKingdom() != null ? kdc.getMessageManager().colorify(user.getKingdom().getSuffix()) : "";
+            String suffix;
+            if ( user.getKingdom() == null ) {
+                suffix = kdc.getConfig().getNoKingdomSuffix();
+            } else {
+                suffix = user.getKingdom().getSuffix();
+            }
+            return kdc.getMessageManager().colorify(suffix);
         }, "kingdom_suffix");
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
