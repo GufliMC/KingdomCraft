@@ -58,12 +58,11 @@ public class BKingdom extends Model implements Kingdom {
     @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER)
     public List<BRank> ranks;
 
-
     @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER)
     public List<BKingdomAttribute> attributes;
 
-//    @OneToMany(mappedBy = "kingdom")
-//    public List<BUser> members;
+    @Formula(select = "(select count(id) from users where kingdom_id = t0.id)")
+    public int memberCount;
 
     @WhenCreated
     Date createdAt;
@@ -203,7 +202,7 @@ public class BKingdom extends Model implements Kingdom {
 
     @Override
     public int getMemberCount() {
-        return new QBUser().kingdom.eq(this).findCount();
+        return memberCount;
     }
 
     @Override

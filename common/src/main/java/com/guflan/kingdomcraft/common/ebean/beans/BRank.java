@@ -24,10 +24,8 @@ import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBRank;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.Model;
+import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
-import io.ebean.annotation.DbForeignKey;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -59,6 +57,9 @@ public class BRank extends Model implements Rank {
 
     @OneToMany(mappedBy = "rank", fetch = FetchType.EAGER)
     public List<BRankPermissionGroup> permissionGroups;
+
+    @Formula(select = "(select count(id) from users where rank_id = t0.id)")
+    public int memberCount;
 
     @WhenCreated
     public Date createdAt;
@@ -183,6 +184,6 @@ public class BRank extends Model implements Rank {
 
     @Override
     public int getMemberCount() {
-        return new QBUser().rank.eq(this).findCount();
+        return memberCount;
     }
 }
