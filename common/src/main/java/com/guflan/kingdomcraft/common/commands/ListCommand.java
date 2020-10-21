@@ -30,20 +30,17 @@ public class ListCommand extends CommandBaseImpl {
 
     public ListCommand(KingdomCraftImpl kdc) {
         super(kdc, "list", 0);
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdListExplanation"));
+        setPermissions("kingdom.list");
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !sender.hasPermission("kingdom.list") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
-            return;
-        }
-
         List<String> kingdoms = kdc.getKingdoms().stream()
                 .sorted(Comparator.comparing(Kingdom::isInviteOnly))
                 .map(k -> (k.isInviteOnly() ? "&c" : "&a") + k.getName())
                 .collect(Collectors.toList());
 
-        kdc.getMessageManager().send(sender, "cmdList", String.join("&7, ", kingdoms));
+        kdc.getMessageManager().send(sender, "cmdList", String.join("&f, ", kingdoms));
     }
 }
