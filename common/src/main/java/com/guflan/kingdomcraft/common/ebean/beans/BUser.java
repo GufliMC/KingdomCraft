@@ -99,25 +99,44 @@ public class BUser extends Model implements User {
 
     @Override
     public void setKingdom(Kingdom kingdom) {
+        if ( kingdom == this.kingdom ) {
+            return;
+        }
+
+        if ( this.kingdom != null ) {
+            this.kingdom.memberCount--;
+        }
+        if ( this.rank != null ) {
+            this.rank.memberCount--;
+        }
+
         if ( kingdom == null ) {
             this.kingdom = null;
             this.rank = null;
             return;
         }
 
-        if ( this.kingdom == null || !this.kingdom.equals(kingdom) ) {
-            this.rank = (BRank) kingdom.getDefaultRank();
-        }
-
         this.kingdom = (BKingdom) kingdom;
+        this.kingdom.memberCount++;
+
+        if ( kingdom.getDefaultRank() != null ) {
+            this.rank = (BRank) kingdom.getDefaultRank();
+            this.rank.memberCount++;
+        }
     }
 
     @Override
     public void setRank(Rank rank) {
-        if ( !rank.getKingdom().equals(kingdom) ) {
+        if ( rank == this.rank ) {
+            return;
+        }
+
+        if ( rank == null || !rank.getKingdom().equals(kingdom) ) {
             throw new IllegalArgumentException("The given rank does not belong to the user their kingdom.");
         }
+        this.rank.memberCount--;
         this.rank = (BRank) rank;
+        this.rank.memberCount++;
     }
 
     @Override

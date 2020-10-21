@@ -121,7 +121,8 @@ public class SetRankCommand extends CommandBaseImpl {
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
-                    kdc.getEventDispatcher().dispatchRankChange(targetPlayer, oldRank);
+                    kdc.getPlugin().getScheduler().executeSync(() ->
+                            kdc.getEventDispatcher().dispatchRankChange(targetPlayer, oldRank));
                     kdc.getMessageManager().send(targetPlayer, "cmdSetRankTargetChange", rank.getName());
                 }
 
