@@ -30,6 +30,7 @@ import com.guflan.kingdomcraft.common.chat.ChatDispatcher;
 import com.guflan.kingdomcraft.common.chat.ChatManagerImpl;
 import com.guflan.kingdomcraft.common.command.CommandDispatcher;
 import com.guflan.kingdomcraft.common.command.CommandManagerImpl;
+import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
@@ -71,6 +72,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
                             KingdomCraftConfig config,
+                            Configuration chatConfig,
                             StorageContext context,
                             MessageManager messageManager) {
 
@@ -86,7 +88,7 @@ public class KingdomCraftImpl implements KingdomCraft {
         this.eventManager = new EventManagerImpl();
         this.eventDispatcher = new EventDispatcher(this.eventManager);
 
-        this.chatManager = new ChatManagerImpl(this);
+        this.chatManager = new ChatManagerImpl(this, chatConfig);
         this.chatDispatcher = new ChatDispatcher(this, chatManager);
 
         this.placeholderManager = new PlaceholderManagerImpl(this);

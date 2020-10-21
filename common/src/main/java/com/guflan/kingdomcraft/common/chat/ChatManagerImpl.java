@@ -17,7 +17,6 @@
 
 package com.guflan.kingdomcraft.common.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.chat.ChatChannelFactory;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
@@ -25,58 +24,31 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.UserChatChannel;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
+import com.guflan.kingdomcraft.common.chat.channels.BasicChatChannel;
 import com.guflan.kingdomcraft.common.chat.channels.KingdomChatChannel;
+import com.guflan.kingdomcraft.common.config.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ChatManagerImpl implements ChatManager {
 
-    private final KingdomCraft kdc;
+    private final KingdomCraftImpl kdc;
 
-    private final List<ChatChannelFactory> factories = new ArrayList<>();
-    private final List<ChatChannel> chatChannels = new ArrayList<>();
+    final List<ChatChannelFactory> factories = new ArrayList<>();
+    final List<ChatChannel> chatChannels = new ArrayList<>();
 
     ChatChannel defaultChannel;
 
-    public ChatManagerImpl(KingdomCraft kdc) {
+    public ChatManagerImpl(KingdomCraftImpl kdc, Configuration config) {
         this.kdc = kdc;
         kdc.getEventManager().addListener(new ChatEventListener(this));
-    }
-
-    @Override
-    public List<ChatChannelFactory> getChatChannelFactories() {
-        return factories;
-    }
-
-    @Override
-    public void addChatChannelFactory(ChatChannelFactory factory) {
-        if ( factory == null ) {
-            return;
-        }
-
-        if ( this.factories.contains(factory) ) {
-            return;
-        }
-
-        this.factories.add(factory);
-
-        for (Kingdom kd : kdc.getKingdoms() ) {
-            if ( factory.shouldCreate(kd) ) {
-                addChatChannel(factory.create(kd));
-            }
-        }
-    }
-
-    @Override
-    public void removeChatChannelFactory(ChatChannelFactory factory) {
-        this.factories.remove(factory);
-    }
-
-    @Override
-    public ChatChannelFactory getChatChannelFactory(String name) {
-        return factories.stream().filter(c -> c.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        load(config);
     }
 
     @Override
@@ -113,21 +85,6 @@ public class ChatManagerImpl implements ChatManager {
     @Override
     public ChatChannel getDefaultChatChannel() {
         return defaultChannel;
-    }
-
-    //
-
-    List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
-        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel)
-                .filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
-    }
-
-    List<ChatChannel> getPublicChannels() {
-        return getChatChannels().stream().filter(ch -> !(ch instanceof KingdomChatChannel)).collect(Collectors.toList());
-    }
-
-    List<ChatChannel> getVisibleChannels(PlatformPlayer player) {
-        return getChatChannels().stream().filter(ch -> canSee(player, ch)).collect(Collectors.toList());
     }
 
     @Override
@@ -170,6 +127,100 @@ public class ChatManagerImpl implements ChatManager {
         }
 
         return true;
+    }
+
+    //
+
+    List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
+        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel)
+                .filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
+    }
+
+    private void load(Configuration config) {
+        if ( !config.contains("enabled") || !config.getBoolean("enabled") ) {
+            return;
+        }
+
+        if ( !config.contains("channels") || config.getConfigurationSection("channels") == null ) {
+            return;
+        }
+
+        for ( String name : config.getKeys(false) ) {
+            Configuration cs = config.getConfigurationSection(name);
+
+            if ( !cs.contains("format") ) {
+                kdc.getPlugin().log("Cannot create channel with name '" + name + "' because no format is given.", Level.WARNING);
+                continue;
+            }
+
+            if ( cs.contains("kingdom") ) {
+                ChatChannelFactory factory = createFactory(name, cs);
+                addFactory(factory);
+            } else {
+                ChatChannel ch = new BasicChatChannel(name);
+                setup(ch, cs);
+                addChatChannel(ch);
+
+                if ( cs.contains("default") && cs.getBoolean("default") ) {
+                    setDefaultChatChannel(ch);
+                }
+            }
+        }
+    }
+
+    private void addFactory(ChatChannelFactory factory) {
+        factories.add(factory);
+        for (Kingdom kd : kdc.getKingdoms() ) {
+            if ( factory.shouldCreate(kd) ) {
+                addChatChannel(factory.create(kd));
+            }
+        }
+    }
+
+    private void setup(ChatChannel channel, Configuration section) {
+        channel.setFormat(section.getString("format"));
+
+        if ( section.contains("prefix") ) {
+            channel.setPrefix(section.getString("prefix"));
+        }
+
+        if ( section.contains("toggleable") ) {
+            channel.setToggleable(section.getBoolean("toggleable"));
+        }
+
+        if ( section.contains("restricted") ) {
+            channel.setRestricted(section.getBoolean("restricted"));
+        }
+
+        if ( section.contains("range") ) {
+            channel.setRange(section.getInt("range"));
+        }
+    }
+
+    private ChatChannelFactory createFactory(String name, Configuration section) {
+        String target = section.getString("kingdom");
+        List<String> kingdoms = Arrays.stream(target.split(Pattern.quote(",")))
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        return new ChatChannelFactory() {
+            @Override
+            public boolean shouldCreate(Kingdom kingdom) {
+                return target.equals("*") || kingdoms.contains(kingdom.getName().toLowerCase());
+            }
+
+            @Override
+            public String getName() {
+                return name;
+            }
+
+            @Override
+            public ChatChannel create(Kingdom kingdom) {
+                ChatChannel ch = new KingdomChatChannel(getName() + "-" + kingdom.getName(), kingdom);
+                setup(ch, section);
+                return ch;
+            }
+        };
     }
 
 }

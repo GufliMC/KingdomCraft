@@ -15,7 +15,7 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.bukkit.chat;
+package com.guflan.kingdomcraft.bukkit.listeners;
 
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;

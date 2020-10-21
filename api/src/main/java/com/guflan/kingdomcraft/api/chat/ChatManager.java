@@ -23,16 +23,6 @@ import java.util.List;
 
 public interface ChatManager {
 
-    List<ChatChannelFactory> getChatChannelFactories();
-
-    void addChatChannelFactory(ChatChannelFactory factory);
-
-    void removeChatChannelFactory(ChatChannelFactory factory);
-
-    ChatChannelFactory getChatChannelFactory(String name);
-
-    //
-
     List<ChatChannel> getChatChannels();
 
     ChatChannel getChatChannel(String name);
