@@ -10,16 +10,19 @@ buildscript {
 
 defaultTasks 'licenseFormat', 'build'
 
+group = 'com.guflan.kingdomcraft'
+version = '6.0'
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'net.minecrell.licenser'
 
-    group = 'com.guflan.kingdomcraft'
-    version = '6.0'
-
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
+
+    group = parent.group;
+    version = parent.version;
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
@@ -42,5 +45,11 @@ subprojects {
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://repo.lucko.me/' }
+    }
+}
+
+task printVersion {
+    doLast {
+        logger.lifecycle(project.version)
     }
 }
