@@ -27,7 +27,7 @@ jobs:
     - name: Shadow Jar with Gradle
       run: ./gradlew shadowJar
     - name: Set version as environment variable
-      run: export PROJECT_VERSION="$(./gradlew printVersion)"
+      run: echo "PROJECT_VERSION=$(./gradlew printVersion)" >> $GITHUB_ENV
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.0
       with:
