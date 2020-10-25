@@ -20,6 +20,9 @@ settings:
     - world_nether
     - world_the_end
 
+    # Enable the chat even if the world is not enabled
+    enable-chat-in-disabled-worlds: false
+
     # include these relationships in the friendly fire check
     friendly-fire-relationships:
     - ally

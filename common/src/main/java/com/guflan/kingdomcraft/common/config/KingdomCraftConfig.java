@@ -86,4 +86,8 @@ public class KingdomCraftConfig {
     public String getNoKingdomSuffix() {
         return config.contains("nokingdom.suffix") ? config.getString("nokingdom.suffix") : "";
     }
+
+    public boolean isChatEnabledInDisabledWorlds() {
+        return config.contains("enable-chat-in-disabled-worlds") && config.getBoolean("enable-chat-in-disabled-worlds");
+    }
 }

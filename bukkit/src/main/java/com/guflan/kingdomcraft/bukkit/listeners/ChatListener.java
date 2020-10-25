@@ -20,6 +20,7 @@ package com.guflan.kingdomcraft.bukkit.listeners;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,6 +36,11 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
+        World world = event.getPlayer().getWorld();
+        if ( !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) && !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) ) {
+            return;
+        }
+
         PlatformPlayer player = new BukkitPlayer(event.getPlayer());
         plugin.getKdc().getChatDispatcher().handle(player, event.getMessage());
         event.setCancelled(true);
