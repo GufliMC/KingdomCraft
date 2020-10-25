@@ -24,3 +24,13 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Shadow Jar with Gradle
+      run: ./gradlew shadowJar
+    - name: Set version as environment variable
+      run: export PROJECT_VERSION="$(./gradlew printVersion)"
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.0
+      with:
+        name: $GITHUB_RUN_NUMBER_KingdomCraft-$PROJECT_VERSION
+        path: bukkit/build/libs/KingdomCraft-$PROJECT_VERSION.jar
+        if-no-files-found: 'error'
