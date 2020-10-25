@@ -67,6 +67,7 @@ cmdReloadExplanation: 'Reload KingdomCraft'
 cmdTpHereExplanation: 'Teleport everyone of your kingdom to you'
 cmdTpHereOtherExplanation: 'Teleport everyone of a kingdom to you'
 cmdChatExplanation: 'Send a message in the specified chat channel'
+cmdAdminExplanation: 'Toggle admin mode'
 
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
 cmdGroupsAddOtherExplanation: 'Add a permission group to a rank'
@@ -245,6 +246,10 @@ cmdTpHereOther: '&aTeleported everyone of kingdom &2{0} &ato you!'
 # /k chat
 cmdChatNoChannel: '&cThe chat channel &4{0} &cdoes not exist!'
 cmdChatEmptyMessage: '&cYou can''t send an empty message!'
+
+# /k admin
+cmdAdminEnable: '&aYou &2enabled &aadmin mode!'
+cmdAdminDisable: '&aYou &2disabled &aadmin mode!'
 
 # /k info
 cmdInfoTotalMembers: '&7Total members: &6{0}'

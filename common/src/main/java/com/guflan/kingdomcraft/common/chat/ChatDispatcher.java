@@ -66,11 +66,23 @@ public class ChatDispatcher {
         result = result.replace("{player}", player.getName());
 
         String finalResult = kdc.getPlaceholderManager().strip(result);
-        kdc.getOnlinePlayers().stream().filter(p -> p != player).filter(p -> chatManager.canSee(p, channel))
+        List<PlatformPlayer> receivers = kdc.getOnlinePlayers().stream()
+                .filter(p -> chatManager.canSee(p, channel))
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
-                .forEach(p -> p.sendMessage(finalResult));
+                .collect(Collectors.toList());
 
-        player.sendMessage(finalResult);
+        if ( !receivers.contains(player) ) {
+            receivers.add(player);
+        }
+
+        for ( PlatformPlayer p : receivers ) {
+            p.sendMessage(finalResult);
+        }
+
+        kdc.getOnlinePlayers().stream().filter(PlatformPlayer::isAdmin).filter(p -> !receivers.contains(p)).forEach(p -> {
+            p.sendMessage("[SS] " + finalResult);
+        });
+
         System.out.println("[CHAT] " + kdc.getMessageManager().decolorify(finalResult));
     }
 

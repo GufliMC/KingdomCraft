@@ -43,6 +43,12 @@ public interface PlatformPlayer extends PlatformSender {
         set(CUSTOM_GUI_KEY, inventory);
     }
 
+    // admin mode
+
+    boolean isAdmin();
+
+    void setAdmin(boolean admin);
+
     // cache
 
     void set(String key, Object value);
