@@ -25,7 +25,6 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
-import jdk.internal.joptsimple.internal.Strings;
 
 import java.util.Arrays;
 
@@ -53,7 +52,7 @@ public class ChatCommand extends CommandBaseImpl {
             return;
         }
 
-        String msg = Strings.join(Arrays.copyOfRange(args, 1, args.length), ", ");
+        String msg = String.join(", ", Arrays.copyOfRange(args, 1, args.length));
         String stripped = kdc.getMessageManager().decolorify(kdc.getMessageManager().colorify(msg)).trim();
         if ( stripped.equals("") ) {
             kdc.getMessageManager().send(sender, "cmdChatEmptyMessage");
