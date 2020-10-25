@@ -33,8 +33,8 @@ public class CommandDispatcher {
                     continue;
                 }
 
-                int argsLength = cmd.split(Pattern.quote(" ")).length;
-                if ( cb.getExpectedArguments() != -1 && args.length - argsLength != cb.getExpectedArguments() ) {
+                int cmdLength = cmd.split(Pattern.quote(" ")).length;
+                if ( cb.getExpectedArguments() != -1 && args.length - cmdLength != cb.getExpectedArguments() ) {
                     invalidBase = cmd;
                     invalidArguments = cb.getArgumentsHint();
                     continue;
@@ -52,7 +52,7 @@ public class CommandDispatcher {
                     }
                 }
 
-                String[] cmdArgs = Arrays.copyOfRange(args, argsLength, args.length);
+                String[] cmdArgs = Arrays.copyOfRange(args, cmdLength, args.length);
                 cb.execute(sender, cmdArgs);
                 return;
             }
