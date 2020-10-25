@@ -92,6 +92,7 @@ public class CommandManagerImpl implements CommandManager {
         registerCommand(new TpHereOtherCommand(kdc));
 
         registerCommand(new ChatCommand(kdc));
+        registerCommand(new AdminCommand(kdc));
 
         /* Management */
 

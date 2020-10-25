@@ -28,6 +28,7 @@ import java.util.UUID;
 
 public class BukkitPlayer extends AbstractPlatformPlayer {
 
+    private boolean admin;
     private final Player player;
 
     public BukkitPlayer(Player player) {
@@ -75,11 +76,25 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
         player.sendMessage(msg);
     }
 
+    // gui
+
     @Override
     public void openInventory(Inventory<?, ?> inventory) {
         if ( inventory.getHandle() instanceof org.bukkit.inventory.Inventory) {
             player.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
             super.openInventory(inventory);
         }
+    }
+
+    // admin
+
+    @Override
+    public boolean isAdmin() {
+        return this.admin;
+    }
+
+    @Override
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
