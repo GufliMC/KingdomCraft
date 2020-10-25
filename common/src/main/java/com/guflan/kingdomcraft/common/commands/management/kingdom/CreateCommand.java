@@ -18,6 +18,7 @@
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
@@ -51,21 +52,24 @@ public class CreateCommand extends CommandBaseImpl {
             return;
         }
 
-        Kingdom kingdom = kdc.createKingdom(args[0]);
-        kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName());
+        kdc.getPlugin().getScheduler().executeAsync(() -> {
+            Kingdom kingdom = kdc.createKingdom(args[0]);
+            kingdom.save();
 
-        if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
-            User user = kdc.getUser((PlatformPlayer) sender);
-            user.setKingdom(kingdom);
+            Rank king = kingdom.createRank("king");
+            king.setLevel(99);
+            king.save();
 
-            // async saving
-            kdc.getPlugin().getScheduler().executeAsync(() -> {
-                kingdom.save();
+            kdc.getPlugin().getScheduler().executeSync(() ->
+                    kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName()));
+
+            if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
+                User user = kdc.getUser((PlatformPlayer) sender);
+                user.setKingdom(kingdom);
+                user.setRank(king);
                 user.save();
-            });
-            return;
-        }
-
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
+                return;
+            }
+        });
     }
 }
