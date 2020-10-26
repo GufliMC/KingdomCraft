@@ -1,5 +1,5 @@
 name: 'KingdomCraft'
-author: iGufGuf
+author: 'Joris Guffens'
 version: ${pluginVersion}
 description: 'The Ultimate Kingdom Plugin'
 softdepend: [Vault, WorldEdit, WorldGuard]

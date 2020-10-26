@@ -20,7 +20,6 @@ package com.guflan.kingdomcraft.bukkit.gui;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.gui.Inventory;
 import com.guflan.kingdomcraft.api.gui.InventoryClickType;
-import com.guflan.kingdomcraft.api.gui.InventoryItem;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -30,7 +29,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class InventoryListener implements Listener {
 
@@ -63,7 +61,7 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        if ( !inv.getHandle().equals(e.getClickedInventory()) ) {
+        if ( !inv.getHandle().equals(e.getView().getTopInventory()) ) {
             return;
         }
 

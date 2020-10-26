@@ -47,9 +47,3 @@ subprojects {
         maven { url 'https://repo.lucko.me/' }
     }
 }
-
-task printVersion {
-    doLast {
-        logger.lifecycle(project.version)
-    }
-}
