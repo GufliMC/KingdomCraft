@@ -52,7 +52,7 @@ public class CommandDispatcher {
                 int cmdLength = cmd.split(Pattern.quote(" ")).length;
                 if ( cb.getExpectedArguments() != -1 && args.length - cmdLength != cb.getExpectedArguments() ) {
                     invalidBase = cmd;
-                    invalidArguments = cb.getArgumentsHint();
+                    invalidArguments = cb.getArgumentsHint() == null ? "" : cb.getArgumentsHint();
                     continue;
                 }
 
@@ -110,7 +110,13 @@ public class CommandDispatcher {
         // autocomplete command
         if ( args.length <= 1 ) {
             List<String> result = new ArrayList<>();
-            commandManager.commands.forEach(cb -> result.addAll(cb.getCommands().stream().map(c -> c.split(Pattern.quote(" "))[0]).collect(Collectors.toList())));
+            commandManager.commands.stream()
+                    .filter(cb -> cb.getPermissions() == null || cb.getPermissions().length == 0
+                            || Arrays.stream(cb.getPermissions()).anyMatch(sender::hasPermission))
+                    .forEach(cb -> result.addAll(cb.getCommands().stream()
+                            .map(c -> c.split(Pattern.quote(" "))[0])
+                            .collect(Collectors.toList()))
+                    );
             return result.stream().filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
         }
 
