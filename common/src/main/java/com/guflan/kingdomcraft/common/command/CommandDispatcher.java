@@ -75,7 +75,7 @@ public class CommandDispatcher {
         }
 
         if ( invalidBase != null ) {
-            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalidUsage",
+            commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalidUsage",
                     "/k " + invalidBase + " " + invalidArguments);
             return;
         }
@@ -98,10 +98,10 @@ public class CommandDispatcher {
         }
 
         if ( bestCommand != null ) {
-            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalidHint",
+            commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalidHint",
                     "/k " + bestCommand.getCommands().get(0));
         } else {
-            commandManager.kdc.getMessageManager().send(sender, "cmdDefaultInvalid");
+            commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalid");
         }
     }
 
