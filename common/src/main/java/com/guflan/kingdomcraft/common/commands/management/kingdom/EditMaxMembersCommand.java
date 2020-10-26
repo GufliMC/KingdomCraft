@@ -22,9 +22,9 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class EditMaxMembersCommand extends CommandBaseImpl {
+public class EditMaxMembersCommand extends CommandBase {
 
     public EditMaxMembersCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit max-members", 1, true);

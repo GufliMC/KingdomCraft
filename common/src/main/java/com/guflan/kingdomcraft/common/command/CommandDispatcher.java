@@ -17,7 +17,6 @@
 
 package com.guflan.kingdomcraft.common.command;
 
-import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import org.apache.commons.text.similarity.LevenshteinDistance;
@@ -30,9 +29,9 @@ import java.util.stream.Collectors;
 
 public class CommandDispatcher {
 
-    private final CommandManagerImpl commandManager;
+    private final CommandManager commandManager;
 
-    public CommandDispatcher(CommandManagerImpl commandManager) {
+    public CommandDispatcher(CommandManager commandManager) {
         this.commandManager = commandManager;
     }
 
@@ -106,7 +105,7 @@ public class CommandDispatcher {
         }
     }
 
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
 
         // autocomplete command
         if ( args.length <= 1 ) {
@@ -114,7 +113,6 @@ public class CommandDispatcher {
             commandManager.commands.forEach(cb -> result.addAll(cb.getCommands().stream().map(c -> c.split(Pattern.quote(" "))[0]).collect(Collectors.toList())));
             return result.stream().filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
         }
-
 
         List<String> result = new ArrayList<>();
         outer: for ( CommandBase cb : commandManager.commands ) {

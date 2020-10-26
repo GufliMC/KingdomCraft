@@ -23,9 +23,9 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class RanksCreateCommand extends CommandBaseImpl {
+public class RanksCreateCommand extends CommandBase {
 
     public RanksCreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks create", 1, true);

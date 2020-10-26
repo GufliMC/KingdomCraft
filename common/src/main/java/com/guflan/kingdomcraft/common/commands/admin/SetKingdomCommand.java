@@ -22,13 +22,13 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-public class SetKingdomCommand extends CommandBaseImpl {
+public class SetKingdomCommand extends CommandBase {
 
     public SetKingdomCommand(KingdomCraftImpl kdc) {
         super(kdc, "setkingdom", 2);
@@ -38,7 +38,7 @@ public class SetKingdomCommand extends CommandBaseImpl {
     }
 
     @Override
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         // first argument (users)
         if ( args.length == 1 ) {
             return kdc.getOnlinePlayers().stream().map(PlatformPlayer::getName).collect(Collectors.toList());

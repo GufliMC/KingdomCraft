@@ -20,15 +20,13 @@ package com.guflan.kingdomcraft.common.commands.management.groups;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.stream.Collectors;
 
-public class GroupsListOtherCommand extends CommandBaseImpl {
+public class GroupsListOtherCommand extends CommandBase {
 
     public GroupsListOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups list", 2);

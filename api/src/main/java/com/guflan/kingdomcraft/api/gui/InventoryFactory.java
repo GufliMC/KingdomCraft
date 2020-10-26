@@ -15,16 +15,15 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.api.command;
+package com.guflan.kingdomcraft.api.gui;
 
-import java.util.List;
+public interface InventoryFactory {
 
-public interface CommandManager {
+    Inventory<?,?> createInventory(Object handle);
 
-    void registerCommand(CommandBase command);
+    Inventory<?,?> createInventory(Object handle, InventoryCallback callback);
 
-    void unregisterCommand(CommandBase command);
+    InventoryItem<?> createItem(Object handle);
 
-    List<CommandBase> getCommands();
-
+    InventoryItem<?> createItem(Object handle, InventoryItemCallback callback);
 }

@@ -21,9 +21,9 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class RanksEditMaxMembersOtherCommand extends CommandBaseImpl {
+public class RanksEditMaxMembersOtherCommand extends CommandBase {
 
     public RanksEditMaxMembersOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit max-members", 3);

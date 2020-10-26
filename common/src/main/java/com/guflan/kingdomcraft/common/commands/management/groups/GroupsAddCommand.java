@@ -24,10 +24,10 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 import com.guflan.kingdomcraft.common.permissions.PermissionGroup;
 
-public class GroupsAddCommand extends CommandBaseImpl {
+public class GroupsAddCommand extends CommandBase {
 
     public GroupsAddCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups add", 2, true);

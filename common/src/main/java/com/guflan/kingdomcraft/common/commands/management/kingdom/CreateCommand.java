@@ -23,9 +23,9 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class CreateCommand extends CommandBaseImpl {
+public class CreateCommand extends CommandBase {
 
     public CreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "create", 1);

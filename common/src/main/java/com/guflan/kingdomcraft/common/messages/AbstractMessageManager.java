@@ -19,48 +19,41 @@ package com.guflan.kingdomcraft.common.messages;
 
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.api.messages.MessageManager;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public abstract class AbstractMessageManagerImpl implements MessageManager {
+public abstract class AbstractMessageManager {
 
 	private String prefix;
 	private final Map<String, String> messages = new HashMap<>();
 
-	@Override
-	public void registerMessage(String name, String msg) {
+	public final void addMessage(String name, String msg) {
 		messages.put(name, msg);
 	}
 
-	@Override
-	public void unregisterMessage(String name) {
+	public final void removeMessage(String name) {
 		messages.remove(name);
 	}
 
-	@Override
-	public String getPrefix() {
+	public final String getPrefix() {
 		return prefix;
 	}
 
-	@Override
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+	public final void setPrefix(String prefix) {
+		this.prefix = colorify(prefix);
 	}
 
 	private boolean isEmpty(String name) {
 		return !messages.containsKey(name) || messages.get(name).replaceAll(Pattern.quote(" "), "").equals("");
 	}
 
-	@Override
 	public String getMessage(String name) {
 		if ( !messages.containsKey(name) ) return null;
 		return colorify(messages.get(name));
 	}
 
-	@Override
 	public String getMessage(String name, String... placeholders) {
 		String message = getMessage(name);
 		if ( message == null ) return null;
@@ -73,16 +66,18 @@ public abstract class AbstractMessageManagerImpl implements MessageManager {
 		return message;
 	}
 
-	@Override
 	public void send(PlatformPlayer player, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 		player.sendMessage(colorify(prefix) + getMessage(name, placeholders));
 	}
 
-	@Override
 	public void send(PlatformSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 		sender.sendMessage(colorify(prefix) + getMessage(name, placeholders));
 	}
+
+	public abstract String colorify(String msg);
+
+	public abstract String decolorify(String msg);
 
 }

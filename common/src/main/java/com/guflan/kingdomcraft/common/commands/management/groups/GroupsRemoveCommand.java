@@ -24,10 +24,10 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 import com.guflan.kingdomcraft.common.permissions.PermissionGroup;
 
-public class GroupsRemoveCommand extends CommandBaseImpl {
+public class GroupsRemoveCommand extends CommandBase {
 
     public GroupsRemoveCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups remove", 2, true);

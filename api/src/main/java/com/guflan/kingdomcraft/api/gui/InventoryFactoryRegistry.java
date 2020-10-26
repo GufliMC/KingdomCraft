@@ -15,31 +15,18 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.api.messages;
+package com.guflan.kingdomcraft.api.gui;
 
-import com.guflan.kingdomcraft.api.entity.PlatformSender;
-import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+public class InventoryFactoryRegistry {
 
-public interface MessageManager {
+    private static InventoryFactory factory;
 
-	void registerMessage(String name, String msg);
+    public static void register(InventoryFactory _factory) {
+        factory = _factory;
+    }
 
-	void unregisterMessage(String name);
-
-	String getPrefix();
-
-	void setPrefix(String prefix);
-
-	String getMessage(String name);
-
-	String getMessage(String name, String... placeholders);
-
-	void send(PlatformPlayer player, String name, String... placeholders);
-
-	void send(PlatformSender sender, String name, String... placeholders);
-
-	String colorify(String msg);
-
-	String decolorify(String msg);
-
+    public static InventoryFactory getFactory() {
+        return factory;
+    }
+    
 }

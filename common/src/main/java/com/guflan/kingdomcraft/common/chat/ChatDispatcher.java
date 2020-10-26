@@ -17,9 +17,9 @@
 
 package com.guflan.kingdomcraft.common.chat;
 
-import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 
 import java.util.Comparator;
 import java.util.List;
@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 
 public class ChatDispatcher {
 
-    private final KingdomCraft kdc;
+    private final KingdomCraftImpl kdc;
     private final ChatManagerImpl chatManager;
 
-    public ChatDispatcher(KingdomCraft kdc, ChatManagerImpl chatManager) {
+    public ChatDispatcher(KingdomCraftImpl kdc, ChatManagerImpl chatManager) {
         this.kdc = kdc;
         this.chatManager = chatManager;
     }

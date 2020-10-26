@@ -25,7 +25,7 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.event.EventListener;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +47,8 @@ public class PermissionsListener implements Listener, EventListener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getKdc().getEventManager().addListener(this);
 
-        plugin.getKdc().getCommandManager().registerCommand(new CommandBaseImpl(plugin.getKdc(), "perms", 0, true) {
+        // TODO remove at release
+        plugin.getKdc().getCommandManager().addCommand(new CommandBase(plugin.getKdc(), "perms", 0, true) {
             @Override
             public void execute(PlatformSender sender, String[] args) {
                 PlatformPlayer p = (PlatformPlayer) sender;

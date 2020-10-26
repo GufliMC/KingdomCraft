@@ -17,17 +17,16 @@
 
 package com.guflan.kingdomcraft.common.commands;
 
-import com.guflan.kingdomcraft.api.command.CommandBase;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HelpCommand extends CommandBaseImpl {
+public class HelpCommand extends CommandBase {
 
     public HelpCommand(KingdomCraftImpl kdc) {
         super(kdc, "help");

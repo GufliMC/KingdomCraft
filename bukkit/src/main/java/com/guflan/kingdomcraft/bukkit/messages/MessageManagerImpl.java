@@ -17,7 +17,7 @@
 
 package com.guflan.kingdomcraft.bukkit.messages;
 
-import com.guflan.kingdomcraft.common.messages.AbstractMessageManagerImpl;
+import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public class MessageManagerImpl extends AbstractMessageManagerImpl {
+public class MessageManagerImpl extends AbstractMessageManager {
 
 	public MessageManagerImpl(Plugin kingdomCraft) {
 		InputStream in = kingdomCraft.getResource("messages.yml");
@@ -39,7 +39,7 @@ public class MessageManagerImpl extends AbstractMessageManagerImpl {
 			config.set("prefix", null);
 
 			for ( String key : config.getKeys(false) ) {
-				registerMessage(key, config.getString(key));
+				addMessage(key, config.getString(key));
 			}
 		} catch (Exception ex) {
 			System.out.println("!!! ERROR !!! \nCouldn't retrieve default language! This can cause wrong message display!\n\n");
@@ -48,7 +48,6 @@ public class MessageManagerImpl extends AbstractMessageManagerImpl {
 	}
 
 
-	@Override
 	public String getMessage(String name) {
 		String msg = super.getMessage(name);
 		return msg == null ? null : StringEscapeUtils.unescapeJava(msg);

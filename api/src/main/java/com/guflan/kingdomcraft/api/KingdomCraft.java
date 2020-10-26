@@ -18,11 +18,12 @@
 package com.guflan.kingdomcraft.api;
 
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.command.CommandManager;
-import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.api.domain.RelationType;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
-import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 
 import java.util.List;
@@ -32,10 +33,6 @@ import java.util.concurrent.CompletableFuture;
 public interface KingdomCraft {
 
     // managers
-
-    MessageManager getMessageManager();
-
-    CommandManager getCommandManager();
 
     EventManager getEventManager();
 

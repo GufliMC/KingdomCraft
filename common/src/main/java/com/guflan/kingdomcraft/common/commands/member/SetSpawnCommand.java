@@ -23,11 +23,11 @@ import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.text.DecimalFormat;
 
-public class SetSpawnCommand extends CommandBaseImpl {
+public class SetSpawnCommand extends CommandBase {
 
     public SetSpawnCommand(KingdomCraftImpl kdc) {
         super(kdc, "setspawn", 0, true);

@@ -21,11 +21,11 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.stream.Collectors;
 
-public class RanksListOtherCommand extends CommandBaseImpl {
+public class RanksListOtherCommand extends CommandBase {
 
     public RanksListOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks list", 1);

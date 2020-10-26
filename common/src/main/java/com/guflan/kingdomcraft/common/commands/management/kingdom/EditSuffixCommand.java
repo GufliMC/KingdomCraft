@@ -22,9 +22,9 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class EditSuffixCommand extends CommandBaseImpl {
+public class EditSuffixCommand extends CommandBase {
 
     public EditSuffixCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit suffix", 1, true);

@@ -18,18 +18,17 @@
 package com.guflan.kingdomcraft.common.commands;
 
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
-import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.domain.UserChatChannel;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChatChannelCommand extends CommandBaseImpl {
+public class ChatChannelCommand extends CommandBase {
 
     public ChatChannelCommand(KingdomCraftImpl kdc) {
         super(kdc, "chatchannel", 1, true);
@@ -39,7 +38,7 @@ public class ChatChannelCommand extends CommandBaseImpl {
     }
 
     @Override
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         return kdc.getChatManager().getChatChannels().stream().filter(ChatChannel::isToggleable)
                 .filter(c -> kdc.getChatManager().canAccess((PlatformPlayer) sender, c))
                 .map(ChatChannel::getName).collect(Collectors.toList());

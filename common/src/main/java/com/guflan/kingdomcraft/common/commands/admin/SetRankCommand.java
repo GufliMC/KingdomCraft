@@ -23,13 +23,13 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-public class SetRankCommand extends CommandBaseImpl {
+public class SetRankCommand extends CommandBase {
 
     public SetRankCommand(KingdomCraftImpl kdc) {
         super(kdc, "setrank", 2);
@@ -39,7 +39,7 @@ public class SetRankCommand extends CommandBaseImpl {
     }
 
     @Override
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
 
         // first argument (players)
         if ( args.length == 1 ) {

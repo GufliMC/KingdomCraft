@@ -20,26 +20,15 @@ package com.guflan.kingdomcraft.common.commands.management.kingdom;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class EditPrefixOtherCommand extends CommandBaseImpl {
+public class EditPrefixOtherCommand extends CommandBase {
 
     public EditPrefixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 2);
         setArgumentsHint("<kingdom> <prefix>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitPrefixOtherExplanation"));
         setPermissions("kingdom.edit.prefix.other");
-    }
-
-    @Override
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
-        if ( args.length == 1 ) {
-            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
-        }
-        return null;
     }
 
     @Override

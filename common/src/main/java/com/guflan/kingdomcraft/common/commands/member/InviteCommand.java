@@ -22,11 +22,11 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.concurrent.ExecutionException;
 
-public class InviteCommand extends CommandBaseImpl {
+public class InviteCommand extends CommandBase {
 
     public InviteCommand(KingdomCraftImpl kdc) {
         super(kdc, "invite", 1, true);

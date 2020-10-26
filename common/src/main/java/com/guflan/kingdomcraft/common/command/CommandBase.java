@@ -15,14 +15,18 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.api.command;
+package com.guflan.kingdomcraft.common.command;
 
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BasicCommandBase implements CommandBase {
+public abstract class CommandBase  {
+
+    protected final KingdomCraftImpl kdc;
 
     private final List<String> commands = new ArrayList<>();
 
@@ -34,19 +38,18 @@ public abstract class BasicCommandBase implements CommandBase {
 
     private String[] permissions;
 
-    public BasicCommandBase() {}
-
-    public BasicCommandBase(String command) {
+    public CommandBase(KingdomCraftImpl kdc, String command) {
+        this.kdc = kdc;
         this.commands.add(command);
     }
 
-    public BasicCommandBase(String command, int expectedArguments) {
-        this(command);
+    public CommandBase(KingdomCraftImpl kdc, String command, int expectedArguments) {
+        this(kdc, command);
         this.expectedArguments = expectedArguments;
     }
 
-    public BasicCommandBase(String command, int expectedArguments, boolean isPlayerOnly) {
-        this(command, expectedArguments);
+    public CommandBase(KingdomCraftImpl kdc, String command, int expectedArguments, boolean isPlayerOnly) {
+        this(kdc, command, expectedArguments);
         this.isPlayerOnly = isPlayerOnly;
     }
 
@@ -55,17 +58,14 @@ public abstract class BasicCommandBase implements CommandBase {
         commands.add(alias);
     }
 
-    @Override
     public boolean isPlayerOnly() {
         return isPlayerOnly;
     }
 
-    @Override
     public int getExpectedArguments() {
         return expectedArguments;
     }
 
-    @Override
     public String getArgumentsHint() {
         return argumentsHint;
     }
@@ -74,7 +74,6 @@ public abstract class BasicCommandBase implements CommandBase {
         this.argumentsHint = argumentsHint;
     }
 
-    @Override
     public String getExplanationMessage() {
         return explanationMessage;
     }
@@ -83,7 +82,6 @@ public abstract class BasicCommandBase implements CommandBase {
         this.explanationMessage = explanationMessage;
     }
 
-    @Override
     public String[] getPermissions() {
         return permissions;
     }
@@ -92,11 +90,13 @@ public abstract class BasicCommandBase implements CommandBase {
         this.permissions = permissions;
     }
 
-    @Override
     public List<String> getCommands() {
         return commands;
     }
 
-    @Override
     public abstract void execute(PlatformSender sender, String[] args);
+    
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        return null;
+    }
 }

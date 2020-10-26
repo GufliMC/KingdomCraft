@@ -23,12 +23,12 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JoinCommand extends CommandBaseImpl {
+public class JoinCommand extends CommandBase {
 
     public JoinCommand(KingdomCraftImpl kdc) {
         super(kdc, "join", 1, true);
@@ -38,7 +38,7 @@ public class JoinCommand extends CommandBaseImpl {
     }
 
     @Override
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
     }
 

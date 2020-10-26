@@ -20,26 +20,15 @@ package com.guflan.kingdomcraft.common.commands.management.kingdom;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class EditSuffixOtherCommand extends CommandBaseImpl {
+public class EditSuffixOtherCommand extends CommandBase {
 
     public EditSuffixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit suffix", 1);
         setArgumentsHint("<kingdom> <suffix>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitSuffixOtherExplanation"));
         setPermissions("kingdom.edit.suffix.other");
-    }
-
-    @Override
-    public List<String> autocomplete(PlatformSender sender, String[] args) {
-        if ( args.length == 1 ) {
-            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
-        }
-        return null;
     }
 
     @Override

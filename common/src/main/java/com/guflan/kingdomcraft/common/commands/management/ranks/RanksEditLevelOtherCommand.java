@@ -21,9 +21,9 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class RanksEditLevelOtherCommand extends CommandBaseImpl {
+public class RanksEditLevelOtherCommand extends CommandBase {
 
     public RanksEditLevelOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit level", 3);

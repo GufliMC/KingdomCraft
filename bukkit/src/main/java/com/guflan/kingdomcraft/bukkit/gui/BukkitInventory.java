@@ -23,8 +23,16 @@ import org.bukkit.Bukkit;
 
 public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.inventory.Inventory> {
 
+    public BukkitInventory(org.bukkit.inventory.Inventory inv, InventoryCallback callback) {
+        super(inv, callback);
+    }
+
+    public BukkitInventory(org.bukkit.inventory.Inventory inv) {
+        super(inv);
+    }
+
     public BukkitInventory(String name, int size, InventoryCallback callback) {
-        super(Bukkit.createInventory(null, size, name), callback);
+        this(Bukkit.createInventory(null, size, name), callback);
     }
 
     public BukkitInventory(String name, int size) {

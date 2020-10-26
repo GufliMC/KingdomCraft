@@ -23,9 +23,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class TpHereOtherCommand extends CommandBaseImpl {
+public class TpHereOtherCommand extends CommandBase {
 
     public TpHereOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "tphere", 1, true);

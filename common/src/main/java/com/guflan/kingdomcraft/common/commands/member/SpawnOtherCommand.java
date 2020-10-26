@@ -22,12 +22,12 @@ import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 import com.guflan.kingdomcraft.common.util.Teleporter;
 
 import java.text.DecimalFormat;
 
-public class SpawnOtherCommand extends CommandBaseImpl {
+public class SpawnOtherCommand extends CommandBase {
 
     public SpawnOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "spawn", 1, true);

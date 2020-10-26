@@ -20,14 +20,11 @@ package com.guflan.kingdomcraft.common.commands.management.ranks;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
-import com.guflan.kingdomcraft.common.permissions.PermissionGroup;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class RanksCloneCommand extends CommandBaseImpl {
+public class RanksCloneCommand extends CommandBase {
 
     public RanksCloneCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks clone", 3, true);

@@ -17,7 +17,6 @@
 
 package com.guflan.kingdomcraft.bukkit;
 
-import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.bukkit.listeners.ChatListener;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfiguration;
@@ -31,6 +30,7 @@ import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
+import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
 import io.ebean.migration.MigrationException;
 import org.bukkit.Bukkit;
@@ -125,7 +125,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
 		Configuration groupsConfig = new BukkitConfiguration(initConfig("groups.yml"));
 
-		MessageManager messageManager = new MessageManagerImpl(this);
+		AbstractMessageManager messageManager = new MessageManagerImpl(this);
 		this.kdc = new KingdomCraftImpl(this, context, messageManager, pluginConfig, chatConfig, groupsConfig);
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {

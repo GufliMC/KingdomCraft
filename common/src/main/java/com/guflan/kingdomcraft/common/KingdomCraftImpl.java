@@ -20,21 +20,23 @@ package com.guflan.kingdomcraft.common;
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.KingdomCraftProvider;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.command.CommandManager;
-import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Relation;
+import com.guflan.kingdomcraft.api.domain.RelationType;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
-import com.guflan.kingdomcraft.api.messages.MessageManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.common.chat.ChatDispatcher;
 import com.guflan.kingdomcraft.common.chat.ChatManagerImpl;
 import com.guflan.kingdomcraft.common.command.CommandDispatcher;
-import com.guflan.kingdomcraft.common.command.CommandManagerImpl;
+import com.guflan.kingdomcraft.common.command.CommandManager;
 import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
 import com.guflan.kingdomcraft.common.event.EventManagerImpl;
+import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
 import com.guflan.kingdomcraft.common.permissions.PermissionManager;
 import com.guflan.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.guflan.kingdomcraft.common.util.Teleporter;
@@ -51,10 +53,13 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final KingdomCraftConfig config;
     private final StorageContext context;
 
-    //
-
-    private final CommandManagerImpl commandManager;
+    private final CommandManager commandManager;
     private final CommandDispatcher commandDispatcher;
+
+    private final AbstractMessageManager messageManager;
+    private final PermissionManager permissionManager;
+
+    // public
 
     private final EventManagerImpl eventManager;
     private final EventDispatcher eventDispatcher;
@@ -63,8 +68,6 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final ChatDispatcher chatDispatcher;
 
     private final PlaceholderManagerImpl placeholderManager;
-    private final MessageManager messageManager;
-    private final PermissionManager permissionManager;
 
     //
 
@@ -72,7 +75,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
                             StorageContext context,
-                            MessageManager messageManager,
+                            AbstractMessageManager messageManager,
                             Configuration config,
                             Configuration chatConfig,
                             Configuration groupsConfig) {
@@ -83,7 +86,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
         this.config = new KingdomCraftConfig(config);
 
-        this.commandManager = new CommandManagerImpl(this);
+        this.commandManager = new CommandManager(this);
         this.commandDispatcher = new CommandDispatcher(commandManager);
 
         this.eventManager = new EventManagerImpl();
@@ -111,8 +114,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     // messages
 
-    @Override
-    public MessageManager getMessageManager() {
+    public AbstractMessageManager getMessageManager() {
         return messageManager;
     }
 
@@ -153,7 +155,6 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     // commands
 
-    @Override
     public CommandManager getCommandManager() {
         return commandManager;
     }

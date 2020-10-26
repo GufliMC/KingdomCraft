@@ -23,9 +23,9 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class RanksEditPrefixCommand extends CommandBaseImpl {
+public class RanksEditPrefixCommand extends CommandBase {
 
     public RanksEditPrefixCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit prefix", 2, true);

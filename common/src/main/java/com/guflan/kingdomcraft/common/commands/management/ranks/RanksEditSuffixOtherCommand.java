@@ -21,9 +21,9 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-public class RanksEditSuffixOtherCommand extends CommandBaseImpl {
+public class RanksEditSuffixOtherCommand extends CommandBase {
 
     public RanksEditSuffixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit suffix", 3);

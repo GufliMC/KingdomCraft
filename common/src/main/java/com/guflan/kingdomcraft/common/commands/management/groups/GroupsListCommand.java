@@ -24,11 +24,11 @@ import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.stream.Collectors;
 
-public class GroupsListCommand extends CommandBaseImpl {
+public class GroupsListCommand extends CommandBase {
 
     public GroupsListCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups list", 1, true);

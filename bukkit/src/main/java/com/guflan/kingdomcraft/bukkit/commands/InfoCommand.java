@@ -28,7 +28,7 @@ import com.guflan.kingdomcraft.api.gui.InventoryItem;
 import com.guflan.kingdomcraft.bukkit.gui.BukkitInventory;
 import com.guflan.kingdomcraft.bukkit.gui.BukkitInventoryItem;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -45,7 +45,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class InfoCommand extends CommandBaseImpl {
+public class InfoCommand extends CommandBase {
 
     public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", -1, true);

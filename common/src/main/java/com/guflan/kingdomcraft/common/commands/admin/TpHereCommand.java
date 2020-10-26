@@ -18,18 +18,14 @@
 package com.guflan.kingdomcraft.common.commands.admin;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.KingdomInvite;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.command.CommandBaseImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class TpHereCommand extends CommandBaseImpl {
+public class TpHereCommand extends CommandBase {
 
     public TpHereCommand(KingdomCraftImpl kdc) {
         super(kdc, "tphere", 0, true);
