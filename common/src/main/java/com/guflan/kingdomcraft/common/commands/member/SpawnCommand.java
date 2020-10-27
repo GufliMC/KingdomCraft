@@ -51,7 +51,7 @@ public class SpawnCommand extends CommandBase {
             return;
         }
 
-        Teleporter.teleport((PlatformPlayer) sender, loc, kdc.getConfig().getTeleportDelay()).thenRun(() -> {
+        Teleporter.teleport((PlatformPlayer) sender, loc).thenRun(() -> {
             DecimalFormat df = new DecimalFormat("#");
             String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 

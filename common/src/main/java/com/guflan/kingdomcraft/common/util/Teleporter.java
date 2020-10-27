@@ -34,6 +34,15 @@ public class Teleporter {
         Teleporter.kdc = kdc;
     }
 
+    public static CompletableFuture<Void> teleport(PlatformPlayer player, PlatformLocation target) {
+        int delay = 0;
+        if ( !player.isAdmin() ) {
+            delay = kdc.getConfig().getTeleportDelay();
+        }
+
+        return teleport(player, target, delay);
+    }
+
     public static CompletableFuture<Void> teleport(PlatformPlayer player, PlatformLocation target, int delay) {
         CompletableFuture<Void> future = new CompletableFuture<>();
 
