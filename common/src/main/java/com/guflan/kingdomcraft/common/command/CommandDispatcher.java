@@ -45,7 +45,7 @@ public class CommandDispatcher {
 
         for ( CommandBase cb : commandManager.commands ) {
             for ( String cmd : cb.getCommands() ) {
-                if ( !String.join(" ", args).toLowerCase().startsWith(cmd.toLowerCase()) ) {
+                if ( !(String.join(" ", args).toLowerCase() + " ").startsWith(cmd.toLowerCase() + " ") ) {
                     continue;
                 }
 
@@ -109,17 +109,20 @@ public class CommandDispatcher {
 
         // autocomplete command
         if ( args.length <= 1 ) {
+            String arg0 = args[0].toLowerCase();
             List<String> result = new ArrayList<>();
             commandManager.commands.stream()
                     .filter(cb -> cb.getPermissions() == null || cb.getPermissions().length == 0
                             || Arrays.stream(cb.getPermissions()).anyMatch(sender::hasPermission))
                     .forEach(cb -> result.addAll(cb.getCommands().stream()
                             .map(c -> c.split(Pattern.quote(" "))[0])
+                            .filter(s -> s.toLowerCase().startsWith(arg0))
                             .collect(Collectors.toList()))
                     );
-            return result.stream().filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+            return result;
         }
 
+        String input = String.join(" ", args).toLowerCase();
         List<String> result = new ArrayList<>();
         outer: for ( CommandBase cb : commandManager.commands ) {
             if ( cb.getPermissions() != null && cb.getPermissions().length > 0 ) {
@@ -130,7 +133,7 @@ public class CommandDispatcher {
 
             for ( String cmd : cb.getCommands() ) {
                 // check full command match
-                if ( String.join(" ", args).toLowerCase().startsWith(cmd.toLowerCase()) ) {
+                if ( (input + " ").startsWith(cmd.toLowerCase() + " ") ) {
                     String[] cmdArgs = Arrays.copyOfRange(args, cmd.split(Pattern.quote(" ")).length, args.length);
                     List<String> options = cb.autocomplete(sender, cmdArgs);
                     if ( options != null ) {
@@ -140,7 +143,7 @@ public class CommandDispatcher {
                 }
 
                 // check partial command match
-                if ( cmd.toLowerCase().startsWith(String.join(" ", args).toLowerCase()) ) {
+                if ( cmd.toLowerCase().startsWith(input) ) {
                     result.add(cmd.split(Pattern.quote(" "))[args.length - 1]);
                     continue outer;
                 }

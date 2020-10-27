@@ -50,11 +50,11 @@ public class Teleporter {
             kdc.getMessageManager().send(player, "teleport", delay + "");
         }
 
-        SchedulerTask task = kdc.getPlugin().getScheduler().syncLater(() -> {
+        player.set(TELEPORT_KEY, kdc.getPlugin().getScheduler().syncLater(() -> {
+            player.remove(TELEPORT_KEY);
             player.teleport(target);
             future.complete(null);
-        }, delay, TimeUnit.SECONDS);
-        player.set(TELEPORT_KEY, task);
+        }, delay, TimeUnit.SECONDS));
 
         return future;
     }
@@ -65,6 +65,7 @@ public class Teleporter {
         }
         kdc.getMessageManager().send(player, "teleportCancel");
         player.get(TELEPORT_KEY, SchedulerTask.class).cancel();
+        player.remove(TELEPORT_KEY);
     }
 
 }

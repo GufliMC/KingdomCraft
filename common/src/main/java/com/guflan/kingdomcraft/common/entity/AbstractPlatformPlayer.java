@@ -28,12 +28,21 @@ public abstract class AbstractPlatformPlayer implements PlatformPlayer {
 
     @Override
     public void set(String key, Object value) {
-        cache.put(key, value);
+        if ( value == null ) {
+            remove(key);
+        } else {
+            cache.put(key, value);
+        }
     }
 
     @Override
     public boolean has(String key) {
         return cache.containsKey(key);
+    }
+
+    @Override
+    public void remove(String key) {
+        cache.remove(key);
     }
 
     @Override

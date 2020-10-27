@@ -55,6 +55,8 @@ public interface PlatformPlayer extends PlatformSender {
 
     boolean has(String key);
 
+    void remove(String key);
+
     Object get(String key);
 
     <T> T get(String key, Class<T> clazz);
