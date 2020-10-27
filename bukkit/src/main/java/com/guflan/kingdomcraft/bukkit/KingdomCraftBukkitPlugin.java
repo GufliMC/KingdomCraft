@@ -25,6 +25,7 @@ import com.guflan.kingdomcraft.bukkit.gui.InventoryListener;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
 import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
 import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
+import com.guflan.kingdomcraft.bukkit.placeholders.VaultPlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
@@ -159,6 +160,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// placeholders
 		new PlaceholderReplacer(this);
+		new VaultPlaceholderReplacer(this);
 	}
 
 	private void disable() {
