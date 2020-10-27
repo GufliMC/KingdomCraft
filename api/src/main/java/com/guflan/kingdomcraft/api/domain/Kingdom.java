@@ -56,9 +56,9 @@ public interface Kingdom extends Model {
 
     Rank createRank(String name);
 
-    KingdomAttribute getOrCreateAttribute(String name);
-
     KingdomAttribute getAttribute(String name);
+
+    KingdomAttribute createAttribute(String name);
 
     PlatformLocation getSpawn();
 

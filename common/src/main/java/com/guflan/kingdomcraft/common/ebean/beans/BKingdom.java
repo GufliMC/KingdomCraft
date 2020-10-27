@@ -20,6 +20,7 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
@@ -174,7 +175,12 @@ public class BKingdom extends Model implements Kingdom {
     }
 
     @Override
-    public KingdomAttribute getOrCreateAttribute(String name) {
+    public KingdomAttribute getAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public KingdomAttribute createAttribute(String name) {
         return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElseGet(() -> {
             BKingdomAttribute attribute = new BKingdomAttribute();
             attribute.kingdom = this;
@@ -183,11 +189,6 @@ public class BKingdom extends Model implements Kingdom {
             attributes.add(attribute);
             return attribute;
         });
-    }
-
-    @Override
-    public KingdomAttribute getAttribute(String name) {
-        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
     }
 
     @Override
