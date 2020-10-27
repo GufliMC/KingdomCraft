@@ -24,6 +24,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class EditInviteOnlyCommand extends CommandBase {
 
     public EditInviteOnlyCommand(KingdomCraftImpl kdc) {
@@ -31,6 +34,14 @@ public class EditInviteOnlyCommand extends CommandBase {
         setArgumentsHint("[true/false]");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdEditInviteOnlyExplanation"));
         setPermissions("kingdom.edit.invite-only");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            return Arrays.asList("true", "false");
+        }
+        return null;
     }
 
     @Override

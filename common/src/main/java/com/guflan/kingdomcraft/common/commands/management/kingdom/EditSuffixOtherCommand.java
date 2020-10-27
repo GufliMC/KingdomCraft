@@ -18,9 +18,13 @@
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditSuffixOtherCommand extends CommandBase {
 
@@ -29,6 +33,14 @@ public class EditSuffixOtherCommand extends CommandBase {
         setArgumentsHint("<kingdom> <suffix>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitSuffixOtherExplanation"));
         setPermissions("kingdom.edit.suffix.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
+        if ( args.length == 1 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

@@ -52,6 +52,10 @@ public class PermissionManager {
         return groups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    public List<PermissionGroup> getGroups() {
+        return new ArrayList<>(groups);
+    }
+
     public PermissionGroup getDefaultGroup() {
         return defaultGroup;
     }

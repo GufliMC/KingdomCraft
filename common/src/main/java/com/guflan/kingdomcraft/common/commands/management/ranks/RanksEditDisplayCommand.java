@@ -24,6 +24,10 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+import com.guflan.kingdomcraft.common.permissions.PermissionGroup;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RanksEditDisplayCommand extends CommandBase {
 
@@ -32,6 +36,18 @@ public class RanksEditDisplayCommand extends CommandBase {
         setArgumentsHint("<rank> <value>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksEditDisplayExplanation"));
         setPermissions("kingdom.ranks.edit.display");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            User user = kdc.getUser(player);
+            if ( user.getKingdom() == null ) {
+                return null;
+            }
+            return user.getKingdom().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

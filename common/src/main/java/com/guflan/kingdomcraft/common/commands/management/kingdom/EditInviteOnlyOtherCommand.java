@@ -18,9 +18,14 @@
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditInviteOnlyOtherCommand extends CommandBase {
 
@@ -29,6 +34,17 @@ public class EditInviteOnlyOtherCommand extends CommandBase {
         setArgumentsHint("<kingdom> [true/false]");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdInviteOnlyOtherExplanation"));
         setPermissions("kingdom.edit.invite-only.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        if ( args.length == 2 ) {
+            return Arrays.asList("true", "false");
+        }
+        return null;
     }
 
     @Override

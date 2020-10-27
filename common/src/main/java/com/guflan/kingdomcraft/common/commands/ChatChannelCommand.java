@@ -40,7 +40,7 @@ public class ChatChannelCommand extends CommandBase {
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         return kdc.getChatManager().getChatChannels().stream().filter(ChatChannel::isToggleable)
-                .filter(c -> kdc.getChatManager().canAccess((PlatformPlayer) sender, c))
+                .filter(c -> kdc.getChatManager().canAccess(sender, c))
                 .map(ChatChannel::getName).collect(Collectors.toList());
     }
 

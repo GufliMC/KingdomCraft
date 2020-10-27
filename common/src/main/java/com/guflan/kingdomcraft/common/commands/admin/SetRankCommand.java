@@ -39,17 +39,15 @@ public class SetRankCommand extends CommandBase {
     }
 
     @Override
-    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
-
-        // first argument (players)
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
         if ( args.length == 1 ) {
-            if ( sender.hasPermission("kingdom.setrank.other") ) {
+            if ( player.hasPermission("kingdom.setrank.other") ) {
                 return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() != null)
                         .map(PlatformPlayer::getName).collect(Collectors.toList());
             }
 
-            User user = kdc.getUser((PlatformPlayer) sender);
-            if ( sender.hasPermission("kingdom.setrank") && user.getKingdom() != null ) {
+            User user = kdc.getUser(player);
+            if ( player.hasPermission("kingdom.setrank") && user.getKingdom() != null ) {
                 return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() == user.getKingdom())
                         .filter(p -> {
                             User u = kdc.getUser(p);
@@ -59,15 +57,26 @@ public class SetRankCommand extends CommandBase {
             }
             return null;
         }
+        if ( args.length == 2 ) {
+            User user = kdc.getUser(player);
+            if ( user.getKingdom() == null ) {
+                return null;
+            }
 
-        // second argument (users)
-        User user = kdc.getOnlineUser(args[0]);
-        if ( user == null || user.getKingdom() == null ) {
-            return null;
+            User target = kdc.getOnlineUser(args[0]);
+            if (target == null || target.getKingdom() == null) {
+                return null;
+            }
+
+            if ( !player.hasPermission("kingdom.setrank.other") && user.getKingdom() != target.getKingdom() ) {
+                return null;
+            }
+
+            return user.getKingdom().getRanks().stream()
+                    .filter(rank -> rank.getMaxMembers() == 0 || rank.getMemberCount() < rank.getMaxMembers())
+                    .map(Rank::getName).collect(Collectors.toList());
         }
-        return user.getKingdom().getRanks().stream()
-                .filter(rank -> rank.getMaxMembers() == 0 || rank.getMemberCount() < rank.getMaxMembers())
-                .map(Rank::getName).collect(Collectors.toList());
+        return null;
     }
 
     @Override

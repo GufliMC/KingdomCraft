@@ -19,9 +19,13 @@ package com.guflan.kingdomcraft.common.commands.management.ranks;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RanksEditSuffixOtherCommand extends CommandBase {
 
@@ -30,6 +34,21 @@ public class RanksEditSuffixOtherCommand extends CommandBase {
         setArgumentsHint("<rank> <value>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksEditSuffixOtherExplanation"));
         setPermissions("kingdom.ranks.edit.suffix.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        if ( args.length == 2 ) {
+            Kingdom kingdom = kdc.getKingdom(args[0]);
+            if ( kingdom == null ) {
+                return null;
+            }
+            return kingdom.getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

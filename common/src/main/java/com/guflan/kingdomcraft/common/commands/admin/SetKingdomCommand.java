@@ -39,13 +39,13 @@ public class SetKingdomCommand extends CommandBase {
 
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
-        // first argument (users)
         if ( args.length == 1 ) {
             return kdc.getOnlinePlayers().stream().map(PlatformPlayer::getName).collect(Collectors.toList());
         }
-
-        // second argument (kingdoms)
-        return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        if ( args.length == 2 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

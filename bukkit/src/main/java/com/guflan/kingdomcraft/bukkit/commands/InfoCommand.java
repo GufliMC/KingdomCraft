@@ -44,6 +44,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class InfoCommand extends CommandBase {
 
@@ -51,6 +52,17 @@ public class InfoCommand extends CommandBase {
         super(kdc, "info", -1, true);
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdInfoExplanation"));
         setPermissions("kingdom.info", "kingdom.info.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 && player.hasPermission("kingdom.info.other") ) {
+            List<String> result = kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+            result .addAll(kdc.getOnlinePlayers().stream().filter(p -> p != player)
+                            .map(PlatformPlayer::getName).collect(Collectors.toList()));
+            return result;
+        }
+        return null;
     }
 
     @Override

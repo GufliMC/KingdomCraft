@@ -27,6 +27,9 @@ import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 import com.guflan.kingdomcraft.common.permissions.PermissionGroup;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class GroupsRemoveCommand extends CommandBase {
 
     public GroupsRemoveCommand(KingdomCraftImpl kdc) {
@@ -34,6 +37,26 @@ public class GroupsRemoveCommand extends CommandBase {
         setArgumentsHint("<rank> <group>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdGroupsRemoveExplanation"));
         setPermissions("kingdom.groups.remove");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            User user = kdc.getUser(player);
+            if ( user.getKingdom() == null ) {
+                return null;
+            }
+            return user.getKingdom().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        }
+        if ( args.length == 2 ) {
+            User user = kdc.getUser(player);
+            if ( user.getKingdom() == null || user.getKingdom().getRank(args[0]) == null ) {
+                return null;
+            }
+            return user.getKingdom().getRank(args[0]).getPermissionGroups().stream()
+                    .map(RankPermissionGroup::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

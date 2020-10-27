@@ -24,6 +24,8 @@ import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChatCommand extends CommandBase {
 
@@ -32,6 +34,14 @@ public class ChatCommand extends CommandBase {
         setArgumentsHint("<channel> <message>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdChatExplanation"));
         setPermissions("kingdom.chat");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            return kdc.getChatManager().getChatChannels().stream().map(ChatChannel::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

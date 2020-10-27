@@ -25,6 +25,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TpHereOtherCommand extends CommandBase {
 
     public TpHereOtherCommand(KingdomCraftImpl kdc) {
@@ -32,6 +35,11 @@ public class TpHereOtherCommand extends CommandBase {
         setArgumentsHint("<kingdom>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdTpHereOtherExplanation"));
         setPermissions("kingdom.tphere.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
     }
 
     @Override

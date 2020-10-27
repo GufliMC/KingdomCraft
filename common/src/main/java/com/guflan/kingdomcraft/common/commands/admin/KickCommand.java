@@ -38,15 +38,17 @@ public class KickCommand extends CommandBase {
     }
 
     @Override
-    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
-        if ( sender.hasPermission("kingdom.kick.other") ) {
-            return kdc.getOnlinePlayers().stream().map(PlatformPlayer::getName).collect(Collectors.toList());
-        }
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            if (player.hasPermission("kingdom.kick.other")) {
+                return kdc.getOnlinePlayers().stream().filter(p -> p != player).map(PlatformPlayer::getName).collect(Collectors.toList());
+            }
 
-        User user = kdc.getUser((PlatformPlayer) sender);
-        if ( sender.hasPermission("kingdom.kick") && user.getKingdom() != null ) {
-            return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() == user.getKingdom())
-                    .map(PlatformPlayer::getName).collect(Collectors.toList());
+            User user = kdc.getUser(player);
+            if (player.hasPermission("kingdom.kick") && user.getKingdom() != null) {
+                return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() == user.getKingdom())
+                        .map(PlatformPlayer::getName).collect(Collectors.toList());
+            }
         }
         return null;
     }

@@ -25,6 +25,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class RanksDeleteCommand extends CommandBase {
 
     public RanksDeleteCommand(KingdomCraftImpl kdc) {
@@ -32,6 +35,12 @@ public class RanksDeleteCommand extends CommandBase {
         setArgumentsHint("<rank>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksDeleteExplanation"));
         setPermissions("kingdom.ranks.delete");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
+        // DONT ADD AUTOCOMPLETE HERE TO PREVENT AN ACCIDENTAL WRONG COMPLETION
+        return null;
     }
 
     @Override

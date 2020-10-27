@@ -20,9 +20,13 @@ package com.guflan.kingdomcraft.common.commands.management.ranks;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RanksCloneCommand extends CommandBase {
 
@@ -31,6 +35,28 @@ public class RanksCloneCommand extends CommandBase {
         setArgumentsHint("<from-kingdom> <to-kingdom> <rank>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksCloneExplanation"));
         setPermissions("kingdom.ranks.clone");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
+        if ( args.length == 1 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        if ( args.length == 2 ) {
+            Kingdom kingdom = kdc.getKingdom(args[0]);
+            if ( kingdom == null ) {
+                return null;
+            }
+            return kdc.getKingdoms().stream().filter(k -> k != kingdom).map(Kingdom::getName).collect(Collectors.toList());
+        }
+        if ( args.length == 3 ) {
+            Kingdom to = kdc.getKingdom(args[1]);
+            if ( to == null || kdc.getKingdom(args[0]) == null ) {
+                return null;
+            }
+            return to.getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

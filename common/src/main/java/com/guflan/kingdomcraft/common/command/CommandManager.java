@@ -135,6 +135,8 @@ public class CommandManager {
         addCommand(new RanksEditLevelCommand(kdc));
         addCommand(new RanksEditLevelOtherCommand(kdc));
 
+        addCommand(new RanksCloneCommand(kdc));
+
         // groups
         addCommand(new GroupsListCommand(kdc));
         addCommand(new GroupsListOtherCommand(kdc));

@@ -22,26 +22,37 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class HelpCommand extends CommandBase {
 
+    private final static int pagesize = 6;
+
     public HelpCommand(KingdomCraftImpl kdc) {
         super(kdc, "help");
     }
 
     @Override
-    public void execute(PlatformSender sender, String[] args) {
-        List<CommandBase> commands = kdc.getCommandManager().getCommands().stream()
-                .filter(cmd -> cmd.getExplanationMessage() != null).collect(Collectors.toList());
-
-        if ( sender instanceof PlatformPlayer ) {
-            commands = commands.stream().filter(cmd -> hasAnyPermission(sender, cmd)).collect(Collectors.toList());
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            List<CommandBase> commands = getAvailableCommands(player);
+            int totalpages = (int) Math.ceil(commands.size() * 1d / pagesize);
+            List<String> result = new ArrayList<>();
+            for ( int i = 1; i <= totalpages; i++ ) {
+                result.add(i + "");
+            }
+            return result;
         }
+        return null;
+    }
 
-        int pagesize = 6;
+    @Override
+    public void execute(PlatformSender sender, String[] args) {
+        List<CommandBase> commands = getAvailableCommands(sender);
+
         int totalpages = (int) Math.ceil(commands.size() * 1d / pagesize);
 
         int page = 1;
@@ -59,11 +70,8 @@ public class HelpCommand extends CommandBase {
         sb.append(kdc.getMessageManager().getMessage("cmdHelpHeader"));
         sb.append("\n");
 
-        for ( int i = (page - 1) * pagesize; i < commands.size(); i++ ) {
-            if ( pagesize == 0 ) {
-                continue;
-            }
-
+        int startindex = (page - 1) * pagesize;
+        for ( int i = startindex; i < Math.min(commands.size(), startindex + pagesize); i++ ) {
             CommandBase cmd = commands.get(i);
 
             sb.append(kdc.getMessageManager().getMessage("cmdHelpFormat",
@@ -71,12 +79,20 @@ public class HelpCommand extends CommandBase {
                     cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint(),
                     cmd.getExplanationMessage()));
             sb.append("\n");
-
-            pagesize--;
         }
 
         sb.append(kdc.getMessageManager().getMessage("cmdHelpFooter", page + "", totalpages + ""));
         sender.sendMessage(sb.toString());
+    }
+
+    private List<CommandBase> getAvailableCommands(PlatformSender sender) {
+        List<CommandBase> commands = kdc.getCommandManager().getCommands().stream()
+                .filter(cmd -> cmd.getExplanationMessage() != null).collect(Collectors.toList());
+
+        if ( sender instanceof PlatformPlayer ) {
+            commands = commands.stream().filter(cmd -> hasAnyPermission(sender, cmd)).collect(Collectors.toList());
+        }
+        return commands;
     }
 
     private boolean hasAnyPermission(PlatformSender sender, CommandBase command) {

@@ -18,11 +18,16 @@
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+import com.guflan.kingdomcraft.common.permissions.PermissionGroup;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DeleteCommand extends CommandBase {
 
@@ -33,6 +38,12 @@ public class DeleteCommand extends CommandBase {
         setArgumentsHint("<kingdom>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdDeleteExplanation"));
         setPermissions("kingdom.delete", "kingdom.delete.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        // DONT ADD AUTOCOMPLETE HERE TO PREVENT AN ACCIDENTAL WRONG COMPLETION
+        return null;
     }
 
     @Override

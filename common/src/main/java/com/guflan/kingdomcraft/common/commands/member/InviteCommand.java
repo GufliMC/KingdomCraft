@@ -17,6 +17,7 @@
 
 package com.guflan.kingdomcraft.common.commands.member;
 
+import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.KingdomInvite;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
@@ -24,7 +25,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class InviteCommand extends CommandBase {
 
@@ -33,6 +36,21 @@ public class InviteCommand extends CommandBase {
         setArgumentsHint("<player>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdInviteExplanation"));
         setPermissions("kingdom.invite");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            User user = kdc.getUser(player);
+            Kingdom kingdom = user.getKingdom();
+            if ( kingdom != null ) {
+                return kdc.getOnlinePlayers().stream().filter(p -> p != player).filter(p -> {
+                    User pu = kdc.getUser(p);
+                    return pu.getKingdom() == null || pu.getKingdom() != kingdom;
+                }).map(PlatformPlayer::getName).collect(Collectors.toList());
+            }
+        }
+        return null;
     }
 
     @Override

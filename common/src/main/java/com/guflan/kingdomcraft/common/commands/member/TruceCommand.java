@@ -26,6 +26,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TruceCommand extends CommandBase {
 
     public TruceCommand(KingdomCraftImpl kdc) {
@@ -33,6 +36,23 @@ public class TruceCommand extends CommandBase {
         setArgumentsHint("<kingdom>");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdTruceExplanation"));
         setPermissions("kingdom.truce");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            User user = kdc.getUser(player);
+            Kingdom kingdom = user.getKingdom();
+            if ( kingdom != null ) {
+                return kdc.getKingdoms().stream().filter(k -> k != kingdom)
+                        .filter(k -> {
+                            Relation rel = kdc.getRelation(kingdom, k);
+                            return rel != null && rel.getType() == RelationType.ENEMY;
+                        })
+                        .map(Kingdom::getName).collect(Collectors.toList());
+            }
+        }
+        return null;
     }
 
     @Override
