@@ -44,6 +44,10 @@ public class Teleporter {
     }
 
     public static CompletableFuture<Void> teleport(PlatformPlayer player, PlatformLocation target, int delay) {
+        if ( player.has(TELEPORT_KEY) ) {
+            player.get(TELEPORT_KEY, SchedulerTask.class).cancel();
+        }
+
         if ( delay <= 0 ) {
             player.teleport(target);
             return CompletableFuture.completedFuture(null);
