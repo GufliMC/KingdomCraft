@@ -36,6 +36,7 @@ public class InventoryListener implements Listener {
 
     public InventoryListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
+        new BukkitInventoryFactory();
     }
 
     @EventHandler(priority = EventPriority.LOW)
