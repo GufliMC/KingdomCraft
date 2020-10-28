@@ -59,7 +59,7 @@ public class ChatCommand extends CommandBase {
             return;
         }
 
-        String msg = String.join(", ", Arrays.copyOfRange(args, 1, args.length));
+        String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         String stripped = kdc.getMessageManager().decolorify(kdc.getMessageManager().colorify(msg)).trim();
         if ( stripped.equals("") ) {
             kdc.getMessageManager().send(sender, "cmdChatEmptyMessage");
