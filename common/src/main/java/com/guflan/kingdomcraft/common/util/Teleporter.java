@@ -44,11 +44,13 @@ public class Teleporter {
     }
 
     public static CompletableFuture<Void> teleport(PlatformPlayer player, PlatformLocation target, int delay) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-
-        if ( delay != 0 ) {
-            kdc.getMessageManager().send(player, "teleport", delay + "");
+        if ( delay <= 0 ) {
+            player.teleport(target);
+            return CompletableFuture.completedFuture(null);
         }
+
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        kdc.getMessageManager().send(player, "teleport", delay + "");
 
         player.set(TELEPORT_KEY, kdc.getPlugin().getScheduler().syncLater(() -> {
             player.remove(TELEPORT_KEY);
