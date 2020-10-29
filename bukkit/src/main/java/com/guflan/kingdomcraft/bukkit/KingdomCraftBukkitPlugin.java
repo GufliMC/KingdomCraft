@@ -161,6 +161,8 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// placeholders
 		new PlaceholderReplacer(this);
 		new VaultPlaceholderReplacer(this);
+
+		getLogger().info("Enabled " + this.getDescription().getFullName());
 	}
 
 	private void disable() {
