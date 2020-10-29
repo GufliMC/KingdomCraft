@@ -41,10 +41,9 @@ import com.guflan.kingdomcraft.common.permissions.PermissionManager;
 import com.guflan.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.guflan.kingdomcraft.common.util.Teleporter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 
 public class KingdomCraftImpl implements KingdomCraft {
@@ -71,7 +70,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     //
 
-    private final List<PlatformPlayer> onlinePlayers = new ArrayList<>();
+    private final Set<PlatformPlayer> onlinePlayers = new CopyOnWriteArraySet<>();
 
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
                             StorageContext context,
@@ -166,7 +165,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     // players
 
     @Override
-    public List<PlatformPlayer> getOnlinePlayers() {
+    public Set<PlatformPlayer> getOnlinePlayers() {
         return onlinePlayers;
     }
 
@@ -183,7 +182,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     // kingdoms
 
     @Override
-    public List<Kingdom> getKingdoms() {
+    public Set<Kingdom> getKingdoms() {
         return context.getKingdoms();
     }
 
@@ -202,7 +201,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     // relations
 
     @Override
-    public List<Relation> getRelations(Kingdom kingdom) {
+    public Set<Relation> getRelations(Kingdom kingdom) {
         return context.getRelations(kingdom);
     }
 
@@ -234,7 +233,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     // users
 
     @Override
-    public List<User> getOnlineUsers() {
+    public Set<User> getOnlineUsers() {
         return context.getOnlineUsers();
     }
 
@@ -294,9 +293,9 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public void onQuit(PlatformPlayer player) {
         eventDispatcher.dispatchQuit(player);
+        onlinePlayers.remove(player);
 
         User user = context.getOnlineUser(player.getUniqueId());
         context.removeOnlineUser(user);
-        onlinePlayers.remove(player);
     }
 }

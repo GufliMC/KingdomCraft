@@ -27,6 +27,7 @@ import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,7 +43,7 @@ public interface KingdomCraft {
 
     // players
 
-    List<PlatformPlayer> getOnlinePlayers();
+    Set<PlatformPlayer> getOnlinePlayers();
 
     PlatformPlayer getPlayer(UUID uuid);
 
@@ -52,7 +53,7 @@ public interface KingdomCraft {
 
     // kingdoms
 
-    List<Kingdom> getKingdoms();
+    Set<Kingdom> getKingdoms();
 
     Kingdom getKingdom(String name);
 
@@ -60,7 +61,7 @@ public interface KingdomCraft {
 
     // relations
 
-    List<Relation> getRelations(Kingdom kingdom);
+    Set<Relation> getRelations(Kingdom kingdom);
 
     void setRelation(Kingdom kingdom, Kingdom other, RelationType type);
 
@@ -74,7 +75,7 @@ public interface KingdomCraft {
 
     // users
 
-    List<User> getOnlineUsers();
+    Set<User> getOnlineUsers();
 
     User getOnlineUser(String name);
 

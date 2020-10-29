@@ -34,20 +34,18 @@ import io.ebean.migration.MigrationRunner;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class StorageContext {
 
-    public static final List<BKingdom> kingdoms = Collections.synchronizedList(new ArrayList<>());
-    public static final List<BRelation> relations = Collections.synchronizedList(new ArrayList<>());
+    public static final Set<BKingdom> kingdoms = new CopyOnWriteArraySet<>();
+    public static final Set<BRelation> relations = new CopyOnWriteArraySet<>();
 
-    public static final List<BUser> users = Collections.synchronizedList(new ArrayList<>());
+    public static final Set<BUser> users = new CopyOnWriteArraySet<>();
 
     private final KingdomCraftPlugin plugin;
 
@@ -103,8 +101,8 @@ public class StorageContext {
         DatabaseFactory.create(config);
     }
 
-    public List<Kingdom> getKingdoms() {
-        return new ArrayList<>(kingdoms);
+    public Set<Kingdom> getKingdoms() {
+        return new HashSet<>(kingdoms);
     }
 
     public Kingdom getKingdom(String name) {
@@ -120,8 +118,8 @@ public class StorageContext {
 
     // relations
 
-    public List<Relation> getRelations(Kingdom kingdom) {
-        return relations.stream().filter(r -> r.kingdom.equals(kingdom) || r.otherKingdom.equals(kingdom)).collect(Collectors.toList());
+    public Set<Relation> getRelations(Kingdom kingdom) {
+        return relations.stream().filter(r -> r.kingdom.equals(kingdom) || r.otherKingdom.equals(kingdom)).collect(Collectors.toSet());
     }
 
     public Relation getRelation(Kingdom kingdom, Kingdom other) {
@@ -178,8 +176,8 @@ public class StorageContext {
 
     // users
 
-    public List<User> getOnlineUsers() {
-        return new ArrayList<>(users);
+    public Set<User> getOnlineUsers() {
+        return new HashSet<>(users);
     }
 
     public User getOnlineUser(String name) {

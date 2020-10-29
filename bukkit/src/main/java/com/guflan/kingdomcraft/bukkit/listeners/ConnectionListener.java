@@ -36,8 +36,11 @@ public class ConnectionListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onLogin(PlayerLoginEvent e) {
+        if ( e.getResult() != PlayerLoginEvent.Result.ALLOWED ) {
+            return;
+        }
         plugin.getKdc().onJoin(new BukkitPlayer(e.getPlayer()));
     }
 
