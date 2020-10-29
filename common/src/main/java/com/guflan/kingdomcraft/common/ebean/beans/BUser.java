@@ -134,7 +134,11 @@ public class BUser extends Model implements User {
         if ( rank == null || !rank.getKingdom().equals(kingdom) ) {
             throw new IllegalArgumentException("The given rank does not belong to the user their kingdom.");
         }
-        this.rank.memberCount--;
+
+        if ( this.rank != null ) {
+            this.rank.memberCount--;
+        }
+
         this.rank = (BRank) rank;
         this.rank.memberCount++;
     }
