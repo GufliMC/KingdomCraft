@@ -35,8 +35,11 @@ public class EventDispatcher {
 
     private void execute(Consumer<EventListener> consumer) {
         eventManager.listeners.forEach(listener -> {
-            //
-            consumer.accept(listener);
+            try {
+                consumer.accept(listener);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
     }
 
@@ -70,6 +73,10 @@ public class EventDispatcher {
 
     public void dispatchRankChange(PlatformPlayer player, Rank oldRank) {
         execute(l -> l.onRankChange(player, oldRank));
+    }
+
+    public void dispatchReload() {
+        execute(EventListener::onReload);
     }
 
 }

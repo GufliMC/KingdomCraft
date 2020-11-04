@@ -17,49 +17,35 @@
 
 package com.guflan.kingdomcraft.bukkit.messages;
 
-import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.ChatColor;
+import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public class MessageManagerImpl extends AbstractMessageManager {
+public class MessageManager {
 
-	public MessageManagerImpl(Plugin kingdomCraft) {
-		InputStream in = kingdomCraft.getResource("messages.yml");
+	public MessageManager(KingdomCraftBukkitPlugin plugin) {
+		KingdomCraftImpl kdc = plugin.getKdc();
+
+		InputStream in = plugin.getResource("messages.yml");
 		try {
 			YamlConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
 
 			String prefix = config.getString("prefix");
-			setPrefix(prefix);
+			kdc.getMessageManager().setPrefix(prefix);
 			config.set("prefix", null);
 
 			for ( String key : config.getKeys(false) ) {
-				addMessage(key, config.getString(key));
+				kdc.getMessageManager().addMessage(key, config.getString(key));
 			}
 		} catch (Exception ex) {
 			System.out.println("!!! ERROR !!! \nCouldn't retrieve default language! This can cause wrong message display!\n\n");
 			throw ex;
 		}
+
 	}
 
-
-	public String getMessage(String name) {
-		String msg = super.getMessage(name);
-		return msg == null ? null : StringEscapeUtils.unescapeJava(msg);
-	}
-
-	@Override
-	public String colorify(String msg) {
-		return ChatColor.translateAlternateColorCodes('&', msg);
-	}
-
-	@Override
-	public String decolorify(String msg) {
-		return ChatColor.stripColor(msg);
-	}
 }

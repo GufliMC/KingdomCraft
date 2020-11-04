@@ -15,24 +15,23 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.common;
+package com.guflan.kingdomcraft.common.commands.admin;
 
-import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
+import com.guflan.kingdomcraft.common.command.CommandBase;
 
-import java.util.logging.Level;
+public class ReloadCommand extends CommandBase {
 
-public interface KingdomCraftPlugin {
+    public ReloadCommand(KingdomCraftImpl kdc) {
+        super(kdc, "reload", 0);
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdReloadExplanation"));
+        setPermissions("kingdom.reload");
+    }
 
-    AbstractScheduler getScheduler();
-
-    void log(String msg);
-
-    void log(String msg, Level level);
-
-    String colorify(String msg);
-
-    String decolorify(String msg);
-
-    void reload();
-
+    @Override
+    public void execute(PlatformSender sender, String[] args) {
+        kdc.getPlugin().reload();
+        kdc.getMessageManager().send(sender, "cmdReload");
+    }
 }

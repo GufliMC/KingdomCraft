@@ -76,6 +76,8 @@ public class CommandManager {
         addCommand(new TruceCommand(kdc));
 
         // admin
+        addCommand(new ReloadCommand(kdc));
+
         addCommand(new SetRankCommand(kdc));
         addCommand(new SetKingdomCommand(kdc));
         addCommand(new KickCommand(kdc));

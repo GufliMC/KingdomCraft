@@ -48,7 +48,7 @@ public class ChatManagerImpl implements ChatManager {
     public ChatManagerImpl(KingdomCraftImpl kdc, Configuration config) {
         this.kdc = kdc;
         kdc.getEventManager().addListener(new ChatEventListener(this));
-        load(config);
+        reload(config);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class ChatManagerImpl implements ChatManager {
                 .filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
     }
 
-    private void load(Configuration config) {
+    public void reload(Configuration config) {
         if ( !config.contains("enabled") || !config.getBoolean("enabled") ) {
             return;
         }
@@ -144,6 +144,9 @@ public class ChatManagerImpl implements ChatManager {
         if ( !config.contains("channels") || config.getConfigurationSection("channels") == null ) {
             return;
         }
+
+        factories.clear();
+        chatChannels.clear();
 
         Configuration channels = config.getConfigurationSection("channels");
         for ( String name : channels.getKeys(false) ) {

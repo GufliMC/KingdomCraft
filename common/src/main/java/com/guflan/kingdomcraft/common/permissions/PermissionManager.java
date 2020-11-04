@@ -34,7 +34,7 @@ public class PermissionManager {
     private PermissionGroup defaultGroup;
 
     public PermissionManager(KingdomCraftImpl kdc, Configuration config) {
-        load(config);
+        reload(config);
     }
 
     public void addPermissionGroup(PermissionGroup group) {
@@ -109,7 +109,8 @@ public class PermissionManager {
         }
     }
 
-    private void load(Configuration config) {
+    public void reload(Configuration config) {
+        groups.clear();
         for ( String key : config.getKeys(false) ) {
             Configuration cs = config.getConfigurationSection(key);
 

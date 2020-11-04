@@ -25,9 +25,13 @@ import java.util.stream.Collectors;
 
 public class KingdomCraftConfig {
 
-    private final Configuration config;
+    private Configuration config;
 
     public KingdomCraftConfig(Configuration config) {
+        this.config = config;
+    }
+
+    public void reload(Configuration config) {
         this.config = config;
     }
 

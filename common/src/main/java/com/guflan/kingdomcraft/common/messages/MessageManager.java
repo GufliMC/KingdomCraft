@@ -19,15 +19,22 @@ package com.guflan.kingdomcraft.common.messages;
 
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
+import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public abstract class AbstractMessageManager {
+public class MessageManager {
+
+	private final KingdomCraftImpl kdc;
 
 	private String prefix;
 	private final Map<String, String> messages = new HashMap<>();
+
+	public MessageManager(KingdomCraftImpl kdc) {
+		this.kdc = kdc;
+	}
 
 	public final void addMessage(String name, String msg) {
 		messages.put(name, msg);
@@ -76,8 +83,12 @@ public abstract class AbstractMessageManager {
 		sender.sendMessage(colorify(prefix) + getMessage(name, placeholders));
 	}
 
-	public abstract String colorify(String msg);
+	public String colorify(String msg) {
+		return kdc.getPlugin().colorify(msg);
+	}
 
-	public abstract String decolorify(String msg);
+	public String decolorify(String msg) {
+		return kdc.getPlugin().decolorify(msg);
+	}
 
 }

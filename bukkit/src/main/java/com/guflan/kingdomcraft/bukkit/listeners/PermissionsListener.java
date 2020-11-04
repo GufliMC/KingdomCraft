@@ -47,23 +47,25 @@ public class PermissionsListener implements Listener, EventListener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getKdc().getEventManager().addListener(this);
 
-        // TODO remove at release
-        plugin.getKdc().getCommandManager().addCommand(new CommandBase(plugin.getKdc(), "perms", 0, true) {
-            @Override
-            public void execute(PlatformSender sender, String[] args) {
-                PlatformPlayer p = (PlatformPlayer) sender;
-                if ( !p.has(PERMISSIONS_KEY) ) {
-                    sender.sendMessage("none");
-                    return;
-                }
+        plugin.getKdc().getOnlinePlayers().forEach(this::update);
 
-                PermissionAttachment pa = p.get(PERMISSIONS_KEY, PermissionAttachment.class);
-                sender.sendMessage(plugin.getKdc().getMessageManager().colorify(pa.getPermissions()
-                        .keySet().stream()
-                        .map(key -> pa.getPermissions().get(key) ? "&a" + key : "&c" + key)
-                        .collect(Collectors.joining(", "))));
-            }
-        });
+//        // DEBUG TOOL
+//        plugin.getKdc().getCommandManager().addCommand(new CommandBase(plugin.getKdc(), "perms", 0, true) {
+//            @Override
+//            public void execute(PlatformSender sender, String[] args) {
+//                PlatformPlayer p = (PlatformPlayer) sender;
+//                if ( !p.has(PERMISSIONS_KEY) ) {
+//                    sender.sendMessage("none");
+//                    return;
+//                }
+//
+//                PermissionAttachment pa = p.get(PERMISSIONS_KEY, PermissionAttachment.class);
+//                sender.sendMessage(plugin.getKdc().getMessageManager().colorify(pa.getPermissions()
+//                        .keySet().stream()
+//                        .map(key -> pa.getPermissions().get(key) ? "&a" + key : "&c" + key)
+//                        .collect(Collectors.joining(", "))));
+//            }
+//        });
     }
 
     @EventHandler
@@ -107,6 +109,11 @@ public class PermissionsListener implements Listener, EventListener {
     @Override
     public void onKingdomJoin(PlatformPlayer player) {
         update(player);
+    }
+
+    @Override
+    public void onReload() {
+        plugin.getKdc().getOnlinePlayers().forEach(this::update);
     }
 
     //

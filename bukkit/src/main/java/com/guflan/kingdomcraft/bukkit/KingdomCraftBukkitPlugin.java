@@ -22,7 +22,7 @@ import com.guflan.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.bukkit.gui.InventoryListener;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
-import com.guflan.kingdomcraft.bukkit.messages.MessageManagerImpl;
+import com.guflan.kingdomcraft.bukkit.messages.MessageManager;
 import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.placeholders.VaultPlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
@@ -30,9 +30,10 @@ import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
-import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -72,6 +73,16 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 	@Override
 	public void log(String msg, Level level) {
 		getLogger().log(level, msg);
+	}
+
+	@Override
+	public String colorify(String msg) {
+		return ChatColor.translateAlternateColorCodes('&', StringEscapeUtils.unescapeJava(msg));
+	}
+
+	@Override
+	public String decolorify(String msg) {
+		return ChatColor.stripColor(msg);
 	}
 
 	//
@@ -116,8 +127,10 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
 		Configuration groupsConfig = new BukkitConfiguration(initConfig("groups.yml"));
 
-		AbstractMessageManager messageManager = new MessageManagerImpl(this);
-		this.kdc = new KingdomCraftImpl(this, context, messageManager, pluginConfig, chatConfig, groupsConfig);
+		this.kdc = new KingdomCraftImpl(this, context, pluginConfig, chatConfig, groupsConfig);
+
+		// initialize messages
+		new MessageManager(this);
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
 			this.kdc.onJoin(new BukkitPlayer(p));
@@ -157,6 +170,26 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 	private void disable() {
 		this.getPluginLoader().disablePlugin(this);
+	}
+
+	@Override
+	public void reload() {
+		ConfigurationSection config = initConfig("config.yml");
+		if ( config == null ) {
+			log("Invalid configuration, cannot reload Kingdomcraft!", Level.WARNING);
+			return;
+		}
+
+		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
+		kdc.getConfig().reload(pluginConfig);
+
+		Configuration groupsConfig = new BukkitConfiguration(initConfig("groups.yml"));
+		kdc.getPermissionManager().reload(groupsConfig);
+
+		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
+		kdc.getChatManagerImpl().reload(chatConfig);
+
+		kdc.getEventDispatcher().dispatchReload();
 	}
 
 	private ConfigurationSection initConfig(String name) {

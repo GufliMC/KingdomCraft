@@ -282,3 +282,6 @@ cmdInfoEnemies: '&cEnemies'
 cmdInfoAllies: '&bAllies'
 cmdInfoTruce: '&aTruce'
 cmdInfoDateFormat: 'dd MMM yyyy'
+
+# /k reload
+cmdReload: '&aReloaded kingdomcraft!'

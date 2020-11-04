@@ -33,7 +33,7 @@ import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
 import com.guflan.kingdomcraft.common.event.EventManagerImpl;
-import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
+import com.guflan.kingdomcraft.common.messages.MessageManager;
 import com.guflan.kingdomcraft.common.permissions.PermissionManager;
 import com.guflan.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.guflan.kingdomcraft.common.util.Teleporter;
@@ -52,7 +52,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final CommandManager commandManager;
     private final CommandDispatcher commandDispatcher;
 
-    private final AbstractMessageManager messageManager;
+    private final MessageManager messageManager;
     private final PermissionManager permissionManager;
 
     // public
@@ -71,16 +71,16 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
                             StorageContext context,
-                            AbstractMessageManager messageManager,
                             Configuration config,
                             Configuration chatConfig,
                             Configuration groupsConfig) {
 
         this.plugin = plugin;
         this.context = context;
-        this.messageManager = messageManager;
 
         this.config = new KingdomCraftConfig(config);
+
+        this.messageManager = new MessageManager(this);
 
         this.commandManager = new CommandManager(this);
         this.commandDispatcher = new CommandDispatcher(commandManager);
@@ -110,7 +110,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     // messages
 
-    public AbstractMessageManager getMessageManager() {
+    public MessageManager getMessageManager() {
         return messageManager;
     }
 
@@ -136,6 +136,10 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public ChatDispatcher getChatDispatcher() {
         return chatDispatcher;
+    }
+
+    public ChatManagerImpl getChatManagerImpl() {
+        return chatManager;
     }
 
     // events

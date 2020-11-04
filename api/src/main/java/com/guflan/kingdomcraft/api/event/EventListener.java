@@ -39,4 +39,6 @@ public interface EventListener {
     default void onRankChange(PlatformPlayer player, Rank oldRank) {}
 
     default void onPlayerAttack(PlayerAttackPlayerEvent event) {}
+
+    default void onReload() {}
 }
