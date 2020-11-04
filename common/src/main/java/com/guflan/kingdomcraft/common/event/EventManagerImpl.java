@@ -22,10 +22,11 @@ import com.guflan.kingdomcraft.api.event.EventManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventManagerImpl implements EventManager {
 
-    final List<EventListener> listeners = new ArrayList<>();
+    final List<EventListener> listeners = new CopyOnWriteArrayList<>();
 
     @Override
     public void addListener(EventListener listener) {
