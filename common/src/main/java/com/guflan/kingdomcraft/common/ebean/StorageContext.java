@@ -24,12 +24,12 @@ import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.DatabaseFactory;
+import io.ebean.annotation.Transactional;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.datasource.DataSourceFactory;
 import io.ebean.datasource.DataSourcePool;
 import io.ebean.migration.MigrationConfig;
-import io.ebean.migration.MigrationException;
 import io.ebean.migration.MigrationRunner;
 
 import java.sql.Connection;
@@ -47,6 +47,7 @@ public class StorageContext {
 
     public static final Set<BUser> users = new CopyOnWriteArraySet<>();
 
+    private boolean initialized = false;
     private final KingdomCraftPlugin plugin;
 
     public StorageContext(KingdomCraftPlugin plugin) {
@@ -60,13 +61,19 @@ public class StorageContext {
         dataSourceConfig.setUsername(username);
         dataSourceConfig.setPassword(password);
 
-        DataSourcePool pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
+        DataSourcePool pool;
+        try {
+            pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
 
-        // run migrations
-        migrate(pool);
+            // run migrations
+            migrate(pool);
 
-        // create database
-        connect(pool);
+            // create database
+            connect(pool);
+        } catch (Exception ex) {
+            plugin.log(ex.getMessage(), Level.SEVERE);
+            return;
+        }
 
         // load cache
         kingdoms.addAll(new QBKingdom().findList());
@@ -75,19 +82,16 @@ public class StorageContext {
             reassign(rel);
             relations.add(rel);
         });
+
+        initialized = true;
     }
 
-    private void migrate(DataSourcePool pool) {
+    private void migrate(DataSourcePool pool) throws SQLException {
         MigrationConfig config = new MigrationConfig();
 
-        Connection conn = null;
-        try {
-            conn = pool.getConnection();
-            String platform = conn.getMetaData().getDatabaseProductName().toLowerCase();
-            config.setMigrationPath("dbmigration/" + platform);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        Connection conn = pool.getConnection();
+        String platform = conn.getMetaData().getDatabaseProductName().toLowerCase();
+        config.setMigrationPath("dbmigration/" + platform);
 
         MigrationRunner runner = new MigrationRunner(config);
         runner.run(conn);
@@ -99,6 +103,10 @@ public class StorageContext {
         config.setRegister(true);
 
         DatabaseFactory.create(config);
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 
     public Set<Kingdom> getKingdoms() {

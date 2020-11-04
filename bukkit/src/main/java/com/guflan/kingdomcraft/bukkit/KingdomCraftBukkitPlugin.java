@@ -17,7 +17,6 @@
 
 package com.guflan.kingdomcraft.bukkit;
 
-import com.guflan.kingdomcraft.bukkit.listeners.ChatListener;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
@@ -33,7 +32,6 @@ import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.messages.AbstractMessageManager;
 import com.guflan.kingdomcraft.common.scheduler.AbstractScheduler;
-import io.ebean.migration.MigrationException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -95,24 +93,16 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
 		// load database
-		StorageContext context;
-		try {
-			context = new StorageContext(this);
+		StorageContext context = new StorageContext(this);
+		ConfigurationSection dbConfig = config.getConfigurationSection("database");
+		context.init(
+			dbConfig.getString("url"),
+			dbConfig.getString("driver"),
+			dbConfig.getString("username"),
+			dbConfig.getString("password")
+		);
 
-			ConfigurationSection dbConfig = config.getConfigurationSection("database");
-			context.init(
-				dbConfig.getString("url"),
-				dbConfig.getString("driver"),
-				dbConfig.getString("username"),
-				dbConfig.getString("password")
-			);
-		} catch (MigrationException ex) {
-			if ( ex.getCause() != null ) {
-				log(ex.getCause().getMessage(), Level.SEVERE);
-			} else {
-				log(ex.getMessage(), Level.SEVERE);
-			}
-
+		if ( !context.isInitialized() ) {
 			log("Error occured during database initialization. Shutting down plugin.", Level.SEVERE);
 			disable();
 			return;
