@@ -18,13 +18,10 @@
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
-import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,10 +62,10 @@ public class RenameOtherCommand extends CommandBase {
         }
 
         String oldName = kingdom.getName();
-        ((BKingdom) kingdom).name = args[1];
+        kingdom.renameTo(args[1]);
         kdc.saveAsync(kingdom);
 
         kdc.getPlugin().getScheduler().executeSync(() ->
-                kdc.getMessageManager().send(sender, "cmdRename", oldName, kingdom.getName()));
+                kdc.getMessageManager().send(sender, "cmdRenameOther", oldName, kingdom.getName()));
     }
 }

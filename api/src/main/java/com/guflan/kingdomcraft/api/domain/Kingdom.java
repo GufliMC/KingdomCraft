@@ -26,6 +26,8 @@ public interface Kingdom extends Model {
 
     String getName();
 
+    void renameTo(String name);
+
     String getDisplay();
 
     void setDisplay(String display);

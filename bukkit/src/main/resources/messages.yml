@@ -200,7 +200,8 @@ cmdSetKingdomSender: '&aYou placed &2{0} &ain kingdom &2{1}&a!'
 cmdCreate: '&aYou created the kingdom &2{0}&a!'
 
 # /k rename
-cmdRename: '&aRenamed the kingdom &2{0} &ato &2{1}&a!'
+cmdRename: '&aRenamed your kingdom to &2{0}&a!'
+cmdRenameOther: '&aRenamed the kingdom &2{0} &ato &2{1}&a!'
 
 # /k delete
 cmdDelete: '&aYou deleted the kingdom &2{0}&a!'

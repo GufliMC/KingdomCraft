@@ -92,6 +92,14 @@ public class BKingdom extends Model implements Kingdom {
     }
 
     @Override
+    public void renameTo(String name) {
+        if (StorageContext.kingdoms.stream().anyMatch(k -> k.getName().equalsIgnoreCase(name))) {
+            throw new IllegalArgumentException("A kingdom with that name already exists.");
+        }
+        this.name = name;
+    }
+
+    @Override
     public String getDisplay() {
         return display != null ? display : name;
     }

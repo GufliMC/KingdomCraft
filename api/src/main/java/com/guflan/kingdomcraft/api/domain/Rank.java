@@ -24,6 +24,8 @@ public interface Rank extends Model {
 
     String getName();
 
+    void renameTo(String name);
+
     Kingdom getKingdom();
 
     String getDisplay();

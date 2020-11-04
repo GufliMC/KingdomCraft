@@ -21,6 +21,7 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
+import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBRank;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.Model;
@@ -86,6 +87,14 @@ public class BRank extends Model implements Rank {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void renameTo(String name) {
+        if ( this.kingdom.getRank(name) != null ) {
+            throw new IllegalArgumentException("A rank with that name already exists.");
+        }
+        this.name = name;
     }
 
     @Override

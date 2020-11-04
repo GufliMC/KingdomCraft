@@ -23,7 +23,6 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
-import com.guflan.kingdomcraft.common.ebean.beans.BRank;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,11 +75,10 @@ public class RanksRenameOtherCommand extends CommandBase {
             return;
         }
 
-        // async saving
         String oldName = rank.getName();
-        ((BRank) rank).name = args[2];
+        rank.renameTo(args[2]);
         kdc.saveAsync(rank);
 
-        kdc.getMessageManager().send(sender, "cmdRanksRename", oldName, rank.getName(), kingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdRanksRenameOther", oldName, rank.getName(), kingdom.getName());
     }
 }
