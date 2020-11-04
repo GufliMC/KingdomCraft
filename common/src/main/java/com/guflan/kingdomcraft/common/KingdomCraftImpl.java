@@ -20,10 +20,7 @@ package com.guflan.kingdomcraft.common;
 import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.KingdomCraftProvider;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Relation;
-import com.guflan.kingdomcraft.api.domain.RelationType;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
@@ -269,6 +266,24 @@ public class KingdomCraftImpl implements KingdomCraft {
     public User getUser(PlatformPlayer player) {
         return getOnlineUser(player.getUniqueId());
     }
+
+    //
+
+    @Override
+    public CompletableFuture<Void> saveAsync(Model model) {
+        return context.saveAsync(Collections.singleton(model));
+    }
+
+    @Override
+    public CompletableFuture<Void> saveAsync(Model... models) {
+        return context.saveAsync(Arrays.asList(models));
+    }
+
+    @Override
+    public CompletableFuture<Void> saveAsync(Collection<Model> models) {
+        return context.saveAsync(models);
+    }
+
 
     //
 

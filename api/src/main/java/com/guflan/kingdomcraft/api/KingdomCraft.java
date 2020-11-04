@@ -18,14 +18,12 @@
 package com.guflan.kingdomcraft.api;
 
 import com.guflan.kingdomcraft.api.chat.ChatManager;
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.Relation;
-import com.guflan.kingdomcraft.api.domain.RelationType;
-import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -86,5 +84,13 @@ public interface KingdomCraft {
     CompletableFuture<User> getUser(String name);
 
     CompletableFuture<User> getUser(UUID uuid);
+
+    //
+
+    CompletableFuture<Void> saveAsync(Model model);
+
+    CompletableFuture<Void> saveAsync(Model... models);
+
+    CompletableFuture<Void> saveAsync(Collection<Model> models);
 
 }

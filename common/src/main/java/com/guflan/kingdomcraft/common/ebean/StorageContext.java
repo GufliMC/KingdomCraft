@@ -264,4 +264,24 @@ public class StorageContext {
         }
     }
 
+    //
+
+    public CompletableFuture<Void> saveAsync(Collection<Model> models) {
+        return plugin.getScheduler().makeAsyncFuture(() -> {
+            save(models);
+        }).handle((v, ex) -> {
+            if ( ex != null ) {
+                plugin.log(ex.getMessage(), Level.SEVERE);
+            }
+            return v;
+        });
+    }
+
+    @Transactional
+    private void save(Collection<Model> models) {
+        for ( Model m : models ) {
+            m.save();
+        }
+    }
+
 }
