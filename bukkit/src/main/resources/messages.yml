@@ -221,7 +221,8 @@ cmdRanksRenameOther: '&aYou renamed the rank &2{0} &ato &2{1} &afor kingdom &2{2
 
 # /k ranks delete
 cmdRanksDelete: '&aYou deleted the rank &2{0}&a!'
-cmdRanksDeleteConfirm: '&aType &2/k delete confirm &ato delete &2{0}&a!'
+cmdRanksDeleteDefault: '&cYou cannot delete the default rank!'
+cmdRanksDeleteOtherDefault: '&cYou cannot delete the default rank of kingdom &4{0}&c!'
 
 # /k ranks list
 cmdRanksList: '&aList of ranks: &2{0}'
