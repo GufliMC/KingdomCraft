@@ -130,9 +130,7 @@ public class SetRankCommand extends CommandBase {
 
                 Rank oldRank = target.getRank();
                 target.setRank(rank);
-
-                // async saving
-                kdc.getPlugin().getScheduler().executeAsync(target::save);
+                kdc.saveAsync(target);
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {

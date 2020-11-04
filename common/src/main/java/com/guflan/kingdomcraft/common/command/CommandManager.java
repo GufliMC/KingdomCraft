@@ -95,6 +95,9 @@ public class CommandManager {
         addCommand(new CreateCommand(kdc));
         addCommand(new DeleteCommand(kdc));
 
+        addCommand(new RenameCommand(kdc));
+        addCommand(new RenameOtherCommand(kdc));
+
         addCommand(new EditDisplayCommand(kdc));
         addCommand(new EditDisplayOtherCommand(kdc));
 
@@ -116,6 +119,9 @@ public class CommandManager {
 
         addCommand(new RanksCreateCommand(kdc));
         addCommand(new RanksCreateOtherCommand(kdc));
+
+        addCommand(new RanksRenameCommand(kdc));
+        addCommand(new RanksRenameOtherCommand(kdc));
 
         addCommand(new RanksDeleteCommand(kdc));
         addCommand(new RanksDeleteOtherCommand(kdc));

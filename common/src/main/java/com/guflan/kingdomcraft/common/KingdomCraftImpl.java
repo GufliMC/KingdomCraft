@@ -270,11 +270,6 @@ public class KingdomCraftImpl implements KingdomCraft {
     //
 
     @Override
-    public CompletableFuture<Void> saveAsync(Model model) {
-        return context.saveAsync(Collections.singleton(model));
-    }
-
-    @Override
     public CompletableFuture<Void> saveAsync(Model... models) {
         return context.saveAsync(Arrays.asList(models));
     }
@@ -284,6 +279,10 @@ public class KingdomCraftImpl implements KingdomCraft {
         return context.saveAsync(models);
     }
 
+    @Override
+    public CompletableFuture<Void> deleteAsync(Model... models) {
+        return context.deleteAsync(Arrays.asList(models));
+    }
 
     //
 
@@ -298,7 +297,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
                 if ( user == null ) {
                     user = context.createUser(player.getUniqueId(), player.getName());
-                    plugin.getScheduler().executeAsync(user::save);
+                    saveAsync(user);
                 }
 
                 context.addOnlineUser(user);

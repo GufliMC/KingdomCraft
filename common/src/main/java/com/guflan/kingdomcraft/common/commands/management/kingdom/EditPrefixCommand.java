@@ -43,10 +43,8 @@ public class EditPrefixCommand extends CommandBase {
         }
 
         kingdom.setPrefix(args[0]);
+        kdc.saveAsync(kingdom);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
-
-        kdc.getMessageManager().send(sender, "cmdEditSuccess", "prefix", args[0]);
+        kdc.getMessageManager().send(sender, "cmdEdit", "prefix", args[0]);
     }
 }

@@ -87,10 +87,8 @@ public class GroupsAddOtherCommand extends CommandBase {
         }
 
         RankPermissionGroup rpg = rank.createPermissionGroup(group.getName());
+        kdc.saveAsync(rpg);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rpg::save);
-
-        kdc.getMessageManager().send(sender, "cmdGroupsAddOtherSuccess", group.getName(), rank.getName(), kingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdGroupsAddOther", group.getName(), rank.getName(), kingdom.getName());
     }
 }

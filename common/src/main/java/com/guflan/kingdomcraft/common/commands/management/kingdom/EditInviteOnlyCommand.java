@@ -60,10 +60,8 @@ public class EditInviteOnlyCommand extends CommandBase {
         }
 
         kingdom.setInviteOnly(Boolean.parseBoolean(args[0]));
+        kdc.saveAsync(kingdom);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
-
-        kdc.getMessageManager().send(sender, "cmdEditSuccess", "invite-only", kingdom.isInviteOnly() + "");
+        kdc.getMessageManager().send(sender, "cmdEdit", "invite-only", kingdom.isInviteOnly() + "");
     }
 }

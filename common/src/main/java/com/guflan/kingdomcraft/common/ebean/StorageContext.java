@@ -284,4 +284,22 @@ public class StorageContext {
         }
     }
 
+    public CompletableFuture<Void> deleteAsync(Collection<Model> models) {
+        return plugin.getScheduler().makeAsyncFuture(() -> {
+            delete(models);
+        }).handle((v, ex) -> {
+            if ( ex != null ) {
+                plugin.log(ex.getMessage(), Level.SEVERE);
+            }
+            return v;
+        });
+    }
+
+    @Transactional
+    private void delete(Collection<Model> models) {
+        for ( Model m : models ) {
+            m.delete();
+        }
+    }
+
 }

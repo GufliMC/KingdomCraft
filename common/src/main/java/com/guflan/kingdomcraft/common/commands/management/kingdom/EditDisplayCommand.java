@@ -43,10 +43,8 @@ public class EditDisplayCommand extends CommandBase {
         }
 
         kingdom.setDisplay(args[0]);
+        kdc.saveAsync(kingdom);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
-
-        kdc.getMessageManager().send(sender, "cmdEditSuccess", "display", args[0]);
+        kdc.getMessageManager().send(sender, "cmdEdit", "display", args[0]);
     }
 }

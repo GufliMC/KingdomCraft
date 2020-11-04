@@ -34,10 +34,13 @@ cmdErrorKingdomNotExist: '&cThe kingdom &4{0} &cdoes not exist!'
 cmdErrorRankNotExist: '&cThe rank &4{0} &cdoes not exist!'
 cmdErrorNoPlayer: '&cThe player &4{0} &cdoes not exist!'
 cmdErrorNotOnline: '&cThe player &4{0} &cis not online!'
-cmdErrorSameKingdom: '&cYou cannot do that to your own kingdom!'
+cmdErrorSameKingdom: '&cYou must specify another kingdom!'
 cmdErrorPermissionGroupNotExist: '&cThe permission group &4{0} &cdoes not exist.'
 cmdErrorKingdomNoDefaultRank: '&cThe kingdom &4{0} &chas no default rank!'
+cmdErrorKingdomAlreadyExists: '&cThe kingdom &4{0} &calready exists!'
+cmdErrorRankAlreadyExists: '&cThe rank &4{0} &calready exists!'
 
+cmdErrorInvalidName: '&cName must be alphanumeric!'
 cmdErrorInvalidString: '&4{0} &cis not a valid!'
 cmdErrorInvalidNumber: '&4{0} &cis not a valid number!'
 cmdErrorInvalidBoolean: '&4{0} &cis not a valid, must be &4true &cor &4false&c!'
@@ -79,6 +82,7 @@ cmdGroupsRemoveExplanation: 'Remove a permission group from a rank'
 cmdGroupsRemoveOtherExplanation: 'Remove a permission group from a rank'
 
 cmdCreateExplanation: 'Create a kingdom'
+cmdRenameExplanation: 'Rename your kingdom'
 cmdDeleteExplanation: 'Delete your kingdom'
 cmdEditDisplayExplanation: 'Change the display of your kingdom'
 cmdEditDisplayOtherExplanation: 'Change the display of a kigndom'
@@ -113,14 +117,14 @@ cmdRanksListOtherExplanation: 'Get a list of all ranks in a kingdom'
 
 # /k join
 cmdJoinAlready: '&aYou are already in a kingdom!'
-cmdJoinSuccess: '&aYou successfully joined &2{0}&a!'
-cmdJoinSuccessMembers: '&2{0} &ahas joined your kingdom!'
+cmdJoin: '&aYou fully joined &2{0}&a!'
+cmdJoinMembers: '&2{0} &ahas joined your kingdom!'
 cmdJoinNoInvite: '&aYou need an invite to join &2{0}&a!'
 cmdJoinFull: '&aThe kingdom &2{0} &ais full!'
 
 # /k leave
-cmdLeaveSuccess: '&aYou successfully left &2{0}&a!'
-cmdLeaveSuccessMembers: '&2{0} &ahas left your kingdom!'
+cmdLeave: '&aYou fully left &2{0}&a!'
+cmdLeaveMembers: '&2{0} &ahas left your kingdom!'
 
 # /k list
 cmdList: '&aList of kingdoms: {0}'
@@ -141,15 +145,15 @@ cmdInviteSender: '&aYou invited &2{0} &ato join &2{1}&a!'
 # /k spawn
 cmdSpawnNotExists: '&aThe kingdom spawn has not been setup yet!'
 cmdSpawnOtherNotExists: '&aThe spawn of kingdom &2{0} &ahas not been setup yet!'
-cmdSpawnSuccess: '&aYou have been teleported to &2{0}&a!'
+cmdSpawn: '&aYou have been teleported to &2{0}&a!'
 
 # /k setspawn
-cmdSetSpawnSuccess: '&aYou changed the spawn of your kingdom &ato &2{0}&a!'
-cmdSetSpawnOtherSuccess: '&aYou changed the spawn of &2{0} &ato &2{1}&a!'
+cmdSetSpawn: '&aYou changed the spawn of your kingdom &ato &2{0}&a!'
+cmdSetSpawnOther: '&aYou changed the spawn of &2{0} &ato &2{1}&a!'
 
 # /k enemy
-cmdEnemySuccess: '&aYou are now enemies with &2{0}&a!'
-cmdEnemySuccessMembers: '&aYour kingdom is now enemies with &2{0}&a!'
+cmdEnemy: '&aYou are now enemies with &2{0}&a!'
+cmdEnemyMembers: '&aYour kingdom is now enemies with &2{0}&a!'
 cmdEnemyAlready: '&cYou are already enemies with &4{0}&c!'
 
 # /k ally
@@ -193,26 +197,30 @@ cmdSetKingdomTarget: '&aYou have been placed in kingdom &2{0}&a!'
 cmdSetKingdomSender: '&aYou placed &2{0} &ain kingdom &2{1}&a!'
 
 # /k create
-cmdCreateAlreadyExists: '&aThe kingdom &2{0} &aalready exists!'
-cmdCreateSuccess: '&aYou created the kingdom &2{0}&a!'
-cmdCreateNameInvalid: '&cKingdom names can only contain alphanumeric characters!'
+cmdCreate: '&aYou created the kingdom &2{0}&a!'
+
+# /k rename
+cmdRename: '&aRenamed the kingdom &2{0} &ato &2{1}&a!'
 
 # /k delete
-cmdDeleteSuccess: '&aYou deleted the kingdom &2{0}&a!'
-cmdDeleteSuccessMembers: '&aYour kingdom has been deleted!'
+cmdDelete: '&aYou deleted the kingdom &2{0}&a!'
+cmdDeleteMembers: '&aYour kingdom has been deleted!'
 cmdDeleteConfirm: '&aType &2/k delete confirm &ato delete &2{0}&a!'
 
 # /k edit
-cmdEditSuccess: '&aChanged {0} of your kingdom to &2{1}&a!'
-cmdEditOtherSuccess: '&aChanged {0} of kingdom &2{1} &ato &2{2}&a!'
+cmdEdit: '&aChanged {0} of your kingdom to &2{1}&a!'
+cmdEditOther: '&aChanged {0} of kingdom &2{1} &ato &2{2}&a!'
 
 # /k ranks create
-cmdRanksCreateAlreadyExists: '&aThe rank &2{0} &aalready exists!'
-cmdRanksCreateSuccess: '&aYou created the rank &2{0}&a!'
-cmdRanksCreateNameInvalid: '&cRank names can only contain alphanumeric characters!'
+cmdRanksCreate: '&aYou created the rank &2{0}&a!'
+cmdRanksCreateOther: '&aYou created the rank &2{0} &afor kingdom &2{1}&a!'
+
+# /k rank rename
+cmdRanksRename: '&aYou renamed the rank &2{0} &ato &2{1}&a!'
+cmdRanksRenameOther: '&aYou renamed the rank &2{0} &ato &2{1} &afor kingdom &2{2}&a!'
 
 # /k ranks delete
-cmdRanksDeleteSuccess: '&aYou deleted the rank &2{0}&a!'
+cmdRanksDelete: '&aYou deleted the rank &2{0}&a!'
 cmdRanksDeleteConfirm: '&aType &2/k delete confirm &ato delete &2{0}&a!'
 
 # /k ranks list
@@ -220,25 +228,25 @@ cmdRanksList: '&aList of ranks: &2{0}'
 cmdRanksListOther: '&aList of ranks for kingdom &2{0}&a: &2{1}'
 
 # /k ranks edit
-cmdRanksEditSuccess: '&aChanged {0} of &2{1} &ato &2{2}&a!'
-cmdRanksEditOtherSuccess: '&aChanged {0} of rank &2{1} &ain kingdom &2{2} &ato &2{3}&a!'
+cmdRanksEdit: '&aChanged {0} of &2{1} &ato &2{2}&a!'
+cmdRanksEditOther: '&aChanged {0} of rank &2{1} &ain kingdom &2{2} &ato &2{3}&a!'
 
 # /k groups add
 cmdGroupsAddAlreadyExists: '&cThe group &4{0} &calready belongs to rank &4{1}&c!'
-cmdGroupsAddSuccess: '&aAdded group &2{0} &ato rank &2{1}&a!'
-cmdGroupsAddOtherSuccess: '&aAdded group &2{0} &ato rank &2{1} &aof kingdom &2{2}&a!'
+cmdGroupsAdd: '&aAdded group &2{0} &ato rank &2{1}&a!'
+cmdGroupsAddOther: '&aAdded group &2{0} &ato rank &2{1} &aof kingdom &2{2}&a!'
 
 # /k groups remove
 cmdGroupsRemoveNotExist: '&cThe group &4{0} &cdoes not belong to rank &4{1}&c!'
-cmdGroupsRemoveSuccess: '&aThe group &2{0} &awas removed from rank &2{1}&a!'
-cmdGroupsRemoveOtherSuccess: '&aThe group &2{0} &awas removed from rank &2{1} &aof kingdom &2{2}!'
+cmdGroupsRemove: '&aThe group &2{0} &awas removed from rank &2{1}&a!'
+cmdGroupsRemoveOther: '&aThe group &2{0} &awas removed from rank &2{1} &aof kingdom &2{2}!'
 
 # /k groups list
 cmdGroupsList: '&aPermission groups belonging to rank &2{0}&a: &2{1}'
 cmdGroupsListOther: '&aPermission groups belonging to rank &2{0} &aof kingdom &2{1}&a: &2{2}'
 
 # /k ranks clone
-cmdRanksCloneSuccess: '&aCloned rank &2{0} &afrom &2{1} &ato &2{2}&a!'
+cmdRanksClone: '&aCloned rank &2{0} &afrom &2{1} &ato &2{2}&a!'
 
 # /k tphere
 cmdTpHere: '&aTeleported everyone of your kingdom to you!'

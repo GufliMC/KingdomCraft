@@ -42,18 +42,15 @@ public class LeaveCommand extends CommandBase {
 
         Kingdom oldKingdom = user.getKingdom();
         user.setKingdom(null);
-
-
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(user::save);
+        kdc.saveAsync(user);
 
         kdc.getEventDispatcher().dispatchKingdomLeave((PlatformPlayer) sender, oldKingdom);
 
-        kdc.getMessageManager().send(sender, "cmdLeaveSuccess", oldKingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdLeave", oldKingdom.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != oldKingdom ) continue;
-            kdc.getMessageManager().send(member, "cmdLeaveSuccessMembers", user.getName());
+            kdc.getMessageManager().send(member, "cmdLeaveMembers", user.getName());
         }
     }
 }

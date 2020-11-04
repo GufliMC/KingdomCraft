@@ -84,9 +84,7 @@ public class KickCommand extends CommandBase {
                 }
 
                 target.setKingdom(null);
-
-                // async saving
-                kdc.getPlugin().getScheduler().executeAsync(target::save);
+                kdc.saveAsync(target);
 
                 PlatformPlayer tplayer = kdc.getPlayer(target);
                 if ( tplayer != null ) {

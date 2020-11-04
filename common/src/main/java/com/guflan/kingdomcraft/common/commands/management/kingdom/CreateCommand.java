@@ -25,6 +25,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 public class CreateCommand extends CommandBase {
 
     public CreateCommand(KingdomCraftImpl kdc) {
@@ -37,12 +40,12 @@ public class CreateCommand extends CommandBase {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdCreateNameInvalid");
+            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
             return;
         }
 
         if ( kdc.getKingdom(args[0]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdCreateAlreadyExists", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomAlreadyExists", args[0]);
             return;
         }
 
@@ -52,24 +55,26 @@ public class CreateCommand extends CommandBase {
             return;
         }
 
-        kdc.getPlugin().getScheduler().executeAsync(() -> {
-            Kingdom kingdom = kdc.createKingdom(args[0]);
+        Kingdom kingdom = kdc.createKingdom(args[0]);
+
+        Rank king = kingdom.createRank("King");
+        king.setLevel(99);
+
+        CompletableFuture<Void> future = kdc.saveAsync(kingdom, king).thenRun(() -> {
+            kingdom.setDefaultRank(king);
             kingdom.save();
-
-            Rank king = kingdom.createRank("king");
-            king.setLevel(99);
-            king.save();
-
-            kdc.getPlugin().getScheduler().executeSync(() ->
-                    kdc.getMessageManager().send(sender, "cmdCreateSuccess", kingdom.getName()));
-
-            if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
-                User user = kdc.getUser((PlatformPlayer) sender);
-                user.setKingdom(kingdom);
-                user.setRank(king);
-                user.save();
-                return;
-            }
         });
+
+        kdc.getPlugin().getScheduler().executeSync(() ->
+                kdc.getMessageManager().send(sender, "cmdCreate", kingdom.getName()));
+
+        if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
+            User user = kdc.getUser((PlatformPlayer) sender);
+            user.setKingdom(kingdom);
+            user.setRank(king);
+            future.thenRun(user::save);
+        }
+
+
     }
 }

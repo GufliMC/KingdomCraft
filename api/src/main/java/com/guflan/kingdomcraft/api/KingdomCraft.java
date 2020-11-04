@@ -87,10 +87,10 @@ public interface KingdomCraft {
 
     //
 
-    CompletableFuture<Void> saveAsync(Model model);
-
     CompletableFuture<Void> saveAsync(Model... models);
 
     CompletableFuture<Void> saveAsync(Collection<Model> models);
+
+    CompletableFuture<Void> deleteAsync(Model... models);
 
 }

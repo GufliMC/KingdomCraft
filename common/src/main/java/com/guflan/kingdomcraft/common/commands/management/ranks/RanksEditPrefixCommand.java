@@ -65,10 +65,8 @@ public class RanksEditPrefixCommand extends CommandBase {
         }
 
         rank.setPrefix(args[1]);
+        kdc.saveAsync(rank);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rank::save);
-
-        kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "prefix", rank.getName(), args[1]);
+        kdc.getMessageManager().send(sender, "cmdRanksEdit", "prefix", rank.getName(), args[1]);
     }
 }

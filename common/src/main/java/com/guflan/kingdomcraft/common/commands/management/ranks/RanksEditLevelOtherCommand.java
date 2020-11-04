@@ -71,11 +71,9 @@ public class RanksEditLevelOtherCommand extends CommandBase {
         }
 
         rank.setLevel(Integer.parseInt(args[2]));
+        kdc.saveAsync(rank);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rank::save);
-
-        kdc.getMessageManager().send(sender, "cmdRanksEditOtherSuccess", "level",
+        kdc.getMessageManager().send(sender, "cmdRanksEditOther", "level",
                 kingdom.getName(), rank.getName(), args[2]);
     }
 }

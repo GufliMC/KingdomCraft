@@ -55,6 +55,7 @@ public class DeleteCommand extends CommandBase {
                 return;
             }
 
+            System.out.println("a");
             DeleteRequest req = player.get(DELETE_KEY, DeleteRequest.class);
             if ( System.currentTimeMillis() - req.timestamp < 1000 * 60 ) {
                 kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
@@ -92,13 +93,12 @@ public class DeleteCommand extends CommandBase {
             User user = kdc.getUser(p);
             if ( user.getKingdom() == kingdom) {
                 user.setKingdom(null);
-                kdc.getMessageManager().send(p, "cmdDeleteSuccessMembers");
+                kdc.getMessageManager().send(p, "cmdDeleteMembers");
             }
         }
 
-        // async deleting
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::delete);
-        kdc.getMessageManager().send(sender, "cmdDeleteSuccess", kingdom.getName());
+        kdc.saveAsync(kingdom);
+        kdc.getMessageManager().send(sender, "cmdDelete", kingdom.getName());
     }
 
     private static class DeleteRequest {

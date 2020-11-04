@@ -81,13 +81,11 @@ public class InviteCommand extends CommandBase {
                 }
 
                 if ( invite != null ) {
-                    kdc.getPlugin().getScheduler().executeAsync(invite::delete);
+                    kdc.deleteAsync(invite);
                 }
 
                 invite = target.addInvite(user);
-
-                // async saving
-                kdc.getPlugin().getScheduler().executeAsync(invite::save);
+                kdc.saveAsync(invite);
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if (targetPlayer != null ) {

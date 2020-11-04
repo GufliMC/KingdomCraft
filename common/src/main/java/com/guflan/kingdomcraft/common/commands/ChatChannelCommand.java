@@ -67,11 +67,11 @@ public class ChatChannelCommand extends CommandBase {
                 ucc = user.addChatChannel(cc.getName());
             }
             ucc.setEnabled(false);
-            kdc.getPlugin().getScheduler().executeAsync(ucc::save);
+            kdc.saveAsync(ucc);
             kdc.getMessageManager().send(sender, "cmdChatChannelDisable", cc.getName());
         } else {
             ucc.setEnabled(true);
-            kdc.getPlugin().getScheduler().executeAsync(ucc::save);
+            kdc.saveAsync(ucc);
             kdc.getMessageManager().send(sender, "cmdChatChannelEnable", cc.getName());
         }
     }

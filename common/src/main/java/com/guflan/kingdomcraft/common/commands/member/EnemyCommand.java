@@ -73,14 +73,14 @@ public class EnemyCommand extends CommandBase {
         }
 
         kdc.setRelation(kingdom, target, RelationType.ENEMY);
-        kdc.getMessageManager().send(sender, "cmdEnemySuccess", target.getName());
+        kdc.getMessageManager().send(sender, "cmdEnemy", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             Kingdom kd = kdc.getUser(member).getKingdom();
             if ( kd == kingdom && !member.equals(sender) ) {
-                kdc.getMessageManager().send(member, "cmdEnemySuccessMembers", target.getName());
+                kdc.getMessageManager().send(member, "cmdEnemyMembers", target.getName());
             } else if ( kd == target ) {
-                kdc.getMessageManager().send(member, "cmdEnemySuccessMembers", kingdom.getName());
+                kdc.getMessageManager().send(member, "cmdEnemyMembers", kingdom.getName());
             }
         }
     }

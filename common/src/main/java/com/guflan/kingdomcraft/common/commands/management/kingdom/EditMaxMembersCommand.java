@@ -48,10 +48,8 @@ public class EditMaxMembersCommand extends CommandBase {
         }
 
         kingdom.setMaxMembers(Integer.parseInt(args[0]));
+        kdc.saveAsync(kingdom);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
-
-        kdc.getMessageManager().send(sender, "cmdEditSuccess", "max-members", kingdom.getMaxMembers() + "");
+        kdc.getMessageManager().send(sender, "cmdEdit", "max-members", kingdom.getMaxMembers() + "");
     }
 }

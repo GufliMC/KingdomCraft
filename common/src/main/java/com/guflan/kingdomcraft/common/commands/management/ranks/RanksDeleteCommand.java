@@ -58,9 +58,7 @@ public class RanksDeleteCommand extends CommandBase {
             return;
         }
 
-        // async deleting
-        kdc.getPlugin().getScheduler().executeAsync(rank::delete);
-
-        kdc.getMessageManager().send(sender, "cmdRanksDeleteSuccess", rank.getName());
+        kdc.deleteAsync(rank);
+        kdc.getMessageManager().send(sender, "cmdRanksDelete", rank.getName());
     }
 }

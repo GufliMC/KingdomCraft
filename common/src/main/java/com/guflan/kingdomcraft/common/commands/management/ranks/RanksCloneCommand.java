@@ -18,6 +18,7 @@
 package com.guflan.kingdomcraft.common.commands.management.ranks;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.Model;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
@@ -25,6 +26,7 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,13 +92,11 @@ public class RanksCloneCommand extends CommandBase {
             clone.createPermissionGroup(rpg.getName());
         }
 
-        kdc.getPlugin().getScheduler().executeAsync(() -> {
-            clone.save();
-            for (RankPermissionGroup rpg : clone.getPermissionGroups() ) {
-                rpg.save();
-            }
-        });
+        List<Model> models = new ArrayList<>();
+        models.add(clone);
+        models.addAll(rank.getPermissionGroups());
+        kdc.saveAsync(models);
 
-        kdc.getMessageManager().send(sender, "cmdRanksCloneSuccess", rank.getName(), from.getName(), to.getName());
+        kdc.getMessageManager().send(sender, "cmdRanksClone", rank.getName(), from.getName(), to.getName());
     }
 }

@@ -52,10 +52,8 @@ public class EditSuffixOtherCommand extends CommandBase {
         }
 
         kingdom.setSuffix(args[1]);
+        kdc.saveAsync(kingdom);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
-
-        kdc.getMessageManager().send(sender, "cmdEditOtherSuccess", "suffix", kingdom.getName(), args[1]);
+        kdc.getMessageManager().send(sender, "cmdEditOther", "suffix", kingdom.getName(), args[1]);
     }
 }

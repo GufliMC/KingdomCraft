@@ -15,29 +15,34 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.common.commands.management.ranks;
+package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class RanksDeleteOtherCommand extends CommandBase {
+public class RenameOtherCommand extends CommandBase {
 
-    public RanksDeleteOtherCommand(KingdomCraftImpl kdc) {
-        super(kdc, "ranks delete", 2);
-        setArgumentsHint("<kingdom> <rank>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksDeleteOtherExplanation"));
-        setPermissions("kingdom.ranks.delete.other");
+    public RenameOtherCommand(KingdomCraftImpl kdc) {
+        super(kdc, "rename", 2);
+        setArgumentsHint("<kingdom> <name>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRenameExplanation"));
+        setPermissions("kingdom.rename.other");
     }
 
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
-        // DONT ADD AUTOCOMPLETE HERE TO PREVENT AN ACCIDENTAL WRONG COMPLETION
+        if ( args.length == 1 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
         return null;
     }
 
@@ -49,13 +54,21 @@ public class RanksDeleteOtherCommand extends CommandBase {
             return;
         }
 
-        Rank rank = kingdom.getRank(args[1]);
-        if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[1]);
+        if ( !args[1].matches("[a-zA-Z0-9]+") ) {
+            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
             return;
         }
 
-        kdc.deleteAsync(rank);
-        kdc.getMessageManager().send(sender, "cmdRanksDelete", rank.getName());
+        if ( kdc.getKingdom(args[1]) != null ) {
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomAlreadyExists", args[1]);
+            return;
+        }
+
+        String oldName = kingdom.getName();
+        ((BKingdom) kingdom).name = args[1];
+        kdc.saveAsync(kingdom);
+
+        kdc.getPlugin().getScheduler().executeSync(() ->
+                kdc.getMessageManager().send(sender, "cmdRename", oldName, kingdom.getName()));
     }
 }

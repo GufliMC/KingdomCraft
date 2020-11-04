@@ -26,6 +26,7 @@ import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class JoinCommand extends CommandBase {
@@ -76,19 +77,18 @@ public class JoinCommand extends CommandBase {
 
         user.setKingdom(kingdom);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(() -> {
-            user.save();
-            user.clearInvites();
+        kdc.saveAsync(user).thenRun(user::clearInvites).exceptionally(ex -> {
+            kdc.getPlugin().log(ex.getMessage(), Level.SEVERE);
+            return null;
         });
 
         kdc.getEventDispatcher().dispatchKingdomJoin((PlatformPlayer) sender);
 
-        kdc.getMessageManager().send(sender, "cmdJoinSuccess", kingdom.getName());
+        kdc.getMessageManager().send(sender, "cmdJoin", kingdom.getName());
 
         for ( PlatformPlayer p : kdc.getOnlinePlayers() ) {
             if ( p.equals(sender) || kdc.getUser(p).getKingdom() != kingdom ) continue;
-            kdc.getMessageManager().send(p, "cmdJoinSuccessMembers", user.getName());
+            kdc.getMessageManager().send(p, "cmdJoinMembers", user.getName());
         }
     }
 }

@@ -71,11 +71,9 @@ public class RanksEditMaxMembersOtherCommand extends CommandBase {
         }
 
         rank.setMaxMembers(Integer.parseInt(args[2]));
+        kdc.saveAsync(rank);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rank::save);
-
-        kdc.getMessageManager().send(sender, "cmdRanksEditOtherSuccess", "max-members",
+        kdc.getMessageManager().send(sender, "cmdRanksEditOther", "max-members",
                 kingdom.getName(), rank.getName(), args[2]);
     }
 }

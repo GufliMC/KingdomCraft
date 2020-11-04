@@ -46,13 +46,11 @@ public class SetSpawnCommand extends CommandBase {
 
         PlatformLocation loc = ((PlatformPlayer) sender).getLocation();
         kingdom.setSpawn(loc);
-
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(kingdom::save);
+        kdc.saveAsync(kingdom);
 
         DecimalFormat df = new DecimalFormat("#");
         String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-        kdc.getMessageManager().send(sender, "cmdSetSpawnSuccess", str);
+        kdc.getMessageManager().send(sender, "cmdSetSpawn", str);
     }
 }

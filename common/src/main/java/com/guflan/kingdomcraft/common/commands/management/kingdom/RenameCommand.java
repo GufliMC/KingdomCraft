@@ -18,21 +18,23 @@
 package com.guflan.kingdomcraft.common.commands.management.kingdom;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+import com.guflan.kingdomcraft.common.ebean.beans.BKingdom;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EditDisplayOtherCommand extends CommandBase {
+public class RenameCommand extends CommandBase {
 
-    public EditDisplayOtherCommand(KingdomCraftImpl kdc) {
-        super(kdc, "edit display", 2);
-        setArgumentsHint("<kingdom> <display>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdEditDisplayOtherExplanation"));
-        setPermissions("kingdom.edit.display.other");
+    public RenameCommand(KingdomCraftImpl kdc) {
+        super(kdc, "rename", 1);
+        setArgumentsHint("<name>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRenameExplanation"));
+        setPermissions("kingdom.rename");
     }
 
     @Override
@@ -45,15 +47,28 @@ public class EditDisplayOtherCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        Kingdom kingdom = kdc.getKingdom(args[0]);
+        User user = kdc.getUser((PlatformPlayer) sender);
+        Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
-        kingdom.setDisplay(args[1]);
+        if ( !args[0].matches("[a-zA-Z0-9]+") ) {
+            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
+            return;
+        }
+
+        if ( kdc.getKingdom(args[0]) != null ) {
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomAlreadyExists", args[1]);
+            return;
+        }
+
+        String oldName = kingdom.getName();
+        ((BKingdom) kingdom).name = args[0];
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditOther", "display", kingdom.getName(), args[1]);
+        kdc.getPlugin().getScheduler().executeSync(() ->
+                kdc.getMessageManager().send(sender, "cmdRename", oldName, kingdom.getName()));
     }
 }

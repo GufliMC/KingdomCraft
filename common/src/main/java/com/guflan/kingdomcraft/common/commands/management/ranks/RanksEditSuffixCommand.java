@@ -65,10 +65,8 @@ public class RanksEditSuffixCommand extends CommandBase {
         }
 
         rank.setSuffix(args[1]);
+        kdc.saveAsync(rank);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rank::save);
-
-        kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "suffix", rank.getName(), args[1]);
+        kdc.getMessageManager().send(sender, "cmdRanksEdit", "suffix", rank.getName(), args[1]);
     }
 }

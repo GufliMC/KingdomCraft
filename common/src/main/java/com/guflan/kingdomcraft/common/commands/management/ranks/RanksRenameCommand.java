@@ -20,21 +20,22 @@ package com.guflan.kingdomcraft.common.commands.management.ranks;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
+import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
+import com.guflan.kingdomcraft.common.ebean.beans.BRank;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RanksEditMaxMembersCommand extends CommandBase {
+public class RanksRenameCommand extends CommandBase {
 
-    public RanksEditMaxMembersCommand(KingdomCraftImpl kdc) {
-        super(kdc, "ranks edit max-members", 2, true);
-        setArgumentsHint("<rank> <amount>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksEditMaxMembersExplanation"));
-        setPermissions("kingdom.ranks.edit.max-members");
+    public RanksRenameCommand(KingdomCraftImpl kdc) {
+        super(kdc, "ranks rename", 2, true);
+        setArgumentsHint("<rank> <name>");
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksRenameExplanation"));
+        setPermissions("kingdom.ranks.rename");
     }
 
     @Override
@@ -64,14 +65,20 @@ public class RanksEditMaxMembersCommand extends CommandBase {
             return;
         }
 
-        if ( !args[1].matches("[0-9]+") ) {
-            kdc.getMessageManager().send(sender, "errorInvalidNumber", args[1]);
+        if ( !args[1].matches("[a-zA-Z0-9]+") ) {
+            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
             return;
         }
 
-        rank.setMaxMembers(Integer.parseInt(args[1]));
+        if ( kingdom.getRank(args[1]) != null ) {
+            kdc.getMessageManager().send(sender, "cmdErrorRankAlreadyexists", args[0]);
+            return;
+        }
+
+        String oldName = rank.getName();
+        ((BRank) rank).name = args[1];
         kdc.saveAsync(rank);
 
-        kdc.getMessageManager().send(sender, "cmdRanksEdit", "max-members", rank.getName(), args[1]);
+        kdc.getMessageManager().send(sender, "cmdRanksRename", oldName, rank.getName());
     }
 }

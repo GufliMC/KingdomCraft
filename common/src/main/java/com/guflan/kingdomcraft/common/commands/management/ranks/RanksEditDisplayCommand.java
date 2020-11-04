@@ -66,10 +66,8 @@ public class RanksEditDisplayCommand extends CommandBase {
         }
 
         rank.setDisplay(args[1]);
+        kdc.saveAsync(rank);
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rank::save);
-
-        kdc.getMessageManager().send(sender, "cmdRanksEditSuccess", "display", rank.getName(), args[1]);
+        kdc.getMessageManager().send(sender, "cmdRanksEdit", "display", rank.getName(), args[1]);
     }
 }

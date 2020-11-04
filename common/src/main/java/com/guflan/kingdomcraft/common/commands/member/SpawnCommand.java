@@ -55,7 +55,7 @@ public class SpawnCommand extends CommandBase {
             DecimalFormat df = new DecimalFormat("#");
             String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-             kdc.getMessageManager().send(sender, "cmdSpawnSuccess", str);
+             kdc.getMessageManager().send(sender, "cmdSpawn", str);
         });
     }
 }

@@ -87,9 +87,7 @@ public class GroupsRemoveOtherCommand extends CommandBase {
             return;
         }
 
-        // async saving
-        kdc.getPlugin().getScheduler().executeAsync(rpg::delete);
-
-        kdc.getMessageManager().send(sender, "cmdGroupsRemoveOtherSuccess", group.getName(), rank.getName(), kingdom.getName());
+        kdc.deleteAsync(rpg);
+        kdc.getMessageManager().send(sender, "cmdGroupsRemoveOther", group.getName(), rank.getName(), kingdom.getName());
     }
 }
