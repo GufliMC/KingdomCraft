@@ -31,7 +31,7 @@ public class RenameOtherCommand extends CommandBase {
     public RenameOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "rename", 2);
         setArgumentsHint("<kingdom> <name>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRenameExplanation"));
+        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRenameOtherExplanation"));
         setPermissions("kingdom.rename.other");
     }
 
