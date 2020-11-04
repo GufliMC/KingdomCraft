@@ -161,11 +161,14 @@ public class BKingdom extends Model implements Kingdom {
 
     @Override
     public Rank getRank(String name) {
-        return ranks.stream().filter(r -> r.name.equals(name)).findFirst().orElse(null);
+        return ranks.stream().filter(r -> r.name.equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     @Override
     public Rank createRank(String name) {
+        if ( getRank(name) != null ) {
+            throw new IllegalArgumentException("A rank with that name already exists.");
+        }
         BRank rank = new BRank();
         rank.name = name;
         rank.kingdom = this;

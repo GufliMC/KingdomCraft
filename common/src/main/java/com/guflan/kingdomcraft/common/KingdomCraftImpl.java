@@ -193,6 +193,9 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     @Override
     public Kingdom createKingdom(String name) {
+        if ( getKingdom(name) != null ) {
+            throw new IllegalArgumentException("A kingdom with that name already exists.");
+        }
         Kingdom kingdom = context.createKingdom(name);
         eventDispatcher.dispatchKingdomCreate(kingdom);
         return kingdom;
