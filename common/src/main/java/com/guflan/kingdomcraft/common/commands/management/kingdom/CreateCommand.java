@@ -57,11 +57,15 @@ public class CreateCommand extends CommandBase {
 
         Kingdom kingdom = kdc.createKingdom(args[0]);
 
+        // TODO make default ranks editable
         Rank king = kingdom.createRank("King");
         king.setLevel(99);
 
-        CompletableFuture<Void> future = kdc.saveAsync(kingdom, king).thenRun(() -> {
-            kingdom.setDefaultRank(king);
+        Rank civilian = kingdom.createRank("Civilian");
+        civilian.setLevel(0);
+
+        CompletableFuture<Void> future = kdc.saveAsync(kingdom, king, civilian).thenRun(() -> {
+            kingdom.setDefaultRank(civilian);
             kingdom.save();
         });
 
