@@ -28,7 +28,7 @@ public class LeaveCommand extends CommandBase {
 
     public LeaveCommand(KingdomCraftImpl kdc) {
         super(kdc, "leave", 0, true);
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdLeaveExplanation"));
+        setExplanationMessage("cmdLeaveExplanation");
         setPermissions("kingdom.leave");
     }
 

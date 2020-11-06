@@ -32,7 +32,7 @@ public class RanksListOtherCommand extends CommandBase {
     public RanksListOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks list", 1);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksListOtherExplanation"));
+        setExplanationMessage("cmdRanksListOtherExplanation");
         setPermissions("kingdom.ranks.list.other");
     }
 

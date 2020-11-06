@@ -33,7 +33,7 @@ public class RanksRenameCommand extends CommandBase {
     public RanksRenameCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks rename", 2, true);
         setArgumentsHint("<rank> <name>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksRenameExplanation"));
+        setExplanationMessage("cmdRanksRenameExplanation");
         setPermissions("kingdom.ranks.rename");
     }
 

@@ -74,10 +74,10 @@ public class HelpCommand extends CommandBase {
         for ( int i = startindex; i < Math.min(commands.size(), startindex + pagesize); i++ ) {
             CommandBase cmd = commands.get(i);
 
-            sb.append(kdc.getMessageManager().getMessage("cmdHelpFormat",
-                    "/k " + cmd.getCommands().get(0),
-                    cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint(),
-                    cmd.getExplanationMessage()));
+            String command = "/k " + cmd.getCommands().get(0) + (cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint());
+            String explanation = kdc.getMessageManager().getMessage(cmd.getExplanationMessage());
+
+            sb.append(kdc.getMessageManager().getMessage("cmdHelpFormat", command, explanation));
             sb.append("\n");
         }
 
@@ -87,7 +87,7 @@ public class HelpCommand extends CommandBase {
 
     private List<CommandBase> getAvailableCommands(PlatformSender sender) {
         List<CommandBase> commands = kdc.getCommandManager().getCommands().stream()
-                .filter(cmd -> cmd.getExplanationMessage() != null).collect(Collectors.toList());
+                .filter(cmd -> kdc.getMessageManager().hasMessage(cmd.getExplanationMessage())).collect(Collectors.toList());
 
         if ( sender instanceof PlatformPlayer ) {
             commands = commands.stream().filter(cmd -> hasAnyPermission(sender, cmd)).collect(Collectors.toList());

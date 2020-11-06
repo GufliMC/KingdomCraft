@@ -25,7 +25,7 @@ public class ReloadCommand extends CommandBase {
 
     public ReloadCommand(KingdomCraftImpl kdc) {
         super(kdc, "reload", 0);
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdReloadExplanation"));
+        setExplanationMessage("cmdReloadExplanation");
         setPermissions("kingdom.reload");
     }
 

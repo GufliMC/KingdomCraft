@@ -33,7 +33,7 @@ public class CreateCommand extends CommandBase {
     public CreateCommand(KingdomCraftImpl kdc) {
         super(kdc, "create", 1);
         setArgumentsHint("<name>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdCreateExplanation"));
+        setExplanationMessage("cmdCreateExplanation");
         setPermissions("kingdom.create", "kingdom.create.other");
     }
 

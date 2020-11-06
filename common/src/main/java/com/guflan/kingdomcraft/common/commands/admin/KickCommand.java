@@ -33,7 +33,7 @@ public class KickCommand extends CommandBase {
     public KickCommand(KingdomCraftImpl kdc) {
         super(kdc, "kick", 1);
         setArgumentsHint("<player>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdKickExplanation"));
+        setExplanationMessage("cmdKickExplanation");
         setPermissions("kingdom.kick", "kingdom.kick.other");
     }
 

@@ -31,7 +31,7 @@ public class EditMaxMembersOtherCommand extends CommandBase {
     public EditMaxMembersOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit max-members", 2);
         setArgumentsHint("<kingdom> <amount>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitMaxMembersOtherExplanation"));
+        setExplanationMessage("cmdExitMaxMembersOtherExplanation");
         setPermissions("kingdom.edit.max-members.other");
     }
 

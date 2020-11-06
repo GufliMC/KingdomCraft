@@ -31,7 +31,7 @@ public class SetSpawnOtherCommand extends CommandBase {
     public SetSpawnOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "setspawn", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdSetSpawnOtherExplanation"));
+        setExplanationMessage("cmdSetSpawnOtherExplanation");
         setPermissions("kingdom.setspawn.other");
     }
 

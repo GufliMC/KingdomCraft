@@ -34,7 +34,7 @@ public class JoinCommand extends CommandBase {
     public JoinCommand(KingdomCraftImpl kdc) {
         super(kdc, "join", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdJoinExplanation"));
+        setExplanationMessage("cmdJoinExplanation");
         setPermissions("kingdom.join");
     }
 

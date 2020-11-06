@@ -35,7 +35,7 @@ public class GroupsAddOtherCommand extends CommandBase {
     public GroupsAddOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups add", 3);
         setArgumentsHint("<kingdom> <rank> <group>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdGroupsAddOtherExplanation"));
+        setExplanationMessage("cmdGroupsAddOtherExplanation");
         setPermissions("kingdom.groups.add.other");
     }
 

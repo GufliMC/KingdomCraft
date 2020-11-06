@@ -33,7 +33,7 @@ public class RanksDeleteCommand extends CommandBase {
     public RanksDeleteCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks delete", 1, true);
         setArgumentsHint("<rank>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksDeleteExplanation"));
+        setExplanationMessage("cmdRanksDeleteExplanation");
         setPermissions("kingdom.ranks.delete");
     }
 

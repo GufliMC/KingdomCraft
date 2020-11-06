@@ -35,7 +35,7 @@ public class GroupsRemoveCommand extends CommandBase {
     public GroupsRemoveCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups remove", 2, true);
         setArgumentsHint("<rank> <group>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdGroupsRemoveExplanation"));
+        setExplanationMessage("cmdGroupsRemoveExplanation");
         setPermissions("kingdom.groups.remove");
     }
 

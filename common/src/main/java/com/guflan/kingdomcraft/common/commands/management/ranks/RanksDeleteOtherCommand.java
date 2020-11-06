@@ -31,7 +31,7 @@ public class RanksDeleteOtherCommand extends CommandBase {
     public RanksDeleteOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks delete", 2);
         setArgumentsHint("<kingdom> <rank>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksDeleteOtherExplanation"));
+        setExplanationMessage("cmdRanksDeleteOtherExplanation");
         setPermissions("kingdom.ranks.delete.other");
     }
 

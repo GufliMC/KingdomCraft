@@ -56,8 +56,12 @@ public class MessageManager {
 		return !messages.containsKey(name) || messages.get(name).replaceAll(Pattern.quote(" "), "").equals("");
 	}
 
+	public boolean hasMessage(String name) {
+		return messages.containsKey(name);
+	}
+
 	public String getMessage(String name) {
-		if ( !messages.containsKey(name) ) return null;
+		if ( !hasMessage(name) ) return null;
 		return colorify(messages.get(name));
 	}
 

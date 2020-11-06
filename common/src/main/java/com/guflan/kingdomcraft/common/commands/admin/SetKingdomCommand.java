@@ -33,7 +33,7 @@ public class SetKingdomCommand extends CommandBase {
     public SetKingdomCommand(KingdomCraftImpl kdc) {
         super(kdc, "setkingdom", 2);
         setArgumentsHint("<player> <kingdom>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdSetKingdomExplanation"));
+        setExplanationMessage("cmdSetKingdomExplanation");
         setPermissions("kingdom.setkingdom");
     }
 

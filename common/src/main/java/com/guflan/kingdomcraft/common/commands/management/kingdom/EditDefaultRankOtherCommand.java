@@ -32,7 +32,7 @@ public class EditDefaultRankOtherCommand extends CommandBase {
     public EditDefaultRankOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit defaultrank", 2);
         setArgumentsHint("<kingdom> <rank>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdEditDefaultRankOtherExplanation"));
+        setExplanationMessage("cmdEditDefaultRankOtherExplanation");
         setPermissions("kingdom.edit.defaultrank.other");
     }
 

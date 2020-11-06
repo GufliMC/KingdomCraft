@@ -33,7 +33,7 @@ public class DeleteOtherCommand extends CommandBase {
     public DeleteOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "delete", 1);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdDeleteOtherExplanation"));
+        setExplanationMessage("cmdDeleteOtherExplanation");
         setPermissions("kingdom.delete", "kingdom.delete.other");
     }
 

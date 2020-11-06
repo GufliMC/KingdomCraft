@@ -33,7 +33,7 @@ public class ChatChannelCommand extends CommandBase {
     public ChatChannelCommand(KingdomCraftImpl kdc) {
         super(kdc, "chatchannel", 1, true);
         setArgumentsHint("<chatchannel>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdChatChannelExplanation"));
+        setExplanationMessage("cmdChatChannelExplanation");
         setPermissions("kingdom.chatchannel");
     }
 

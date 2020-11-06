@@ -33,7 +33,7 @@ public class RanksEditSuffixCommand extends CommandBase {
     public RanksEditSuffixCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit suffix", 2, true);
         setArgumentsHint("<rank> <value>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksEditSuffixExplanation"));
+        setExplanationMessage("cmdRanksEditSuffixExplanation");
         setPermissions("kingdom.ranks.edit.suffix");
     }
 

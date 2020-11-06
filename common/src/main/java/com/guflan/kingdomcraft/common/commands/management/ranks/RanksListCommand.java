@@ -31,7 +31,7 @@ public class RanksListCommand extends CommandBase {
 
     public RanksListCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks list", 0, true);
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdRanksListExplanation"));
+        setExplanationMessage("cmdRanksListExplanation");
         setPermissions("kingdom.ranks.list");
     }
 

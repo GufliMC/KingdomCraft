@@ -31,7 +31,7 @@ public class EditSuffixOtherCommand extends CommandBase {
     public EditSuffixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit suffix", 1);
         setArgumentsHint("<kingdom> <suffix>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitSuffixOtherExplanation"));
+        setExplanationMessage("cmdExitSuffixOtherExplanation");
         setPermissions("kingdom.edit.suffix.other");
     }
 

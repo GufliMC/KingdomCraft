@@ -49,7 +49,7 @@ cmdErrorInvalidBoolean: '&4{0} &cis not a valid, must be &4true &cor &4false&c!'
 
 cmdHelpHeader: '&e+----<->----+ &6KingdomCraft &e+----<->----+'
 cmdHelpFooter: '&ePage &a{0}&f/&a{1}'
-cmdHelpFormat: '&f{0}{1} &a{2}'
+cmdHelpFormat: '&f{0} &a{1}'
 cmdHelpPageLimit: '&cThere are only &4{0} &cpages.'
 
 cmdJoinExplanation: 'Join a kingdom'

@@ -34,7 +34,7 @@ public class EnemyCommand extends CommandBase {
     public EnemyCommand(KingdomCraftImpl kdc) {
         super(kdc, "enemy", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdEnemyExplanation"));
+        setExplanationMessage("cmdEnemyExplanation");
         setPermissions("kingdom.enemy");
     }
 

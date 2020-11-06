@@ -29,7 +29,7 @@ public class EditPrefixCommand extends CommandBase {
     public EditPrefixCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 1, true);
         setArgumentsHint("<prefix>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdExitPrefixExplanation"));
+        setExplanationMessage("cmdExitPrefixExplanation");
         setPermissions("kingdom.edit.prefix");
     }
 

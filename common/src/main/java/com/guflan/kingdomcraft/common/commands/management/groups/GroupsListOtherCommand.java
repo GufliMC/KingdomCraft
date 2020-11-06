@@ -34,7 +34,7 @@ public class GroupsListOtherCommand extends CommandBase {
     public GroupsListOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups list", 2);
         setArgumentsHint("<kingdom> <rank>");
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdGroupsListOtherExplanation"));
+        setExplanationMessage("cmdGroupsListOtherExplanation");
         setPermissions("kingdom.groups.list.other");
     }
 
