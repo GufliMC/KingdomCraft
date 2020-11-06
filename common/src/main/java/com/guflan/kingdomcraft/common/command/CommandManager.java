@@ -100,6 +100,9 @@ public class CommandManager {
         addCommand(new RenameCommand(kdc));
         addCommand(new RenameOtherCommand(kdc));
 
+        addCommand(new EditDefaultRankCommand(kdc));
+        addCommand(new EditDefaultRankOtherCommand(kdc));
+
         addCommand(new EditDisplayCommand(kdc));
         addCommand(new EditDisplayOtherCommand(kdc));
 
