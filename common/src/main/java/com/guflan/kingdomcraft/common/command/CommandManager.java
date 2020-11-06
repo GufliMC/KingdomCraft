@@ -95,7 +95,9 @@ public class CommandManager {
 
         // kingdoms
         addCommand(new CreateCommand(kdc));
+
         addCommand(new DeleteCommand(kdc));
+        addCommand(new DeleteOtherCommand(kdc));
 
         addCommand(new RenameCommand(kdc));
         addCommand(new RenameOtherCommand(kdc));
