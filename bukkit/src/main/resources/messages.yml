@@ -122,13 +122,13 @@ cmdRanksListOtherExplanation: 'Get a list of all ranks in a kingdom'
 
 # /k join
 cmdJoinAlready: '&aYou are already in a kingdom!'
-cmdJoin: '&aYou fully joined &2{0}&a!'
+cmdJoin: '&aYou joined &2{0}&a!'
 cmdJoinMembers: '&2{0} &ahas joined your kingdom!'
 cmdJoinNoInvite: '&aYou need an invite to join &2{0}&a!'
 cmdJoinFull: '&aThe kingdom &2{0} &ais full!'
 
 # /k leave
-cmdLeave: '&aYou fully left &2{0}&a!'
+cmdLeave: '&aYou left &2{0}&a!'
 cmdLeaveMembers: '&2{0} &ahas left your kingdom!'
 
 # /k list
