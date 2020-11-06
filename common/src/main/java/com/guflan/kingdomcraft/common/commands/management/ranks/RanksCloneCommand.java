@@ -81,7 +81,11 @@ public class RanksCloneCommand extends CommandBase {
             return;
         }
 
-        Rank clone = to.createRank(rank.getName());
+        Rank clone = to.getRank(rank.getName());
+        if ( clone == null ) {
+            clone = to.createRank(rank.getName());
+        }
+
         clone.setPrefix(rank.getPrefix());
         clone.setSuffix(rank.getSuffix());
         clone.setDisplay(rank.getDisplay());
@@ -89,6 +93,9 @@ public class RanksCloneCommand extends CommandBase {
         clone.setLevel(rank.getLevel());
 
         for (RankPermissionGroup rpg : rank.getPermissionGroups() ) {
+            if ( clone.getPermissionGroup(rpg.getName()) != null ) {
+                continue;
+            }
             clone.createPermissionGroup(rpg.getName());
         }
 
