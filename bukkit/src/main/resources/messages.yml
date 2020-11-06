@@ -132,8 +132,8 @@ cmdLeave: '&aYou fully left &2{0}&a!'
 cmdLeaveMembers: '&2{0} &ahas left your kingdom!'
 
 # /k list
+cmdListDelimiter: '&a, &2'
 cmdList: '&aList of kingdoms: {0}'
-cmdListNormal: '&aThere are &2{0} &aonline players:'
 
 # /k chatchannel
 cmdChatChannelEnable: '&aYou enabled the channel &2{0}&a!'

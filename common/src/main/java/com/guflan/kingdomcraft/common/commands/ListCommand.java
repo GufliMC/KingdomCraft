@@ -38,9 +38,13 @@ public class ListCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         List<String> kingdoms = kdc.getKingdoms().stream()
                 .sorted(Comparator.comparing(Kingdom::isInviteOnly))
-                .map(k -> (k.isInviteOnly() ? "&c" : "&a") + k.getName())
+                .map(Kingdom::getDisplay)
                 .collect(Collectors.toList());
 
-        kdc.getMessageManager().send(sender, "cmdList", String.join("&f, ", kingdoms));
+        String delimiter = kdc.getMessageManager().getMessage("cmdListDelimiter");
+        delimiter = delimiter != null ? delimiter : "&a, &2";
+
+        String result = String.join(delimiter, kingdoms);
+        kdc.getMessageManager().send(sender, "cmdList", result);
     }
 }
