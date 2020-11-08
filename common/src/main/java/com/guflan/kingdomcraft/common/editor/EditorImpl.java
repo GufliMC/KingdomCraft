@@ -1,25 +1,38 @@
+/*
+ * This file is part of KingdomCraft.
+ *
+ * KingdomCraft is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * KingdomCraft is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.guflan.kingdomcraft.common.editor;
 
-import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
+import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import com.guflan.kingdomcraft.api.editor.Editor;
 import com.guflan.kingdomcraft.api.editor.EditorAttribute;
-import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.EntityBuilder;
-import org.apache.http.client.entity.GzipCompressingEntity;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,9 +41,9 @@ import org.json.simple.parser.ParseException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
@@ -52,7 +65,7 @@ public class EditorImpl implements Editor {
 
     @Override
     public void addKingdomAttribute(EditorAttribute attribute) {
-        if ( kingdomAttributes.contains(attribute) ) {
+        if (kingdomAttributes.contains(attribute)) {
             return;
         }
         kingdomAttributes.add(attribute);
@@ -65,7 +78,7 @@ public class EditorImpl implements Editor {
 
     @Override
     public void addRankAttribute(EditorAttribute attribute) {
-        if ( rankAttributes.contains(attribute) ) {
+        if (rankAttributes.contains(attribute)) {
             return;
         }
         rankAttributes.add(attribute);
@@ -78,23 +91,23 @@ public class EditorImpl implements Editor {
 
     public void startSession(PlatformSender sender) {
         JSONArray kingdomAttributes = new JSONArray();
-        for ( EditorAttribute attribute : this.kingdomAttributes ) {
+        for (EditorAttribute attribute : this.kingdomAttributes) {
             kingdomAttributes.add(serialize(attribute));
         }
 
         JSONArray rankAttributes = new JSONArray();
-        for ( EditorAttribute attribute : this.kingdomAttributes ) {
+        for (EditorAttribute attribute : this.kingdomAttributes) {
             rankAttributes.add(serialize(attribute));
         }
 
         JSONObject kingdoms = new JSONObject();
-        for ( Kingdom kingdom: kdc.getKingdoms() ) {
+        for (Kingdom kingdom : kdc.getKingdoms()) {
             kingdoms.put(kingdom.getName(), serialize(kingdom));
         }
 
         JSONObject json = new JSONObject();
         json.put("kingdomAttributes", kingdomAttributes);
-        json.put("rankAttributes",rankAttributes);
+        json.put("rankAttributes", rankAttributes);
         json.put("kingdoms", kingdoms);
 
         System.out.println(json);
@@ -128,17 +141,17 @@ public class EditorImpl implements Editor {
 
         try {
             Map<String, JSONObject> kingdoms = (JSONObject) json.get("kingdoms");
-            for ( Kingdom kingdom : kdc.getKingdoms() ) {
-                if ( !kingdoms.containsKey(kingdom.getName()) ) {
+            for (Kingdom kingdom : kdc.getKingdoms()) {
+                if (!kingdoms.containsKey(kingdom.getName())) {
                     kingdom.delete();
                 } else {
                     JSONObject kingdomJson = kingdoms.get(kingdom.getName());
                     deserialize(kingdom, kingdomJson);
                 }
             }
-            for ( String name : kingdoms.keySet() ) {
+            for (String name : kingdoms.keySet()) {
                 Kingdom kingdom = kdc.getKingdom(name);
-                if ( kingdom != null ) {
+                if (kingdom != null) {
                     continue;
                 }
 
@@ -171,23 +184,23 @@ public class EditorImpl implements Editor {
         json.put("invite-only", kingdom.isInviteOnly());
 
         JSONObject attributes = new JSONObject();
-        for ( EditorAttribute attribute : this.kingdomAttributes ) {
+        for (EditorAttribute attribute : this.kingdomAttributes) {
             KingdomAttribute kingdomAttribute = kingdom.getAttribute(attribute.getName());
-            if ( kingdomAttribute != null ) {
+            if (kingdomAttribute != null) {
                 attributes.put(attribute.getName(), kingdomAttribute.getValue());
             }
         }
         json.put("attributes", attributes);
 
         JSONObject ranks = new JSONObject();
-        for ( Rank rank : kingdom.getRanks() ) {
+        for (Rank rank : kingdom.getRanks()) {
             ranks.put(rank.getName(), serialize(rank));
         }
         json.put("ranks", ranks);
 
         return json;
     }
-    
+
     private JSONObject serialize(Rank rank) {
         JSONObject json = new JSONObject();
         json.put("display", rank.getDisplay());
@@ -197,21 +210,21 @@ public class EditorImpl implements Editor {
         json.put("level", rank.getLevel());
 
         JSONObject attributes = new JSONObject();
-        for ( EditorAttribute attribute : this.rankAttributes ) {
+        for (EditorAttribute attribute : this.rankAttributes) {
             RankAttribute rankAttribute = rank.getAttribute(attribute.getName());
-            if ( rankAttribute != null ) {
+            if (rankAttribute != null) {
                 attributes.put(attribute.getName(), rankAttribute.getValue());
             }
         }
         json.put("attributes", attributes);
-        
+
         return json;
     }
-    
+
     private void deserialize(Kingdom kingdom, JSONObject json) {
         boolean updated = false;
-        if ( json.containsKey("name")
-                && !kingdom.getName().equals(json.get("name")) ) {
+        if (json.containsKey("name")
+                && !kingdom.getName().equals(json.get("name"))) {
             try {
                 kingdom.renameTo((String) json.get("name"));
                 updated = true;
@@ -219,35 +232,35 @@ public class EditorImpl implements Editor {
                 kdc.getPlugin().log("Editor tried to rename to an existing kingdom.", Level.WARNING);
             }
         }
-        if ( json.containsKey("display") && !kingdom.getDisplay().equals(json.get("display"))) {
+        if (json.containsKey("display") && !kingdom.getDisplay().equals(json.get("display"))) {
             kingdom.setDisplay((String) json.get("display"));
             updated = true;
         }
-        if ( json.containsKey("prefix") && !kingdom.getPrefix().equals(json.get("prefix"))) {
+        if (json.containsKey("prefix") && !kingdom.getPrefix().equals(json.get("prefix"))) {
             kingdom.setPrefix((String) json.get("prefix"));
             updated = true;
         }
-        if ( json.containsKey("suffix") && !kingdom.getSuffix().equals(json.get("suffix"))) {
+        if (json.containsKey("suffix") && !kingdom.getSuffix().equals(json.get("suffix"))) {
             kingdom.setSuffix((String) json.get("suffix"));
             updated = true;
         }
-        if ( json.containsKey("max-members") && kingdom.getMaxMembers() != (int) (long) json.get("max-members") ) {
+        if (json.containsKey("max-members") && kingdom.getMaxMembers() != (int) (long) json.get("max-members")) {
             kingdom.setMaxMembers((int) (long) json.get("max-members"));
             updated = true;
         }
-        if ( json.containsKey("invite-only") && kingdom.isInviteOnly() != (boolean) json.get("invite-only")) {
+        if (json.containsKey("invite-only") && kingdom.isInviteOnly() != (boolean) json.get("invite-only")) {
             kingdom.setInviteOnly((boolean) json.get("invite-only"));
             updated = true;
         }
 
-        if ( json.containsKey("attributes") ) {
+        if (json.containsKey("attributes")) {
             Map<String, Object> attributesJson = (JSONObject) json.get("attributes");
-            for ( EditorAttribute attribute : this.kingdomAttributes ) {
-                if ( attributesJson.get(attribute.getName()) == null ) {
+            for (EditorAttribute attribute : this.kingdomAttributes) {
+                if (attributesJson.get(attribute.getName()) == null) {
                     continue;
                 }
                 String value = attributesJson.get(attribute.getName()).toString();
-                if ( !attribute.validate(value) ) {
+                if (!attribute.validate(value)) {
                     kdc.getPlugin().log("Editor tried to set an invalid kingdom attribute value.", Level.WARNING);
                     continue;
                 }
@@ -255,7 +268,7 @@ public class EditorImpl implements Editor {
                 KingdomAttribute kingdomAttribute = kingdom.getAttribute(attribute.getName());
                 if (kingdomAttribute == null) {
                     kingdomAttribute = kingdom.createAttribute(attribute.getName());
-                } else if ( kingdomAttribute.getValue().equals(value) ) {
+                } else if (kingdomAttribute.getValue().equals(value)) {
                     continue;
                 }
                 kingdomAttribute.setValue(value);
@@ -268,11 +281,11 @@ public class EditorImpl implements Editor {
 //            updated = true;
 //        }
 
-        if ( json.containsKey("ranks") ) {
+        if (json.containsKey("ranks")) {
             Map<String, JSONObject> ranks = (JSONObject) json.get("ranks");
             for (Rank rank : kingdom.getRanks()) {
                 if (!json.containsKey(rank.getName())) {
-                    if ( kingdom.getDefaultRank() == rank ) {
+                    if (kingdom.getDefaultRank() == rank) {
                         kdc.getPlugin().log("Editor tried to delete the default rank.", Level.WARNING);
                         continue;
                     }
@@ -298,28 +311,28 @@ public class EditorImpl implements Editor {
 //            updated = true;
 //        }
 
-        if ( updated ) {
+        if (updated) {
             kingdom.save();
         }
     }
 
     private boolean deserializeDefaultRank(Kingdom kingdom, JSONObject json) {
-        if ( json.containsKey("defaultrank") && (kingdom.getDefaultRank() == null
+        if (json.containsKey("defaultrank") && (kingdom.getDefaultRank() == null
                 || !kingdom.getDefaultRank().getName().equals(json.get("defaultrank")))) {
             Rank rank = kingdom.getRank((String) json.get("defaultrank"));
-            if ( rank != null ) {
+            if (rank != null) {
                 kingdom.setDefaultRank(rank);
                 return true;
             }
         }
         return false;
     }
-    
+
     private void deserialize(Rank rank, JSONObject json) {
         boolean updated = false;
 
-        if ( json.containsKey("name")
-                && !rank.getName().equals(json.get("name")) ) {
+        if (json.containsKey("name")
+                && !rank.getName().equals(json.get("name"))) {
             try {
                 rank.renameTo((String) json.get("name"));
                 updated = true;
@@ -327,43 +340,43 @@ public class EditorImpl implements Editor {
                 kdc.getPlugin().log("Editor tried to rename to an existing rank.", Level.WARNING);
             }
         }
-        if ( json.containsKey("display") && !rank.getDisplay().equals(json.get("display"))) {
+        if (json.containsKey("display") && !rank.getDisplay().equals(json.get("display"))) {
             rank.setDisplay((String) json.get("display"));
             updated = true;
         }
-        if ( json.containsKey("prefix") && !rank.getPrefix().equals(json.get("prefix"))) {
+        if (json.containsKey("prefix") && !rank.getPrefix().equals(json.get("prefix"))) {
             rank.setPrefix((String) json.get("prefix"));
             updated = true;
         }
-        if ( json.containsKey("suffix") && !rank.getSuffix().equals(json.get("suffix"))) {
+        if (json.containsKey("suffix") && !rank.getSuffix().equals(json.get("suffix"))) {
             rank.setSuffix((String) json.get("suffix"));
             updated = true;
         }
-        if ( json.containsKey("max-members") && rank.getMaxMembers() != (int) (long) json.get("max-members")) {
+        if (json.containsKey("max-members") && rank.getMaxMembers() != (int) (long) json.get("max-members")) {
             rank.setMaxMembers((int) (long) json.get("max-members"));
             updated = true;
         }
-        if ( json.containsKey("level") && rank.getLevel() != (int) (long) json.get("level") ) {
+        if (json.containsKey("level") && rank.getLevel() != (int) (long) json.get("level")) {
             rank.setLevel((int) (long) json.get("level"));
             updated = true;
         }
 
-        if ( json.containsKey("attributes") ) {
+        if (json.containsKey("attributes")) {
             Map<String, Object> attributesJson = (JSONObject) json.get("attributes");
-            for ( EditorAttribute attribute : this.rankAttributes ) {
-                if ( attributesJson.get(attribute.getName()) == null ) {
+            for (EditorAttribute attribute : this.rankAttributes) {
+                if (attributesJson.get(attribute.getName()) == null) {
                     continue;
                 }
                 String value = attributesJson.get(attribute.getName()).toString();
-                if ( !attribute.validate(value) ) {
+                if (!attribute.validate(value)) {
                     kdc.getPlugin().log("Editor tried to set an invalid rank attribute value.", Level.WARNING);
                     continue;
                 }
 
                 RankAttribute rankAttribute = rank.getAttribute(attribute.getName());
-                if (rankAttribute == null ) {
+                if (rankAttribute == null) {
                     rankAttribute = rank.createAttribute(attribute.getName());
-                } else if ( rankAttribute.getValue().equals(value) ) {
+                } else if (rankAttribute.getValue().equals(value)) {
                     continue;
                 }
                 rankAttribute.setValue(value);
@@ -371,7 +384,7 @@ public class EditorImpl implements Editor {
             }
         }
 
-        if ( updated ) {
+        if (updated) {
             rank.save();
         }
     }
@@ -411,7 +424,7 @@ public class EditorImpl implements Editor {
 
             int status = response.getStatusLine().getStatusCode();
 
-            if ( status < 200 || status >= 300 ) {
+            if (status < 200 || status >= 300) {
                 throw new HttpResponseException(status, response.getStatusLine().getReasonPhrase());
             }
 
