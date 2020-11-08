@@ -21,6 +21,7 @@ import com.guflan.kingdomcraft.api.KingdomCraft;
 import com.guflan.kingdomcraft.api.KingdomCraftProvider;
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.api.editor.Editor;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
@@ -31,6 +32,7 @@ import com.guflan.kingdomcraft.common.command.CommandManager;
 import com.guflan.kingdomcraft.common.config.Configuration;
 import com.guflan.kingdomcraft.common.config.KingdomCraftConfig;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
+import com.guflan.kingdomcraft.common.editor.EditorImpl;
 import com.guflan.kingdomcraft.common.event.EventDispatcher;
 import com.guflan.kingdomcraft.common.event.EventManagerImpl;
 import com.guflan.kingdomcraft.common.messages.MessageManager;
@@ -55,8 +57,6 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final MessageManager messageManager;
     private final PermissionManager permissionManager;
 
-    // public
-
     private final EventManagerImpl eventManager;
     private final EventDispatcher eventDispatcher;
 
@@ -64,6 +64,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     private final ChatDispatcher chatDispatcher;
 
     private final PlaceholderManagerImpl placeholderManager;
+    private final EditorImpl editor;
 
     //
 
@@ -93,6 +94,8 @@ public class KingdomCraftImpl implements KingdomCraft {
 
         this.placeholderManager = new PlaceholderManagerImpl(this);
         this.permissionManager = new PermissionManager(this, groupsConfig);
+
+        this.editor = new EditorImpl(this);
 
         KingdomCraftProvider.register(this);
         Teleporter.register(this);
@@ -161,6 +164,17 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public CommandDispatcher getCommandDispatcher() {
         return commandDispatcher;
+    }
+
+    // editor
+
+    @Override
+    public Editor getEditor() {
+        return editor;
+    }
+
+    public EditorImpl getEditorImpl() {
+        return editor;
     }
 
     // players

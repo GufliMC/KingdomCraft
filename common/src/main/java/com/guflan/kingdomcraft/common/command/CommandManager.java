@@ -91,6 +91,9 @@ public class CommandManager {
         addCommand(new ChatCommand(kdc));
         addCommand(new AdminCommand(kdc));
 
+        addCommand(new EditorCommand(kdc));
+        addCommand(new EditorSaveCommand(kdc));
+
         /* Management */
 
         // kingdoms

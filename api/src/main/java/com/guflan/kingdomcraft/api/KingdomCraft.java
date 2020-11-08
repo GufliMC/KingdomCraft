@@ -19,6 +19,7 @@ package com.guflan.kingdomcraft.api;
 
 import com.guflan.kingdomcraft.api.chat.ChatManager;
 import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.api.editor.Editor;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.event.EventManager;
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
@@ -38,6 +39,8 @@ public interface KingdomCraft {
     ChatManager getChatManager();
 
     PlaceholderManager getPlaceholderManager();
+
+    Editor getEditor();
 
     // players
 

@@ -73,6 +73,7 @@ cmdTpHereExplanation: 'Teleport everyone of your kingdom to you'
 cmdTpHereOtherExplanation: 'Teleport everyone of a kingdom to you'
 cmdChatExplanation: 'Send a message in the specified chat channel'
 cmdAdminExplanation: 'Toggle admin mode'
+cmdEditorExplanation: 'Start a webeditor session'
 
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
 cmdGroupsAddOtherExplanation: 'Add a permission group to a rank'
@@ -287,3 +288,14 @@ cmdInfoDateFormat: 'dd MMM yyyy'
 
 # /k reload
 cmdReload: '&aReloaded kingdomcraft!'
+
+# /k editor
+cmdEditorStarting: '&aCreating session...'
+cmdEditorStarted: '&aEditor session started! Go to &2{0}'
+cmdEditorSaving: '&aSaving the new configuration...'
+cmdEditorSaved: '&aThe new configuration has been saved!'
+cmdEditorErrorUpload: '&cThe session cannot be started! Try again later.'
+cmdEditorErrorDownload: '&cThe new configuration could not be retrieved! Is your key correct?'
+cmdEditorErrorFormat: '&cThe new configuration is of invalid format. Contact the developer!'
+cmdEditorErrorSave: '&cThe new configuration could not be saved. Contact the developer!'
+
