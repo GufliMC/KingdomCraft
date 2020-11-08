@@ -32,7 +32,7 @@ cmdErrorSenderNoKingdom: '&cYou''re not in a kingdom!'
 cmdErrorTargetNoKingodm: '&4{0} &cis not in a kingdom!'
 cmdErrorKingdomNotExist: '&cThe kingdom &4{0} &cdoes not exist!'
 cmdErrorRankNotExist: '&cThe rank &4{0} &cdoes not exist!'
-cmdErrorNoPlayer: '&cThe player &4{0} &cdoes not exist!'
+cmdErrorPlayerNotExist: '&cThe player &4{0} &cdoes not exist!'
 cmdErrorNotOnline: '&cThe player &4{0} &cis not online!'
 cmdErrorSameKingdom: '&cYou must specify another kingdom!'
 cmdErrorPermissionGroupNotExist: '&cThe permission group &4{0} &cdoes not exist.'
@@ -133,7 +133,7 @@ cmdLeaveMembers: '&2{0} &ahas left your kingdom!'
 
 # /k list
 cmdListDelimiter: '&a, &2'
-cmdList: '&aList of kingdoms: {0}'
+cmdList: '&aList of kingdoms: &2{0}'
 
 # /k chatchannel
 cmdChatChannelEnable: '&aYou enabled the channel &2{0}&a!'

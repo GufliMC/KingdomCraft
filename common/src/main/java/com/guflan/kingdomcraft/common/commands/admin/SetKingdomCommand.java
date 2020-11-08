@@ -54,7 +54,7 @@ public class SetKingdomCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if ( target == null ) {
-                    kdc.getMessageManager().send(sender, "cmdErrorNoPlayer", args[0]);
+                    kdc.getMessageManager().send(sender, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 

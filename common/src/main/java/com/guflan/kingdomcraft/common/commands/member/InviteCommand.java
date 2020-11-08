@@ -65,7 +65,7 @@ public class InviteCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdErrorNoPlayer");
+                    kdc.getMessageManager().send(sender, "cmdErrorPlayerNotExist");
                     return;
                 }
 

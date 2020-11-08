@@ -94,6 +94,10 @@ public class InfoCommand extends CommandBase {
         kdc.getPlugin().getScheduler().executeAsync(() -> {
             try {
                 User target = kdc.getUser(args[0]).get();
+                if ( target == null ) {
+                    kdc.getMessageManager().send(player, "cmdErrorPlayerNotExist");
+                    return;
+                }
 
                 kdc.getPlugin().getScheduler().executeSync(() -> {
                     showUserInventory(player, target);
