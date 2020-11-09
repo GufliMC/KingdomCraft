@@ -157,7 +157,7 @@ public class ChatManagerImpl implements ChatManager {
                 continue;
             }
 
-            if ( cs.contains("kingdom") ) {
+            if ( cs.contains("kingdoms") ) {
                 ChatChannelFactory factory = createFactory(name, cs);
                 addFactory(factory);
             } else {
@@ -202,15 +202,23 @@ public class ChatManagerImpl implements ChatManager {
     }
 
     private ChatChannelFactory createFactory(String name, Configuration section) {
-        String target = section.getString("kingdom");
-        List<String> kingdoms = Arrays.stream(target.split(Pattern.quote(",")))
-                .map(String::toLowerCase)
-                .collect(Collectors.toList());
+        boolean allKingdoms = false;
+        List<String> kingdoms = new ArrayList<>();
+        if ( section.get("kingdoms") instanceof String ) {
+            if ( section.getString("kingdoms").equals("*") ) {
+                allKingdoms = true;
+            } else {
+                kingdoms.add(section.getString("kingdoms"));
+            }
+        } else {
+            kingdoms.addAll(section.getStringList("kingdoms"));
+        }
 
+        final boolean finalAllKingdoms = allKingdoms;
         return new ChatChannelFactory() {
             @Override
             public boolean shouldCreate(Kingdom kingdom) {
-                return target.equals("*") || kingdoms.contains(kingdom.getName().toLowerCase());
+                return finalAllKingdoms || kingdoms.contains(kingdom.getName().toLowerCase());
             }
 
             @Override

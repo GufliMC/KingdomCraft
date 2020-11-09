@@ -5,7 +5,7 @@ channels:
   kingdom:
     prefix: ''
     format: '&6[K]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-    kingdom: '*' # every kingdom gets it's own channel
+    kingdoms: '*' # every kingdom gets it's own channel
 
   public:
     prefix: '!'
@@ -23,11 +23,13 @@ channels:
   trade:
     prefix: '$'
     format: '&6[K][T]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-    kingdom: '*' # every kingdom gets it's own trade channel
+    kingdoms: '*' # every kingdom gets it's own trade channel
     toggleable: true
 
-  gufland-only:
+  gufland-jenava:
     prefix: '#'
     format: '&6[K][O]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-    kingdom: 'gufland' # this channel will only exist for this kingdom
     toggleable: true
+    kingdoms:
+    - 'gufland'
+    - 'jenava'
