@@ -154,6 +154,8 @@ public class CommandManager {
         addCommand(new RanksCloneCommand(kdc));
 
         // groups
+        addCommand(new GroupsCommand(kdc));
+
         addCommand(new GroupsListCommand(kdc));
         addCommand(new GroupsListOtherCommand(kdc));
 
@@ -162,8 +164,6 @@ public class CommandManager {
 
         addCommand(new GroupsRemoveCommand(kdc));
         addCommand(new GroupsRemoveOtherCommand(kdc));
-
-        // TODO
     }
 
 }

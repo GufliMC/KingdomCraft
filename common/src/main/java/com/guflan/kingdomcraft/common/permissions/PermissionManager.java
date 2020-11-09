@@ -17,6 +17,7 @@
 
 package com.guflan.kingdomcraft.common.permissions;
 
+import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
 import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
@@ -66,7 +67,7 @@ public class PermissionManager {
         return perms;
     }
 
-    public Map<String, Boolean> getTotalPermissions(User user) {
+    public Map<String, Boolean> getTotalPermissions(User user, String world) {
         Map<String, Boolean> permissions = new HashMap<>();
 
         List<PermissionGroup> groups = new ArrayList<>();
@@ -77,11 +78,18 @@ public class PermissionManager {
 
             groups.add(defaultGroup);
         } else {
-            for (RankPermissionGroup rpg : user.getRank().getPermissionGroups()) {
-                PermissionGroup group = getGroup(rpg.getName());
-                if ( group != null ) {
-                    groups.add(group);
+            Rank rank = user.getRank();
+            for ( PermissionGroup group : this.getGroups() ) {
+                RankPermissionGroup rpg = user.getRank().getPermissionGroup(group.getName());
+                if ( rpg == null && group.getRanks().isEmpty() && group.getRanks().stream()
+                        .noneMatch(r -> r.equalsIgnoreCase(rank.getName())) ) {
+                    continue;
                 }
+                if ( !group.getWorlds().isEmpty() && group.getWorlds().stream()
+                        .noneMatch(w -> w.equalsIgnoreCase(world)) ) {
+                    continue;
+                }
+                groups.add(group);
             }
         }
 
@@ -117,6 +125,7 @@ public class PermissionManager {
             PermissionGroup group = new PermissionGroup(key,
                     cs.contains("permissions") ? cs.getStringList("permissions") : new ArrayList<>(),
                     cs.contains("inheritances") ? cs.getStringList("inheritances") : new ArrayList<>(),
+                    cs.contains("ranks") ? cs.getStringList("ranks") : new ArrayList<>(),
                     cs.contains("worlds") ? cs.getStringList("worlds") : new ArrayList<>());
 
             if ( key.equalsIgnoreCase("default") ) {

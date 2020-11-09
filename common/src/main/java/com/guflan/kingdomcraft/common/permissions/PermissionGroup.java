@@ -25,19 +25,25 @@ import java.util.Map;
 public class PermissionGroup {
 
     private final String name;
-    private final List<String> worlds;
     private final List<String> permissions;
     private final List<String> inheritances;
+    private final List<String> ranks;
+    private final List<String> worlds;
 
-    public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> worlds) {
+    public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks, List<String> worlds) {
         this.name = name;
         this.worlds = worlds;
         this.permissions = permissions;
         this.inheritances = inheritances;
+        this.ranks = ranks;
+    }
+
+    public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks) {
+        this(name, permissions, inheritances, ranks, new ArrayList<>());
     }
 
     public PermissionGroup(String name, List<String> permissions, List<String> inheritances) {
-        this(name, permissions, inheritances, new ArrayList<>());
+        this(name, permissions, inheritances, new ArrayList<>(), new ArrayList<>());
     }
 
     public String getName() {
@@ -50,6 +56,10 @@ public class PermissionGroup {
 
     public List<String> getPermissions() {
         return permissions;
+    }
+
+    public List<String> getRanks() {
+        return ranks;
     }
 
     public Map<String, Boolean> getPermissionsAsMap() {

@@ -75,6 +75,7 @@ cmdChatExplanation: 'Send a message in the specified chat channel'
 cmdAdminExplanation: 'Toggle admin mode'
 cmdEditorExplanation: 'Start a webeditor session'
 
+cmdGroupsExplanation: 'Get a list of all existing groups'
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
 cmdGroupsAddOtherExplanation: 'Add a permission group to a rank'
 cmdGroupsListExplanation: 'Get a list of all groups belonging to a rank'
@@ -238,6 +239,10 @@ cmdRanksListOther: '&aList of ranks for kingdom &2{0}&a: &2{1}'
 # /k ranks edit
 cmdRanksEdit: '&aChanged {0} of &2{1} &ato &2{2}&a!'
 cmdRanksEditOther: '&aChanged {0} of rank &2{1} &ain kingdom &2{2} &ato &2{3}&a!'
+
+# /k groups
+cmdGroupsDelimiter: '&7, &2'
+cmdGroups: '&aList of available groups: &2{0}'
 
 # /k groups add
 cmdGroupsAddAlreadyExists: '&cThe group &4{0} &calready belongs to rank &4{1}&c!'

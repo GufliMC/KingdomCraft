@@ -132,7 +132,8 @@ public class PermissionsListener implements Listener, EventListener {
         clear(player);
 
         User user = plugin.getKdc().getUser(player);
-        Map<String, Boolean> permissions = plugin.getKdc().getPermissionManager().getTotalPermissions(user);
+        Map<String, Boolean> permissions = plugin.getKdc().getPermissionManager()
+                .getTotalPermissions(user, player.getLocation().getWorldName());
 
         Player p = ((BukkitPlayer) player).getPlayer();
         PermissionAttachment pa = p.addAttachment(plugin);
