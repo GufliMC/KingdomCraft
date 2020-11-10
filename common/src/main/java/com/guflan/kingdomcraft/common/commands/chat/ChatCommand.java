@@ -15,7 +15,7 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.common.commands.admin;
+package com.guflan.kingdomcraft.common.commands.chat;
 
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
@@ -31,9 +31,10 @@ public class ChatCommand extends CommandBase {
 
     public ChatCommand(KingdomCraftImpl kdc) {
         super(kdc, "chat", -1, true);
+        addCommand("c");
         setArgumentsHint("<channel> <message>");
         setExplanationMessage("cmdChatExplanation");
-        setPermissions("kingdom.chat");
+        setPermissions("kingdom.chat", "kingdom.chat.other");
     }
 
     @Override
@@ -56,6 +57,12 @@ public class ChatCommand extends CommandBase {
         ChatChannel channel = kdc.getChatManager().getChatChannel(args[0]);
         if ( channel == null ) {
             kdc.getMessageManager().send(sender, "cmdChatNoChannel", args[0]);
+            return;
+        }
+
+        if ( !kdc.getChatManagerImpl().canAccess(player, channel)
+                && !player.hasPermission("kingdom.chat.other") ) {
+            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
             return;
         }
 

@@ -228,6 +228,17 @@ public class ChatManagerImpl implements ChatManager {
 
             @Override
             public ChatChannel create(Kingdom kingdom) {
+                if ( !finalAllKingdoms && kingdoms.size() > 1 ) {
+                    KingdomChatChannel ch = (KingdomChatChannel) getChatChannel(getName());
+                    if ( ch == null ) {
+                        ch = new KingdomChatChannel(getName(), kingdom);
+                        setup(ch, section);
+                    } else {
+                        ch.getKingdoms().add(kingdom);
+                    }
+                    return ch;
+                }
+
                 ChatChannel ch = new KingdomChatChannel(getName() + "-" + kingdom.getName(), kingdom);
                 setup(ch, section);
                 return ch;

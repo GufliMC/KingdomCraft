@@ -15,7 +15,7 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.guflan.kingdomcraft.common.commands;
+package com.guflan.kingdomcraft.common.commands.chat;
 
 import com.guflan.kingdomcraft.api.chat.ChatChannel;
 import com.guflan.kingdomcraft.api.domain.User;
