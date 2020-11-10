@@ -17,6 +17,8 @@
 
 package com.guflan.kingdomcraft.bukkit;
 
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
@@ -129,12 +131,12 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		this.kdc = new KingdomCraftImpl(this, context, pluginConfig, chatConfig, groupsConfig);
 
+		for ( Player p : Bukkit.getOnlinePlayers() ) {
+			this.kdc.onLoad(new BukkitPlayer(p));
+		}
+
 		// initialize messages
 		new MessageManager(this);
-
-		for ( Player p : Bukkit.getOnlinePlayers() ) {
-			this.kdc.onJoin(new BukkitPlayer(p));
-		}
 
 		// commands
 		CommandHandler commandHandler = new CommandHandler(this);

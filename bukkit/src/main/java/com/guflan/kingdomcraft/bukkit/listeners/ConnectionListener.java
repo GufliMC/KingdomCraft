@@ -20,8 +20,6 @@ package com.guflan.kingdomcraft.bukkit.listeners;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,7 +39,7 @@ public class ConnectionListener implements Listener {
         if ( e.getResult() != PlayerLoginEvent.Result.ALLOWED ) {
             return;
         }
-        plugin.getKdc().onJoin(new BukkitPlayer(e.getPlayer()));
+        plugin.getScheduler().executeAsync(() -> plugin.getKdc().onJoin(new BukkitPlayer(e.getPlayer())));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

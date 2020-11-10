@@ -75,7 +75,7 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
-        // Attacking an npc from another plugin will trigger this event
+        // Ignore when the player is not a real player (like an npc from another plugin)
         if ( p == null || d == null ) {
             return;
         }
@@ -92,10 +92,14 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
+        if ( d.isAdmin() ) {
+            return;
+        }
+
         User u1 = plugin.getKdc().getUser(p);
         User u2 = plugin.getKdc().getUser(d);
 
-        if ( d.isAdmin() ) {
+        if ( u1 == null || u2 == null ) {
             return;
         }
 

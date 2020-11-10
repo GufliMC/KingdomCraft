@@ -310,26 +310,28 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     //
 
-    public void onJoin(PlatformPlayer player) {
+    public void onLoad(PlatformPlayer player) {
         onlinePlayers.add(player);
-        plugin.getScheduler().executeAsync(() -> {
-            try {
-                User user = getUser(player.getUniqueId()).get();
-                if ( user == null ) {
-                    user = getUser(player.getName()).get();
-                }
-
-                if ( user == null ) {
-                    user = context.createUser(player.getUniqueId(), player.getName());
-                    saveAsync(user);
-                }
-
-                context.addOnlineUser(user);
-                eventDispatcher.dispatchJoin(player);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+        try {
+            User user = getUser(player.getUniqueId()).get();
+            if ( user == null ) {
+                user = getUser(player.getName()).get();
             }
-        });
+
+            if ( user == null ) {
+                user = context.createUser(player.getUniqueId(), player.getName());
+                saveAsync(user);
+            }
+
+            context.addOnlineUser(user);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onJoin(PlatformPlayer player) {
+        onLoad(player);
+        eventDispatcher.dispatchJoin(player);
     }
 
     public void onQuit(PlatformPlayer player) {

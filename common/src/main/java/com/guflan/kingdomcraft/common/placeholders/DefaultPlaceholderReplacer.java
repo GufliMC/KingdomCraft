@@ -29,28 +29,36 @@ public class DefaultPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            if ( user.getKingdom() == null ) {
-                return kdc.getMessageManager().colorify(kdc.getConfig().getNoKingdomDisplay());
-            } else {
-                return user.getKingdom() != null ? kdc.getMessageManager().colorify(user.getKingdom().getDisplay()) : "";
+            if ( user == null ) {
+                return "";
             }
+            String display;
+            if ( user.getKingdom() == null ) {
+                display = kdc.getConfig().getNoKingdomDisplay();
+            } else {
+                display = user.getKingdom() != null ? user.getKingdom().getDisplay() : "";
+            }
+            return kdc.getMessageManager().colorify(display);
         }, "kingdom");
         pm.addPlaceholderReplacer((player, placeholder) -> {
            User user = kdc.getUser(player);
-           return user.getKingdom() != null ? user.getKingdom().getName() : "";
+           return user != null && user.getKingdom() != null ? user.getKingdom().getName() : "";
         }, "kingdom_name");
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getDisplay()) : "";
+            return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getDisplay()) : "";
         }, "rank");
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getRank() != null ? user.getRank().getName() : "";
+            return user != null && user.getRank() != null ? user.getRank().getName() : "";
         }, "rank_name");
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
+            if ( user == null ) {
+                return "";
+            }
             String prefix;
             if ( user.getKingdom() == null ) {
                 prefix = kdc.getConfig().getNoKingdomPrefix();
@@ -61,6 +69,9 @@ public class DefaultPlaceholderReplacer {
         }, "kingdom_prefix");
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
+            if ( user == null ) {
+                return "";
+            }
             String suffix;
             if ( user.getKingdom() == null ) {
                 suffix = kdc.getConfig().getNoKingdomSuffix();
@@ -72,11 +83,11 @@ public class DefaultPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getPrefix()) : "";
+            return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getPrefix()) : "";
         }, "rank_prefix");
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getSuffix()) : "";
+            return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getSuffix()) : "";
         }, "rank_suffix");
 
     }
