@@ -29,7 +29,7 @@ cmdErrorInvalidHint: '&cInvalid command, did you mean: &4{0}'
 cmdErrorInvalidUsage: '&cInvalid usage, try: &4{0}'
 
 cmdErrorSenderNoKingdom: '&cYou''re not in a kingdom!'
-cmdErrorTargetNoKingodm: '&4{0} &cis not in a kingdom!'
+cmdErrorTargetNoKingdom: '&4{0} &cis not in a kingdom!'
 cmdErrorKingdomNotExist: '&cThe kingdom &4{0} &cdoes not exist!'
 cmdErrorRankNotExist: '&cThe rank &4{0} &cdoes not exist!'
 cmdErrorPlayerNotExist: '&cThe player &4{0} &cdoes not exist!'

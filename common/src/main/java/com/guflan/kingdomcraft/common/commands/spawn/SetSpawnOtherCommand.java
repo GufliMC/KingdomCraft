@@ -25,6 +25,8 @@ import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SetSpawnOtherCommand extends CommandBase {
 
@@ -33,6 +35,14 @@ public class SetSpawnOtherCommand extends CommandBase {
         setArgumentsHint("<kingdom>");
         setExplanationMessage("cmdSetSpawnOtherExplanation");
         setPermissions("kingdom.setspawn.other");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
+        if ( args.length == 1 ) {
+            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

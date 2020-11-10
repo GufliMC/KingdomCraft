@@ -50,6 +50,8 @@ public interface KingdomCraft {
 
     PlatformPlayer getPlayer(User user);
 
+    PlatformPlayer getPlayer(String name);
+
     User getUser(PlatformPlayer player);
 
     // kingdoms

@@ -194,6 +194,12 @@ public class KingdomCraftImpl implements KingdomCraft {
         return getPlayer(user.getUniqueId());
     }
 
+    @Override
+    public PlatformPlayer getPlayer(String name) {
+        return onlinePlayers.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+
+    }
+
     // kingdoms
 
     @Override
