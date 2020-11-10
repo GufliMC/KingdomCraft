@@ -29,7 +29,11 @@ public class DefaultPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
             User user = kdc.getUser(player);
-            return user.getKingdom() != null ? kdc.getMessageManager().colorify(user.getKingdom().getDisplay()) : "";
+            if ( user.getKingdom() == null ) {
+                return kdc.getMessageManager().colorify(kdc.getConfig().getNoKingdomDisplay());
+            } else {
+                return user.getKingdom() != null ? kdc.getMessageManager().colorify(user.getKingdom().getDisplay()) : "";
+            }
         }, "kingdom");
         pm.addPlaceholderReplacer((player, placeholder) -> {
            User user = kdc.getUser(player);

@@ -91,6 +91,10 @@ public class KingdomCraftConfig {
         return config.contains("nokingdom.suffix") ? config.getString("nokingdom.suffix") : "";
     }
 
+    public String getNoKingdomDisplay() {
+        return config.contains("nokingdom.display") ? config.getString("nokingdom.display") : "";
+    }
+
     public boolean isChatEnabledInDisabledWorlds() {
         return config.contains("enable-chat-in-disabled-worlds") && config.getBoolean("enable-chat-in-disabled-worlds");
     }

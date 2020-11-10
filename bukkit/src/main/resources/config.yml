@@ -11,6 +11,7 @@
 settings:
 
     nokingdom:
+        display: '&eHobo'
         prefix: '&7[&eHobo&7]'
         suffix: ''
 
