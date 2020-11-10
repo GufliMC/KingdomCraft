@@ -32,10 +32,7 @@ import com.guflan.kingdomcraft.common.commands.relations.AllyCommand;
 import com.guflan.kingdomcraft.common.commands.relations.EnemyCommand;
 import com.guflan.kingdomcraft.common.commands.relations.NeutralCommand;
 import com.guflan.kingdomcraft.common.commands.relations.TruceCommand;
-import com.guflan.kingdomcraft.common.commands.spawn.SetSpawnCommand;
-import com.guflan.kingdomcraft.common.commands.spawn.SetSpawnOtherCommand;
-import com.guflan.kingdomcraft.common.commands.spawn.SpawnCommand;
-import com.guflan.kingdomcraft.common.commands.spawn.SpawnOtherCommand;
+import com.guflan.kingdomcraft.common.commands.spawn.*;
 import com.guflan.kingdomcraft.common.commands.tphere.TpHereCommand;
 import com.guflan.kingdomcraft.common.commands.tphere.TpHereOtherCommand;
 
@@ -98,6 +95,9 @@ public class CommandManager {
 
         addCommand(new SpawnOtherCommand(kdc));
         addCommand(new SetSpawnOtherCommand(kdc));
+
+        addCommand(new TpSpawnCommand(kdc));
+        addCommand(new TpSpawnOtherCommand(kdc));
 
         addCommand(new TpHereCommand(kdc));
         addCommand(new TpHereOtherCommand(kdc));

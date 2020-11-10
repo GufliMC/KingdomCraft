@@ -32,16 +32,19 @@ settings:
     # Respawn at the kingdom spawn when you die
     respawn_at_kingdom: true
 
+    # Delay for teleport commands like /k spawn
+    teleport-delay: 5
+
     # commands to be executed when an event happens
     # prefix with CONSOLE to execute this in the console
     # e.g. CONSOLE money give {player} 1000
     events:
         kingdom_join:
-        - k spawn
+        - CONSOLE k tpspawn {player}
         - CONSOLE clearinv {player}
 
         kingdom_leave:
-        - spawn
+        - CONSOLE k tpspawn {player}
         - CONSOLE clearinv {player}
 
     messages:

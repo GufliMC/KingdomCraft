@@ -18,33 +18,28 @@
 package com.guflan.kingdomcraft.common.commands.spawn;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.User;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
-import com.guflan.kingdomcraft.common.util.Teleporter;
 
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SpawnOtherPlayerCommand extends CommandBase {
+public class TpSpawnCommand extends CommandBase {
 
-    public SpawnOtherPlayerCommand(KingdomCraftImpl kdc) {
-        super(kdc, "spawn", 2);
-        setArgumentsHint("<player> <kingdom>");
-        setExplanationMessage("cmdSpawnOtherPlayerExplanation");
-        setPermissions("kingdom.spawn.other");
+    public TpSpawnCommand(KingdomCraftImpl kdc) {
+        super(kdc, "tpspawn", 1);
+        setArgumentsHint("<player>");
+        setExplanationMessage("cmdTpSpawnExplanation");
+        setPermissions("kingdom.tpspawn");
     }
 
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         if ( args.length == 1 ) {
-            return kdc.getOnlinePlayers().stream().map(PlatformPlayer::getName).collect(Collectors.toList());
-        }
-        if ( args.length == 2 ) {
             return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
         }
         return null;
@@ -52,15 +47,15 @@ public class SpawnOtherPlayerCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        PlatformPlayer targetplayer = kdc.getPlayer(args[0]);
-        if ( targetplayer == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNotOnline", args[0]);
+        PlatformPlayer target = kdc.getPlayer(args[0]);
+        if ( target == null ) {
+            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
-        Kingdom kingdom = kdc.getKingdom(args[1]);
+        Kingdom kingdom = kdc.getUser(target).getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[1]);
+            kdc.getMessageManager().send(sender, "cmdErrorTargetNoKingdom", target.getName());
             return;
         }
 
@@ -70,11 +65,12 @@ public class SpawnOtherPlayerCommand extends CommandBase {
             return;
         }
 
-        Teleporter.teleport(targetplayer, loc, 0).thenRun(() -> {
-            DecimalFormat df = new DecimalFormat("#");
-            String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
+        target.teleport(loc);
 
-             kdc.getMessageManager().send(sender, "cmdSpawn", str);
-        });
+        DecimalFormat df = new DecimalFormat("#");
+        String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
+
+        kdc.getMessageManager().send(sender, "cmdTpSpawn", str);
+        kdc.getMessageManager().send(target, "cmdTpSpawnTarget", str);
     }
 }

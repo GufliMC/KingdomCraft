@@ -74,6 +74,8 @@ cmdTpHereOtherExplanation: 'Teleport everyone of a kingdom to you'
 cmdChatExplanation: 'Send a message in the specified chat channel'
 cmdAdminExplanation: 'Toggle admin mode'
 cmdEditorExplanation: 'Start a webeditor session'
+cmdTpSpawnExplanation: 'Teleport a player to their kingdom spawn'
+cmdTpSpawnOtherExplanation: 'Teleport a player to a kingdom spawn'
 
 cmdGroupsExplanation: 'Get a list of all existing groups'
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
@@ -153,6 +155,10 @@ cmdInviteSender: '&aYou invited &2{0} &ato join &2{1}&a!'
 cmdSpawnNotExists: '&aThe kingdom spawn has not been setup yet!'
 cmdSpawnOtherNotExists: '&aThe spawn of kingdom &2{0} &ahas not been setup yet!'
 cmdSpawn: '&aYou have been teleported to &2{0}&a!'
+
+# /k tpspawn
+cmdTpSpawn: '&aTeleported &2{0} &ato &2{1}'
+cmdTpSpawnTarget: '&aYou''ve been teleported to &2{0}'
 
 # /k setspawn
 cmdSetSpawn: '&aYou changed the spawn of your kingdom &ato &2{0}&a!'
