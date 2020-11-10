@@ -18,12 +18,26 @@
 package com.guflan.kingdomcraft.common.command;
 
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
-import com.guflan.kingdomcraft.common.commands.*;
 import com.guflan.kingdomcraft.common.commands.admin.*;
-import com.guflan.kingdomcraft.common.commands.management.groups.*;
-import com.guflan.kingdomcraft.common.commands.management.kingdom.*;
-import com.guflan.kingdomcraft.common.commands.management.ranks.*;
+import com.guflan.kingdomcraft.common.commands.chat.ChatChannelCommand;
+import com.guflan.kingdomcraft.common.commands.chat.ChatCommand;
+import com.guflan.kingdomcraft.common.commands.general.HelpCommand;
+import com.guflan.kingdomcraft.common.commands.general.JoinCommand;
+import com.guflan.kingdomcraft.common.commands.general.ListCommand;
+import com.guflan.kingdomcraft.common.commands.edit.groups.*;
+import com.guflan.kingdomcraft.common.commands.edit.kingdom.*;
+import com.guflan.kingdomcraft.common.commands.edit.ranks.*;
 import com.guflan.kingdomcraft.common.commands.member.*;
+import com.guflan.kingdomcraft.common.commands.relations.AllyCommand;
+import com.guflan.kingdomcraft.common.commands.relations.EnemyCommand;
+import com.guflan.kingdomcraft.common.commands.relations.NeutralCommand;
+import com.guflan.kingdomcraft.common.commands.relations.TruceCommand;
+import com.guflan.kingdomcraft.common.commands.spawn.SetSpawnCommand;
+import com.guflan.kingdomcraft.common.commands.spawn.SetSpawnOtherCommand;
+import com.guflan.kingdomcraft.common.commands.spawn.SpawnCommand;
+import com.guflan.kingdomcraft.common.commands.spawn.SpawnOtherCommand;
+import com.guflan.kingdomcraft.common.commands.tphere.TpHereCommand;
+import com.guflan.kingdomcraft.common.commands.tphere.TpHereOtherCommand;
 
 import java.util.ArrayList;
 import java.util.List;
