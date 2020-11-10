@@ -25,6 +25,9 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.command.CommandBase;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class EditDefaultRankCommand extends CommandBase {
 
     public EditDefaultRankCommand(KingdomCraftImpl kdc) {
@@ -32,6 +35,18 @@ public class EditDefaultRankCommand extends CommandBase {
         setArgumentsHint("<rank>");
         setExplanationMessage("cmdEditDefaultRankExplanation");
         setPermissions("kingdom.edit.defaultrank");
+    }
+
+    @Override
+    public List<String> autocomplete(PlatformPlayer player, String[] args) {
+        if ( args.length == 1 ) {
+            User user = kdc.getUser(player);
+            if ( user.getKingdom() == null ) {
+                return null;
+            }
+            return user.getKingdom().getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override

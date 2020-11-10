@@ -41,6 +41,13 @@ public class EditDefaultRankOtherCommand extends CommandBase {
         if ( args.length == 1 ) {
             return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
         }
+        if ( args.length == 2 ) {
+            Kingdom kingdom = kdc.getKingdom(args[0]);
+            if ( kingdom == null ) {
+                return null;
+            }
+            return kingdom.getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+        }
         return null;
     }
 
