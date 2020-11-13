@@ -74,9 +74,8 @@ public class ChatDispatcher {
         result = kdc.getPlaceholderManager().handle(player, result);
         result = kdc.getMessageManager().colorify(result);
 
-        message = kdc.getMessageManager().colorify(message);
-        if ( !player.hasPermission("kingdom.chat.colors") ) {
-            message = kdc.getMessageManager().decolorify(message);
+        if ( player.hasPermission("kingdom.chat.colors") ) {
+            message = kdc.getMessageManager().colorify(message);
         }
 
         result = kdc.getPlaceholderManager().strip(result, "message", "player");

@@ -21,11 +21,10 @@ import com.guflan.kingdomcraft.api.entity.PlatformSender;
 import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CommandDispatcher {
 
@@ -81,28 +80,72 @@ public class CommandDispatcher {
         }
 
         // suggest a command if the command doesn't exist
-        int bestScore = Integer.MAX_VALUE;
-        CommandBase bestCommand = null;
-
         LevenshteinDistance ld = new LevenshteinDistance(5);
-        for ( CommandBase cb : commandManager.commands ) {
-            for ( String cmd : cb.getCommands() ) {
-                int score = ld.apply(args[0], cmd);
 
-                if (score != -1 && score < bestScore) {
-                    bestScore = score;
-                    bestCommand = cb;
-                    if (score == 1) break;
+        Map<CommandBase, String[]> candidates = new HashMap<>();
+        for ( CommandBase cb : commandManager.getCommands() ) {
+            candidates.put(cb, cb.getCommands().get(0).split(Pattern.quote(" ")));
+        }
+
+        for ( int i = 0; i < args.length; i++ ) {
+            final int index = i;
+
+            Map<CommandBase, String[]> filter = new HashMap<>();
+            candidates.forEach((cb, cbArgs) -> {
+                if ( cbArgs.length > index ) {
+                    filter.put(cb, cbArgs);
                 }
+            });
+
+            if ( filter.size() == 0 ) {
+                break;
             }
+
+            List<CommandBase> equal = filter.keySet().stream()
+                    .filter(cb -> filter.get(cb)[index].equalsIgnoreCase(args[index]))
+                    .collect(Collectors.toList());
+
+            if ( !equal.isEmpty() ) {
+                candidates.entrySet().removeIf(e -> !equal.contains(e.getKey()));
+                continue;
+            }
+
+            CommandBase closest = filter.keySet().stream()
+                    .min(Comparator.comparingInt(cb -> {
+                        int res = ld.apply(filter.get(cb)[index], args[index]);
+                        return res == -1 ? Integer.MAX_VALUE : res;
+                    }))
+                    .orElse(null);
+
+            if ( closest == null ) {
+                break;
+            }
+
+            String arg = filter.get(closest)[index];
+
+            List<CommandBase> keep = filter.keySet().stream()
+                    .filter(cb -> filter.get(cb)[index].equalsIgnoreCase(arg))
+                    .collect(Collectors.toList());
+
+            candidates.entrySet().removeIf(e -> !keep.contains(e.getKey()));
         }
 
-        if ( bestCommand != null ) {
-            commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalidHint",
-                    "/k " + bestCommand.getCommands().get(0));
-        } else {
+        if ( candidates.isEmpty() ) {
             commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalid");
+            return;
         }
+
+        CommandBase bestCommand = candidates.keySet().stream()
+                .min(Comparator.comparingInt(cb -> {
+                    int baseLength = candidates.get(cb).length;
+                    int argsLength = cb.getArgumentsHint() == null ? 0 : cb.getArgumentsHint().split(Pattern.quote(" ")).length;
+                    return Math.abs((baseLength + argsLength) - args.length);
+                })).orElse(null);
+
+        commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalidHint",
+                "/k " + bestCommand.getCommands().get(0) +
+                        (bestCommand.getArgumentsHint() != null  ? " " + bestCommand.getArgumentsHint() : ""));
+
     }
 
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
