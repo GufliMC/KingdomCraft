@@ -79,10 +79,11 @@ public class ChatDispatcher {
             message = kdc.getMessageManager().decolorify(message);
         }
 
+        result = kdc.getPlaceholderManager().strip(result, "message", "player");
         result = result.replace("{message}", message);
         result = result.replace("{player}", player.getName());
 
-        String finalResult = kdc.getPlaceholderManager().strip(result);
+        String finalResult = result;
         List<PlatformPlayer> receivers = kdc.getOnlinePlayers().stream()
                 .filter(p -> chatManager.canSee(p, channel))
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
@@ -97,7 +98,7 @@ public class ChatDispatcher {
         }
 
         kdc.getOnlinePlayers().stream().filter(PlatformPlayer::isAdmin).filter(p -> !receivers.contains(p)).forEach(p -> {
-            p.sendMessage("[SS] " + finalResult);
+            p.sendMessage(kdc.getMessageManager().getMessage("socialSpyPrefix") + finalResult);
         });
 
         System.out.println("[CHAT] " + kdc.getMessageManager().decolorify(finalResult));

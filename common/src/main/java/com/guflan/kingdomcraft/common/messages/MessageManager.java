@@ -65,13 +65,20 @@ public class MessageManager {
 		return colorify(messages.get(name));
 	}
 
+	public String getMessage(String name, boolean colorify, String... placeholders) {
+		if ( colorify ) {
+			return colorify(getMessage(name, placeholders));
+		}
+		return getMessage(name, placeholders);
+	}
+
 	public String getMessage(String name, String... placeholders) {
 		String message = getMessage(name);
 		if ( message == null ) return null;
 
 		for ( int i = 0; i < placeholders.length; i++ ) {
 			message = message.replace("{" + i + "}",
-					placeholders[i] == null ? "" : colorify(placeholders[i]));
+					placeholders[i] == null ? "" : placeholders[i]);
 		}
 
 		return message;
@@ -85,6 +92,16 @@ public class MessageManager {
 	public void send(PlatformSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 		sender.sendMessage(colorify(prefix) + getMessage(name, placeholders));
+	}
+
+	public void send(PlatformPlayer player, String name, boolean colorify, String... placeholders) {
+		if ( isEmpty(name) ) return;
+		player.sendMessage(colorify(prefix) + getMessage(name, colorify, placeholders));
+	}
+
+	public void send(PlatformSender sender, String name, boolean colorify, String... placeholders) {
+		if ( isEmpty(name) ) return;
+		sender.sendMessage(colorify(prefix) + getMessage(name, colorify, placeholders));
 	}
 
 	public String colorify(String msg) {

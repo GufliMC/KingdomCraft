@@ -41,7 +41,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        PlatformPlayer player = new BukkitPlayer(event.getPlayer());
+        PlatformPlayer player = plugin.getKdc().getPlayer(event.getPlayer().getUniqueId());
         plugin.getKdc().getChatDispatcher().handle(player, event.getMessage());
         event.setCancelled(true);
     }

@@ -92,14 +92,38 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
         return sb.toString();
     }
 
+//    @Override
+//    public String strip(String str) {
+//        StringBuffer sb = new StringBuffer();
+//        Pattern p = Pattern.compile("(\\{[^}]+\\})");
+//        Matcher m = p.matcher(str);
+//
+//        while ( m.find() ) {
+//            //String placeholder = m.group(1).toLowerCase();
+//            m.appendReplacement(sb, "");
+//        }
+//        m.appendTail(sb);
+//
+//        return sb.toString();
+//    }
+
     @Override
-    public String strip(String str) {
+    public String strip(String str, String... ignore) {
         StringBuffer sb = new StringBuffer();
         Pattern p = Pattern.compile("(\\{[^}]+\\})");
         Matcher m = p.matcher(str);
 
-        while ( m.find() ) {
-            //String placeholder = m.group(1).toLowerCase();
+        outer: while ( m.find() ) {
+            String placeholder = m.group(1);
+            placeholder = placeholder.substring(1, placeholder.length()-1);
+
+            for ( String s : ignore ) {
+                if ( placeholder.equalsIgnoreCase(s) ) {
+                    sb.append("{").append(placeholder).append("}");
+                    continue outer;
+                }
+            }
+
             m.appendReplacement(sb, "");
         }
         m.appendTail(sb);

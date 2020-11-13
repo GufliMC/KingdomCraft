@@ -31,5 +31,7 @@ public interface PlaceholderManager {
 
     String handle(PlatformPlayer player, String str, String prefix);
 
-    String strip(String msg);
+    //String strip(String msg);
+
+    String strip(String msg, String... ignore);
 }
