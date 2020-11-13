@@ -40,14 +40,15 @@ public class ChatChannelCommand extends CommandBase {
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         return kdc.getChatManager().getChatChannels().stream().filter(ChatChannel::isToggleable)
-                .filter(c -> kdc.getChatManager().canAccess(sender, c))
+                .filter(c -> kdc.getChatManager().canTalk(sender, c))
                 .map(ChatChannel::getName).collect(Collectors.toList());
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
+        PlatformPlayer player = (PlatformPlayer) sender;
         ChatChannel cc = kdc.getChatManager().getChatChannel(args[0]);
-        if ( cc == null || (cc.isRestricted() && !sender.hasPermission(cc.getPermission()))) {
+        if ( cc == null || !kdc.getChatManager().canTalk(player, cc)) {
             kdc.getMessageManager().send(sender, "cmdChatChannelNotExist", args[0]);
             return;
         }

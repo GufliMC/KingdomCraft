@@ -60,7 +60,7 @@ public class ChatCommand extends CommandBase {
             return;
         }
 
-        if ( !kdc.getChatManagerImpl().canAccess(player, channel)
+        if ( !kdc.getChatManager().canTalk(player, channel)
                 && !player.hasPermission("kingdom.chat.other") ) {
             kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
             return;

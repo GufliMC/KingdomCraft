@@ -26,7 +26,7 @@ public class BasicChatChannel implements ChatChannel {
     private String prefix;
     private String format;
 
-    private boolean restricted;
+    private RestrictMode restrictMode;
     private boolean toggleable;
 
     private int range;
@@ -61,13 +61,13 @@ public class BasicChatChannel implements ChatChannel {
     }
 
     @Override
-    public boolean isRestricted() {
-        return restricted;
+    public RestrictMode getRestrictMode() {
+        return restrictMode;
     }
 
     @Override
-    public void setRestricted(boolean restricted) {
-        this.restricted = restricted;
+    public void setRestrictMode(RestrictMode restrictMode) {
+        this.restrictMode = restrictMode;
     }
 
     @Override

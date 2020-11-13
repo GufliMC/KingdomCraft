@@ -37,7 +37,7 @@ public class ChatDispatcher {
 
     public void handle(PlatformPlayer player, String message) {
         List<ChatChannel> channels = chatManager.getChatChannels().stream()
-                .filter(c -> chatManager.canAccess(player, c))
+                .filter(c -> chatManager.canTalk(player, c))
                 .sorted(Comparator.comparingInt(ch -> ch.getPrefix() == null ? 0 : -ch.getPrefix().length()))
                 .collect(Collectors.toList());
 
@@ -58,7 +58,7 @@ public class ChatDispatcher {
 
             channel = chatManager.getDefaultChatChannel();
         } else {
-            if ( !chatManager.canSee(player, channel) ) {
+            if ( !chatManager.canTalk(player, channel) ) {
                 kdc.getMessageManager().send(player, "chatChannelDisabled", channel.getName());
             }
             if ( channel.getPrefix() != null ) {
@@ -84,7 +84,7 @@ public class ChatDispatcher {
 
         String finalResult = result;
         List<PlatformPlayer> receivers = kdc.getOnlinePlayers().stream()
-                .filter(p -> chatManager.canSee(p, channel))
+                .filter(p -> chatManager.canRead(p, channel))
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
                 .collect(Collectors.toList());
 

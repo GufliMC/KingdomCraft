@@ -17,6 +17,8 @@
 
 package com.guflan.kingdomcraft.api.chat;
 
+import java.util.Arrays;
+
 public interface ChatChannel {
 
     String getName();
@@ -29,9 +31,9 @@ public interface ChatChannel {
 
     void setFormat(String format);
 
-    boolean isRestricted();
+    RestrictMode getRestrictMode();
 
-    void setRestricted(boolean restricted);
+    void setRestrictMode(RestrictMode restrictMode);
 
     String getPermission();
 
@@ -42,5 +44,15 @@ public interface ChatChannel {
     int getRange();
 
     void setRange(int range);
+
+    enum RestrictMode {
+        NONE, TALK, READ;
+
+        public static RestrictMode get(String name) {
+            return Arrays.stream(RestrictMode.values())
+                    .filter(val -> val.name().equalsIgnoreCase(name))
+                    .findFirst().orElse(null);
+        }
+    }
 
 }

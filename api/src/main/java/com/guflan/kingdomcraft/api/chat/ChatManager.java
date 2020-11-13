@@ -36,7 +36,7 @@ public interface ChatManager {
     ChatChannel getDefaultChatChannel();
 
     //
-    boolean canAccess(PlatformPlayer player, ChatChannel chatChannel);
+    boolean canTalk(PlatformPlayer player, ChatChannel chatChannel);
 
-    boolean canSee(PlatformPlayer player, ChatChannel chatChannel);
+    boolean canRead(PlatformPlayer player, ChatChannel chatChannel);
 }

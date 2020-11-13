@@ -87,12 +87,7 @@ public class ChatManagerImpl implements ChatManager {
         return defaultChannel;
     }
 
-    @Override
-    public boolean canAccess(PlatformPlayer player, ChatChannel channel) {
-//        if ( player.isAdmin() ) {
-//            return true;
-//        }
-
+    private boolean canAccess(PlatformPlayer player, ChatChannel channel) {
         User user = kdc.getUser(player);
         if ( channel instanceof KingdomChatChannel) {
             KingdomChatChannel ch = (KingdomChatChannel) channel;
@@ -101,7 +96,8 @@ public class ChatManagerImpl implements ChatManager {
             }
         }
 
-        if ( channel.isRestricted() && !player.hasPermission(channel.getPermission())) {
+        if ( channel.getRestrictMode() == ChatChannel.RestrictMode.READ
+                && !player.hasPermission(channel.getPermission())) {
             return false;
         }
 
@@ -109,11 +105,21 @@ public class ChatManagerImpl implements ChatManager {
     }
 
     @Override
-    public boolean canSee(PlatformPlayer player, ChatChannel channel) {
-//        if ( player.isAdmin() ) {
-//            return true;
-//        }
+    public boolean canTalk(PlatformPlayer player, ChatChannel channel) {
+        if ( !canAccess(player, channel) ) {
+            return false;
+        }
 
+        if ( channel.getRestrictMode() == ChatChannel.RestrictMode.TALK
+                && !player.hasPermission(channel.getPermission())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean canRead(PlatformPlayer player, ChatChannel channel) {
         if ( !canAccess(player, channel) ) {
             return false;
         }
@@ -192,8 +198,22 @@ public class ChatManagerImpl implements ChatManager {
             channel.setToggleable(section.getBoolean("toggleable"));
         }
 
-        if ( section.contains("restricted") ) {
-            channel.setRestricted(section.getBoolean("restricted"));
+        if ( section.contains("restrict") ) {
+            if ( section.get("restrict") instanceof Boolean ) {
+                boolean val = section.getBoolean("restrict");
+                if ( val ) {
+                    channel.setRestrictMode(ChatChannel.RestrictMode.READ);
+                } else {
+                    channel.setRestrictMode(ChatChannel.RestrictMode.NONE);
+                }
+            } else {
+                ChatChannel.RestrictMode mode = ChatChannel.RestrictMode.get(section.getString("restrict"));
+                if ( mode == null ) {
+                    channel.setRestrictMode(ChatChannel.RestrictMode.NONE);
+                } else {
+                    channel.setRestrictMode(mode);
+                }
+            }
         }
 
         if ( section.contains("range") ) {
