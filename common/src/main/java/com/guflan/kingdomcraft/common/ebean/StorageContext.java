@@ -18,6 +18,7 @@
 package com.guflan.kingdomcraft.common.ebean;
 
 import com.guflan.kingdomcraft.api.domain.*;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftPlugin;
 import com.guflan.kingdomcraft.common.ebean.beans.*;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
@@ -229,6 +230,12 @@ public class StorageContext {
         user.id = uuid.toString();
         user.name = name;
         return user;
+    }
+
+    public void update(User user, PlatformPlayer player) {
+        BUser buser = (BUser) user;
+        buser.update(player.getUniqueId(), player.getName());
+        saveAsync(Collections.singleton(buser));
     }
 
     public void addOnlineUser(User user) {

@@ -75,6 +75,11 @@ public class BUser extends Model implements User {
         super.save();
     }
 
+    public void update(UUID uuid, String name) {
+        this.id = uuid.toString();
+        this.name = name;
+    }
+
     // interface
 
     @Override

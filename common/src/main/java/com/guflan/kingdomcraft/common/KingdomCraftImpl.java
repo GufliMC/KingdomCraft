@@ -316,6 +316,9 @@ public class KingdomCraftImpl implements KingdomCraft {
             User user = getUser(player.getUniqueId()).get();
             if ( user == null ) {
                 user = getUser(player.getName()).get();
+                context.update(user, player);
+            } else if ( !user.getName().equals(player.getName()) ) {
+                context.update(user, player);
             }
 
             if ( user == null ) {
