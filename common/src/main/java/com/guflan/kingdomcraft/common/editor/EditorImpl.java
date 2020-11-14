@@ -49,10 +49,10 @@ import java.util.logging.Level;
 
 public class EditorImpl implements Editor {
 
-    private final static String editorUrl = "https://bytebin.lucko.me/";
+    private final static String editorUrl = "https://webeditor.kingdomcraft.be/";
 
-    private final static String uploadUrl = "https://bytebin.lucko.me/post";
-    private final static String fetchUrl = "https://bytebin.lucko.me/";
+    private final static String uploadUrl = "https://bytebin.kingdomcraft.be/";
+    private final static String fetchUrl = "https://bytebin.kingdomcraft.be/";
 
     private final KingdomCraftImpl kdc;
 
@@ -109,8 +109,6 @@ public class EditorImpl implements Editor {
         json.put("kingdomAttributes", kingdomAttributes);
         json.put("rankAttributes", rankAttributes);
         json.put("kingdoms", kingdoms);
-
-        System.out.println(json);
 
         try {
             String result = upload(json.toJSONString());
