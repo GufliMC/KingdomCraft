@@ -69,7 +69,7 @@ public class EditorImpl implements Editor {
 
     @Override
     public void addKingdomAttribute(EditorAttribute attribute) {
-        if (!kingdomAttributes.contains(attribute)) {
+        if (kingdomAttributes.contains(attribute)) {
             return;
         }
         kingdomAttributes.add(attribute);
@@ -82,7 +82,7 @@ public class EditorImpl implements Editor {
 
     @Override
     public void addRankAttribute(EditorAttribute attribute) {
-        if (!rankAttributes.contains(attribute)) {
+        if (rankAttributes.contains(attribute)) {
             return;
         }
         rankAttributes.add(attribute);
@@ -102,11 +102,19 @@ public class EditorImpl implements Editor {
         kdc.getKingdoms().forEach(kingdom -> kingdoms.put(kingdom.getName(), serializer.serialize(kingdom)));
         node.set("kingdoms", mapper.valueToTree(kingdoms));
 
+        Map<String, String> kingdomAttributes = new HashMap<>();
+        this.kingdomAttributes.forEach(attribute -> kingdomAttributes.put(attribute.getName(), attribute.getDescription()));
+        node.set("kingdomAttributes", mapper.valueToTree(kingdomAttributes));
+
+        Map<String, String> rankAttributes = new HashMap<>();
+        this.rankAttributes.forEach(attribute -> rankAttributes.put(attribute.getName(), attribute.getDescription()));
+        node.set("rankAttributes", mapper.valueToTree(rankAttributes));
+        
         try {
             String result = upload(mapper.writeValueAsString(node));
             JsonNode resultNode = mapper.readTree(result);
             kdc.getMessageManager().send(sender, "cmdEditorStarted", editorUrl + resultNode.get("key").asText());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             kdc.getMessageManager().send(sender, "cmdEditorErrorUpload");
         }

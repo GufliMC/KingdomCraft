@@ -1,7 +1,9 @@
 package com.guflan.kingdomcraft.common.editor;
 
 import com.guflan.kingdomcraft.api.domain.Kingdom;
+import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import com.guflan.kingdomcraft.api.domain.Rank;
+import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import com.guflan.kingdomcraft.api.editor.EditorAttribute;
 
 import java.util.*;
@@ -26,19 +28,23 @@ public class ModelSerializer {
         map.put("display", kingdom.getDisplay());
         map.put("prefix", kingdom.getPrefix());
         map.put("suffix", kingdom.getSuffix());
-        map.put("defaultrank", kingdom.getDefaultRank().getName());
+        map.put("defaultrank", kingdom.getDefaultRank() != null ? kingdom.getDefaultRank().getName() : "");
         map.put("max-members", kingdom.getMaxMembers());
         map.put("invite-only", kingdom.isInviteOnly());
 
         // remove empty values
         new HashSet<>(map.keySet()).stream().filter(key -> map.get(key).equals("")).forEach(map::remove);
 
-        Map<String, String> attributes = new HashMap<>();
-        editor.kingdomAttributes.stream()
-                .map(attribute -> kingdom.getAttribute(attribute.getName()))
-                .filter(Objects::nonNull)
-                .forEach(attribute -> attributes.put(attribute.getName(), attribute.getValue()));
-        if ( !attributes.isEmpty() ) {
+        if ( !editor.kingdomAttributes.isEmpty() ) {
+            Map<String, String> attributes = new HashMap<>();
+            for (EditorAttribute attribute : editor.kingdomAttributes) {
+                KingdomAttribute ka = kingdom.getAttribute(attribute.getName());
+                if (ka != null) {
+                    attributes.put(attribute.getName(), ka.getValue());
+                } else {
+                    attributes.put(attribute.getName(), "");
+                }
+            }
             map.put("attributes", attributes);
         }
 
@@ -63,12 +69,16 @@ public class ModelSerializer {
         // remove empty values
         new HashSet<>(map.keySet()).stream().filter(key -> map.get(key).equals("")).forEach(map::remove);
 
-        Map<String, String> attributes = new HashMap<>();
-        editor.rankAttributes.stream()
-                .map(attribute -> rank.getAttribute(attribute.getName()))
-                .filter(Objects::nonNull)
-                .forEach(attribute -> attributes.put(attribute.getName(), attribute.getValue()));
-        if ( !attributes.isEmpty() ) {
+        if ( !editor.rankAttributes.isEmpty() ) {
+            Map<String, String> attributes = new HashMap<>();
+            for (EditorAttribute attribute : editor.rankAttributes) {
+                RankAttribute ra = rank.getAttribute(attribute.getName());
+                if (ra != null) {
+                    attributes.put(attribute.getName(), ra.getValue());
+                } else {
+                    attributes.put(attribute.getName(), "");
+                }
+            }
             map.put("attributes", attributes);
         }
 
