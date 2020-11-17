@@ -69,7 +69,7 @@ public class EditorImpl implements Editor {
 
     @Override
     public void addKingdomAttribute(EditorAttribute attribute) {
-        if (kingdomAttributes.contains(attribute)) {
+        if (!kingdomAttributes.contains(attribute)) {
             return;
         }
         kingdomAttributes.add(attribute);
@@ -82,7 +82,7 @@ public class EditorImpl implements Editor {
 
     @Override
     public void addRankAttribute(EditorAttribute attribute) {
-        if (rankAttributes.contains(attribute)) {
+        if (!rankAttributes.contains(attribute)) {
             return;
         }
         rankAttributes.add(attribute);

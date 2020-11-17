@@ -63,6 +63,8 @@ public class ModelDeserializer {
             kingdom.setInviteOnly(node.get("invite-only").asBoolean());
         }
 
+        kingdom.save();
+
         if (node.has("deleted_ranks")) {
             ObjectReader reader = mapper.readerFor(new TypeReference<List<String>>() {});
             try {
@@ -81,6 +83,7 @@ public class ModelDeserializer {
                     Rank rank = kingdom.getRank(rankname);
                     if (rank == null) {
                         rank = kingdom.createRank(rankname);
+                        rank.save();
                     }
                     deserialize(rank, ranks.get(rankname));
                 }
@@ -91,14 +94,15 @@ public class ModelDeserializer {
 
         if ( node.has("default_rank") ) {
             Rank rank = kingdom.getRank(node.get("default_rank").asText());
-            kingdom.setDefaultRank(rank);
+            if ( rank != kingdom.getDefaultRank() ) {
+                kingdom.setDefaultRank(rank);
+                kingdom.save();
+            }
         }
 
         if (node.has("attributes")) {
             deserialize(kingdom, editor.kingdomAttributes, node.get("attributes"));
         }
-
-        kingdom.save();
     }
 
     private void deserialize(Rank rank, JsonNode node) {
@@ -118,11 +122,11 @@ public class ModelDeserializer {
             rank.setLevel(node.get("level").asInt());
         }
 
+        rank.save();
+
         if (node.has("attributes")) {
             deserialize(rank, editor.rankAttributes, node.get("attributes"));
         }
-
-        rank.save();
     }
 
 }
