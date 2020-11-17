@@ -55,12 +55,11 @@ public class RanksDeleteOtherCommand extends CommandBase {
             return;
         }
 
+        kdc.getMessageManager().send(sender, "cmdRanksDelete", rank.getName());
         if ( kingdom.getDefaultRank().equals(rank) ) {
             kdc.getMessageManager().send(sender, "cmdRanksDeleteOtherDefault", kingdom.getName());
-            return;
         }
 
         kdc.deleteAsync(rank);
-        kdc.getMessageManager().send(sender, "cmdRanksDelete", rank.getName());
     }
 }

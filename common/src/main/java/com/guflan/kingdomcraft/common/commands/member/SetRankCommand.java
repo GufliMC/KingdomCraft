@@ -51,7 +51,7 @@ public class SetRankCommand extends CommandBase {
                 return kdc.getOnlinePlayers().stream().filter(p -> kdc.getUser(p).getKingdom() == user.getKingdom())
                         .filter(p -> {
                             User u = kdc.getUser(p);
-                            return u.getRank().getLevel() < user.getRank().getLevel();
+                            return u.getRank() == null || u.getRank().getLevel() < user.getRank().getLevel();
                         })
                         .map(PlatformPlayer::getName).collect(Collectors.toList());
             }

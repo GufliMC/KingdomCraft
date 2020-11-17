@@ -55,18 +55,7 @@ public class CreateCommand extends CommandBase {
         }
 
         Kingdom kingdom = kdc.createKingdom(args[0]);
-
-        // TODO make default ranks editable
-        Rank king = kingdom.createRank("King");
-        king.setLevel(99);
-
-        Rank civilian = kingdom.createRank("Civilian");
-        civilian.setLevel(0);
-
-        CompletableFuture<Void> future = kdc.saveAsync(kingdom, king, civilian).thenRun(() -> {
-            kingdom.setDefaultRank(civilian);
-            kingdom.save();
-        });
+        CompletableFuture<Void> future = kdc.saveAsync(kingdom);
 
         kdc.getPlugin().getScheduler().executeSync(() ->
                 kdc.getMessageManager().send(sender, "cmdCreate", kingdom.getName()));
@@ -74,7 +63,6 @@ public class CreateCommand extends CommandBase {
         if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
             User user = kdc.getUser((PlatformPlayer) sender);
             user.setKingdom(kingdom);
-            user.setRank(king);
             future.thenRun(user::save);
         }
 

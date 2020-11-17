@@ -106,7 +106,7 @@ public class BRank extends Model implements Rank {
 
     @Override
     public String getDisplay() {
-        return display != null ? display : name;
+        return display != null && !display.equals("") ? display : name;
     }
 
     @Override
