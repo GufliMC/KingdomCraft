@@ -74,6 +74,8 @@ public class BRank extends Model implements Rank {
         if ( kingdom.defaultRank == this ) {
             kingdom.defaultRank = null;
         }
+        StorageContext.users.stream().filter(user -> user.getRank() == this)
+                .forEach(user -> user.setRank(null));
         return super.delete();
     }
 

@@ -22,7 +22,7 @@ import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import java.util.Date;
 import java.util.List;
 
-public interface Kingdom extends Model {
+public interface Kingdom extends Model, AttributeHolder {
 
     String getName();
 

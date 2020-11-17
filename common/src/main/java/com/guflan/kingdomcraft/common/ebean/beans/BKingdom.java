@@ -17,10 +17,7 @@
 
 package com.guflan.kingdomcraft.common.ebean.beans;
 
-import com.guflan.kingdomcraft.api.domain.Kingdom;
-import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
-import com.guflan.kingdomcraft.api.domain.Rank;
-import com.guflan.kingdomcraft.api.domain.RankAttribute;
+import com.guflan.kingdomcraft.api.domain.*;
 import com.guflan.kingdomcraft.api.entity.PlatformLocation;
 import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
@@ -76,6 +73,8 @@ public class BKingdom extends Model implements Kingdom {
     @Override
     public boolean delete() {
         StorageContext.kingdoms.remove(this);
+        StorageContext.users.stream().filter(user -> user.getKingdom() == this)
+                .forEach(user -> user.setKingdom(null));
         return super.delete();
     }
 
