@@ -64,11 +64,6 @@ public class SetKingdomCommand extends CommandBase {
                     return;
                 }
 
-                if ( kingdom.getDefaultRank() == null ) {
-                    kdc.getMessageManager().send(sender, "cmdErrorKingdomNoDefaultRank", kingdom.getName());
-                    return;
-                }
-
                 if ( target.getKingdom() == kingdom ) {
                     kdc.getMessageManager().send(sender, "cmdSetKingdomAlready", target.getName(), kingdom.getName());
                     return;
@@ -76,10 +71,6 @@ public class SetKingdomCommand extends CommandBase {
 
                 Kingdom oldKingdom = target.getKingdom();
                 target.setKingdom(kingdom);
-
-                if ( kingdom.getDefaultRank() != null ) {
-                    target.setRank(kingdom.getDefaultRank());
-                }
 
                 kdc.saveAsync(target);
 
@@ -89,11 +80,7 @@ public class SetKingdomCommand extends CommandBase {
                         kdc.getEventDispatcher().dispatchKingdomLeave(tplayer, oldKingdom);
                     }
                     kdc.getEventDispatcher().dispatchKingdomJoin(tplayer);
-                }
-
-                PlatformPlayer targetPlayer = kdc.getPlayer(target);
-                if ( targetPlayer != null ) {
-                    kdc.getMessageManager().send(targetPlayer, "cmdSetKingdomTarget", kingdom.getName());
+                    kdc.getMessageManager().send(tplayer, "cmdSetKingdomTarget", kingdom.getName());
                 }
 
                 kdc.getMessageManager().send(sender, "cmdSetKingdomSender", target.getName(), kingdom.getName());

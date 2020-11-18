@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@DbName("kingdomcraft")
 @Entity
 @Table(name = "kingdoms")
 public class BKingdom extends Model implements Kingdom {
@@ -44,6 +45,7 @@ public class BKingdom extends Model implements Kingdom {
     public String prefix;
     public String suffix;
 
+    @Convert(converter = PlatformLocationConverter.class, attributeName = "spawn")
     public PlatformLocation spawn;
 
     public boolean inviteOnly;
@@ -70,6 +72,10 @@ public class BKingdom extends Model implements Kingdom {
 
     //
 
+    public BKingdom() {
+        super("kingdomcraft");
+    }
+
     @Override
     public boolean delete() {
         StorageContext.kingdoms.remove(this);
@@ -84,6 +90,11 @@ public class BKingdom extends Model implements Kingdom {
     }
 
     // interface
+
+    @Override
+    public long getId() {
+        return id;
+    }
 
     @Override
     public String getName() {

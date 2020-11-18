@@ -21,14 +21,13 @@ import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Relation;
 import com.guflan.kingdomcraft.api.domain.RelationType;
 import io.ebean.Model;
+import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
-import io.ebean.annotation.DbForeignKey;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@DbName("kingdomcraft")
 @Entity
 @Table(name = "kingdom_relations")
 public class BRelation extends Model implements Relation {
@@ -55,6 +54,10 @@ public class BRelation extends Model implements Relation {
     public Date updatedAt;
 
     //
+
+    public BRelation() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {

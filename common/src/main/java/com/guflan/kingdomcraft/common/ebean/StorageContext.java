@@ -24,7 +24,9 @@ import com.guflan.kingdomcraft.common.ebean.beans.*;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBKingdom;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBRelation;
 import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
+import io.ebean.DB;
 import io.ebean.DatabaseFactory;
+import io.ebean.Transaction;
 import io.ebean.annotation.Transactional;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
@@ -38,6 +40,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -102,6 +106,19 @@ public class StorageContext {
         DatabaseConfig config = new DatabaseConfig();
         config.setDataSource(pool);
         config.setRegister(true);
+        config.setDefaultServer(false);
+        config.setName("kingdomcraft");
+
+        config.addClass(BKingdom.class);
+        config.addClass(BKingdomAttribute.class);
+        config.addClass(BKingdomInvite.class);
+        config.addClass(BRank.class);
+        config.addClass(BRankAttribute.class);
+        config.addClass(BRankPermissionGroup.class);
+        config.addClass(BRelation.class);
+        config.addClass(BUser.class);
+        config.addClass(BUserChatChannel.class);
+        config.addClass(PlatformLocationConverter.class);
 
         DatabaseFactory.create(config);
     }
@@ -278,16 +295,20 @@ public class StorageContext {
             save(models);
         }).handle((v, ex) -> {
             if ( ex != null ) {
+                ex.printStackTrace();
                 plugin.log(ex.getMessage(), Level.SEVERE);
             }
             return v;
         });
     }
 
-    @Transactional
     private void save(Collection<Model> models) {
-        for ( Model m : models ) {
-            m.save();
+        try (Transaction transaction = DB.byName("kingdomcraft").beginTransaction()) {
+            for (Model m : models) {
+                m.save();
+            }
+
+            transaction.commit();
         }
     }
 
@@ -296,16 +317,20 @@ public class StorageContext {
             delete(models);
         }).handle((v, ex) -> {
             if ( ex != null ) {
+                ex.printStackTrace();
                 plugin.log(ex.getMessage(), Level.SEVERE);
             }
             return v;
         });
     }
 
-    @Transactional
     private void delete(Collection<Model> models) {
-        for ( Model m : models ) {
-            m.delete();
+        try (Transaction transaction = DB.byName("kingdomcraft").beginTransaction()) {
+            for (Model m : models) {
+                m.delete();
+            }
+
+            transaction.commit();
         }
     }
 

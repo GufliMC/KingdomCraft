@@ -24,6 +24,8 @@ import java.util.List;
 
 public interface Kingdom extends Model, AttributeHolder {
 
+    long getId();
+
     String getName();
 
     void renameTo(String name);

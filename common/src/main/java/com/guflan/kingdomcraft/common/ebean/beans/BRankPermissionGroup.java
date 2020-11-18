@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
+import io.ebean.annotation.DbName;
 import io.ebean.annotation.Index;
 
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"rank_id", "name"})
 @Table(name = "rank_permission_groups")
@@ -44,6 +46,10 @@ public class BRankPermissionGroup extends Model implements RankPermissionGroup {
     public String name;
 
     //
+
+    public BRankPermissionGroup() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {

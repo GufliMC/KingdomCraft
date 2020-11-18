@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.api.domain.RankAttribute;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
+import io.ebean.annotation.DbName;
 import io.ebean.annotation.Index;
 
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"rank_id", "name"})
 @Table(name = "rank_attributes")
@@ -45,6 +47,10 @@ public class BRankAttribute extends Model implements RankAttribute {
     public String value;
 
     //
+
+    public BRankAttribute() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {

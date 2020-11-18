@@ -295,7 +295,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     @Override
     public CompletableFuture<Void> saveAsync(Model... models) {
-        return context.saveAsync(Arrays.asList(models));
+        return saveAsync(Arrays.asList(models));
     }
 
     @Override
@@ -305,7 +305,12 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     @Override
     public CompletableFuture<Void> deleteAsync(Model... models) {
-        return context.deleteAsync(Arrays.asList(models));
+        return deleteAsync(Arrays.asList(models));
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAsync(Collection<Model> models) {
+        return context.deleteAsync(models);
     }
 
     //

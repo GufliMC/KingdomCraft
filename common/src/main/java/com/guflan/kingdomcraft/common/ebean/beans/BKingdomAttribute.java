@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.api.domain.KingdomAttribute;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
+import io.ebean.annotation.DbName;
 import io.ebean.annotation.Index;
 
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"kingdom_id", "name"})
 @Table(name = "kingdom_attributes")
@@ -45,6 +47,10 @@ public class BKingdomAttribute extends Model implements KingdomAttribute {
     public String value;
 
     //
+
+    public BKingdomAttribute() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {

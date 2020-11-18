@@ -21,6 +21,7 @@ import java.util.List;
 
 public interface Rank extends Model, AttributeHolder {
 
+    long getId();
 
     String getName();
 

@@ -20,10 +20,8 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 import com.guflan.kingdomcraft.api.domain.*;
 import io.ebean.DB;
 import io.ebean.Model;
+import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
-import io.ebean.annotation.DbForeignKey;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@DbName("kingdomcraft")
 @Entity
 @Table(name = "users")
 public class BUser extends Model implements User {
@@ -62,6 +61,10 @@ public class BUser extends Model implements User {
     public Date updatedAt;
 
     //
+
+    public BUser() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {
@@ -127,6 +130,8 @@ public class BUser extends Model implements User {
         if ( kingdom.getDefaultRank() != null ) {
             this.rank = (BRank) kingdom.getDefaultRank();
             this.rank.memberCount++;
+        } else {
+            this.rank = null;
         }
     }
 

@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@DbName("kingdomcraft")
 @Entity
 @Table(name = "ranks")
 @UniqueConstraint(columnNames = { "name", "kingdom_id" })
@@ -68,6 +69,12 @@ public class BRank extends Model implements Rank {
     @WhenModified
     public Date updatedAt;
 
+    //
+
+    public BRank() {
+        super("kingdomcraft");
+    }
+
     @Override
     public boolean delete() {
         kingdom.ranks.remove(this);
@@ -86,6 +93,11 @@ public class BRank extends Model implements Rank {
     }
 
     // interface
+
+    @Override
+    public long getId() {
+        return id;
+    }
 
     @Override
     public String getName() {

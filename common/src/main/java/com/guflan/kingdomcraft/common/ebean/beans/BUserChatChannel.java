@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.api.domain.UserChatChannel;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
+import io.ebean.annotation.DbName;
 import io.ebean.annotation.Index;
 
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"user_id", "channel"})
 @Table(name = "user_chatchannels")
@@ -46,6 +48,10 @@ public class BUserChatChannel extends Model implements UserChatChannel {
     public boolean enabled = true;
 
     //
+
+    public BUserChatChannel() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {

@@ -98,4 +98,6 @@ public interface KingdomCraft {
 
     CompletableFuture<Void> deleteAsync(Model... models);
 
+    CompletableFuture<Void> deleteAsync(Collection<Model> models);
+
 }

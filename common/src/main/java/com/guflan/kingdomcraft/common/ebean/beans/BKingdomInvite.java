@@ -23,11 +23,13 @@ import com.guflan.kingdomcraft.api.domain.User;
 import io.ebean.Model;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
+import io.ebean.annotation.DbName;
 import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@DbName("kingdomcraft")
 @Entity
 @Table(name = "user_invites")
 public class BKingdomInvite extends Model implements KingdomInvite {
@@ -51,6 +53,10 @@ public class BKingdomInvite extends Model implements KingdomInvite {
     public Date createdAt;
 
     //
+
+    public BKingdomInvite() {
+        super("kingdomcraft");
+    }
 
     @Override
     public boolean delete() {

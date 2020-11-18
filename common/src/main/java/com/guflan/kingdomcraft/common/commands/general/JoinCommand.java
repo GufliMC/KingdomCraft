@@ -51,18 +51,13 @@ public class JoinCommand extends CommandBase {
             return;
         }
 
-        if ( kingdom.getDefaultRank() == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNoDefaultRank", kingdom.getName());
-            return;
-        }
-
         User user = kdc.getUser((PlatformPlayer) sender);
         if ( user.getKingdom() != null ) {
             kdc.getMessageManager().send(sender, "cmdJoinAlready");
             return;
         }
 
-        if ( kingdom.isInviteOnly() ) {
+        if ( kingdom.isInviteOnly() && !sender.hasPermission("kingdom.join." + kingdom.getName().toLowerCase())) {
             KingdomInvite invite = user.getInvite(kingdom);
             if ( invite == null || !invite.isValid() ) {
                 kdc.getMessageManager().send(sender, "cmdJoinNoInvite", kingdom.getName());
@@ -71,6 +66,12 @@ public class JoinCommand extends CommandBase {
         }
 
         if ( kingdom.getMaxMembers() > 0 && kingdom.getMaxMembers() >= kingdom.getMemberCount() ) {
+            kdc.getMessageManager().send(sender, "cmdJoinFull", kingdom.getName());
+            return;
+        }
+
+        if ( kingdom.getDefaultRank() != null && kingdom.getDefaultRank().getMaxMembers() > 0
+                && kingdom.getDefaultRank().getMaxMembers() >= kingdom.getDefaultRank().getMemberCount() ) {
             kdc.getMessageManager().send(sender, "cmdJoinFull", kingdom.getName());
             return;
         }
