@@ -17,8 +17,6 @@
 
 package com.guflan.kingdomcraft.bukkit;
 
-import com.guflan.kingdomcraft.api.domain.User;
-import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.bukkit.command.CommandHandler;
 import com.guflan.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
@@ -43,6 +41,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.impl.SimpleLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -106,6 +105,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
 		// load database
+		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "WARN");
 		StorageContext context = new StorageContext(this);
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
 		context.init(
