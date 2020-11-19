@@ -105,7 +105,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
 		// load database
-		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "WARN");
+		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, config.getBoolean("debug") ? "TRACE" : "WARN");
 		StorageContext context = new StorageContext(this);
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
 		context.init(

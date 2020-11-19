@@ -27,7 +27,6 @@ import com.guflan.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.DB;
 import io.ebean.DatabaseFactory;
 import io.ebean.Transaction;
-import io.ebean.annotation.Transactional;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.datasource.DataSourceFactory;
@@ -40,8 +39,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
