@@ -132,6 +132,10 @@ public class StorageContext {
         return kingdoms.stream().filter(k -> k.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    public Kingdom getKingdom(long id) {
+        return kingdoms.stream().filter(k -> k.getId() == id).findFirst().orElse(null);
+    }
+
     public Kingdom createKingdom(String name) {
         BKingdom kingdom = new BKingdom();
         kingdom.name = name;

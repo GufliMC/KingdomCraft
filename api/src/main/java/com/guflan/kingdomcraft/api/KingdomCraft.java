@@ -60,6 +60,8 @@ public interface KingdomCraft {
 
     Kingdom getKingdom(String name);
 
+    Kingdom getKingdom(long id);
+
     Kingdom createKingdom(String name);
 
     // relations
