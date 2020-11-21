@@ -35,6 +35,10 @@ public class DeathListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
+        if ( !plugin.getKdc().getConfig().isWorldEnabled(event.getEntity().getWorld().getName()) ) {
+            return;
+        }
+
         if ( event.getEntity().getKiller() != null ) {
             if ( plugin.getKdc().getConfig().getOnKillMessage() == null
                     || plugin.getKdc().getConfig().getOnKillMessage().equals("") ) {
