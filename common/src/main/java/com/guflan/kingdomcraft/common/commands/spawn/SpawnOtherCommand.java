@@ -33,6 +33,7 @@ public class SpawnOtherCommand extends CommandBase {
 
     public SpawnOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "spawn", 1, true);
+        addCommand("s");
         setArgumentsHint("<kingdom>");
         setExplanationMessage("cmdSpawnOtherExplanation");
         setPermissions("kingdom.spawn.other");
