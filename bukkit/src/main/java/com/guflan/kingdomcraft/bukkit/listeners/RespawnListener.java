@@ -17,8 +17,12 @@
 
 package com.guflan.kingdomcraft.bukkit.listeners;
 
+import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import com.guflan.kingdomcraft.bukkit.util.LocationConverter;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -32,10 +36,17 @@ public class RespawnListener implements Listener {
 
     // respawn
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onRespawn(PlayerRespawnEvent event) {
+        if ( !plugin.getKdc().getConfig().isWorldEnabled(event.getRespawnLocation().getWorld().getName()) ) {
+            return;
+        }
+
         if ( plugin.getKdc().getConfig().respawnAtKingdom() ) {
-            // TODO
+            User user = plugin.getKdc().getOnlineUser(event.getPlayer().getUniqueId());
+            if ( user.getKingdom() != null && user.getKingdom().getSpawn() != null ) {
+                event.setRespawnLocation(LocationConverter.convert(user.getKingdom().getSpawn()));
+            }
         }
     }
 }
