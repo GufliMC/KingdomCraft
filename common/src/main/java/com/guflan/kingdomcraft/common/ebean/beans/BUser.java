@@ -18,10 +18,9 @@
 package com.guflan.kingdomcraft.common.ebean.beans;
 
 import com.guflan.kingdomcraft.api.domain.*;
-import io.ebean.DB;
 import io.ebean.Model;
-import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -185,7 +184,7 @@ public class BUser extends Model implements User {
 
     @Override
     public void clearInvites() {
-        DB.deleteAll(kingdomInvites);
+        db().deleteAll(kingdomInvites);
         kingdomInvites.clear();
     }
 
