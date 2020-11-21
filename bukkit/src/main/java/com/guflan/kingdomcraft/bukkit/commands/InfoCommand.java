@@ -215,7 +215,7 @@ public class InfoCommand extends CommandBase {
 
         kdc.getRelations(kingdom).stream().filter(rel -> rel.getType() == RelationType.ENEMY).forEach(rel -> {
             Kingdom target = rel.getKingdom1() == kingdom ? rel.getKingdom2() : rel.getKingdom1();
-            enemiesLore.add(target.getDisplay());
+            enemiesLore.add(kdc.getPlugin().colorify(target.getDisplay()));
         });
 
         if ( enemiesLore.size() > 0 ) {
@@ -235,7 +235,7 @@ public class InfoCommand extends CommandBase {
 
         kdc.getRelations(kingdom).stream().filter(rel -> rel.getType() == RelationType.TRUCE).forEach(rel -> {
             Kingdom target = rel.getKingdom1() == kingdom ? rel.getKingdom2() : rel.getKingdom1();
-            truceLore.add(target.getDisplay());
+            truceLore.add(kdc.getPlugin().colorify(target.getDisplay()));
         });
 
         if ( truceLore.size() > 0 ) {
@@ -255,7 +255,7 @@ public class InfoCommand extends CommandBase {
 
         kdc.getRelations(kingdom).stream().filter(rel -> rel.getType() == RelationType.ALLY).forEach(rel -> {
             Kingdom target = rel.getKingdom1() == kingdom ? rel.getKingdom2() : rel.getKingdom1();
-            alliesLore.add(target.getDisplay());
+            alliesLore.add(kdc.getPlugin().colorify(target.getDisplay()));
         });
 
         if ( alliesLore.size() > 0 ) {
