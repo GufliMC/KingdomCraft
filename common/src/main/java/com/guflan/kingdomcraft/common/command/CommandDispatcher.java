@@ -162,7 +162,7 @@ public class CommandDispatcher {
                             .filter(s -> s.toLowerCase().startsWith(arg0))
                             .collect(Collectors.toList()))
                     );
-            return result;
+            return result.stream().distinct().collect(Collectors.toList());
         }
 
         String input = String.join(" ", args).toLowerCase();
