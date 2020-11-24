@@ -86,6 +86,11 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
         }
     }
 
+    @Override
+    public void closeInventory() {
+        player.closeInventory();
+    }
+
     // admin
 
     @Override

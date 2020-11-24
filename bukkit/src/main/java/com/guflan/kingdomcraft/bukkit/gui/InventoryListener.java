@@ -91,7 +91,9 @@ public class InventoryListener implements Listener {
 
         try {
             playSound = inv.dispatchClick(player, type, e.getSlot());
-        } catch (Exception ignore) {}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         if ( !playSound ) {
             return;
