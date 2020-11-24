@@ -51,8 +51,7 @@ settings:
         join: '&e{kingdom_prefix}{rank_prefix}{player} &ejoined the server.'
         leave: '&e{kingdom_prefix}{rank_prefix}{player} &equit the server.'
         death: '&e{kingdom_prefix}{rank_prefix}{player} &edied.'
-        kill: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by
-            {killer_kingdom_prefix}{killer_rank_prefix}{killer_player} &ewith weapon {killer_weapon}&e.'
+        kill: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_player}&e.'
 
 # DO NOT CHANGE THIS SECTION IF YOU DO NOT KNOW WHAT YOU ARE DOING!
 database:

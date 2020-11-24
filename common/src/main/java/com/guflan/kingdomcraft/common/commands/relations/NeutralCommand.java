@@ -66,6 +66,11 @@ public class NeutralCommand extends CommandBase {
             return;
         }
 
+        if ( target == kingdom ) {
+            kdc.getMessageManager().send(sender, "cmdErrorSameKingdom");
+            return;
+        }
+
         Relation existing = kdc.getRelation(kingdom, target);
         if ( existing == null || existing.getType() == RelationType.NEUTRAL ) {
             kdc.getMessageManager().send(sender, "cmdNeutralAlready", target.getName());

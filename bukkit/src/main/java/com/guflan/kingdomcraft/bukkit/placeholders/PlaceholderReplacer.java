@@ -19,9 +19,8 @@ package com.guflan.kingdomcraft.bukkit.placeholders;
 
 import com.guflan.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
-import org.apache.commons.text.WordUtils;
+import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
 
 public class PlaceholderReplacer {
 
@@ -33,14 +32,13 @@ public class PlaceholderReplacer {
             "world");
 
         pm.addPlaceholderReplacer((player, placeholder) -> {
-                ItemStack stack = Bukkit.getPlayer(player.getUniqueId()).getItemInHand();
-                if ( stack.getItemMeta() == null || stack.getItemMeta().getDisplayName() == null ) {
-                    String name = stack.getType().toString().replace("_", " ");
-                    return WordUtils.capitalizeFully(name, ' ');
-                }
-                return stack.getItemMeta().getDisplayName();
-            },
-            "item", "weapon");
+                    BukkitPlayer p = (BukkitPlayer) player;
+                return p.getPlayer().getDisplayName() != null ? p.getPlayer().getDisplayName() : p.getPlayer().getName();
+        },
+        "player");
+
+        pm.addPlaceholderReplacer((player, placeholder) -> player.getName(),
+                "username");
     }
 
 }
