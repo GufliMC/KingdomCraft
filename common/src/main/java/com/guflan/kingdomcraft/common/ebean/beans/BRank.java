@@ -210,4 +210,9 @@ public class BRank extends Model implements Rank {
     public int getMemberCount() {
         return memberCount;
     }
+
+    @Override
+    public List<String> getMembers() {
+        return new QBUser().rank.id.eq(this.id).select("name").findSingleAttributeList();
+    }
 }

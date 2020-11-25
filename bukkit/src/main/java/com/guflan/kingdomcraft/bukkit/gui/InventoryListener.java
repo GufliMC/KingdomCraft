@@ -90,7 +90,7 @@ public class InventoryListener implements Listener {
         boolean playSound = false;
 
         try {
-            playSound = inv.dispatchClick(player, type, e.getSlot());
+            playSound = inv.dispatchClick(player, type, e.getRawSlot());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

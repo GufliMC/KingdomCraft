@@ -60,4 +60,6 @@ public interface Rank extends Model, AttributeHolder {
     RankPermissionGroup createPermissionGroup(String name);
 
     int getMemberCount();
+
+    List<String> getMembers();
 }

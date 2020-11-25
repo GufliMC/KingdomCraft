@@ -229,7 +229,7 @@ public class BKingdom extends Model implements Kingdom {
 
     @Override
     public List<String> getMembers() {
-        return new QBUser().kingdom.eq(this).select("name").findSingleAttributeList();
+        return new QBUser().kingdom.id.eq(this.id).select("name").findSingleAttributeList();
     }
 
     @Override
