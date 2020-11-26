@@ -20,6 +20,7 @@ package com.guflan.kingdomcraft.common.permissions;
 import com.guflan.kingdomcraft.api.domain.Rank;
 import com.guflan.kingdomcraft.api.domain.RankPermissionGroup;
 import com.guflan.kingdomcraft.api.domain.User;
+import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import com.guflan.kingdomcraft.common.KingdomCraftImpl;
 import com.guflan.kingdomcraft.common.config.Configuration;
 
@@ -30,11 +31,13 @@ import java.util.Map;
 
 public class PermissionManager {
 
+    private final KingdomCraftImpl kdc;
     private final List<PermissionGroup> groups = new ArrayList<>();
 
     private PermissionGroup defaultGroup;
 
     public PermissionManager(KingdomCraftImpl kdc, Configuration config) {
+        this.kdc = kdc;
         reload(config);
     }
 
@@ -61,22 +64,14 @@ public class PermissionManager {
         return defaultGroup;
     }
 
-    public Map<String, Boolean> getTotalPermissions(PermissionGroup group) {
-        Map<String, Boolean> perms = group.getPermissionsAsMap();
-        fillPermissionsMap(group, new ArrayList<>(), perms);
-        return perms;
-    }
-
-    public Map<String, Boolean> getTotalPermissions(User user, String world) {
-        Map<String, Boolean> permissions = new HashMap<>();
-
+    public List<PermissionGroup> getGroups(PlatformPlayer player) {
+        User user = kdc.getUser(player);
         List<PermissionGroup> groups = new ArrayList<>();
-        if ( user.getRank() == null  ) {
-            if ( defaultGroup == null ) {
-                return permissions;
-            }
 
-            groups.add(defaultGroup);
+        if ( user.getRank() == null  ) {
+            if ( defaultGroup != null ) {
+                groups.add(defaultGroup);
+            }
         } else {
             Rank rank = user.getRank();
             for ( PermissionGroup group : this.getGroups() ) {
@@ -86,14 +81,27 @@ public class PermissionManager {
                     continue;
                 }
                 if ( !group.getWorlds().isEmpty() && group.getWorlds().stream()
-                        .noneMatch(w -> w.equalsIgnoreCase(world)) ) {
+                        .noneMatch(w -> w.equalsIgnoreCase(player.getLocation().getWorldName())) ) {
                     continue;
                 }
                 groups.add(group);
             }
         }
+        return groups;
+    }
 
+    public Map<String, Boolean> getTotalPermissions(PermissionGroup group) {
+        Map<String, Boolean> perms = group.getPermissionsAsMap();
+        fillPermissionsMap(group, new ArrayList<>(), perms);
+        return perms;
+    }
+
+    public Map<String, Boolean> getTotalPermissions(PlatformPlayer player) {
+        List<PermissionGroup> groups = getGroups(player);
+
+        Map<String, Boolean> permissions = new HashMap<>();
         groups.forEach(group -> permissions.putAll(getTotalPermissions(group)));
+
         return permissions;
     }
 
@@ -126,7 +134,8 @@ public class PermissionManager {
                     cs.contains("permissions") ? cs.getStringList("permissions") : new ArrayList<>(),
                     cs.contains("inheritances") ? cs.getStringList("inheritances") : new ArrayList<>(),
                     cs.contains("ranks") ? cs.getStringList("ranks") : new ArrayList<>(),
-                    cs.contains("worlds") ? cs.getStringList("worlds") : new ArrayList<>());
+                    cs.contains("worlds") ? cs.getStringList("worlds") : new ArrayList<>(),
+                    cs.contains("externals") ? cs.getStringList("externals") : new ArrayList<>());
 
             if ( key.equalsIgnoreCase("default") ) {
                 defaultGroup = group;

@@ -23,6 +23,7 @@ import com.guflan.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.guflan.kingdomcraft.bukkit.gui.InventoryListener;
 import com.guflan.kingdomcraft.bukkit.listeners.*;
 import com.guflan.kingdomcraft.bukkit.messages.MessageManager;
+import com.guflan.kingdomcraft.bukkit.permissions.VaultPermissionHandler;
 import com.guflan.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.placeholders.VaultPlaceholderReplacer;
 import com.guflan.kingdomcraft.bukkit.scheduler.BukkitScheduler;
@@ -127,7 +128,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// initialize handler
 		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
 		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
-		Configuration groupsConfig = new BukkitConfiguration(initConfig("groups.yml"));
+		Configuration groupsConfig = new BukkitConfiguration(initConfig("permissions.yml"));
 
 		this.kdc = new KingdomCraftImpl(this, context, pluginConfig, chatConfig, groupsConfig);
 
@@ -160,6 +161,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 			pm.registerEvents(new ChatListener(this), this);
 		}
 
+		// vault permissions hook
+		new VaultPermissionHandler(this);
+
 		// kingdom events
 		new KingdomJoinQuitListener(this);
 
@@ -185,7 +189,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
 		kdc.getConfig().reload(pluginConfig);
 
-		Configuration groupsConfig = new BukkitConfiguration(initConfig("groups.yml"));
+		Configuration groupsConfig = new BukkitConfiguration(initConfig("permissions.yml"));
 		kdc.getPermissionManager().reload(groupsConfig);
 
 		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));

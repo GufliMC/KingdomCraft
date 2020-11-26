@@ -29,21 +29,27 @@ public class PermissionGroup {
     private final List<String> inheritances;
     private final List<String> ranks;
     private final List<String> worlds;
+    private final List<String> externals;
 
-    public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks, List<String> worlds) {
+    public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks, List<String> worlds, List<String> externals) {
         this.name = name;
         this.worlds = worlds;
         this.permissions = permissions;
         this.inheritances = inheritances;
         this.ranks = ranks;
+        this.externals = externals;
+    }
+
+    public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks, List<String> worlds) {
+        this(name, permissions, inheritances, ranks, worlds, new ArrayList<>());
     }
 
     public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks) {
-        this(name, permissions, inheritances, ranks, new ArrayList<>());
+        this(name, permissions, inheritances, ranks, new ArrayList<>(), new ArrayList<>());
     }
 
     public PermissionGroup(String name, List<String> permissions, List<String> inheritances) {
-        this(name, permissions, inheritances, new ArrayList<>(), new ArrayList<>());
+        this(name, permissions, inheritances, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public String getName() {
@@ -70,5 +76,14 @@ public class PermissionGroup {
 
     public List<String> getInheritances() {
         return inheritances;
+    }
+
+    /**
+     * This is dependend on the implementation. For bukkit, this will be used to determine the groups for vault.
+     *
+     * @return list of externals
+     */
+    public List<String> getExternals() {
+        return externals;
     }
 }
