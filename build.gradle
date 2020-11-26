@@ -29,7 +29,7 @@ subprojects {
     }
 
     jar {
-        from '../LICENSE.txt'
+        from '../COPYING'
     }
 
     project.ext.apiVersion = version
