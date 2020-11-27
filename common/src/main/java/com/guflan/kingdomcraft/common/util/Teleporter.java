@@ -66,7 +66,7 @@ public class Teleporter {
     }
 
     public static void cancel(PlatformPlayer player) {
-        if ( !player.has(TELEPORT_KEY) ) {
+        if ( player == null || !player.has(TELEPORT_KEY) ) {
             return;
         }
         kdc.getMessageManager().send(player, "teleportCancel");
