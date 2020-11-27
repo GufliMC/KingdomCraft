@@ -22,6 +22,7 @@ import com.guflan.kingdomcraft.api.entity.PlatformPlayer;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,7 +50,9 @@ public class CommandDispatcher {
                 }
 
                 int cmdLength = cmd.split(Pattern.quote(" ")).length;
-                if ( cb.getExpectedArguments() != -1 && args.length - cmdLength != cb.getExpectedArguments() ) {
+                String[] cmdArgs = convertArgs(Arrays.copyOfRange(args, cmdLength, args.length), cb.getExpectedArguments());
+
+                if ( cb.getExpectedArguments() != -1 && cmdArgs.length != cb.getExpectedArguments() ) {
                     invalidBase = cmd;
                     invalidArguments = cb.getArgumentsHint() == null ? "" : cb.getArgumentsHint();
                     continue;
@@ -67,7 +70,6 @@ public class CommandDispatcher {
                     }
                 }
 
-                String[] cmdArgs = Arrays.copyOfRange(args, cmdLength, args.length);
                 cb.execute(sender, cmdArgs);
                 return;
             }
@@ -194,6 +196,28 @@ public class CommandDispatcher {
         }
 
         return result.stream().distinct().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
+    }
+
+    private String[] convertArgs(String[] args, int expectedArgs) {
+        if ( expectedArgs <= 0 ) {
+            return args;
+        }
+        if ( args.length <= expectedArgs ) {
+            return args;
+        }
+
+        List<String> currentArgs = Arrays.asList(args);
+
+        String lastArgument = String.join(" ", currentArgs.subList(expectedArgs - 1, currentArgs.size()));
+        if ( (lastArgument.startsWith("\"") && lastArgument.endsWith("\"")) || (lastArgument.startsWith("'") && lastArgument.endsWith("'")) ) {
+            lastArgument = lastArgument.substring(1, lastArgument.length() - 1);
+
+            List<String> newArgs = new ArrayList<>(currentArgs.subList(0, expectedArgs - 1));
+            newArgs.add(lastArgument);
+            return newArgs.toArray(new String[0]);
+        }
+
+        return args;
     }
 
 }
