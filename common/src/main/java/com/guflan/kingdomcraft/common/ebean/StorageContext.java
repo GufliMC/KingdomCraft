@@ -38,6 +38,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class StorageContext {
     public static final Set<BKingdom> kingdoms = new CopyOnWriteArraySet<>();
     public static final Set<BRelation> relations = new CopyOnWriteArraySet<>();
 
-    public static final Set<BUser> users = new CopyOnWriteArraySet<>();
+    public static final Map<PlatformPlayer, User> players = new ConcurrentHashMap<>();
 
     private boolean initialized = false;
     private final KingdomCraftPlugin plugin;
@@ -204,15 +205,15 @@ public class StorageContext {
     // users
 
     public Set<User> getOnlineUsers() {
-        return new HashSet<>(users);
+        return new HashSet<>(players.values());
     }
 
     public User getOnlineUser(String name) {
-        return users.stream().filter(u -> u.name.equalsIgnoreCase(name)).findFirst().orElse(null);
+        return players.values().stream().filter(u -> u.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public User getOnlineUser(UUID uuid) {
-        return users.stream().filter(u -> u.id.equals(uuid.toString())).findFirst().orElse(null);
+        return players.values().stream().filter(u -> u.getUniqueId().equals(uuid)).findFirst().orElse(null);
     }
 
     public CompletableFuture<List<User>> getUsers() {
@@ -256,16 +257,6 @@ public class StorageContext {
         saveAsync(Collections.singleton(buser));
     }
 
-    public void addOnlineUser(User user) {
-        if ( !users.contains(user) ) {
-            users.add((BUser) user);
-        }
-    }
-
-    public void removeOnlineUser(User user) {
-        users.remove(user);
-    }
-
     private CompletableFuture<User> reassign(CompletableFuture<User> future) {
         return future.thenApply(u -> {
             if ( u != null ) {
@@ -287,6 +278,33 @@ public class StorageContext {
         for ( BKingdomInvite ki : buser.kingdomInvites ) {
             ki.kingdom = (BKingdom) getKingdom(ki.kingdom.getName());
         }
+    }
+
+    // players
+
+    public void addPlayer(PlatformPlayer player, User user) {
+        players.put(player, user);
+    }
+
+    public void removePlayer(PlatformPlayer player) {
+        players.remove(player);
+    }
+
+    public Set<PlatformPlayer> getPlayers() {
+        return new HashSet<>(players.keySet());
+    }
+
+    public PlatformPlayer getPlayer(UUID uuid) {
+        return players.keySet().stream().filter(p -> p.getUniqueId().equals(uuid)).findFirst().orElse(null);
+    }
+
+    public PlatformPlayer getPlayer(User user) {
+        return getPlayer(user.getUniqueId());
+    }
+
+    public PlatformPlayer getPlayer(String name) {
+        return players.keySet().stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+
     }
 
     //

@@ -68,8 +68,6 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     //
 
-    private final Set<PlatformPlayer> onlinePlayers = new CopyOnWriteArraySet<>();
-
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
                             StorageContext context,
                             Configuration config,
@@ -181,22 +179,22 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     @Override
     public Set<PlatformPlayer> getOnlinePlayers() {
-        return onlinePlayers;
+        return context.getPlayers();
     }
 
     @Override
     public PlatformPlayer getPlayer(UUID uuid) {
-        return onlinePlayers.stream().filter(p -> p.getUniqueId().equals(uuid)).findFirst().orElse(null);
+        return context.getPlayer(uuid);
     }
 
     @Override
     public PlatformPlayer getPlayer(User user) {
-        return getPlayer(user.getUniqueId());
+        return context.getPlayer(user);
     }
 
     @Override
     public PlatformPlayer getPlayer(String name) {
-        return onlinePlayers.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return context.getPlayer(name);
 
     }
 
@@ -320,8 +318,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     //
 
-    public void onLoad(PlatformPlayer player) {
-        onlinePlayers.add(player);
+    public boolean onLoad(PlatformPlayer player) {
         try {
             User user = getUser(player.getUniqueId()).get();
             if ( user == null ) {
@@ -335,22 +332,24 @@ public class KingdomCraftImpl implements KingdomCraft {
                 context.update(user, player);
             }
 
-            context.addOnlineUser(user);
+            context.addPlayer(player, user);
+            return true;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void onJoin(PlatformPlayer player) {
-        onLoad(player);
-        eventDispatcher.dispatchJoin(player);
+    public boolean onJoin(PlatformPlayer player) {
+        if ( onLoad(player) ) {
+            eventDispatcher.dispatchJoin(player);
+            return true;
+        }
+        return false;
     }
 
     public void onQuit(PlatformPlayer player) {
         eventDispatcher.dispatchQuit(player);
-        onlinePlayers.remove(player);
-
-        User user = context.getOnlineUser(player.getUniqueId());
-        context.removeOnlineUser(user);
+        context.removePlayer(player);
     }
 }

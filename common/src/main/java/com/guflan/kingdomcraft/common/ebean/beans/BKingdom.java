@@ -79,7 +79,7 @@ public class BKingdom extends Model implements Kingdom {
     @Override
     public boolean delete() {
         StorageContext.kingdoms.remove(this);
-        StorageContext.users.stream().filter(user -> user.getKingdom() == this)
+        StorageContext.players.values().stream().filter(user -> user.getKingdom() == this)
                 .forEach(user -> user.setKingdom(null));
         return super.delete();
     }
