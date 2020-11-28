@@ -95,7 +95,7 @@ public class InfoCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if ( target == null ) {
-                    kdc.getMessageManager().send(player, "cmdErrorPlayerNotExist");
+                    kdc.getMessageManager().send(player, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 
