@@ -20,6 +20,7 @@ package com.guflan.kingdomcraft.common.ebean.beans;
 import com.guflan.kingdomcraft.api.domain.Kingdom;
 import com.guflan.kingdomcraft.api.domain.Relation;
 import com.guflan.kingdomcraft.api.domain.RelationType;
+import com.guflan.kingdomcraft.common.ebean.StorageContext;
 import io.ebean.Model;
 import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
@@ -61,7 +62,7 @@ public class BRelation extends Model implements Relation {
 
     @Override
     public boolean delete() {
-
+        StorageContext.relations.remove(this);
         return super.delete();
     }
 

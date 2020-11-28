@@ -147,19 +147,24 @@ public class StorageContext {
     // relations
 
     public Set<Relation> getRelations(Kingdom kingdom) {
-        return relations.stream().filter(r -> r.kingdom.equals(kingdom) || r.otherKingdom.equals(kingdom)).collect(Collectors.toSet());
+        return relations.stream()
+                .filter(r -> !r.isRequest())
+                .filter(r -> r.kingdom.equals(kingdom) || r.otherKingdom.equals(kingdom))
+                .collect(Collectors.toSet());
     }
 
     public Relation getRelation(Kingdom kingdom, Kingdom other) {
-        return relations.stream().filter(r -> (r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
-                || (r.kingdom.equals(other) && r.otherKingdom.equals(kingdom))).filter(r -> !r.isRequest()).findFirst().orElse(null);
+        return relations.stream()
+                .filter(r -> !r.isRequest())
+                .filter(r -> (r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
+                    || (r.kingdom.equals(other) && r.otherKingdom.equals(kingdom)))
+                .findFirst().orElse(null);
     }
 
     public void setRelation(Kingdom kingdom, Kingdom other, RelationType type) {
         Relation oldrel = getRelation(kingdom, other);
         if ( oldrel != null ) {
             oldrel.delete();
-            return;
         }
 
         BRelation newrel = createRelation(kingdom, other, type, false);
@@ -174,8 +179,10 @@ public class StorageContext {
     }
 
     public Relation getRelationRequest(Kingdom kingdom, Kingdom other) {
-        return relations.stream().filter(r -> r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
-                .filter(Relation::isRequest).findFirst().orElse(null);
+        return relations.stream()
+                .filter(Relation::isRequest)
+                .filter(r -> r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
+                .findFirst().orElse(null);
     }
 
     public void removeRelationRequest(Kingdom kingdom, Kingdom other) {
