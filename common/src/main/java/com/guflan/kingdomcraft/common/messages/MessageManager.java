@@ -67,7 +67,9 @@ public class MessageManager {
 
 	public String getMessage(String name, boolean colorify, String... placeholders) {
 		if ( colorify ) {
-			return colorify(getMessage(name, placeholders));
+			String msg = getMessage(name, placeholders);
+			if ( msg == null ) return null;
+			return colorify(msg);
 		}
 		return getMessage(name, placeholders);
 	}

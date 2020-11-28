@@ -41,6 +41,10 @@ public class ModelDeserializer {
 
     private void deserialize(AttributeHolder holder, List<EditorAttribute> attributes, JsonNode node) {
         for (EditorAttribute attribute : attributes) {
+            if (!node.has(attribute.getName()) ) {
+                continue;
+            }
+
             String value = node.get(attribute.getName()).asText();
             if (value == null) {
                 continue;

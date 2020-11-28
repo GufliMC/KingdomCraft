@@ -38,7 +38,7 @@ public class ListCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         List<String> kingdoms = kdc.getKingdoms().stream()
                 .sorted(Comparator.comparing(Kingdom::isInviteOnly))
-                .map(Kingdom::getDisplay)
+                .map(Kingdom::getName)
                 .collect(Collectors.toList());
 
         String delimiter = kdc.getMessageManager().getMessage("cmdListDelimiter");
