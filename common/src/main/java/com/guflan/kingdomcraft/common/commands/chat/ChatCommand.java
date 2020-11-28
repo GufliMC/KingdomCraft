@@ -50,7 +50,7 @@ public class ChatCommand extends CommandBase {
         PlatformPlayer player = (PlatformPlayer) sender;
 
         if ( args.length < 2 ) {
-            kdc.getMessageManager().send(sender, "cmdDefaultInvalidUsage", "/k chat " + getArgumentsHint());
+            kdc.getMessageManager().send(sender, "cmdErrorInvalidUsage", "/k chat " + getArgumentsHint());
             return;
         }
 
