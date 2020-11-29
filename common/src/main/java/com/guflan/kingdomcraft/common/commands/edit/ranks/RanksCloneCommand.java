@@ -52,11 +52,11 @@ public class RanksCloneCommand extends CommandBase {
             return kdc.getKingdoms().stream().filter(k -> k != kingdom).map(Kingdom::getName).collect(Collectors.toList());
         }
         if ( args.length == 3 ) {
-            Kingdom to = kdc.getKingdom(args[1]);
-            if ( to == null || kdc.getKingdom(args[0]) == null ) {
+            Kingdom from = kdc.getKingdom(args[0]);
+            if ( from == null || kdc.getKingdom(args[1]) == null ) {
                 return null;
             }
-            return to.getRanks().stream().map(Rank::getName).collect(Collectors.toList());
+            return from.getRanks().stream().map(Rank::getName).collect(Collectors.toList());
         }
         return null;
     }
