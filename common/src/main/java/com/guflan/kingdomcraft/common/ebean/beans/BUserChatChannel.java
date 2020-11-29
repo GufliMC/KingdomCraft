@@ -30,14 +30,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"user_id", "channel"})
 @Table(name = "user_chatchannels")
-public class BUserChatChannel extends Model implements UserChatChannel {
+public class BUserChatChannel extends BaseModel implements UserChatChannel {
 
     @Id
-    public long id;
+    public int id;
 
     @ManyToOne
     @DbForeignKey(onDelete = ConstraintMode.CASCADE)
@@ -50,7 +49,7 @@ public class BUserChatChannel extends Model implements UserChatChannel {
     //
 
     public BUserChatChannel() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override

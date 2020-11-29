@@ -30,13 +30,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@DbName("kingdomcraft")
 @Entity
 @Table(name = "kingdoms")
-public class BKingdom extends Model implements Kingdom {
+public class BKingdom extends BaseModel implements Kingdom {
 
     @Id
-    public long id;
+    public int id;
 
     @Column(unique=true)
     public String name;
@@ -73,7 +72,7 @@ public class BKingdom extends Model implements Kingdom {
     //
 
     public BKingdom() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override
@@ -92,7 +91,7 @@ public class BKingdom extends Model implements Kingdom {
     // interface
 
     @Override
-    public long getId() {
+    public int getId() {
         return id;
     }
 

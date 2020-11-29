@@ -28,10 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@DbName("kingdomcraft")
 @Entity
 @Table(name = "users")
-public class BUser extends Model implements User {
+public class BUser extends BaseModel implements User {
 
     @Id
     public String id;
@@ -62,7 +61,7 @@ public class BUser extends Model implements User {
     //
 
     public BUser() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override

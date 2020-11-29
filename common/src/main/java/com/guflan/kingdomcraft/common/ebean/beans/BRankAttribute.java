@@ -30,14 +30,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"rank_id", "name"})
 @Table(name = "rank_attributes")
-public class BRankAttribute extends Model implements RankAttribute {
+public class BRankAttribute extends BaseModel implements RankAttribute {
 
     @Id
-    public long id;
+    public int id;
 
     @ManyToOne
     @DbForeignKey(onDelete = ConstraintMode.CASCADE)
@@ -49,7 +48,7 @@ public class BRankAttribute extends Model implements RankAttribute {
     //
 
     public BRankAttribute() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override

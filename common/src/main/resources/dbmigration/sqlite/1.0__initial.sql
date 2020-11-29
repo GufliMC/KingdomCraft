@@ -65,6 +65,15 @@ create table rank_attributes (
   foreign key (rank_id) references ranks (id) on delete cascade on update cascade
 );
 
+create table rank_permission_groups (
+  id                            integer not null,
+  rank_id                       integer,
+  name                          varchar(255),
+  constraint uq_rank_permission_groups_rank_id_name unique (rank_id,name),
+  constraint pk_rank_permission_groups primary key (id),
+  foreign key (rank_id) references ranks (id) on delete cascade on update cascade
+);
+
 create table kingdom_relations (
   id                            integer not null,
   kingdom_id                    integer,
@@ -89,5 +98,15 @@ create table users (
   constraint pk_users primary key (id),
   foreign key (rank_id) references ranks (id) on delete set null on update set null,
   foreign key (kingdom_id) references kingdoms (id) on delete set null on update set null
+);
+
+create table user_chatchannels (
+  id                            integer not null,
+  user_id                       varchar(255),
+  channel                       varchar(255),
+  enabled                       int default 0 not null,
+  constraint uq_user_chatchannels_user_id_channel unique (user_id,channel),
+  constraint pk_user_chatchannels primary key (id),
+  foreign key (user_id) references users (id) on delete cascade on update cascade
 );
 

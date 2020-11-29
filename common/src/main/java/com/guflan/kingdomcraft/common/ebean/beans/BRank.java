@@ -33,14 +33,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@DbName("kingdomcraft")
 @Entity
 @Table(name = "ranks")
 @UniqueConstraint(columnNames = { "name", "kingdom_id" })
-public class BRank extends Model implements Rank {
+public class BRank extends BaseModel implements Rank {
 
     @Id
-    public long id;
+    public int id;
 
     public String name;
 
@@ -72,7 +71,7 @@ public class BRank extends Model implements Rank {
     //
 
     public BRank() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override
@@ -95,7 +94,7 @@ public class BRank extends Model implements Rank {
     // interface
 
     @Override
-    public long getId() {
+    public int getId() {
         return id;
     }
 

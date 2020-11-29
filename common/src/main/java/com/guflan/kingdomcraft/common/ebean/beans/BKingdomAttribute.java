@@ -30,14 +30,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"kingdom_id", "name"})
 @Table(name = "kingdom_attributes")
-public class BKingdomAttribute extends Model implements KingdomAttribute {
+public class BKingdomAttribute extends BaseModel implements KingdomAttribute {
 
     @Id
-    public long id;
+    public int id;
 
     @ManyToOne
     @DbForeignKey(onDelete = ConstraintMode.CASCADE)
@@ -49,7 +48,7 @@ public class BKingdomAttribute extends Model implements KingdomAttribute {
     //
 
     public BKingdomAttribute() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override

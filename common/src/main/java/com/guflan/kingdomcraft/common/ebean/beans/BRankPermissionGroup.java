@@ -30,14 +30,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@DbName("kingdomcraft")
 @Entity
 @Index(unique = true, columnNames = {"rank_id", "name"})
 @Table(name = "rank_permission_groups")
-public class BRankPermissionGroup extends Model implements RankPermissionGroup {
+public class BRankPermissionGroup extends BaseModel implements RankPermissionGroup {
 
     @Id
-    public long id;
+    public int id;
 
     @ManyToOne
     @DbForeignKey(onDelete = ConstraintMode.CASCADE)
@@ -48,7 +47,7 @@ public class BRankPermissionGroup extends Model implements RankPermissionGroup {
     //
 
     public BRankPermissionGroup() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override

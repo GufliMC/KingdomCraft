@@ -29,13 +29,12 @@ import io.ebean.annotation.WhenCreated;
 import javax.persistence.*;
 import java.util.Date;
 
-@DbName("kingdomcraft")
 @Entity
 @Table(name = "user_invites")
-public class BKingdomInvite extends Model implements KingdomInvite {
+public class BKingdomInvite extends BaseModel implements KingdomInvite {
 
     @Id
-    public long id;
+    public int id;
 
     @ManyToOne
     @DbForeignKey(onDelete = ConstraintMode.CASCADE)
@@ -55,7 +54,7 @@ public class BKingdomInvite extends Model implements KingdomInvite {
     //
 
     public BKingdomInvite() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override

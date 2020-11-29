@@ -28,13 +28,12 @@ import io.ebean.annotation.ConstraintMode;
 import javax.persistence.*;
 import java.util.Date;
 
-@DbName("kingdomcraft")
 @Entity
 @Table(name = "kingdom_relations")
-public class BRelation extends Model implements Relation {
+public class BRelation extends BaseModel implements Relation {
 
     @Id
-    public long id;
+    public int id;
 
     @ManyToOne
     @DbForeignKey(onDelete = ConstraintMode.CASCADE)
@@ -57,7 +56,7 @@ public class BRelation extends Model implements Relation {
     //
 
     public BRelation() {
-        super("kingdomcraft");
+        super();
     }
 
     @Override
