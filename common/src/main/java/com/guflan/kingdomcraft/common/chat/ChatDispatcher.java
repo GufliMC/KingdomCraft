@@ -100,7 +100,7 @@ public class ChatDispatcher {
             p.sendMessage(kdc.getMessageManager().getMessage("socialSpyPrefix") + finalResult);
         });
 
-        System.out.println("[CHAT] " + kdc.getMessageManager().decolorify(finalResult));
+        System.out.println("[" + channel.getName() + "] " + player.getName() + ": " + message);
     }
 
 }
