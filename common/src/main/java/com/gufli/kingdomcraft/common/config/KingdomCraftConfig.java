@@ -48,11 +48,15 @@ public class KingdomCraftConfig {
         return worlds.isEmpty() || worlds.stream().anyMatch(s -> s.equalsIgnoreCase(world));
     }
 
-    public List<RelationType> getFriendlyFireRelationTypes() {
+    public List<String> getFriendlyFireRelationTypes() {
         return config.contains("friendly-fire-relationships") ?
                 config.getStringList("friendly-fire-relationships").stream()
-                        .map(s -> RelationType.valueOf(s.toUpperCase())).collect(Collectors.toList())
+                        .map(String::toUpperCase).collect(Collectors.toList())
                 : new ArrayList<>();
+    }
+
+    public boolean isFriendlyFireEnabled() {
+        return config.contains("friendly-fire") && config.getBoolean("friendly-fire");
     }
 
     public List<String> getOnKingdomJoinCommands() {

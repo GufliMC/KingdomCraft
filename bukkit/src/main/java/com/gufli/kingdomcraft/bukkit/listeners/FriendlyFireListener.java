@@ -25,6 +25,7 @@ import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -57,18 +58,17 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
-
         PlatformPlayer p;
-        if ( entity instanceof PlatformPlayer) {
+        if ( entity instanceof Player) {
             p = plugin.getKdc().getPlayer(entity.getUniqueId());
         } else {
             return;
         }
 
         PlatformPlayer d;
-        if ( damager instanceof PlatformPlayer) {
+        if ( damager instanceof Player) {
             d = plugin.getKdc().getPlayer(damager.getUniqueId());
-        } else if ( damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof PlatformPlayer) {
+        } else if ( damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Player) {
             d = plugin.getKdc().getPlayer(((PlatformPlayer) ((Projectile) damager).getShooter()).getUniqueId());
         }
         else {
@@ -114,10 +114,14 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
+        if ( plugin.getKdc().getConfig().isFriendlyFireEnabled() ) {
+            return;
+        }
+
         if ( k1 != k2 ) {
             Relation rel = plugin.getKdc().getRelation(k1, k2);
             RelationType type = rel == null ? RelationType.NEUTRAL : rel.getType();
-            if ( !plugin.getKdc().getConfig().getFriendlyFireRelationTypes().contains(type) ) {
+            if ( !plugin.getKdc().getConfig().getFriendlyFireRelationTypes().contains(type.name()) ) {
                 return;
             }
         }

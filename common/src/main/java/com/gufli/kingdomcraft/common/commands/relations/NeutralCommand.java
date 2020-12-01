@@ -94,7 +94,7 @@ public class NeutralCommand extends CommandBase {
 
                 for (PlatformPlayer member : kdc.getOnlinePlayers()) {
                     if (kdc.getUser(member).getKingdom() != target) continue;
-                    kdc.getMessageManager().send(sender, "cmdNeutralRequestTarget", kingdom.getName());
+                    kdc.getMessageManager().send(member, "cmdNeutralRequestTarget", kingdom.getName());
                 }
 
                 return;
@@ -107,7 +107,7 @@ public class NeutralCommand extends CommandBase {
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessageManager().send(sender, "cmdNeutralAccepted", kingdom.getName());
+            kdc.getMessageManager().send(member, "cmdNeutralAccepted", kingdom.getName());
         }
     }
 }

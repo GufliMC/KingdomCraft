@@ -91,7 +91,7 @@ public class AllyCommand extends CommandBase {
 
             for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
                 if ( kdc.getUser(member).getKingdom() != target ) continue;
-                kdc.getMessageManager().send(sender, "cmdAllyRequestTarget", kingdom.getName());
+                kdc.getMessageManager().send(member, "cmdAllyRequestTarget", kingdom.getName());
             }
             return;
         }
@@ -102,7 +102,7 @@ public class AllyCommand extends CommandBase {
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessageManager().send(sender, "cmdAllyAccepted", kingdom.getName());
+            kdc.getMessageManager().send(member, "cmdAllyAccepted", kingdom.getName());
         }
     }
 }

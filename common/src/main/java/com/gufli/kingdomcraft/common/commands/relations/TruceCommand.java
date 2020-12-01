@@ -100,7 +100,7 @@ public class TruceCommand extends CommandBase {
 
             for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
                 if ( kdc.getUser(member).getKingdom() != target ) continue;
-                kdc.getMessageManager().send(sender, "cmdTruceRequestTarget", kingdom.getName());
+                kdc.getMessageManager().send(member, "cmdTruceRequestTarget", kingdom.getName());
             }
             return;
         }
@@ -111,7 +111,7 @@ public class TruceCommand extends CommandBase {
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessageManager().send(sender, "cmdTruceAccepted", kingdom.getName());
+            kdc.getMessageManager().send(member, "cmdTruceAccepted", kingdom.getName());
         }
     }
 }
