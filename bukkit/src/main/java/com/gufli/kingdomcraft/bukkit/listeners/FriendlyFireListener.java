@@ -84,6 +84,10 @@ public class FriendlyFireListener implements Listener {
         plugin.getKdc().getEventDispatcher().dispatchPlayerAttack(event);
 
         if ( event.getResult() == PlayerAttackPlayerEvent.Result.DENY ) {
+            if ( damager instanceof Projectile ) {
+                damager.remove();
+            }
+
             e.setCancelled(true);
             return;
         }
