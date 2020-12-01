@@ -10,7 +10,7 @@ buildscript {
 
 defaultTasks 'licenseFormat', 'build'
 
-group = 'com.guflan.kingdomcraft'
+group = 'com.gufli.kingdomcraft'
 version = '6.0'
 
 subprojects {

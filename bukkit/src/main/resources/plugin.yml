@@ -3,7 +3,7 @@ author: 'Joris Guffens'
 version: ${pluginVersion}
 description: 'The Ultimate Kingdom Plugin'
 softdepend: [Vault, WorldEdit, WorldGuard]
-main: com.guflan.kingdomcraft.bukkit.KingdomCraftBukkitPlugin
+main: com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin
 commands:
     kingdomcraft:
       aliases: [k, kd, kdc, kingdoms, kingdom]
