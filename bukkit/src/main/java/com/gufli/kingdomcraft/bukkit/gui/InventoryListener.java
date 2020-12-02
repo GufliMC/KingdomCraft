@@ -47,15 +47,29 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
+        if ( !(e.getPlayer() instanceof Player) ) {
+            return;
+        }
+
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
+        if ( player == null ) {
+            return;
+        }
+
         handleClose(player);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if ( !(e.getWhoClicked() instanceof Player) ) return;
+        if ( !(e.getWhoClicked() instanceof Player) ) {
+            return;
+        }
 
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getWhoClicked().getUniqueId());
+        if ( player == null ) {
+            return;
+        }
+
         Inventory<?, ?> inv = player.getInventory();
 
         if ( inv == null || inv.getHandle() == null ) {
