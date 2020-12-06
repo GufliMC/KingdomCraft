@@ -81,27 +81,12 @@ public class RanksCloneCommand extends CommandBase {
             return;
         }
 
-        Rank clone = to.getRank(rank.getName());
-        if ( clone == null ) {
-            clone = to.createRank(rank.getName());
-        }
-
-        clone.setPrefix(rank.getPrefix());
-        clone.setSuffix(rank.getSuffix());
-        clone.setDisplay(rank.getDisplay());
-        clone.setMaxMembers(rank.getMaxMembers());
-        clone.setLevel(rank.getLevel());
-
-        for (RankPermissionGroup rpg : rank.getPermissionGroups() ) {
-            if ( clone.getPermissionGroup(rpg.getName()) != null ) {
-                continue;
-            }
-            clone.createPermissionGroup(rpg.getName());
-        }
+        Rank clone = rank.clone(to, true);
 
         List<Model> models = new ArrayList<>();
         models.add(clone);
         models.addAll(rank.getPermissionGroups());
+        models.addAll(rank.getAttributes());
         kdc.saveAsync(models);
 
         kdc.getMessageManager().send(sender, "cmdRanksClone", rank.getName(), from.getName(), to.getName());

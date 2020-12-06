@@ -17,10 +17,7 @@
 
 package com.gufli.kingdomcraft.common.ebean.beans;
 
-import com.gufli.kingdomcraft.api.domain.Kingdom;
-import com.gufli.kingdomcraft.api.domain.Rank;
-import com.gufli.kingdomcraft.api.domain.RankAttribute;
-import com.gufli.kingdomcraft.api.domain.RankPermissionGroup;
+import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.annotation.*;
@@ -182,6 +179,11 @@ public class BRank extends BaseModel implements Rank {
     }
 
     @Override
+    public List<RankAttribute> getAttributes() {
+        return new ArrayList<>(attributes);
+    }
+
+    @Override
     public List<RankPermissionGroup> getPermissionGroups() {
         return new ArrayList<>(permissionGroups);
     }
@@ -211,5 +213,36 @@ public class BRank extends BaseModel implements Rank {
     @Override
     public List<String> getMembers() {
         return new QBUser().rank.id.eq(this.id).select("name").findSingleAttributeList();
+    }
+
+    @Override
+    public Rank clone(Kingdom kingdom, boolean withAttributes) {
+        Rank clone = kingdom.getRank(this.name);
+        if ( clone == null ) {
+            clone = kingdom.createRank(this.name);
+        }
+
+        clone.setPrefix(this.prefix);
+        clone.setSuffix(this.suffix);
+        clone.setDisplay(this.display);
+        clone.setMaxMembers(this.maxMembers);
+        clone.setLevel(this.level);
+
+        for (RankPermissionGroup rpg : this.permissionGroups ) {
+            if ( clone.getPermissionGroup(rpg.getName()) != null ) {
+                continue;
+            }
+            clone.createPermissionGroup(rpg.getName());
+        }
+
+        if ( withAttributes ) {
+            for (RankAttribute attr : this.attributes ) {
+                if ( clone.getAttribute(attr.getName()) != null ) {
+                    continue;
+                }
+                clone.createAttribute(attr.getName()).setValue(attr.getValue());
+            }
+        }
+        return clone;
     }
 }

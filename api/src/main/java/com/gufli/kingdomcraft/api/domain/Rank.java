@@ -53,6 +53,8 @@ public interface Rank extends Model, AttributeHolder {
 
     RankAttribute createAttribute(String name);
 
+    List<RankAttribute> getAttributes();
+
     List<RankPermissionGroup> getPermissionGroups();
 
     RankPermissionGroup getPermissionGroup(String name);
@@ -62,4 +64,6 @@ public interface Rank extends Model, AttributeHolder {
     int getMemberCount();
 
     List<String> getMembers();
+
+    Rank clone(Kingdom kingdom, boolean withAttributes);
 }
