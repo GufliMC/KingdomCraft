@@ -200,7 +200,7 @@ public class CommandDispatcher {
         if ( expectedArgs <= 0 ) {
             return args;
         }
-        if ( args.length <= expectedArgs ) {
+        if ( args.length < expectedArgs ) {
             return args;
         }
 
