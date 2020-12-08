@@ -45,4 +45,9 @@ public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.i
         handle.setItem(slot, item.getHandle());
     }
 
+    @Override
+    public void removeItem(int slot) {
+        super.removeItem(slot);
+        handle.setItem(slot, null);
+    }
 }

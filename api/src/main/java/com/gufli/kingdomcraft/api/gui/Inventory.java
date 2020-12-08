@@ -75,4 +75,8 @@ public class Inventory<T extends InventoryItem<?>, U> {
         items.put(slot, item);
     }
 
+    public void removeItem(int slot) {
+        items.remove(slot);
+    }
+
 }
