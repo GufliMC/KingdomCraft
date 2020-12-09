@@ -23,6 +23,7 @@ import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ChatDispatcher {
@@ -41,9 +42,11 @@ public class ChatDispatcher {
                 .sorted(Comparator.comparingInt(ch -> ch.getPrefix() == null ? 0 : -ch.getPrefix().length()))
                 .collect(Collectors.toList());
 
+        String strippedMessage = kdc.getPlugin().decolorify(message);
+
         ChatChannel channel = null;
         for ( ChatChannel ch : channels ) {
-            if ( ch.getPrefix() != null && !message.startsWith(ch.getPrefix()) ) {
+            if ( ch.getPrefix() != null && !strippedMessage.startsWith(ch.getPrefix()) ) {
                 continue;
             }
             channel = ch;
@@ -62,7 +65,7 @@ public class ChatDispatcher {
                 kdc.getMessageManager().send(player, "chatChannelDisabled", channel.getName());
             }
             if ( channel.getPrefix() != null ) {
-                message = message.substring(channel.getPrefix().length()).trim();
+                message = message.replaceFirst(Pattern.quote(channel.getPrefix()), "");
             }
         }
 
