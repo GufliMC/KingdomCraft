@@ -65,13 +65,13 @@ public class JoinCommand extends CommandBase {
             }
         }
 
-        if ( kingdom.getMaxMembers() > 0 && kingdom.getMaxMembers() >= kingdom.getMemberCount() ) {
+        if ( kingdom.getMaxMembers() > 0 && kingdom.getMaxMembers() <= kingdom.getMemberCount() ) {
             kdc.getMessageManager().send(sender, "cmdJoinFull", kingdom.getName());
             return;
         }
 
         if ( kingdom.getDefaultRank() != null && kingdom.getDefaultRank().getMaxMembers() > 0
-                && kingdom.getDefaultRank().getMaxMembers() >= kingdom.getDefaultRank().getMemberCount() ) {
+                && kingdom.getDefaultRank().getMaxMembers() <= kingdom.getDefaultRank().getMemberCount() ) {
             kdc.getMessageManager().send(sender, "cmdJoinFull", kingdom.getName());
             return;
         }
