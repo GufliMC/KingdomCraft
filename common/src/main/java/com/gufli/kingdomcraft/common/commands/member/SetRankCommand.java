@@ -123,7 +123,7 @@ public class SetRankCommand extends CommandBase {
                 }
 
                 if ( !sender.hasPermission("kingdom.setrank.other") && rank.getMaxMembers() > 0
-                        && rank.getMaxMembers() >= rank.getMemberCount() ) {
+                        && rank.getMaxMembers() <= rank.getMemberCount() ) {
                     kdc.getMessageManager().send(sender, "cmdSetRankFull", rank.getName());
                     return;
                 }
