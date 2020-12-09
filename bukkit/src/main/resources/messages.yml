@@ -203,8 +203,9 @@ cmdSetRankLowLevelTarget: '&cYour rank level is lower than the target rank!'
 cmdSetRankLowLevelCurrent: '&cYour rank level is lower than the current rank of &4{0}&c!'
 cmdSetRankNotExist: '&aThe rank &2{0} &adoes not exist!'
 cmdSetRankAlready: '&c{0} &4already has rank &4{1}&c!'
-cmdSetRankSenderChange: '&aYou changed the rank of &2{0} &ato &2{1}&a!'
-cmdSetRankTargetChange: '&aYour rank has been changed to &2{0}&a!'
+cmdSetRankSender: '&aYou changed the rank of &2{0} &ato &2{1}&a!'
+cmdSetRankTarget: '&aYour rank has been changed to &2{0}&a!'
+cmdSetRankFull: '&cThat rank &4{0} &cis full!'
 
 # /k setkingdom
 cmdSetKingdomAlready: '&c{0} &4is already in kingdom &4{1}&c!'

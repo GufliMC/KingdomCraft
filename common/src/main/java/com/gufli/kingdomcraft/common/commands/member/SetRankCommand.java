@@ -136,11 +136,11 @@ public class SetRankCommand extends CommandBase {
                 if ( targetPlayer != null ) {
                     kdc.getPlugin().getScheduler().executeSync(() ->
                             kdc.getEventDispatcher().dispatchRankChange(targetPlayer, oldRank));
-                    kdc.getMessageManager().send(targetPlayer, "cmdSetRankTargetChange", rank.getName());
+                    kdc.getMessageManager().send(targetPlayer, "cmdSetRankTarget", rank.getName());
                 }
 
-                kdc.getMessageManager().send(sender, "cmdSetRankSenderChange", target.getName(), rank.getName());
-            } catch (InterruptedException | ExecutionException e) {
+                kdc.getMessageManager().send(sender, "cmdSetRankSender", target.getName(), rank.getName());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
