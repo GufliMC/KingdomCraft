@@ -17,7 +17,11 @@
 
 package com.gufli.kingdomcraft.common.ebean.beans;
 
+import com.gufli.kingdomcraft.api.KingdomCraftProvider;
 import com.gufli.kingdomcraft.api.domain.*;
+import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import com.gufli.kingdomcraft.common.event.EventDispatcher;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.*;
 
@@ -115,20 +119,42 @@ public class BUser extends BaseModel implements User {
             this.rank.memberCount--;
         }
 
+        Kingdom oldKingdom = this.kingdom;
+
         if ( kingdom == null ) {
             this.kingdom = null;
             this.rank = null;
+            dispatchKingdomLeave(oldKingdom);
             return;
         }
 
         this.kingdom = (BKingdom) kingdom;
         this.kingdom.memberCount++;
 
-        if ( kingdom.getDefaultRank() != null ) {
+        if (kingdom.getDefaultRank() != null) {
             this.rank = (BRank) kingdom.getDefaultRank();
             this.rank.memberCount++;
         } else {
             this.rank = null;
+        }
+
+        dispatchKingdomLeave(oldKingdom);
+        dispatchKingdomJoin();
+    }
+
+    private void dispatchKingdomLeave(Kingdom oldKingdom) {
+        KingdomCraftImpl kdc = ((KingdomCraftImpl) KingdomCraftProvider.get());
+        PlatformPlayer player = kdc.getPlayer(this);
+        if ( player != null ) {
+            kdc.getEventDispatcher().dispatchKingdomLeave(player, oldKingdom);
+        }
+    }
+
+    private void dispatchKingdomJoin() {
+        KingdomCraftImpl kdc = ((KingdomCraftImpl) KingdomCraftProvider.get());
+        PlatformPlayer player = kdc.getPlayer(this);
+        if ( player != null ) {
+            kdc.getEventDispatcher().dispatchKingdomJoin(player);
         }
     }
 
@@ -146,13 +172,24 @@ public class BUser extends BaseModel implements User {
             this.rank.memberCount--;
         }
 
+        Rank oldRank = this.rank;
+
         if ( rank == null ) {
             this.rank = null;
-            return;
+        } else {
+            this.rank = (BRank) rank;
+            this.rank.memberCount++;
         }
 
-        this.rank = (BRank) rank;
-        this.rank.memberCount++;
+        dispatchRankChange(oldRank);
+    }
+
+    private void dispatchRankChange(Rank oldRank) {
+        KingdomCraftImpl kdc = ((KingdomCraftImpl) KingdomCraftProvider.get());
+        PlatformPlayer player = kdc.getPlayer(this);
+        if ( player != null ) {
+            kdc.getEventDispatcher().dispatchRankChange(player, oldRank);
+        }
     }
 
     @Override

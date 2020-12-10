@@ -83,8 +83,6 @@ public class JoinCommand extends CommandBase {
             return null;
         });
 
-        kdc.getEventDispatcher().dispatchKingdomJoin((PlatformPlayer) sender);
-
         kdc.getMessageManager().send(sender, "cmdJoin", kingdom.getName());
 
         for ( PlatformPlayer p : kdc.getOnlinePlayers() ) {

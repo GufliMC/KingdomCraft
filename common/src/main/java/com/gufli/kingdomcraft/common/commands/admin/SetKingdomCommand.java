@@ -69,17 +69,11 @@ public class SetKingdomCommand extends CommandBase {
                     return;
                 }
 
-                Kingdom oldKingdom = target.getKingdom();
                 target.setKingdom(kingdom);
-
                 kdc.saveAsync(target);
 
                 PlatformPlayer tplayer = kdc.getPlayer(target);
                 if ( tplayer != null ) {
-                    if ( oldKingdom != null ) {
-                        kdc.getEventDispatcher().dispatchKingdomLeave(tplayer, oldKingdom);
-                    }
-                    kdc.getEventDispatcher().dispatchKingdomJoin(tplayer);
                     kdc.getMessageManager().send(tplayer, "cmdSetKingdomTarget", kingdom.getName());
                 }
 

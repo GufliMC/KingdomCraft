@@ -44,8 +44,6 @@ public class LeaveCommand extends CommandBase {
         user.setKingdom(null);
         kdc.saveAsync(user);
 
-        kdc.getEventDispatcher().dispatchKingdomLeave((PlatformPlayer) sender, oldKingdom);
-
         kdc.getMessageManager().send(sender, "cmdLeave", oldKingdom.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
