@@ -60,7 +60,7 @@ public class SetKingdomCommand extends CommandBase {
 
                 Kingdom kingdom = kdc.getKingdom(args[1]);
                 if ( kingdom == null ) {
-                    kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+                    kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[1]);
                     return;
                 }
 

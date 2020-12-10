@@ -39,15 +39,15 @@ settings:
 
     # commands to be executed when an event happens
     # prefix with CONSOLE to execute this in the console
-    # e.g. CONSOLE money give {player} 1000
+    # e.g. CONSOLE money give {username} 1000
     events:
         kingdom_join:
-        - CONSOLE k tpspawn {player}
-        - CONSOLE clearinv {player}
+        - CONSOLE k tpspawn {username}
+        - CONSOLE clearinv {username}
 
         kingdom_leave:
-        - CONSOLE k tpspawn {player}
-        - CONSOLE clearinv {player}
+        - CONSOLE k tpspawn {username}
+        - CONSOLE clearinv {username}
 
     messages:
         join: '&e{kingdom_prefix}{rank_prefix}{player} &ejoined the server.'

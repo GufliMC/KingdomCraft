@@ -43,7 +43,9 @@ public class KingdomJoinQuitListener implements EventListener {
         if ( plugin.getKdc().getConfig().getOnKingdomJoinCommands().isEmpty() ) {
             return;
         }
-        execute(player, plugin.getKdc().getConfig().getOnKingdomJoinCommands());
+        plugin.getScheduler().sync().execute(() -> {
+            execute(player, plugin.getKdc().getConfig().getOnKingdomJoinCommands());
+        });
     }
 
     @Override
@@ -51,7 +53,9 @@ public class KingdomJoinQuitListener implements EventListener {
         if ( plugin.getKdc().getConfig().getOnKingdomLeaveCommands().isEmpty() ) {
             return;
         }
-        execute(player, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
+        plugin.getScheduler().sync().execute(() -> {
+            execute(player, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
+        });
     }
 
     private void execute(PlatformPlayer player, List<String> commands) {
