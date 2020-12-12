@@ -69,7 +69,7 @@ public class FriendlyFireListener implements Listener {
         if ( damager instanceof Player) {
             d = plugin.getKdc().getPlayer(damager.getUniqueId());
         } else if ( damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Player) {
-            d = plugin.getKdc().getPlayer(((PlatformPlayer) ((Projectile) damager).getShooter()).getUniqueId());
+            d = plugin.getKdc().getPlayer(((Player) ((Projectile) damager).getShooter()).getUniqueId());
         }
         else {
             return;
