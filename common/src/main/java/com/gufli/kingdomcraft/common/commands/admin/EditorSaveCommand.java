@@ -25,6 +25,7 @@ public class EditorSaveCommand extends CommandBase {
 
     public EditorSaveCommand(KingdomCraftImpl kdc) {
         super(kdc, "editor", 1);
+        setPermissions("kingdom.editor");
     }
 
     @Override
