@@ -161,6 +161,8 @@ public class EditorImpl implements Editor {
                 deserializer.deserialize(kingdom, kingdoms.get(kingdomname));
             }
 
+            kdc.getPlugin().reload();
+
             kdc.getMessageManager().send(sender, "cmdEditorSaved");
         } catch (Exception ex) {
             ex.printStackTrace();
