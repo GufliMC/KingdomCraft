@@ -148,7 +148,6 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// listeners
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ConnectionListener(this), this);
-		pm.registerEvents(new FriendlyFireListener(this), this);
 		pm.registerEvents(new JoinQuitListener(this), this);
 		pm.registerEvents(new RespawnListener(this), this);
 		pm.registerEvents(new DeathListener(this), this);
@@ -166,6 +165,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// kingdom events
 		new KingdomJoinQuitListener(this);
+		new FriendlyFireListener(this);
 
 		// placeholders
 		new PlaceholderReplacer(this);

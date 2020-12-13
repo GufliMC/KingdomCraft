@@ -339,9 +339,9 @@ public class KingdomCraftImpl implements KingdomCraft {
         return false;
     }
 
-    public boolean onJoin(PlatformPlayer player) {
+    public boolean onLogin(PlatformPlayer player) {
         if ( onLoad(player) ) {
-            eventDispatcher.dispatchJoin(player);
+            eventDispatcher.dispatchLogin(player);
             return true;
         }
         return false;

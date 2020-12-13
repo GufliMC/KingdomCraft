@@ -17,6 +17,8 @@
 
 package com.gufli.kingdomcraft.api.entity;
 
+import com.gufli.kingdomcraft.api.KingdomCraftProvider;
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.gui.Inventory;
 
 import java.util.UUID;
@@ -32,6 +34,10 @@ public interface PlatformPlayer extends PlatformSender {
     void teleport(PlatformLocation location);
 
     PlatformLocation getLocation();
+
+    default User getUser() {
+        return KingdomCraftProvider.get().getUser(this);
+    }
 
     // gui
 

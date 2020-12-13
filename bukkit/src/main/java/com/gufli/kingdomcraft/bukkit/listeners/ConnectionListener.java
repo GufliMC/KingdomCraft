@@ -18,16 +18,19 @@
 package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class ConnectionListener implements Listener {
+public class ConnectionListener implements Listener, EventListener {
 
     private final KingdomCraftBukkitPlugin plugin;
 
@@ -41,7 +44,7 @@ public class ConnectionListener implements Listener {
             return;
         }
         plugin.getScheduler().executeAsync(() -> {
-            if ( !plugin.getKdc().onJoin(new BukkitPlayer(e.getPlayer())) ) {
+            if ( !plugin.getKdc().onLogin(new BukkitPlayer(e.getPlayer())) ) {
                 e.getPlayer().kickPlayer(plugin.getKdc().getMessageManager().getPrefix() +
                         ChatColor.RED + "An error occured! Could not load your user data.");
             }
@@ -54,4 +57,22 @@ public class ConnectionListener implements Listener {
         plugin.getKdc().onQuit(player);
     }
 
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
+        if ( player == null ) {
+            // player is still loading
+            return;
+        }
+        plugin.getKdc().getEventDispatcher().dispatchJoin(player);
+    }
+
+    @Override
+    public void onLogin(PlatformPlayer player) {
+        if ( Bukkit.getPlayer(player.getUniqueId()) == null ) {
+            // player is still joining
+            return;
+        }
+        plugin.getKdc().getEventDispatcher().dispatchJoin(player);
+    }
 }
