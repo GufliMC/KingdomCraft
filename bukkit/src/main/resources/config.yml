@@ -58,6 +58,6 @@ settings:
 # DO NOT CHANGE THIS SECTION IF YOU DO NOT KNOW WHAT YOU ARE DOING!
 database:
     driver: 'org.h2.Driver'
-    url: 'jdbc:h2:file:./plugins/KingdomCraft/database.h2'
+    url: 'jdbc:h2:file:./plugins/KingdomCraft/database.h2;AUTO_SERVER=TRUE'
     username: 'kingdomcraft'
     password: ''
