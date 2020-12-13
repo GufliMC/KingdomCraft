@@ -28,5 +28,5 @@ jobs:
       uses: actions/upload-artifact@v2.2.0
       with:
         name: KingdomCraft
-        path: bukkit/build/libs/KingdomCraft-*.jar
+        path: bukkit/build/libs/KingdomCraftStarter-*.jar
         if-no-files-found: 'error'
