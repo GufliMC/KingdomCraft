@@ -29,7 +29,7 @@ processResources {
 }
 
 shadowJar {
-    archiveBaseName.set("KingdomCraft")
+    archiveBaseName.set("KingdomCraftStarter")
     archiveVersion.set("${project.ext.fullVersion}")
 
     dependencies {
