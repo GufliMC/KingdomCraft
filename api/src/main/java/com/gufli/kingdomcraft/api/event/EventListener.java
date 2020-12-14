@@ -20,6 +20,7 @@ package com.gufli.kingdomcraft.api.event;
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 
 public interface EventListener {
 
@@ -39,9 +40,7 @@ public interface EventListener {
 
     default void onRankChange(PlatformPlayer player, Rank oldRank) {}
 
-    default EventResult onPlayerAttack(PlatformPlayer player, PlatformPlayer attacker, EventResult result) {
-        return result;
-    }
+    default void onPlayerAttack(PlayerAttackPlayerEvent event) {}
 
     default void onReload() {}
 }
