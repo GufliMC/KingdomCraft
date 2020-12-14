@@ -76,7 +76,7 @@ public class PermissionManager {
             Rank rank = user.getRank();
             for ( PermissionGroup group : this.getGroups() ) {
                 RankPermissionGroup rpg = rank.getPermissionGroup(group.getName());
-                if ( rpg == null && group.getRanks().isEmpty() && group.getRanks().stream()
+                if ( rpg == null || group.getRanks().isEmpty() || group.getRanks().stream()
                         .noneMatch(r -> r.equalsIgnoreCase(rank.getName())) ) {
                     continue;
                 }
