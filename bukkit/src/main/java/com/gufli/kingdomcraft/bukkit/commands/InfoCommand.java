@@ -48,10 +48,18 @@ import java.util.stream.Collectors;
 
 public class InfoCommand extends CommandBase {
 
+    private SimpleDateFormat dateFormat;
+
     public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", -1, true);
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdInfoExplanation"));
         setPermissions("kingdom.info", "kingdom.info.other");
+
+        try {
+            dateFormat = new SimpleDateFormat(kdc.getMessageManager().getMessage("cmdInfoDateFormat"));
+        } catch (IllegalArgumentException ex) {
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        }
     }
 
     @Override
@@ -124,10 +132,10 @@ public class InfoCommand extends CommandBase {
         if ( kdc.getPlayer(user) != null ) {
             userLore.add(getText("LastSeen", getText("LastSeenNow")));
         } else {
-            userLore.add(getText("LastSeen", format(user.getUpdatedAt())));
+            userLore.add(getText("LastSeen", dateFormat.format(user.getUpdatedAt())));
         }
 
-        userLore.add(getText("FirstSeen", format(user.getCreatedAt())));
+        userLore.add(getText("FirstSeen", dateFormat.format(user.getCreatedAt())));
 
         skullMeta.setLore(userLore);
         playerItem.setItemMeta(skullMeta);
@@ -200,7 +208,7 @@ public class InfoCommand extends CommandBase {
         }
 
         kingdomLore.add("");
-        kingdomLore.add(getText("CreatedAt", format(kingdom.getCreatedAt())));
+        kingdomLore.add(getText("CreatedAt", dateFormat.format(kingdom.getCreatedAt())));
 
         bannerMeta.setLore(kingdomLore);
         kingdomItem.setItemMeta(bannerMeta);
@@ -288,11 +296,6 @@ public class InfoCommand extends CommandBase {
 
         placeItems(inv, 3, rankItems);
         player.openInventory(inv);
-    }
-
-    private String format(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat(kdc.getMessageManager().getMessage("cmdInfoDateFormat"));
-        return format.format(date);
     }
 
     private <T extends InventoryItem<?>> void placeItems(Inventory<T, ?> inv, int row, List<T> items) {
