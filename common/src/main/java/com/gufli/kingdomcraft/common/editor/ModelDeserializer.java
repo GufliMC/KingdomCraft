@@ -113,8 +113,8 @@ public class ModelDeserializer {
             }
         }
 
-        if ( node.has("default_rank") ) {
-            Rank rank = kingdom.getRank(node.get("default_rank").asText());
+        if ( node.has("defaultrank") ) {
+            Rank rank = kingdom.getRank(node.get("defaultrank").asText());
             if ( rank != kingdom.getDefaultRank() ) {
                 kingdom.setDefaultRank(rank);
                 kingdom.save();
