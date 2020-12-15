@@ -25,6 +25,7 @@ import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
+import com.gufli.kingdomcraft.common.permissions.PermissionGroup;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,7 +66,8 @@ public class GroupsListCommand extends CommandBase {
             return;
         }
 
-        kdc.getMessageManager().send(sender, "cmdGroupsList", rank.getName(), rank.getPermissionGroups().stream()
-                .map(RankPermissionGroup::getName).collect(Collectors.joining(", ")));
+        kdc.getMessageManager().send(sender, "cmdGroupsList", rank.getName(),
+                kdc.getPermissionManager().getGroups(rank).stream().map(PermissionGroup::getName)
+                        .collect(Collectors.joining(", ")));
     }
 }

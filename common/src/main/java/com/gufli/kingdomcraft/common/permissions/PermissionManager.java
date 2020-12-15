@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PermissionManager {
 
@@ -56,6 +57,20 @@ public class PermissionManager {
         return groups.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    public List<PermissionGroup> getGroups(Rank rank) {
+        return this.getGroups().stream().filter(group -> {
+            RankPermissionGroup rpg = rank.getPermissionGroup(group.getName());
+            return rpg != null || (!group.getRanks().isEmpty() && group.getRanks().stream()
+                    .anyMatch(r -> r.equalsIgnoreCase(rank.getName())));
+        }).collect(Collectors.toList());
+    }
+
+    public List<PermissionGroup> getGroups(Rank rank, String world) {
+        return getGroups(rank).stream().filter(group ->
+                group.getWorlds().isEmpty() || group.getWorlds().stream().anyMatch(w -> w.equalsIgnoreCase(world)))
+                .collect(Collectors.toList());
+    }
+
     public List<PermissionGroup> getGroups() {
         return new ArrayList<>(groups);
     }
@@ -73,19 +88,7 @@ public class PermissionManager {
                 groups.add(defaultGroup);
             }
         } else {
-            Rank rank = user.getRank();
-            for ( PermissionGroup group : this.getGroups() ) {
-                RankPermissionGroup rpg = rank.getPermissionGroup(group.getName());
-                if ( rpg == null || group.getRanks().isEmpty() || group.getRanks().stream()
-                        .noneMatch(r -> r.equalsIgnoreCase(rank.getName())) ) {
-                    continue;
-                }
-                if ( !group.getWorlds().isEmpty() && group.getWorlds().stream()
-                        .noneMatch(w -> w.equalsIgnoreCase(player.getLocation().getWorldName())) ) {
-                    continue;
-                }
-                groups.add(group);
-            }
+            groups.addAll(getGroups(user.getRank(), player.getLocation().getWorldName()));
         }
         return groups;
     }
