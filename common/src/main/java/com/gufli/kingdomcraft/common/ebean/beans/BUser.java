@@ -138,7 +138,9 @@ public class BUser extends BaseModel implements User {
             this.rank = null;
         }
 
-        dispatchKingdomLeave(oldKingdom);
+        if ( oldKingdom != null ) {
+            dispatchKingdomLeave(oldKingdom);
+        }
         dispatchKingdomJoin();
     }
 
