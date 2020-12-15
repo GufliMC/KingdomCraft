@@ -80,6 +80,11 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
+        // no friendly fire check when attacking yourself
+        if ( p == d ) {
+            return;
+        }
+
         PlayerAttackPlayerEvent event = new PlayerAttackPlayerEvent(p, d);
         plugin.getKdc().getEventDispatcher().dispatchPlayerAttack(event);
 

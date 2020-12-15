@@ -19,7 +19,9 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -39,14 +41,20 @@ public class DeathListener implements Listener {
             return;
         }
 
-        if ( event.getEntity().getKiller() != null ) {
+        if ( event.getEntity().getKiller() != null && event.getEntity().getKiller() != event.getEntity() ) {
             if ( plugin.getKdc().getConfig().getOnKillMessage() == null
                     || plugin.getKdc().getConfig().getOnKillMessage().equals("") ) {
                 return;
             }
 
+            event.setDeathMessage(null);
+
             PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
             PlatformPlayer k = plugin.getKdc().getPlayer(event.getEntity().getKiller().getUniqueId());
+
+            if ( p == null || k == null ) {
+                return;
+            }
 
             String msg = plugin.getKdc().getConfig().getOnKillMessage();
             msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
@@ -61,11 +69,31 @@ public class DeathListener implements Listener {
             return;
         }
 
+        event.setDeathMessage(null);
+
         PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
+        if ( p == null ) {
+            return;
+        }
 
         String msg = plugin.getKdc().getConfig().getOnDeathMessage();
         msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
         msg = plugin.getKdc().getMessageManager().colorify(msg);
         event.setDeathMessage(msg);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDeath2(PlayerDeathEvent event) {
+        if ( event.getDeathMessage() == null || event.getDeathMessage().equals("") ) {
+            return;
+        }
+
+        if ( (plugin.getKdc().getConfig().getOnDeathMessage() != null
+                && !plugin.getKdc().getConfig().getOnDeathMessage().equals(""))
+                || (plugin.getKdc().getConfig().getOnKillMessage() != null
+                && !plugin.getKdc().getConfig().getOnKillMessage().equals(""))) {
+            Bukkit.broadcastMessage(event.getDeathMessage());
+            event.setDeathMessage(null);
+        }
     }
 }
