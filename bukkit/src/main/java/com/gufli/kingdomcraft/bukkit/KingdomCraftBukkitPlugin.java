@@ -147,7 +147,6 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new ConnectionListener(this), this);
 		pm.registerEvents(new FriendlyFireListener(this), this);
 		pm.registerEvents(new JoinQuitListener(this), this);
 		pm.registerEvents(new RespawnListener(this), this);
@@ -155,6 +154,10 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new InventoryListener(this), this);
 		pm.registerEvents(new PermissionsListener(this), this);
 		pm.registerEvents(new MoveListener(this), this);
+
+		ConnectionListener cl = new ConnectionListener(this);
+		pm.registerEvents(cl, this);
+		kdc.getEventManager().addListener(cl);
 
 		// chat
 		if ( chatConfig.contains("enabled") && chatConfig.getBoolean("enabled") ) {

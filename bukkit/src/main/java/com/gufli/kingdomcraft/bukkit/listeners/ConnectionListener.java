@@ -30,6 +30,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.concurrent.TimeUnit;
+
 public class ConnectionListener implements Listener, EventListener {
 
     private final KingdomCraftBukkitPlugin plugin;
@@ -61,18 +63,26 @@ public class ConnectionListener implements Listener, EventListener {
     public void onJoin(PlayerJoinEvent e) {
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
         if ( player == null ) {
-            // player is still loading
+            return; // player is still loading
+        }
+        if ( player.has("LOADED") ) {
             return;
         }
+        player.set("LOADED", true);
         plugin.getKdc().getEventDispatcher().dispatchJoin(player);
     }
 
     @Override
     public void onLogin(PlatformPlayer player) {
-        if ( Bukkit.getPlayer(player.getUniqueId()) == null ) {
-            // player is still joining
-            return;
-        }
-        plugin.getKdc().getEventDispatcher().dispatchJoin(player);
+        plugin.getScheduler().sync().execute(() -> {
+            if ( Bukkit.getPlayer(player.getUniqueId()) == null ) {
+                return; // player is still joining
+            }
+            if ( player.has("LOADED") ) {
+                return;
+            }
+            player.set("LOADED", true);
+            plugin.getKdc().getEventDispatcher().dispatchJoin(player);
+        });
     }
 }
