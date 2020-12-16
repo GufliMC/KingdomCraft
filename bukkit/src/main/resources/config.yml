@@ -32,7 +32,7 @@ settings:
     - truce
 
     # Respawn at the kingdom spawn when you die
-    respawn_at_kingdom: true
+    respawn-at-kingdom: true
 
     # Delay for teleport commands like /k spawn
     teleport-delay: 5
@@ -41,13 +41,16 @@ settings:
     # prefix with CONSOLE to execute this in the console
     # e.g. CONSOLE money give {username} 1000
     events:
-        kingdom_join:
+        kingdom-join:
         - CONSOLE k tpspawn {username}
         - CONSOLE clearinv {username}
 
-        kingdom_leave:
+        kingdom-leave:
         - CONSOLE k tpspawn {username}
         - CONSOLE clearinv {username}
+
+    # Show the custom join and leave messages (defined below) only for your own kingdom members
+    join-and-leave-kingdom-only: false
 
     messages:
         join: '&e{kingdom_prefix}{rank_prefix}{player} &ejoined the server.'

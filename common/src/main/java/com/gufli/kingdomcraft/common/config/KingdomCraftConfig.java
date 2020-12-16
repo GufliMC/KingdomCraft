@@ -60,11 +60,21 @@ public class KingdomCraftConfig {
     }
 
     public List<String> getOnKingdomJoinCommands() {
-        return config.contains("events.kingdom_join") ? config.getStringList("events.kingdom_join") : new ArrayList<>();
+        if ( config.contains("events.kingdom-join") ) {
+            return config.getStringList("events.kingdom-join");
+        } else if ( config.contains("events.kingdom_join") ) {
+            return config.getStringList("events.kingdom_join");
+        }
+        return new ArrayList<>();
     }
 
     public List<String> getOnKingdomLeaveCommands() {
-        return config.contains("events.kingdom_leave") ? config.getStringList("events.kingdom_leave") : new ArrayList<>();
+        if ( config.contains("events.kingdom-leave") ) {
+            return config.getStringList("events.kingdom-leave");
+        } else if ( config.contains("events.kingdom_leave") ) {
+            return config.getStringList("events.kingdom_leave");
+        }
+        return new ArrayList<>();
     }
 
     public boolean respawnAtKingdom() {
@@ -101,5 +111,9 @@ public class KingdomCraftConfig {
 
     public boolean isChatEnabledInDisabledWorlds() {
         return config.contains("enable-chat-in-disabled-worlds") && config.getBoolean("enable-chat-in-disabled-worlds");
+    }
+
+    public boolean showJoinAndLeaveKingdomOnly() {
+        return config.contains("join-and-leave-kingdom-only") && config.getBoolean("join-and-leave-kingdom-only");
     }
 }

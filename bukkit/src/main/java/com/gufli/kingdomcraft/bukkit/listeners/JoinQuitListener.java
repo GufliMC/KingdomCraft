@@ -17,9 +17,11 @@
 
 package com.gufli.kingdomcraft.bukkit.listeners;
 
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -57,26 +59,43 @@ public class JoinQuitListener implements Listener, EventListener {
     @Override
     public void onJoin(PlatformPlayer player) {
         String msg = plugin.getKdc().getConfig().getOnJoinMessage();
-        if ( msg != null ) {
-            msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
-            msg = plugin.getKdc().getMessageManager().colorify(msg);
-
-            for (PlatformPlayer p : plugin.getKdc().getOnlinePlayers()) {
-                p.sendMessage(msg);
-            }
+        if ( msg == null || msg.equals("") ) {
+            return;
         }
+
+        send(player, msg);
     }
 
     @Override
     public void onQuit(PlatformPlayer player) {
         String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
-        if ( msg != null ) {
-            msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
-            msg = plugin.getKdc().getMessageManager().colorify(msg);
+        if ( msg == null || msg.equals("")) {
+            return;
+        }
 
-            for (PlatformPlayer p : plugin.getKdc().getOnlinePlayers()) {
-                p.sendMessage(msg);
+        send(player, msg);
+    }
+
+    private void send(PlatformPlayer player, String msg) {
+        if ( msg == null || msg.equals("")) {
+            return;
+        }
+
+        msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
+        msg = plugin.getKdc().getMessageManager().colorify(msg);
+
+        if ( plugin.getKdc().getConfig().showJoinAndLeaveKingdomOnly() ) {
+            User user = player.getUser();
+            if ( user.getKingdom() == null ) {
+                return;
             }
+
+            String finalMsg = msg;
+            plugin.getKdc().getOnlinePlayers().stream()
+                    .filter(p -> p.getUser().getKingdom() == user.getKingdom())
+                    .forEach(p -> p.sendMessage(finalMsg));
+        } else {
+            Bukkit.broadcastMessage(msg);
         }
     }
 }
