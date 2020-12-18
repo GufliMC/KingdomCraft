@@ -21,6 +21,7 @@ import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
+import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 
 public interface EventListener {
 
@@ -43,4 +44,6 @@ public interface EventListener {
     default void onPlayerAttack(PlayerAttackPlayerEvent event) {}
 
     default void onReload() {}
+
+    default void onPlayerChat(PlayerChatEvent event) {}
 }

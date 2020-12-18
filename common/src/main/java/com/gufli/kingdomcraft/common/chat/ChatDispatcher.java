@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.common.chat;
 
 import com.gufli.kingdomcraft.api.chat.ChatChannel;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 
 import java.util.Comparator;
@@ -69,7 +70,12 @@ public class ChatDispatcher {
             }
         }
 
-        send(player, channel, message);
+        PlayerChatEvent event = new PlayerChatEvent(player, channel, message);
+        if ( event.isCancelled() ) {
+            return;
+        }
+
+        send(player, channel, event.getMessage());
     }
 
     public void send(PlatformPlayer player, ChatChannel channel, String message) {

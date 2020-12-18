@@ -22,6 +22,7 @@ import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
+import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 
 import java.util.function.Consumer;
 
@@ -81,6 +82,10 @@ public class EventDispatcher {
 
     public void dispatchReload() {
         execute(EventListener::onReload);
+    }
+
+    public void dispatchPlayerChat(PlayerChatEvent event) {
+        execute(l -> l.onPlayerChat(event));
     }
 
 }
