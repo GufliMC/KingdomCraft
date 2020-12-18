@@ -49,7 +49,7 @@ public class TpSpawnCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         PlatformPlayer target = kdc.getPlayer(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessageManager().send(sender, "cmdErrorNotOnline", args[0]);
             return;
         }
 
