@@ -325,10 +325,10 @@ public class InfoCommand extends CommandBase {
     }
 
     private String getText(String key) {
-        return kdc.getMessageManager().getMessage("cmdInfo" + key);
+        return kdc.getMessageManager().getMessage("cmdInfo" + key, true);
     }
 
     private String getText(String key, String... placeholders) {
-        return kdc.getMessageManager().getMessage("cmdInfo" + key, placeholders);
+        return kdc.getMessageManager().getMessage("cmdInfo" + key, true, placeholders);
     }
 }
