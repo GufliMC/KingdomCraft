@@ -20,10 +20,14 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class DeathListener implements Listener {
 
@@ -35,28 +39,42 @@ public class DeathListener implements Listener {
 
     // respawn
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
         if ( !plugin.getKdc().getConfig().isWorldEnabled(event.getEntity().getWorld().getName()) ) {
             return;
         }
 
         if ( event.getEntity().getKiller() != null && event.getEntity().getKiller() != event.getEntity() ) {
-            if ( plugin.getKdc().getConfig().getOnKillMessage() == null
-                    || plugin.getKdc().getConfig().getOnKillMessage().equals("") ) {
-                return;
-            }
-
-            event.setDeathMessage(null);
 
             PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
             PlatformPlayer k = plugin.getKdc().getPlayer(event.getEntity().getKiller().getUniqueId());
+
+            String msg = plugin.getKdc().getConfig().getOnKillMessage();
+
+            ItemStack weapon = event.getEntity().getKiller().getItemInHand();
+            if ( weapon != null && weapon.getType() != Material.AIR ) {
+                ItemMeta meta = weapon.getItemMeta();
+                if ( meta.getDisplayName() != null && !meta.getDisplayName().equals("")
+                        && meta.getLore() != null && !meta.getLore().isEmpty() ) {
+                    msg = plugin.getKdc().getConfig().getOnKillWeaponMessage();
+                    msg = msg.replace("{weapon}",
+                            ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
+                }
+            }
+
+            if ( msg == null ) {
+                return;
+            }
+
+            if ( msg.equals("") ) {
+                event.setDeathMessage(null);
+            }
 
             if ( p == null || k == null ) {
                 return;
             }
 
-            String msg = plugin.getKdc().getConfig().getOnKillMessage();
             msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
             msg = plugin.getKdc().getPlaceholderManager().handle(k, msg, "killer_");
             msg = plugin.getKdc().getMessageManager().colorify(msg);
@@ -64,12 +82,15 @@ public class DeathListener implements Listener {
             return;
         }
 
-        if ( plugin.getKdc().getConfig().getOnDeathMessage() == null
-                || plugin.getKdc().getConfig().getOnDeathMessage().equals("") ) {
+        if ( plugin.getKdc().getConfig().getOnDeathMessage() == null ) {
             return;
         }
 
         event.setDeathMessage(null);
+
+        if ( plugin.getKdc().getConfig().getOnDeathMessage().equals("") ) {
+            return;
+        }
 
         PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
         if ( p == null ) {
@@ -88,12 +109,7 @@ public class DeathListener implements Listener {
             return;
         }
 
-        if ( (plugin.getKdc().getConfig().getOnDeathMessage() != null
-                && !plugin.getKdc().getConfig().getOnDeathMessage().equals(""))
-                || (plugin.getKdc().getConfig().getOnKillMessage() != null
-                && !plugin.getKdc().getConfig().getOnKillMessage().equals(""))) {
-            Bukkit.broadcastMessage(event.getDeathMessage());
-            event.setDeathMessage(null);
-        }
+        event.setDeathMessage(null);
+        Bukkit.broadcastMessage(event.getDeathMessage());
     }
 }

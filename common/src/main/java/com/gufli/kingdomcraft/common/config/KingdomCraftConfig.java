@@ -97,6 +97,10 @@ public class KingdomCraftConfig {
         return config.contains("messages.kill") ? config.getString("messages.kill") : null;
     }
 
+    public String getOnKillWeaponMessage() {
+        return config.contains("messages.kill-weapon") ? config.getString("messages.kill-weapon") : null;
+    }
+
     public String getNoKingdomPrefix() {
         return config.contains("nokingdom.prefix") ? config.getString("nokingdom.prefix") : "";
     }
