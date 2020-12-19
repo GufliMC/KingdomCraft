@@ -46,17 +46,20 @@ public class DeathListener implements Listener {
         }
 
         if ( event.getEntity().getKiller() != null && event.getEntity().getKiller() != event.getEntity() ) {
-
             PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
             PlatformPlayer k = plugin.getKdc().getPlayer(event.getEntity().getKiller().getUniqueId());
 
             String msg = plugin.getKdc().getConfig().getOnKillMessage();
 
             ItemStack weapon = event.getEntity().getKiller().getItemInHand();
-            if ( weapon != null && weapon.getType() != Material.AIR ) {
+            if ( weapon != null && weapon.getType() != Material.AIR
+                    && plugin.getKdc().getConfig().getOnKillWeaponMessage() != null
+                    && !plugin.getKdc().getConfig().getOnKillWeaponMessage().equals("") ) {
+
                 ItemMeta meta = weapon.getItemMeta();
                 if ( meta.getDisplayName() != null && !meta.getDisplayName().equals("")
                         && meta.getLore() != null && !meta.getLore().isEmpty() ) {
+
                     msg = plugin.getKdc().getConfig().getOnKillWeaponMessage();
                     msg = msg.replace("{weapon}",
                             ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
@@ -67,11 +70,8 @@ public class DeathListener implements Listener {
                 return;
             }
 
-            if ( msg.equals("") ) {
-                event.setDeathMessage(null);
-            }
-
-            if ( p == null || k == null ) {
+            event.setDeathMessage(null);
+            if ( msg.equals("") || p == null || k == null ) {
                 return;
             }
 
@@ -88,12 +88,8 @@ public class DeathListener implements Listener {
 
         event.setDeathMessage(null);
 
-        if ( plugin.getKdc().getConfig().getOnDeathMessage().equals("") ) {
-            return;
-        }
-
         PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
-        if ( p == null ) {
+        if ( plugin.getKdc().getConfig().getOnDeathMessage().equals("") || p == null ) {
             return;
         }
 
@@ -109,7 +105,7 @@ public class DeathListener implements Listener {
             return;
         }
 
+        plugin.getKdc().getOnlinePlayers().forEach(p -> p.sendMessage(event.getDeathMessage()));
         event.setDeathMessage(null);
-        Bukkit.broadcastMessage(event.getDeathMessage());
     }
 }

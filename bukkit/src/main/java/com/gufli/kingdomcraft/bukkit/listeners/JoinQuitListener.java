@@ -95,7 +95,8 @@ public class JoinQuitListener implements Listener, EventListener {
                     .filter(p -> p.getUser().getKingdom() == user.getKingdom())
                     .forEach(p -> p.sendMessage(finalMsg));
         } else {
-            Bukkit.broadcastMessage(msg);
+            String finalMsg = msg;
+            plugin.getKdc().getOnlinePlayers().forEach(p -> p.sendMessage(finalMsg));
         }
     }
 }
