@@ -34,7 +34,9 @@ public class MoveListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onMove(PlayerMoveEvent event) {
-        if ( event.getFrom().getBlock() == event.getTo().getBlock() ) {
+        if ( event.getFrom().getBlockX() == event.getTo().getBlockX()
+                && event.getFrom().getBlockY() == event.getTo().getBlockY()
+                && event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
             return;
         }
         Teleporter.cancel(plugin.getKdc().getPlayer(event.getPlayer().getUniqueId()));
