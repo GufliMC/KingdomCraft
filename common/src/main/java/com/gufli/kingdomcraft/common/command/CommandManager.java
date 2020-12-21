@@ -111,6 +111,9 @@ public class CommandManager {
         addCommand(new EditorCommand(kdc));
         addCommand(new EditorSaveCommand(kdc));
 
+        addCommand(new PlayerDataPurgeCommand(kdc));
+        addCommand(new PlayerDataClearCommand(kdc));
+
         /* Management */
 
         // kingdoms

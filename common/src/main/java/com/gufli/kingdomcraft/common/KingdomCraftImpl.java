@@ -258,6 +258,14 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     // users
 
+    public void clearUsers() {
+        context.clearUsers();
+    }
+
+    public void purgeUsers() {
+        context.purgeUsers();
+    }
+
     @Override
     public Set<User> getOnlineUsers() {
         return context.getOnlineUsers();

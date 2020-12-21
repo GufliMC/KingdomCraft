@@ -211,6 +211,20 @@ public class StorageContext {
 
     // users
 
+    public void clearUsers() {
+        new QBUser().delete();
+        for ( User user : players.values() ) {
+            user.setKingdom(null);
+            ((BUser) user).insert();
+        }
+    }
+
+    public void purgeUsers() {
+        Date date = new Date();
+        date.setTime(date.getTime() + 14 * 24 * 60 * 60 * 1000);
+        new QBUser().updatedAt.before(date).delete();
+    }
+
     public Set<User> getOnlineUsers() {
         return new HashSet<>(players.values());
     }
