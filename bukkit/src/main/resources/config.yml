@@ -16,10 +16,10 @@ settings:
         suffix: ''
 
     # a list of worlds this plugin is enabled in, remove to allow all worlds
-    worlds:
-    - world
-    - world_nether
-    - world_the_end
+    # worlds:
+    # - world
+    # - world_nether
+    # - world_the_end
 
     # Enable the chat even if the world is not enabled
     enable-chat-in-disabled-worlds: false
