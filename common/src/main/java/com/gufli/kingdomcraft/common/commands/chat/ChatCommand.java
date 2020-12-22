@@ -40,7 +40,9 @@ public class ChatCommand extends CommandBase {
     @Override
     public List<String> autocomplete(PlatformPlayer player, String[] args) {
         if ( args.length == 1 ) {
-            return kdc.getChatManager().getChatChannels().stream().map(ChatChannel::getName).collect(Collectors.toList());
+            return kdc.getChatManager().getChatChannels().stream()
+                    .filter(c -> player.hasPermission("kingdom.chat.other") || kdc.getChatManager().canTalk(player, c))
+                    .map(ChatChannel::getName).collect(Collectors.toList());
         }
         return null;
     }

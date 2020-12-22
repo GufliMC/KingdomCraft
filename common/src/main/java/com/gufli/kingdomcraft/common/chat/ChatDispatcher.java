@@ -71,6 +71,8 @@ public class ChatDispatcher {
         }
 
         PlayerChatEvent event = new PlayerChatEvent(player, channel, message);
+        kdc.getEventDispatcher().dispatchPlayerChat(event);
+
         if ( event.isCancelled() ) {
             return;
         }
