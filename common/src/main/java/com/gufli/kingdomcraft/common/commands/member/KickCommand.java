@@ -86,11 +86,6 @@ public class KickCommand extends CommandBase {
                 target.setKingdom(null);
                 kdc.saveAsync(target);
 
-                PlatformPlayer tplayer = kdc.getPlayer(target);
-                if ( tplayer != null ) {
-                    kdc.getEventDispatcher().dispatchKingdomLeave(tplayer, kingdom);
-                }
-
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
                     kdc.getMessageManager().send(targetPlayer, "cmdKickTarget", kingdom.getName());
