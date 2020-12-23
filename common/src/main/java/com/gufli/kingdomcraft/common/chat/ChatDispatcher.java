@@ -21,6 +21,7 @@ import com.gufli.kingdomcraft.api.chat.ChatChannel;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -82,6 +83,7 @@ public class ChatDispatcher {
 
     public void send(PlatformPlayer player, ChatChannel channel, String message) {
         String result = channel.getFormat();
+        result = StringEscapeUtils.unescapeJava(result);
         result = kdc.getPlaceholderManager().handle(player, result);
         result = kdc.getMessageManager().colorify(result);
 
