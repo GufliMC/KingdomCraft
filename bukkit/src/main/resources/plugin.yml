@@ -2,8 +2,150 @@ name: 'KingdomCraft'
 author: 'Joris Guffens'
 version: ${pluginVersion}
 description: 'The Ultimate Kingdom Plugin'
-softdepend: [Vault, WorldEdit, WorldGuard]
+softdepend: [Vault]
+website: 'kingdomcraft.be'
 main: com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin
 commands:
     kingdomcraft:
       aliases: [k, kd, kdc, kingdoms, kingdom]
+permissions:
+    kingdom.create:
+        description: 'Create a kingdom'
+    kingdom.delete:
+        description: 'Delete your kingdom'
+    kingdom.delete.other:
+        description: 'Delete any kingdom'
+    kingdom.rename:
+        description: 'Rename your kingdom'
+    kingdom.rename.other:
+        description: 'Rename any kingdom'
+    kingdom.edit.defaultrank:
+        description: 'Change the default rank of your kingdom'
+    kingdom.edit.defaultrank.other:
+        description: 'Change the default rank of any kingdom'
+    kingdom.edit.display:
+        description: 'Change the display of your kingdom'
+    kingdom.edit.display.other:
+        description: 'Change the display of any kingdom'
+    kingdom.edit.prefix:
+        description: 'Change the prefix of your kingdom'
+    kingdom.edit.prefix.other:
+        description: 'Change the prefix of any kingdom'
+    kingdom.edit.suffix:
+        description: 'Change the suffix of your kingdom'
+    kingdom.edit.suffix.other:
+        description: 'Change the suffix of any kingdom'
+    kingdom.edit.invite-only:
+        description: 'Change the invite only status of your kingdom'
+    kingdom.edit.invite-only.other:
+        description: 'Change the invite only status of any kingdom'
+    kingdom.edit.max-members:
+        description: 'Change the max members of your kingdom'
+    kingdom.edit.max-members.other:
+        description: 'Change the max members of any kingdom'
+    kingdom.ranks.create:
+        description: 'Create a rank in your kingdom'
+    kingdom.ranks.create.other:
+        description: 'Create a rank in any kingdom'
+    kingdom.ranks.delete:
+        description: 'Delete a rank in your kingdom'
+    kingdom.ranks.delete.other:
+        description: 'Delete a rank in any kingdom'
+    kingdom.ranks.clone:
+        description: 'Clone a rank from one kingdom to another'
+    kingdom.ranks.rename:
+        description: 'Rename a rank in your kingdom'
+    kingdom.ranks.rename.other:
+        description: 'Rename a rank in any kingdom'
+    kingdom.ranks.list:
+        description: 'View all ranks in your kingdom'
+    kingdom.ranks.list.other:
+        description: 'View all ranks in any kingdom'
+    kingdom.ranks.edit.display:
+        description: 'Change the display of a rank in your kingdom'
+    kingdom.ranks.edit.display.other:
+        description: 'Change the display of a rank in any kingdom'
+    kingdom.ranks.edit.prefix:
+        description: 'Change the prefix of a rank in your kingdom'
+    kingdom.ranks.edit.prefix.other:
+        description: 'Change the prefix of a rank in any kingdom'
+    kingdom.ranks.edit.suffix:
+        description: 'Change the suffix of a rank in your kingdom'
+    kingdom.ranks.edit.suffix.other:
+        description: 'Change the suffix of a rank in any kingdom'
+    kingdom.ranks.edit.level:
+        description: 'Change the level of a rank in your kingdom'
+    kingdom.Ranks.edit.level.other:
+        description: 'Change the level of a rank in any kingdom'
+    kingdom.ranks.edit.max-members:
+        description: 'Change the max members of a rank in your kingdom'
+    kingdom.ranks.edit.max-members.other:
+        description: 'Change the max members of a rank in any kingdom'
+    kingdom.groups:
+        description: 'List all existing groups'
+    kingdom.groups.list:
+        description: 'List all groups belonging to a rank in your kingdom'
+    kingdom.groups.list.other:
+        description: 'List all groups belonging to a rank in any kingdom'
+    kingdom.groups.add:
+        description: 'Add a group to a rank in your kingdom'
+    kingdom.groups.add.other:
+        description: 'Add a group to a rank in any kingdom'
+    kingdom.groups.remove:
+        description: 'Remove a group from a rank in your kingdom'
+    kingdom.groups.remove.other:
+        description: 'Remove a group from a rank in any kingdom'
+    kingdom.chatchannel:
+        description: 'Toggle a chat channel'
+    kingdom.chat:
+        description: 'Send a message in a specific chat channel'
+    kingdom.chat.other:
+        description: 'Send a message in a specific chat channel you don''t have access to'
+    kingdom.chat.colors:
+        description: 'Access to using colors in the chat'
+    kingdom.ally:
+        description: 'Request or accept an alliance'
+    kingdom.enemy:
+        description: 'Start a rivalry'
+    kingdom.truce:
+        description: 'Request or accept a truce'
+    kingdom.neutral:
+        description: 'End an alliance or rivalry'
+    kingdom.admin:
+        description: 'Toggle admin mode'
+    kingdom.list:
+        description: 'List all kingdoms'
+    kingdom.info:
+        description: 'View info about a kingdom or player'
+    kingdom.join:
+        description: 'Join a kingdom'
+    kingdom.leave:
+        description: 'Leave a kingdom'
+    kingdom.spawn:
+        description: 'Teleport to your kingdom spawn'
+    kingdom.invite:
+        description: 'Invite a player for your kingdom'
+    kingdom.setspawn:
+        description: 'Change your kingdom''s spawn'
+    kingdom.setrank:
+        description: 'Change the rank of a player in your kingdom'
+    kingdom.kick:
+        description: 'Kick a player out of your kingdom'
+    kingdom.tphere:
+        description: 'Teleport everyone of your kingdom to you'
+    kingdom.spawn.other:
+        description: 'Teleport to any kingdom''s spawn'
+    kingdom.setspawn.other:
+        description: 'Change any kingdom''s spawn'
+    kingdom.setrank.other:
+        description: 'Change the rank of any player'
+    kingdom.setkingdom:
+        description: 'Change the kingdom of any player'
+    kingdom.kick.other:
+        description: 'Kick any player out of their kingdom'
+    kingdom.tphere.other:
+        description: 'Teleport everyone of a kingdom to you'
+    kingdom.tpspawn:
+        description: 'Teleport a player to their kingdom spawn'
+    kingdom.tpspawn.other:
+        description: 'Teleport a player to any kingdom spawn'
