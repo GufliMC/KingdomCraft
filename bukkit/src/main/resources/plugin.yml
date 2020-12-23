@@ -116,7 +116,9 @@ permissions:
     kingdom.list:
         description: 'List all kingdoms'
     kingdom.info:
-        description: 'View info about a kingdom or player'
+        description: 'View info about your kingdom or yourself'
+    kingdom.info.other:
+        description: 'View info about another kingdom or player'
     kingdom.join:
         description: 'Join a kingdom'
     kingdom.leave:

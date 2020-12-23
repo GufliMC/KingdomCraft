@@ -252,7 +252,7 @@ public class StorageContext {
         }
 
         return reassign(plugin.getScheduler().makeAsyncFuture(() ->
-                new QBUser().name.eq(name).findOne()));
+                new QBUser().name.ieq(name).findOne()));
     }
 
     public CompletableFuture<User> getUser(UUID uuid) {
