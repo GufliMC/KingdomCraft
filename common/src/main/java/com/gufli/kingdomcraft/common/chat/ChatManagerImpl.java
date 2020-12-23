@@ -217,6 +217,10 @@ public class ChatManagerImpl implements ChatManager {
         if ( section.contains("range") ) {
             channel.setRange(section.getInt("range"));
         }
+
+        if ( section.contains("cooldown") ) {
+            channel.setCooldown(section.getInt("cooldown"));
+        }
     }
 
     private ChatChannelFactory createFactory(String name, Configuration section) {

@@ -24,6 +24,7 @@ channels:
     format: '&6[RP]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
     prefix: '*'
     restrict: 'talk'
+    cooldown: 5 # Cooldown in seconds
 
   trade:
     prefix: '$'

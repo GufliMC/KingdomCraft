@@ -45,6 +45,10 @@ public interface ChatChannel {
 
     void setRange(int range);
 
+    int getCooldown();
+
+    void setCooldown(int cooldown);
+
     enum RestrictMode {
         NONE, TALK, READ;
 

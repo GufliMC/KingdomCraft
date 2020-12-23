@@ -23,6 +23,7 @@ import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -62,12 +63,23 @@ public class ChatDispatcher {
             }
 
             channel = chatManager.getDefaultChatChannel();
-        } else {
-            if ( !chatManager.canTalk(player, channel) ) {
-                kdc.getMessageManager().send(player, "chatChannelDisabled", channel.getName());
-            }
-            if ( channel.getPrefix() != null ) {
-                message = message.replaceFirst(Pattern.quote(channel.getPrefix()), "");
+        }
+        else if ( channel.getPrefix() != null && !channel.getPrefix().equals("") ) {
+            message = message.replaceFirst(Pattern.quote(channel.getPrefix()), "");
+        }
+
+        // Chat cooldown check
+        String cooldownKey = "CHAT_COOLDOWN_" + channel.getName();
+        if ( channel.getCooldown() > 0 && player.has(cooldownKey)
+                && !player.isAdmin() && !player.hasPermission("kingdom.chat.bypass.cooldown")) {
+
+            long lastMessage = player.get(cooldownKey, Long.class);
+            long diff = System.currentTimeMillis() - lastMessage;
+            if ( diff < channel.getCooldown() * 1000 ) {
+                float remaining = ((channel.getCooldown() * 1000) - diff) / 1000f;
+                DecimalFormat df = new DecimalFormat("0.0");
+                kdc.getMessageManager().send(player, "chatChannelCooldown", df.format(remaining));
+                return;
             }
         }
 
@@ -100,6 +112,10 @@ public class ChatDispatcher {
                 .filter(p -> chatManager.canRead(p, channel))
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
                 .collect(Collectors.toList());
+
+        if ( channel.getCooldown() > 0 && !player.isAdmin() && !player.hasPermission("kingdom.chat.bypass.cooldown") ) {
+            player.set("CHAT_COOLDOWN_" + channel.getName(), System.currentTimeMillis());
+        }
 
         if ( !receivers.contains(player) ) {
             receivers.add(player);

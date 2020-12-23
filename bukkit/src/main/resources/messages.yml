@@ -17,6 +17,7 @@ teleportCancel: '&cTeleportation cancelled!'
 
 chatNoChannel: '&cThere is not available chat channel to send your message!'
 chatChannelDisabled: '&cYou disabled the &4{0} &cchannel!'
+chatChannelCooldown: '&cYou have to wait &4{0} &cmore seconds to talk in this channel!'
 
 socialSpyPrefix: '&b[SS] '
 

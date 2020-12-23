@@ -30,6 +30,7 @@ public class BasicChatChannel implements ChatChannel {
     private boolean toggleable;
 
     private int range;
+    private int cooldown;
 
     public BasicChatChannel(String name) {
         this.name = name;
@@ -95,4 +96,13 @@ public class BasicChatChannel implements ChatChannel {
         this.range = range;
     }
 
+    @Override
+    public int getCooldown() {
+        return cooldown;
+    }
+
+    @Override
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
 }
