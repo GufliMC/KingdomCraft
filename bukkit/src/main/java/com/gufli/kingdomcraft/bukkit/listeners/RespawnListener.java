@@ -20,6 +20,7 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.util.LocationConverter;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,17 +36,26 @@ public class RespawnListener implements Listener {
 
     // respawn
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
         if ( !plugin.getKdc().getConfig().isWorldEnabled(event.getRespawnLocation().getWorld().getName()) ) {
             return;
         }
 
-        if ( plugin.getKdc().getConfig().respawnAtKingdom() ) {
-            User user = plugin.getKdc().getOnlineUser(event.getPlayer().getUniqueId());
-            if ( user.getKingdom() != null && user.getKingdom().getSpawn() != null ) {
-                event.setRespawnLocation(LocationConverter.convert(user.getKingdom().getSpawn()));
-            }
+        if ( !plugin.getKdc().getConfig().respawnAtKingdom() ) {
+            return;
         }
+
+        User user = plugin.getKdc().getOnlineUser(event.getPlayer().getUniqueId());
+        if ( user.getKingdom() == null || user.getKingdom().getSpawn() == null ) {
+            return;
+        }
+
+        Location loc = LocationConverter.convert(user.getKingdom().getSpawn());
+        if ( loc == null ) {
+            return;
+        }
+
+        event.setRespawnLocation(loc);
     }
 }
