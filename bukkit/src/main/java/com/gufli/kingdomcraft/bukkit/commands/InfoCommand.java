@@ -29,6 +29,7 @@ import com.gufli.kingdomcraft.bukkit.gui.BukkitInventory;
 import com.gufli.kingdomcraft.bukkit.gui.BukkitInventoryItem;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -292,18 +293,24 @@ public class InfoCommand extends CommandBase {
             rankLore.add(getText("Level", rank.getLevel() + ""));
 
             rankLore.add("");
-            List<String> members = new ArrayList<>();
-            for ( String member : rank.getMembers() ) {
-                members.add(member);
+            List<String> members = rank.getMembers().stream()
+                    .sorted(Comparator.comparing(name -> kdc.getPlayer(name) != null))
+                    .map(name -> kdc.getPlayer(name) != null ? ChatColor.GREEN + name : ChatColor.GRAY + name)
+                    .collect(Collectors.toList());
 
-                if ( members.size() + members.size() * 2 >= 30 ) {
-                    rankLore.add(ChatColor.GRAY + String.join(", ", members) + ",");
-                    members.clear();
+            List<String> line = new ArrayList<>();
+            for ( String member : members) {
+                line.add(member);
+
+                String result = String.join(ChatColor.GRAY + ", ", line) + ChatColor.GRAY + ",";
+                if ( result.length() >= 40 ) {
+                    rankLore.add(result);
+                    line.clear();
                 }
             }
 
-            if ( !members.isEmpty() ) {
-                rankLore.add(ChatColor.GRAY + String.join(", ", members));
+            if ( !line.isEmpty() ) {
+                rankLore.add(String.join(ChatColor.GRAY + ", ", line));
             }
 
             rankMeta.setLore(rankLore);
