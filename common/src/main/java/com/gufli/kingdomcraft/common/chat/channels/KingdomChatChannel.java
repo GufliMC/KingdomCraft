@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.common.chat.channels;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,12 +29,12 @@ public class KingdomChatChannel extends BasicChatChannel {
 
     public KingdomChatChannel(String name, Kingdom... kingdoms) {
         super(name);
-        this.kingdoms = Arrays.asList(kingdoms);
+        this.kingdoms = new ArrayList<>(Arrays.asList(kingdoms));
     }
 
     public KingdomChatChannel(String name, List<Kingdom> kingdoms) {
         super(name);
-        this.kingdoms = kingdoms;
+        this.kingdoms = new ArrayList<>(kingdoms);
     }
 
     public List<Kingdom> getKingdoms() {

@@ -13,14 +13,14 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VaultPermissionsListener implements Listener, EventListener {
+public class VaultPermissionListener implements Listener, EventListener {
 
     private final KingdomCraftBukkitPlugin plugin;
     private final Permission permissionProvider;
 
     private final List<String> allExternals = new ArrayList<>();
 
-    public VaultPermissionsListener(KingdomCraftBukkitPlugin plugin, Permission permissionProvider) {
+    public VaultPermissionListener(KingdomCraftBukkitPlugin plugin, Permission permissionProvider) {
         this.plugin = plugin;
         this.permissionProvider = permissionProvider;
         loadExternals();
@@ -67,8 +67,11 @@ public class VaultPermissionsListener implements Listener, EventListener {
         Player bplayer = Bukkit.getPlayer(player.getUniqueId());
 
         List<String> externals = new ArrayList<>();
-        plugin.getKdc().getPermissionManager().getGroups().forEach(group
-                -> externals.addAll(group.getExternals()));
+        Rank rank = player.getUser().getRank();
+        if ( rank != null ) {
+            plugin.getKdc().getPermissionManager().getGroups(rank).forEach(group
+                    -> externals.addAll(group.getExternals()));
+        }
 
         List<String> distinctExternals = new ArrayList<>(allExternals);
         distinctExternals.removeIf(externals::contains);

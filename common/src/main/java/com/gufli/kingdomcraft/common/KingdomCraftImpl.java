@@ -337,6 +337,8 @@ public class KingdomCraftImpl implements KingdomCraft {
                 saveAsync(user);
             } else if ( !user.getName().equals(player.getName()) || !user.getUniqueId().equals(player.getUniqueId())) {
                 context.update(user, player);
+            } else {
+                context.login(user);
             }
 
             context.addPlayer(player, user);

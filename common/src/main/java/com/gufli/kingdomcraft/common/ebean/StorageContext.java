@@ -278,6 +278,12 @@ public class StorageContext {
         saveAsync(Collections.singleton(buser));
     }
 
+    public void login(User user) {
+        BUser buser = (BUser) user;
+        buser.updatedAt = new Date();
+        saveAsync(Collections.singleton(buser));
+    }
+
     private CompletableFuture<User> reassign(CompletableFuture<User> future) {
         return future.thenApply(u -> {
             if ( u != null ) {
