@@ -124,7 +124,8 @@ public class BUser extends BaseModel implements User {
         if ( kingdom == null ) {
             this.kingdom = null;
             this.rank = null;
-            dispatchKingdomLeave(oldKingdom);
+            ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
+                    .dispatchKingdomLeave(this, oldKingdom);
             return;
         }
 
@@ -139,25 +140,12 @@ public class BUser extends BaseModel implements User {
         }
 
         if ( oldKingdom != null ) {
-            dispatchKingdomLeave(oldKingdom);
+            ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
+                    .dispatchKingdomLeave(this, oldKingdom);
         }
-        dispatchKingdomJoin();
-    }
 
-    private void dispatchKingdomLeave(Kingdom oldKingdom) {
-        KingdomCraftImpl kdc = ((KingdomCraftImpl) KingdomCraftProvider.get());
-        PlatformPlayer player = kdc.getPlayer(this);
-        if ( player != null ) {
-            kdc.getEventDispatcher().dispatchKingdomLeave(player, oldKingdom);
-        }
-    }
-
-    private void dispatchKingdomJoin() {
-        KingdomCraftImpl kdc = ((KingdomCraftImpl) KingdomCraftProvider.get());
-        PlatformPlayer player = kdc.getPlayer(this);
-        if ( player != null ) {
-            kdc.getEventDispatcher().dispatchKingdomJoin(player);
-        }
+        ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
+                .dispatchKingdomJoin(this);
     }
 
     @Override
@@ -183,15 +171,8 @@ public class BUser extends BaseModel implements User {
             this.rank.memberCount++;
         }
 
-        dispatchRankChange(oldRank);
-    }
-
-    private void dispatchRankChange(Rank oldRank) {
-        KingdomCraftImpl kdc = ((KingdomCraftImpl) KingdomCraftProvider.get());
-        PlatformPlayer player = kdc.getPlayer(this);
-        if ( player != null ) {
-            kdc.getEventDispatcher().dispatchRankChange(player, oldRank);
-        }
+        ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
+                .dispatchRankChange(this, oldRank);
     }
 
     @Override

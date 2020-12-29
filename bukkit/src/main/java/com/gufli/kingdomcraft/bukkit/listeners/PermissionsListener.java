@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
@@ -93,18 +94,18 @@ public class PermissionsListener implements Listener, EventListener {
     }
 
     @Override
-    public void onRankChange(PlatformPlayer player, Rank oldRank) {
-        update(player);
+    public void onRankChange(User user, Rank oldRank) {
+        update(user);
     }
 
     @Override
-    public void onKingdomLeave(PlatformPlayer player, Kingdom oldKingdom) {
-        update(player);
+    public void onKingdomLeave(User user, Kingdom oldKingdom) {
+        update(user);
     }
 
     @Override
-    public void onKingdomJoin(PlatformPlayer player) {
-        update(player);
+    public void onKingdomJoin(User user) {
+        update(user);
     }
 
     @Override
@@ -122,6 +123,13 @@ public class PermissionsListener implements Listener, EventListener {
         PermissionAttachment pa = player.get(PERMISSIONS_KEY, PermissionAttachment.class);
         Player p = ((BukkitPlayer) player).getPlayer();
         p.removeAttachment(pa);
+    }
+
+    private void update(User user) {
+        PlatformPlayer player = plugin.getKdc().getPlayer(user);
+        if ( player != null ) {
+            update(player);
+        }
     }
 
     void update(PlatformPlayer player) {

@@ -18,10 +18,12 @@
 package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -39,40 +41,37 @@ public class KingdomJoinQuitListener implements EventListener {
     // kingdom join & kingdom leave commands
 
     @Override
-    public void onKingdomJoin(PlatformPlayer player) {
+    public void onKingdomJoin(User user) {
         if ( plugin.getKdc().getConfig().getOnKingdomJoinCommands().isEmpty() ) {
             return;
         }
         plugin.getScheduler().sync().execute(() -> {
-            execute(player, plugin.getKdc().getConfig().getOnKingdomJoinCommands());
+            execute(user, plugin.getKdc().getConfig().getOnKingdomJoinCommands());
         });
     }
 
     @Override
-    public void onKingdomLeave(PlatformPlayer player, Kingdom oldKingdom) {
+    public void onKingdomLeave(User user, Kingdom oldKingdom) {
         if ( plugin.getKdc().getConfig().getOnKingdomLeaveCommands().isEmpty() ) {
             return;
         }
         plugin.getScheduler().sync().execute(() -> {
-            execute(player, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
+            execute(user, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
         });
     }
 
-    private void execute(PlatformPlayer player, List<String> commands) {
-        if ( !(player instanceof BukkitPlayer) ) {
-            return;
-        }
-        Player bplayer = ((BukkitPlayer) player).getPlayer();
+    private void execute(User user, List<String> commands) {
+        Player bplayer = Bukkit.getPlayer(user.getUniqueId());
 
         plugin.log("Executing kingdom join/leave commands: ");
         for ( String cmd : commands ) {
-            cmd = plugin.getKdc().getPlaceholderManager().handle(player, cmd);
+            cmd = cmd.replace("{username}", user.getName());
 
             if ( cmd.toLowerCase().startsWith("console") ) {
                 cmd = cmd.substring(7).trim();
                 System.out.println(cmd);
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
-            } else {
+            } else if ( bplayer != null && bplayer.isOnline() ){
                 bplayer.chat("/" + cmd);
             }
         }

@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.api.event;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
@@ -31,15 +32,15 @@ public interface EventListener {
 
     default void onQuit(PlatformPlayer player) {}
 
-    default void onKingdomJoin(PlatformPlayer player) {}
+    default void onKingdomJoin(User user) {}
 
-    default void onKingdomLeave(PlatformPlayer player, Kingdom oldKingdom) {}
+    default void onKingdomLeave(User user, Kingdom oldKingdom) {}
 
     default void onKingdomCreate(Kingdom kingdom) {}
 
     default void onKingdomDelete(Kingdom kingdom) {}
 
-    default void onRankChange(PlatformPlayer player, Rank oldRank) {}
+    default void onRankChange(User user, Rank oldRank) {}
 
     default void onPlayerAttack(PlayerAttackPlayerEvent event) {}
 

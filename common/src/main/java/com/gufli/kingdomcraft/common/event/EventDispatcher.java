@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.common.event;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
@@ -56,12 +57,12 @@ public class EventDispatcher {
         execute(l -> l.onQuit(player));
     }
 
-    public void dispatchKingdomJoin(PlatformPlayer player) {
-        execute(l -> l.onKingdomJoin(player));
+    public void dispatchKingdomJoin(User user) {
+        execute(l -> l.onKingdomJoin(user));
     }
 
-    public void dispatchKingdomLeave(PlatformPlayer player, Kingdom oldKingdom) {
-        execute(l -> l.onKingdomLeave(player, oldKingdom));
+    public void dispatchKingdomLeave(User user, Kingdom oldKingdom) {
+        execute(l -> l.onKingdomLeave(user, oldKingdom));
     }
 
     public void dispatchKingdomCreate(Kingdom kingdom) {
@@ -76,8 +77,8 @@ public class EventDispatcher {
         execute(l -> l.onPlayerAttack(event));
     }
 
-    public void dispatchRankChange(PlatformPlayer player, Rank oldRank) {
-        execute(l -> l.onRankChange(player, oldRank));
+    public void dispatchRankChange(User user, Rank oldRank) {
+        execute(l -> l.onRankChange(user, oldRank));
     }
 
     public void dispatchReload() {
