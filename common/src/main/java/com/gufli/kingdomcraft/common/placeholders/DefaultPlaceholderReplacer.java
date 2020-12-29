@@ -90,6 +90,37 @@ public class DefaultPlaceholderReplacer {
             return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getSuffix()) : "";
         }, "rank_suffix");
 
+        pm.addPlaceholderReplacer((player, placeholder) -> {
+            User user = kdc.getUser(player);
+            if ( user == null || user.getKingdom() == null ) {
+                return "";
+            }
+            return user.getKingdom().getMemberCount() + "";
+        }, "kingdom_member_count");
+        pm.addPlaceholderReplacer((player, placeholder) -> {
+            User user = kdc.getUser(player);
+            if ( user == null || user.getKingdom() == null ) {
+                return "";
+            }
+            return kdc.getOnlineUsers().stream().filter(u -> u.getKingdom() == user.getKingdom()).count() + "";
+        }, "kingdom_online_member_count");
+
+        pm.addPlaceholderReplacer((player, placeholder) -> {
+            User user = kdc.getUser(player);
+            if ( user == null || user.getKingdom() == null || user.getRank() == null ) {
+                return "";
+            }
+            return user.getRank().getMemberCount() + "";
+        }, "rank_member_count");
+        pm.addPlaceholderReplacer((player, placeholder) -> {
+            User user = kdc.getUser(player);
+            if ( user == null || user.getKingdom() == null || user.getRank() == null ) {
+                return "";
+            }
+            return kdc.getOnlineUsers().stream().filter(u -> u.getRank() == user.getRank()).count() + "";
+        }, "rank_online_member_count");
+
+
     }
 
 }
