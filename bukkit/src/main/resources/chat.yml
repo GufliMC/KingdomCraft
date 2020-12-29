@@ -6,7 +6,7 @@ channels:
     prefix: ''
     format: '&6[P]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
     toggleable: false
-    default: true # default channel, when no other channel matches the prefix
+    default: true # players without kingdom will talk in this channel by default
 
   kingdom:
     prefix: '!'
