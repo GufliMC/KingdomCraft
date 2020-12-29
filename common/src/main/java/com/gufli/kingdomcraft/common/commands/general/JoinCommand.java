@@ -61,6 +61,16 @@ public class JoinCommand extends CommandBase {
             KingdomInvite invite = user.getInvite(kingdom);
             if ( invite == null || !invite.isValid() ) {
                 kdc.getMessageManager().send(sender, "cmdJoinNoInvite", kingdom.getName());
+
+                kdc.getOnlinePlayers().stream()
+                        .filter(p -> p.getUser().getKingdom() == kingdom)
+                        .filter(p -> p.hasPermission("kingdom.invite"))
+                        .filter(p -> !p.has("INVITE_MEMBER_" + user.getName())
+                                || p.get("INVITE_MEMBER_" + user.getName(), Long.class) < System.currentTimeMillis())
+                        .forEach(p -> {
+                            p.set("INVITE_MEMBER_" + user.getName(), System.currentTimeMillis() + 15000);
+                            kdc.getMessageManager().send(p, "cmdJoinNoInviteMembers", user.getName());
+                        });
                 return;
             }
         }

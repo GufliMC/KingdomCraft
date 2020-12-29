@@ -132,6 +132,7 @@ cmdJoinAlready: '&aYou are already in a kingdom!'
 cmdJoin: '&aYou joined &2{0}&a!'
 cmdJoinMembers: '&2{0} &ahas joined your kingdom!'
 cmdJoinNoInvite: '&aYou need an invite to join &2{0}&a!'
+cmdJoinNoInviteMembers: '&2{0} &atried to join your kingdom but is not invited!'
 cmdJoinFull: '&aThe kingdom &2{0} &ais full!'
 
 # /k leave
