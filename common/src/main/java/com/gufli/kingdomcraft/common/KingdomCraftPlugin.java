@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.common;
 
 import com.gufli.kingdomcraft.common.scheduler.AbstractScheduler;
 
+import java.io.File;
 import java.util.logging.Level;
 
 public interface KingdomCraftPlugin {
@@ -34,5 +35,7 @@ public interface KingdomCraftPlugin {
     String decolorify(String msg);
 
     void reload();
+
+    File getDataFolder();
 
 }

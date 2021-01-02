@@ -315,3 +315,6 @@ cmdEditorErrorDownload: '&cThe new configuration could not be retrieved! Is your
 cmdEditorErrorFormat: '&cThe new configuration is of invalid format. Contact the developer!'
 cmdEditorErrorSave: '&cThe new configuration could not be saved. Contact the developer!'
 
+# /k sqldump
+cmdSqlDump: '&aSQL dump has been written to &2{0}&a!'
+

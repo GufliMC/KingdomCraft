@@ -82,6 +82,7 @@ public class KingdomCraftImpl implements KingdomCraft {
 
         this.commandManager = new CommandManager(this);
         this.commandDispatcher = new CommandDispatcher(commandManager);
+        context.registerDumpCommand(this);
 
         this.eventManager = new EventManagerImpl();
         this.eventDispatcher = new EventDispatcher(this.eventManager);

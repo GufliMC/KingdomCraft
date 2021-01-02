@@ -19,14 +19,18 @@ package com.gufli.kingdomcraft.common.ebean;
 
 import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
+import com.gufli.kingdomcraft.common.commands.admin.SqlDumpCommand;
 import com.gufli.kingdomcraft.common.ebean.beans.*;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBKingdom;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBRelation;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.DB;
+import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.Transaction;
+import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.datasource.DataSourceFactory;
@@ -123,6 +127,13 @@ public class StorageContext {
 
     public boolean isInitialized() {
         return initialized;
+    }
+
+    public void registerDumpCommand(KingdomCraftImpl kdc) {
+        Database db = DB.byName("kingdomcraft");
+        if ( db.getPlatform() == Platform.H2 ) {
+            kdc.getCommandManager().addCommand(new SqlDumpCommand(kdc));
+        }
     }
 
     public Set<Kingdom> getKingdoms() {
