@@ -127,10 +127,23 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// initialize handler
 		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
-		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
-		Configuration groupsConfig = new BukkitConfiguration(initConfig("permissions.yml"));
+		ConfigurationSection chatConfig = initConfig("chat.yml");
 
-		this.kdc = new KingdomCraftImpl(this, context, pluginConfig, chatConfig, groupsConfig);
+		if ( chatConfig == null ) {
+			log("Cannot load chat.yml. Shutting down plugin.", Level.SEVERE);
+			disable();
+			return;
+		}
+
+		ConfigurationSection permissionsConfig = initConfig("permissions.yml");
+		if ( permissionsConfig == null ) {
+			log("Cannot load permissions.yml. Shutting down plugin.", Level.SEVERE);
+			disable();
+			return;
+		}
+
+		this.kdc = new KingdomCraftImpl(this, context,
+				pluginConfig, new BukkitConfiguration(chatConfig), new BukkitConfiguration(permissionsConfig));
 
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
 			this.kdc.onLoad(new BukkitPlayer(p));
@@ -184,19 +197,26 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 	@Override
 	public void reload() {
 		ConfigurationSection config = initConfig("config.yml");
-		if ( config == null ) {
-			log("Invalid configuration, cannot reload Kingdomcraft!", Level.WARNING);
-			return;
+		if ( config != null && config.contains("settings") ) {
+			ConfigurationSection pluginConfig = config.getConfigurationSection("settings");
+			kdc.getConfig().reload(new BukkitConfiguration(pluginConfig));
+		} else {
+			log("An error occured, cannot reload config.yml", Level.WARNING);
 		}
 
-		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
-		kdc.getConfig().reload(pluginConfig);
+		ConfigurationSection permissionsConfig = initConfig("permissions.yml");
+		if ( permissionsConfig != null ) {
+			kdc.getPermissionManager().reload(new BukkitConfiguration(permissionsConfig));
+		} else {
+			log("An error occured, cannot reload permissions.yml", Level.WARNING);
+		}
 
-		Configuration groupsConfig = new BukkitConfiguration(initConfig("permissions.yml"));
-		kdc.getPermissionManager().reload(groupsConfig);
-
-		Configuration chatConfig = new BukkitConfiguration(initConfig("chat.yml"));
-		kdc.getChatManagerImpl().reload(chatConfig);
+		ConfigurationSection chatConfig = initConfig("chat.yml");
+		if ( chatConfig != null ) {
+			kdc.getChatManagerImpl().reload(new BukkitConfiguration(chatConfig));
+		} else {
+			log("An error occured, cannot reload chat.yml", Level.WARNING);
+		}
 
 		kdc.getEventDispatcher().dispatchReload();
 	}
@@ -211,7 +231,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		try {
 			config.load(configFile);
 		} catch (IOException | InvalidConfigurationException e) {
-			log(e.getMessage(), Level.WARNING);
+			log(e.getClass().getSimpleName() + ": " + e.getMessage(), Level.WARNING);
 			return null;
 		}
 
