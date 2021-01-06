@@ -125,7 +125,10 @@ public class ChatDispatcher {
             p.sendMessage(finalResult);
         }
 
-        kdc.getOnlinePlayers().stream().filter(PlatformPlayer::isAdmin).filter(p -> !receivers.contains(p)).forEach(p -> {
+        kdc.getOnlinePlayers().stream()
+                .filter(p -> p.has("SOCIAL_SPY") && p.get("SOCIAL_SPY", Boolean.class))
+                .filter(p -> !receivers.contains(p))
+                .forEach(p -> {
             p.sendMessage(kdc.getMessageManager().getMessage("socialSpyPrefix") + finalResult);
         });
 

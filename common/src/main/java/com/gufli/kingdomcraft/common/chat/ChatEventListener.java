@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.common.chat;
 
 import com.gufli.kingdomcraft.api.chat.ChatChannelFactory;
 import com.gufli.kingdomcraft.api.domain.Kingdom;
+import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.common.chat.channels.KingdomChatChannel;
 
@@ -28,6 +29,13 @@ public class ChatEventListener implements EventListener {
 
     public ChatEventListener(ChatManagerImpl chatManager) {
         this.chatManager = chatManager;
+    }
+
+    @Override
+    public void onJoin(PlatformPlayer player) {
+        if ( player.hasPermission("kingdom.socialspy") ) {
+            player.set("SOCIAL_SPY", true);
+        }
     }
 
     @Override

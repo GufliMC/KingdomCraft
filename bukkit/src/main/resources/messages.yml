@@ -79,6 +79,7 @@ cmdAdminExplanation: 'Toggle admin mode'
 cmdEditorExplanation: 'Start a webeditor session'
 cmdTpSpawnExplanation: 'Teleport a player to their kingdom spawn'
 cmdTpSpawnOtherExplanation: 'Teleport a player to a kingdom spawn'
+cmdSocialSpyExplanation: 'Toggle social spy'
 
 cmdGroupsExplanation: 'Get a list of all existing groups'
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
@@ -284,6 +285,10 @@ cmdChatEmptyMessage: '&cYou can''t send an empty message!'
 # /k admin
 cmdAdminEnable: '&aYou &2enabled &aadmin mode!'
 cmdAdminDisable: '&aYou &2disabled &aadmin mode!'
+
+# /k socialspy
+cmdSocialSpyEnable: '&aYou &2enabled &asocial spy!'
+cmdSocialSpyDisable: '&aYou &2disabled &asocial spy!'
 
 # /k info
 cmdInfoTotalMembers: '&7Total members: &6{0}'
