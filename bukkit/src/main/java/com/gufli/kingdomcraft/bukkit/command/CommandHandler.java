@@ -20,6 +20,7 @@ package com.gufli.kingdomcraft.bukkit.command;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.commands.InfoCommand;
+import com.gufli.kingdomcraft.bukkit.commands.VersionCommand;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandManager;
@@ -43,6 +44,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
         CommandManager cm = plugin.getKdc().getCommandManager();
         cm.addCommand(new InfoCommand(kdc));
+        cm.addCommand(new VersionCommand(plugin));
     }
 
     @Override
