@@ -25,6 +25,7 @@ import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
@@ -34,6 +35,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 
 public class FriendlyFireListener implements Listener {
 
@@ -53,7 +55,14 @@ public class FriendlyFireListener implements Listener {
         handleEvent(e, e.getEntity(), e.getCombuster());
     }
 
-    private <T extends EntityEvent & Cancellable> void handleEvent(T e, Entity entity, Entity damager) {
+    @EventHandler
+    public void onPlayerFish(PlayerFishEvent e) {
+        if ( e.getState() == PlayerFishEvent.State.CAUGHT_ENTITY ) {
+            handleEvent(e, e.getCaught(), e.getPlayer());
+        }
+    }
+
+    private <T extends Cancellable> void handleEvent(T e, Entity entity, Entity damager) {
         if ( !plugin.getKdc().getConfig().isWorldEnabled(entity.getWorld().getName()) ) {
             return;
         }
