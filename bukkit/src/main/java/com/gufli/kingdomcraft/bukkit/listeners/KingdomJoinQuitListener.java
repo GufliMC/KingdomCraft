@@ -67,9 +67,9 @@ public class KingdomJoinQuitListener implements EventListener {
         for ( String cmd : commands ) {
             cmd = cmd.replace("{username}", user.getName());
             cmd = cmd.replace("{kingdom_name}", kingdom.getName());
-            cmd = cmd.replace("{kingdom}", kingdom.getDisplay());
-            cmd = cmd.replace("{kingdom_prefix}", kingdom.getPrefix());
-            cmd = cmd.replace("{kingdom_suffix}", kingdom.getSuffix());
+            cmd = cmd.replace("{kingdom}", plugin.colorify(kingdom.getDisplay()));
+            cmd = cmd.replace("{kingdom_prefix}", plugin.colorify(kingdom.getPrefix()));
+            cmd = cmd.replace("{kingdom_suffix}", plugin.colorify(kingdom.getSuffix()));
             cmd = plugin.getKdc().getPlaceholderManager().handle(user, cmd);
 
             if ( cmd.toLowerCase().startsWith("console") ) {
