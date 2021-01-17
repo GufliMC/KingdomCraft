@@ -46,7 +46,7 @@ public class KingdomJoinQuitListener implements EventListener {
             return;
         }
         plugin.getScheduler().sync().execute(() -> {
-            execute(user, plugin.getKdc().getConfig().getOnKingdomJoinCommands());
+            execute(user, user.getKingdom(), plugin.getKdc().getConfig().getOnKingdomJoinCommands());
         });
     }
 
@@ -56,16 +56,20 @@ public class KingdomJoinQuitListener implements EventListener {
             return;
         }
         plugin.getScheduler().sync().execute(() -> {
-            execute(user, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
+            execute(user, oldKingdom, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
         });
     }
 
-    private void execute(User user, List<String> commands) {
+    private void execute(User user, Kingdom kingdom, List<String> commands) {
         Player bplayer = Bukkit.getPlayer(user.getUniqueId());
 
         plugin.log("Executing kingdom join/leave commands: ");
         for ( String cmd : commands ) {
             cmd = cmd.replace("{username}", user.getName());
+            cmd = cmd.replace("{kingdom_name}", kingdom.getName());
+            cmd = cmd.replace("{kingdom}", kingdom.getDisplay());
+            cmd = cmd.replace("{kingdom_prefix}", kingdom.getPrefix());
+            cmd = cmd.replace("{kingdom_suffix}", kingdom.getSuffix());
             cmd = plugin.getKdc().getPlaceholderManager().handle(user, cmd);
 
             if ( cmd.toLowerCase().startsWith("console") ) {

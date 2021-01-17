@@ -17,28 +17,34 @@
 
 package com.gufli.kingdomcraft.bukkit.placeholders;
 
+import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class PlaceholderReplacer {
 
     public PlaceholderReplacer(KingdomCraftBukkitPlugin plugin) {
         PlaceholderManager pm = plugin.getKdc().getPlaceholderManager();
 
-        pm.addPlaceholderReplacer((player, placeholder) -> Bukkit.getPlayer(player.getUniqueId())
-                    .getLocation().getWorld().toString(),
-            "world");
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            Player player = Bukkit.getPlayer(user.getUniqueId());
+            if ( player == null || !player.isOnline() ) return null;
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-                    BukkitPlayer p = (BukkitPlayer) player;
-                return p.getPlayer().getDisplayName() != null ? p.getPlayer().getDisplayName() : p.getPlayer().getName();
-        },
-        "player");
+            return player.getLocation().getWorld().toString();
+        }, "world");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> player.getName(),
-                "username");
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            PlatformPlayer player = plugin.getKdc().getPlayer(user);
+            if ( player == null ) return null;
+
+            BukkitPlayer p = (BukkitPlayer) player;
+            return p.getPlayer().getDisplayName() != null ? p.getPlayer().getDisplayName() : p.getPlayer().getName();
+        }, "player");
+
+        pm.addPlaceholderReplacer((user, placeholder) -> user.getName(), "username");
     }
 
 }
