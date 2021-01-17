@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.api.placeholders;
 
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
 public interface PlaceholderManager {
@@ -30,6 +31,10 @@ public interface PlaceholderManager {
     String handle(PlatformPlayer player, String str);
 
     String handle(PlatformPlayer player, String str, String prefix);
+
+    String handle(User user, String str);
+
+    String handle(User user, String str, String prefix);
 
     //String strip(String msg);
 

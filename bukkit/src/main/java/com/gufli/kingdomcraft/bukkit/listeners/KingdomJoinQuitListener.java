@@ -66,10 +66,11 @@ public class KingdomJoinQuitListener implements EventListener {
         plugin.log("Executing kingdom join/leave commands: ");
         for ( String cmd : commands ) {
             cmd = cmd.replace("{username}", user.getName());
+            cmd = plugin.getKdc().getPlaceholderManager().handle(user, cmd);
 
             if ( cmd.toLowerCase().startsWith("console") ) {
                 cmd = cmd.substring(7).trim();
-                System.out.println(cmd);
+                plugin.log(cmd);
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
             } else if ( bplayer != null && bplayer.isOnline() ){
                 bplayer.chat("/" + cmd);

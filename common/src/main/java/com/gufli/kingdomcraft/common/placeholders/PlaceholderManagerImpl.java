@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.common.placeholders;
 
+import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderReplacer;
@@ -59,6 +60,16 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
 
     @Override
     public String handle(PlatformPlayer player, String str, String prefix) {
+        return handle(player.getUser(), str, prefix);
+    }
+
+    @Override
+    public String handle(User user, String str) {
+        return handle(user, str, "");
+    }
+
+    @Override
+    public String handle(User user, String str, String prefix) {
         if ( str == null ) {
             return null;
         }
@@ -81,7 +92,7 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
                 continue;
             }
 
-            String replacement = replacer.replace(player, placeholder);
+            String replacement = replacer.replace(user, placeholder);
             if ( replacement == null ) {
                 replacement = "";
             }

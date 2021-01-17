@@ -17,7 +17,6 @@
 
 package com.gufli.kingdomcraft.common.placeholders;
 
-import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 
@@ -25,13 +24,9 @@ public class DefaultPlaceholderReplacer {
 
     public DefaultPlaceholderReplacer(KingdomCraftImpl kdc, PlaceholderManager pm) {
 
-        pm.addPlaceholderReplacer((player, placeholder) -> player.getName(), "player", "username");
+        pm.addPlaceholderReplacer((user, placeholder) -> user.getName(), "user", "username");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null ) {
-                return "";
-            }
+        pm.addPlaceholderReplacer((user, placeholder) -> {
             String display;
             if ( user.getKingdom() == null ) {
                 display = kdc.getConfig().getNoKingdomDisplay();
@@ -40,25 +35,18 @@ public class DefaultPlaceholderReplacer {
             }
             return kdc.getMessageManager().colorify(display);
         }, "kingdom");
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-           User user = kdc.getUser(player);
-           return user != null && user.getKingdom() != null ? user.getKingdom().getName() : "";
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+           return user.getKingdom() != null ? user.getKingdom().getName() : "";
         }, "kingdom_name");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getDisplay()) : "";
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getDisplay()) : "";
         }, "rank");
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            return user != null && user.getRank() != null ? user.getRank().getName() : "";
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            return user.getRank() != null ? user.getRank().getName() : "";
         }, "rank_name");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null ) {
-                return "";
-            }
+        pm.addPlaceholderReplacer((user, placeholder) -> {
             String prefix;
             if ( user.getKingdom() == null ) {
                 prefix = kdc.getConfig().getNoKingdomPrefix();
@@ -67,11 +55,7 @@ public class DefaultPlaceholderReplacer {
             }
             return kdc.getMessageManager().colorify(prefix);
         }, "kingdom_prefix");
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null ) {
-                return "";
-            }
+        pm.addPlaceholderReplacer((user, placeholder) -> {
             String suffix;
             if ( user.getKingdom() == null ) {
                 suffix = kdc.getConfig().getNoKingdomSuffix();
@@ -81,40 +65,34 @@ public class DefaultPlaceholderReplacer {
             return kdc.getMessageManager().colorify(suffix);
         }, "kingdom_suffix");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getPrefix()) : "";
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getPrefix()) : "";
         }, "rank_prefix");
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            return user != null && user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getSuffix()) : "";
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getSuffix()) : "";
         }, "rank_suffix");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null || user.getKingdom() == null ) {
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            if ( user.getKingdom() == null ) {
                 return "";
             }
             return user.getKingdom().getMemberCount() + "";
         }, "kingdom_member_count");
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null || user.getKingdom() == null ) {
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            if ( user.getKingdom() == null ) {
                 return "";
             }
             return kdc.getOnlineUsers().stream().filter(u -> u.getKingdom() == user.getKingdom()).count() + "";
         }, "kingdom_online_member_count");
 
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null || user.getKingdom() == null || user.getRank() == null ) {
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            if ( user.getKingdom() == null || user.getRank() == null ) {
                 return "";
             }
             return user.getRank().getMemberCount() + "";
         }, "rank_member_count");
-        pm.addPlaceholderReplacer((player, placeholder) -> {
-            User user = kdc.getUser(player);
-            if ( user == null || user.getKingdom() == null || user.getRank() == null ) {
+        pm.addPlaceholderReplacer((user, placeholder) -> {
+            if ( user.getKingdom() == null || user.getRank() == null ) {
                 return "";
             }
             return kdc.getOnlineUsers().stream().filter(u -> u.getRank() == user.getRank()).count() + "";
