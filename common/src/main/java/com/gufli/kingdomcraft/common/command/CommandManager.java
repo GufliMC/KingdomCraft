@@ -106,7 +106,9 @@ public class CommandManager {
         addCommand(new TpHereOtherCommand(kdc));
 
         addCommand(new ChatCommand(kdc));
+
         addCommand(new AdminCommand(kdc));
+        addCommand(new AdminOtherCommand(kdc));
         addCommand(new SocialSpyCommand(kdc));
 
         addCommand(new EditorCommand(kdc));

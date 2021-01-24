@@ -286,6 +286,12 @@ cmdChatEmptyMessage: '&cYou can''t send an empty message!'
 cmdAdminEnable: '&aYou &2enabled &aadmin mode!'
 cmdAdminDisable: '&aYou &2disabled &aadmin mode!'
 
+cmdAdminEnableSender: '&aYou &2enabled &aadmin mode for &2{0}&a!'
+cmdAdminDisableSender: '&aYou &2disabled &aadmin mode for &2{0}&a!'
+
+cmdAdminEnableTarget: '&aAdmin mode has been &2enabled &afor you!'
+cmdAdminDisableTarget: '&aAdmin mode has been &2disabled &afor you!'
+
 # /k socialspy
 cmdSocialSpyEnable: '&aYou &2enabled &asocial spy!'
 cmdSocialSpyDisable: '&aYou &2disabled &asocial spy!'
