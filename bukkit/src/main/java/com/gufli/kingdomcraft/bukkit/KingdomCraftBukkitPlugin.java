@@ -187,6 +187,27 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		new PlaceholderReplacer(this);
 		new VaultPlaceholderReplacer(this);
 
+		// bStats
+		Metrics metrics = new Metrics(this, 10101);
+
+		// Number of kingdoms chart
+		metrics.addCustomChart(new Metrics.SimplePie("kingdoms", () -> {
+			int amount = kdc.getKingdoms().size();
+			if ( amount <= 5 ) {
+				return "0-5";
+			} else if ( amount <= 10 ) {
+				return "6-10";
+			} else if ( amount <= 15 ) {
+				return "11-15";
+			} else if ( amount <= 20 ) {
+				return "16-20";
+			} else if ( amount <= 25 ) {
+				return "21-25";
+			} else {
+				return "25+";
+			}
+		}));
+
 		getLogger().info("Enabled " + this.getDescription().getFullName());
 	}
 
