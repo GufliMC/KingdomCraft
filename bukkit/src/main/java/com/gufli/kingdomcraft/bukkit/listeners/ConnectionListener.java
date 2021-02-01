@@ -59,7 +59,7 @@ public class ConnectionListener implements Listener, EventListener {
         plugin.getKdc().onQuit(player);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
         if ( player == null ) {
