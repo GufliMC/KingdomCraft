@@ -1,11 +1,14 @@
 package com.gufli.kingdomcraft.bukkit.gui;
 
+import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.gui.InventoryClickType;
 import com.gufli.kingdomcraft.api.gui.InventoryItemCallback;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 public class InventoryBuilder {
 
@@ -67,6 +70,14 @@ public class InventoryBuilder {
 
     public InventoryBuilder withItem(ItemStack item, InventoryItemCallback cb) {
         items.add(new BukkitInventoryItem(item, cb));
+        return this;
+    }
+
+    public InventoryBuilder withItem(ItemStack item, BiConsumer<PlatformPlayer, InventoryClickType> cb) {
+        items.add(new BukkitInventoryItem(item, (player, clickType) -> {
+            cb.accept(player, clickType);
+            return true;
+        }));
         return this;
     }
 

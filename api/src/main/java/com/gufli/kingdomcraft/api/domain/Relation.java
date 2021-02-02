@@ -27,4 +27,8 @@ public interface Relation extends Model {
 
     boolean isRequest();
 
+    default Kingdom getOther(Kingdom kd) {
+        return getKingdom1() == kd ? getKingdom2() : getKingdom1();
+    }
+
 }

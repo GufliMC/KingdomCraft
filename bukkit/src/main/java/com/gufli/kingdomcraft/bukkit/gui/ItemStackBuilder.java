@@ -30,6 +30,16 @@ public class ItemStackBuilder {
         return new ItemStackBuilder(itemStack).hideAttributes();
     }
 
+    public static ItemStackBuilder skull() {
+        ItemStack item = null;
+        try {
+            item = new ItemStack(Material.valueOf("PLAYER_HEAD"));
+        } catch (IllegalArgumentException ex) {
+            item = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (byte) 3);
+        }
+        return new ItemStackBuilder(item);
+    }
+
     private ItemStackBuilder(ItemStack itemStack) {
         this.itemStack = Objects.requireNonNull(itemStack, "itemStack");
     }
@@ -37,6 +47,8 @@ public class ItemStackBuilder {
     public ItemStack build() {
         return this.itemStack;
     }
+
+    // Modifiers
 
     public ItemStackBuilder transform(Consumer<ItemStack> is) {
         is.accept(this.itemStack);
@@ -55,6 +67,24 @@ public class ItemStackBuilder {
         }
         return this;
     }
+
+    public ItemStackBuilder apply(Consumer<ItemStackBuilder> consumer) {
+        consumer.accept(this);
+        return this;
+    }
+
+    public ItemStackBuilder apply(boolean condition, Consumer<ItemStackBuilder> consumer) {
+        if ( condition ) {
+            consumer.accept(this);
+        }
+        return this;
+    }
+
+    public ItemStackBuilder apply(Supplier<Boolean> condition, Consumer<ItemStackBuilder> consumer) {
+        return apply(condition.get(), consumer);
+    }
+
+    // Basic
 
     public ItemStackBuilder withName(String name) {
         return transformMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
@@ -94,6 +124,8 @@ public class ItemStackBuilder {
         return transform(itemStack -> itemStack.setAmount(amount));
     }
 
+    // Enchantments
+
     public ItemStackBuilder withEnchantment(Enchantment enchantment, int level) {
         return transform(itemStack -> itemStack.addUnsafeEnchantment(enchantment, level));
     }
@@ -105,6 +137,8 @@ public class ItemStackBuilder {
     public ItemStackBuilder clearEnchantments() {
         return transform(itemStack -> itemStack.getEnchantments().keySet().forEach(itemStack::removeEnchantment));
     }
+
+    // ItemFlags & Attributes
 
     public ItemStackBuilder withItemFlag(ItemFlag... flags) {
         return transformMeta(meta -> meta.addItemFlags(flags));
@@ -122,7 +156,9 @@ public class ItemStackBuilder {
         return withoutItemFlag(ItemFlag.values());
     }
 
-    public ItemStackBuilder withColor(Color color) {
+    // Leather armor color
+
+    public ItemStackBuilder withLeatherColor(Color color) {
         Material type = itemStack.getType();
         if (type != Material.LEATHER_BOOTS && type != Material.LEATHER_CHESTPLATE
                 && type != Material.LEATHER_HELMET && type != Material.LEATHER_LEGGINGS) {
@@ -134,28 +170,6 @@ public class ItemStackBuilder {
         });
     }
 
-    public ItemStackBuilder apply(Consumer<ItemStackBuilder> consumer) {
-        consumer.accept(this);
-        return this;
-    }
-
-    public ItemStackBuilder apply(boolean condition, Consumer<ItemStackBuilder> consumer) {
-        if ( condition ) {
-            consumer.accept(this);
-        }
-        return this;
-    }
-
-    public ItemStackBuilder apply(Supplier<Boolean> condition, Consumer<ItemStackBuilder> consumer) {
-        return apply(condition.get(), consumer);
-    }
-
-    public ItemStackBuilder setPlayer(OfflinePlayer owner) {
-        return transformMeta(SkullMeta.class, meta -> {
-            meta.setOwner(owner.getName());
-        });
-    }
-
     // SKULLS
 
     private static Class<?> GameProfile;
@@ -164,8 +178,10 @@ public class ItemStackBuilder {
     private static Method Property_getName;
     private static Method PropertyMap_put;
     private static Field CraftMetaSkull_profile;
+    private static Method CraftMetaSkull_setOwningPlayer;
 
     static {
+
         try {
             GameProfile = Class.forName("com.mojang.authlib.GameProfile");
             GameProfile_getProperties = GameProfile.getDeclaredMethod("getProperties");
@@ -179,12 +195,34 @@ public class ItemStackBuilder {
             Class<?> CraftMetaSkull = Reflection.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftMetaSkull");
             CraftMetaSkull_profile = CraftMetaSkull.getDeclaredField("profile");
             CraftMetaSkull_profile.setAccessible(true);
+
+            CraftMetaSkull_setOwningPlayer = CraftMetaSkull.getMethod("setOwningPlayer", OfflinePlayer.class);
+
+            // Optional
+            try {
+                CraftMetaSkull_setOwningPlayer = CraftMetaSkull.getMethod("setOwningPlayer", OfflinePlayer.class);
+            } catch (NoSuchMethodException ignored) {}
+
         } catch (NoSuchMethodException | ClassNotFoundException | NoSuchFieldException e) {
             e.printStackTrace();
         }
     }
 
-    public ItemStackBuilder withTexture(String texture) {
+    public ItemStackBuilder withSkullOwner(OfflinePlayer owner) {
+        return transformMeta(SkullMeta.class, meta -> {
+            if ( CraftMetaSkull_setOwningPlayer != null ) {
+                try {
+                    CraftMetaSkull_setOwningPlayer.invoke(meta, owner);
+                    return;
+                } catch (IllegalAccessException | InvocationTargetException ignored) {}
+            }
+
+            // Fallback to deprecated method
+            meta.setOwner(owner.getName());
+        });
+    }
+
+    public ItemStackBuilder withSkullTexture(String texture) {
         try {
             UUID uuid = UUID.randomUUID();
 
@@ -192,24 +230,24 @@ public class ItemStackBuilder {
             Object property = Property.getDeclaredConstructor(String.class, String.class).newInstance("textures", texture);
             Object properties = GameProfile_getProperties.invoke(profile);
             PropertyMap_put.invoke(properties, Property_getName.invoke(property), property);
-            return withProfile(profile);
+            return withSkullProfile(profile);
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
         return this;
     }
 
-    public ItemStackBuilder withTexture(UUID uuid) {
+    public ItemStackBuilder withSkullTexture(UUID uuid) {
         try {
             Object profile = GameProfile.getDeclaredConstructor(UUID.class, String.class).newInstance(uuid, uuid.toString().substring(0, 15));
-            return withProfile(profile);
+            return withSkullProfile(profile);
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
         return this;
     }
 
-    private ItemStackBuilder withProfile(Object profile) {
+    private ItemStackBuilder withSkullProfile(Object profile) {
         try {
             SkullMeta meta = (SkullMeta) this.itemStack.getItemMeta();
             CraftMetaSkull_profile.set(meta, profile);
@@ -280,21 +318,21 @@ public class ItemStackBuilder {
 
     // FIREWORK
 
-    public ItemStackBuilder withPower(int power) {
+    public ItemStackBuilder withFireworkPower(int power) {
         return transformMeta(FireworkMeta.class, meta ->
                 meta.setPower(power));
     }
 
-    public ItemStackBuilder withEffect(FireworkEffect effect) {
+    public ItemStackBuilder withFireworkEffect(FireworkEffect effect) {
         return transformMeta(FireworkMeta.class, meta ->
                 meta.addEffect(effect));
     }
 
-    public ItemStackBuilder withEffects(FireworkEffect... effects) {
-        return withEffects(Arrays.asList(effects));
+    public ItemStackBuilder withFireworkEffects(FireworkEffect... effects) {
+        return withFireworkEffects(Arrays.asList(effects));
     }
 
-    public ItemStackBuilder withEffects(List<FireworkEffect> effects) {
+    public ItemStackBuilder withFireworkEffects(List<FireworkEffect> effects) {
         return transformMeta(FireworkMeta.class, meta -> {
             meta.clearEffects();
             meta.addEffects(effects);

@@ -15,7 +15,7 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.kingdomcraft.bukkit.panel;
+package com.gufli.kingdomcraft.bukkit.menu;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.User;
@@ -33,7 +33,7 @@ public class InfoCommand extends CommandBase {
     public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", -1, true);
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdInfoExplanation"));
-        setPermissions("kingdom.panel");
+        setPermissions("kingdom.menu");
     }
 
     @Override
@@ -50,13 +50,13 @@ public class InfoCommand extends CommandBase {
         User user = kdc.getUser(player);
 
         if ( args.length == 0 || args[0].equalsIgnoreCase(player.getName()) ) {
-            PlayerInfoPanel.open(player, user);
+            MainMenu.openPlayerInfo(player, user);
             return;
         }
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom != null ) {
-            KingdomInfoPanel.open(player, kingdom);
+            MainMenu.openKingdomInfo(player, kingdom);
             return;
         }
 
@@ -68,8 +68,7 @@ public class InfoCommand extends CommandBase {
                     return;
                 }
 
-                kdc.getPlugin().getScheduler().executeSync(() ->
-                        PlayerInfoPanel.open(player, target));
+                kdc.getPlugin().getScheduler().executeSync(() -> MainMenu.openPlayerInfo(player, target));
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
