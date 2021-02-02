@@ -28,19 +28,22 @@ import com.gufli.kingdomcraft.common.command.CommandBase;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChatChannelCommand extends CommandBase {
+public class DefaultChatChannelCommand extends CommandBase {
 
-    public ChatChannelCommand(KingdomCraftImpl kdc) {
-        super(kdc, "chatchannel", 1, true);
+    public DefaultChatChannelCommand(KingdomCraftImpl kdc) {
+        super(kdc, "defaultchatchannel", -1, true);
         setArgumentsHint("<chatchannel>");
-        addCommand("channel");
-        setExplanationMessage("cmdChatChannelExplanation");
-        setPermissions("kingdom.chatchannel");
+        addCommand("defaultcc");
+        addCommand("dcc");
+        addCommand("defaultchannel");
+        addCommand("dc");
+        setExplanationMessage("cmdDefaultChatChannelExplanation");
+        setPermissions("kingdom.defaultchatchannel");
     }
 
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
-        return kdc.getChatManager().getChatChannels().stream().filter(ChatChannel::isToggleable)
+        return kdc.getChatManager().getChatChannels().stream()
                 .filter(c -> kdc.getChatManager().canTalk(sender, c))
                 .map(ChatChannel::getName).collect(Collectors.toList());
     }
@@ -48,33 +51,20 @@ public class ChatChannelCommand extends CommandBase {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         PlatformPlayer player = (PlatformPlayer) sender;
+
+        if ( args.length == 0 ) {
+            player.remove("DEFAULT_CHATCHANNEL");
+            kdc.getMessageManager().send(sender, "cmdDefaultChatChannelDisable");
+            return;
+        }
+
         ChatChannel cc = kdc.getChatManager().getChatChannel(args[0]);
         if ( cc == null || !kdc.getChatManager().canTalk(player, cc)) {
             kdc.getMessageManager().send(sender, "cmdChatChannelNotExist", args[0]);
             return;
         }
 
-        if ( !cc.isToggleable() ) {
-            kdc.getMessageManager().send(sender, "cmdChatChannelNoToggle", cc.getName());
-            return;
-        }
-
-        User user = kdc.getUser((PlatformPlayer) sender);
-        UserChatChannel ucc = user.getChatChannel(cc.getName());
-
-        boolean isEnabled = ucc == null || ucc.isEnabled();
-
-        if ( isEnabled ) {
-            if ( ucc == null ) {
-                ucc = user.addChatChannel(cc.getName());
-            }
-            ucc.setEnabled(false);
-            kdc.saveAsync(ucc);
-            kdc.getMessageManager().send(sender, "cmdChatChannelDisable", cc.getName());
-        } else {
-            ucc.setEnabled(true);
-            kdc.saveAsync(ucc);
-            kdc.getMessageManager().send(sender, "cmdChatChannelEnable", cc.getName());
-        }
+        player.set("DEFAULT_CHATCHANNEL", cc.getName());
+        kdc.getMessageManager().send(sender, "cmdDefaultChatChannel", cc.getName());
     }
 }

@@ -48,24 +48,44 @@ public class ChatDispatcher {
         String strippedMessage = kdc.getPlugin().decolorify(message);
 
         ChatChannel channel = null;
+        if (player.has("DEFAULT_CHATCHANNEL") ) {
+            channel = channels.stream().filter(ch -> ch.getName().equals(player.get("DEFAULT_CHATCHANNEL", String.class)))
+                    .findFirst().orElse(null);
+        }
+
         for ( ChatChannel ch : channels ) {
+            if ( ch == channel ) {
+                continue;
+            }
+
             if ( ch.getPrefix() != null && !strippedMessage.startsWith(ch.getPrefix()) ) {
                 continue;
+            }
+
+            // If the player is using a default channel, use that prefix instead to talk in the channel without prefix
+            if ( channel != null && channel.getPrefix() != null && ch.getPrefix() != null && ch.getPrefix().equals("") ) {
+                if ( strippedMessage.startsWith(channel.getPrefix()) ) {
+                    message = message.replaceFirst(Pattern.quote(channel.getPrefix()), "");
+                    channel = ch;
+                    break;
+                }
+                continue;
+            }
+
+            if ( ch.getPrefix() != null ) {
+                message = message.replaceFirst(Pattern.quote(ch.getPrefix()), "");
             }
             channel = ch;
             break;
         }
 
         if ( channel == null ) {
-            if ( chatManager.getDefaultChatChannel() == null ) {
+            if (chatManager.getDefaultChatChannel() == null) {
                 kdc.getMessageManager().send(player, "chatNoChannel");
                 return;
             }
 
             channel = chatManager.getDefaultChatChannel();
-        }
-        else if ( channel.getPrefix() != null && !channel.getPrefix().equals("") ) {
-            message = message.replaceFirst(Pattern.quote(channel.getPrefix()), "");
         }
 
         // Chat cooldown check
@@ -75,7 +95,7 @@ public class ChatDispatcher {
 
             long lastMessage = player.get(cooldownKey, Long.class);
             long diff = System.currentTimeMillis() - lastMessage;
-            if ( diff < channel.getCooldown() * 1000 ) {
+            if ( diff < channel.getCooldown() * 1000L) {
                 float remaining = ((channel.getCooldown() * 1000) - diff) / 1000f;
                 DecimalFormat df = new DecimalFormat("0.0");
                 kdc.getMessageManager().send(player, "chatChannelCooldown", df.format(remaining));

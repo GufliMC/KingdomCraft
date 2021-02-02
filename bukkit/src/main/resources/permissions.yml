@@ -3,6 +3,11 @@
 default:
   permissions:
   - kingdom.join
+  - kingdom.menu
+  - kingdom.info
+  - kingdom.defaultchatchannel
+  - kingdom.list
+  - kingdom.chat
 
 # these groups must be linked to ranks
 king:
@@ -28,3 +33,8 @@ duke:
 member:
   permissions:
     - kingdom.spawn
+    - kingdom.menu
+    - kingdom.info
+    - kingdom.defaultchatchannel
+    - kingdom.list
+    - kingdom.chat

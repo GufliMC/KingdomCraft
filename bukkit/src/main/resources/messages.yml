@@ -59,8 +59,10 @@ cmdJoinExplanation: 'Join a kingdom'
 cmdListExplanation: 'Get a list of kingdoms'
 cmdSpawnExplanation: 'Teleport to the kingdom spawn'
 cmdInfoExplanation: 'Get info of a kingdom or player'
+cmdMenuExplanation: 'Open the kingdom menu'
 cmdLeaveExplanation: 'Leave your kingdom'
-cmdChannelExplanation: 'Enable/disable a channel to talk in'
+cmdChatChannelExplanation: 'Enable/disable a channel to talk in'
+cmdDefaultChatChannelExplanation: 'Toggle channel to talk in without prefix'
 cmdSetRankExplanation: 'Change a players rank'
 cmdEnemyExplanation: 'Start a rivalry'
 cmdTruceExplanation: 'Request or accept a truce'
@@ -80,6 +82,7 @@ cmdEditorExplanation: 'Start a webeditor session'
 cmdTpSpawnExplanation: 'Teleport a player to their kingdom spawn'
 cmdTpSpawnOtherExplanation: 'Teleport a player to a kingdom spawn'
 cmdSocialSpyExplanation: 'Toggle social spy'
+
 
 cmdGroupsExplanation: 'Get a list of all existing groups'
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
@@ -149,6 +152,10 @@ cmdChatChannelEnable: '&aYou enabled the channel &2{0}&a!'
 cmdChatChannelDisable: '&aYou disabled the channel &2{0}&a!'
 cmdChatChannelNoToggle: '&aYou can''t disable &2{0}&a!'
 cmdChatChannelNotExist: '&aThe channel &2{0} &adoes not exist!'
+
+# /k defaultchatchannel
+cmdDefaultChatChannel: '&aYou changed &2{0} &ato your default chat channel!'
+cmdDefaultChatChannelDisable: '&aYou turned off a default chat channel!'
 
 # /k invite
 cmdInviteAlreadyKingdom: '&cThe player &4{0} &cis already in your kingdom!'

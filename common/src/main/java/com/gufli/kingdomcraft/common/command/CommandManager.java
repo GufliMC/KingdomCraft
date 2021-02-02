@@ -21,6 +21,7 @@ import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.commands.admin.*;
 import com.gufli.kingdomcraft.common.commands.chat.ChatChannelCommand;
 import com.gufli.kingdomcraft.common.commands.chat.ChatCommand;
+import com.gufli.kingdomcraft.common.commands.chat.DefaultChatChannelCommand;
 import com.gufli.kingdomcraft.common.commands.edit.groups.*;
 import com.gufli.kingdomcraft.common.commands.edit.kingdom.*;
 import com.gufli.kingdomcraft.common.commands.edit.ranks.*;
@@ -76,6 +77,7 @@ public class CommandManager {
 
         addCommand(new JoinCommand(kdc));
         addCommand(new ChatChannelCommand(kdc));
+        addCommand(new DefaultChatChannelCommand(kdc));
 
         // member
         addCommand(new LeaveCommand(kdc));
