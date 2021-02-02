@@ -19,7 +19,7 @@ package com.gufli.kingdomcraft.api.domain;
 
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 public interface Kingdom extends Model, AttributeHolder {
@@ -72,6 +72,6 @@ public interface Kingdom extends Model, AttributeHolder {
 
     List<String> getMembers();
 
-    Date getCreatedAt();
+    Instant getCreatedAt();
 
 }

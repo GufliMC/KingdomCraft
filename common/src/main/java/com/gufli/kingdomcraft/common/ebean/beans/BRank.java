@@ -24,6 +24,7 @@ import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,10 +58,10 @@ public class BRank extends BaseModel implements Rank {
     public int memberCount;
 
     @WhenCreated
-    public Date createdAt;
+    public Instant createdAt;
 
     @WhenModified
-    public Date updatedAt;
+    public Instant updatedAt;
 
     //
 

@@ -25,7 +25,7 @@ import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name = "kingdom_relations")
@@ -47,10 +47,10 @@ public class BRelation extends BaseModel implements Relation {
     public boolean isRequest;
 
     @WhenCreated
-    public Date createdAt;
+    public Instant createdAt;
 
     @WhenModified
-    public Date updatedAt;
+    public Instant updatedAt;
 
     //
 

@@ -25,7 +25,7 @@ import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.WhenCreated;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name = "user_invites")
@@ -47,7 +47,7 @@ public class BKingdomInvite extends BaseModel implements KingdomInvite {
     public BUser sender;
 
     @WhenCreated
-    public Date createdAt;
+    public Instant createdAt;
 
     //
 
@@ -84,13 +84,13 @@ public class BKingdomInvite extends BaseModel implements KingdomInvite {
     }
 
     @Override
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
     @Override
     public boolean isValid() {
         return sender.getKingdom().equals(kingdom)
-                && System.currentTimeMillis() - createdAt.getTime() <= 1000 * 60 * 60; // 1h
+                && System.currentTimeMillis() - createdAt.getEpochSecond() <= 3600; // 1h
     }
 }

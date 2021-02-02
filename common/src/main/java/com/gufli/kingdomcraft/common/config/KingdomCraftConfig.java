@@ -19,6 +19,8 @@ package com.gufli.kingdomcraft.common.config;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -44,47 +46,40 @@ public class KingdomCraftConfig {
         return config.contains("worlds") ? config.getStringList("worlds") : new ArrayList<>();
     }
 
-    public TimeZone getTimeZone() {
+    public ZoneId getTimeZone() {
         if ( config.contains("timezone") ) {
-            return TimeZone.getTimeZone(config.getString("timezone"));
+            try {
+                return ZoneId.of(config.getString("timezone"));
+            } catch (Exception ignored) {}
         }
-        return TimeZone.getDefault();
+        return ZoneId.systemDefault();
     }
 
-    public DateFormat getDateFormat() {
-        DateFormat df;
-        try {
-            df = new SimpleDateFormat(config.contains("date-format") ? config.getString("date-format") : "yyyy-MM-dd");
-        } catch (IllegalArgumentException ex) {
-            df = new SimpleDateFormat("yyyy-MM-dd");
+    public DateTimeFormatter getDateFormat() {
+        if ( config.contains("date-format") ) {
+            try {
+                return DateTimeFormatter.ofPattern(config.getString("date-format"));
+            } catch (Exception ignored) {}
         }
-        df.setTimeZone(getTimeZone());
-        return df;
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 
-    public DateFormat getTimeFormat() {
-        DateFormat df;
-        try {
-            df = new SimpleDateFormat(config.contains("time-format") ? config.getString("time-format") : "HH:mm");
-        } catch (IllegalArgumentException ex) {
-            df = new SimpleDateFormat("HH:mm");
+    public DateTimeFormatter getTimeFormat() {
+        if ( config.contains("time-format") ) {
+            try {
+                return DateTimeFormatter.ofPattern(config.getString("time-format"));
+            } catch (Exception ignored) {}
         }
-        df.setTimeZone(getTimeZone());
-        return df;
+        return DateTimeFormatter.ofPattern("HH:mm");
     }
 
-    public DateFormat getDateTimeFormat() {
-        DateFormat df;
+    public DateTimeFormatter getDateTimeFormat() {
+        String dateFormat = config.contains("date-format") ? config.getString("date-format") : "yyyy-MM-dd";
+        String timeFormat = config.contains("time-format") ? config.getString("time-format") : "HH:mm";
         try {
-            df = new SimpleDateFormat((
-                    config.contains("date-format") ? config.getString("date-format") : "yyyy-MM-dd") + " " +
-                    (config.contains("time-format") ? config.getString("time-format") : "HH:mm")
-            );
-        } catch (IllegalArgumentException ex) {
-            df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        }
-        df.setTimeZone(getTimeZone());
-        return df;
+            return DateTimeFormatter.ofPattern(dateFormat + " " + timeFormat);
+        } catch (Exception ignored) {}
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     }
 
     public boolean isWorldEnabled(String world) {

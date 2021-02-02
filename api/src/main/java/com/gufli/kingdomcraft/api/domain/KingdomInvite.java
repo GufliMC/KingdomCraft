@@ -17,7 +17,7 @@
 
 package com.gufli.kingdomcraft.api.domain;
 
-import java.util.Date;
+import java.time.Instant;
 
 public interface KingdomInvite extends Model {
 
@@ -27,7 +27,7 @@ public interface KingdomInvite extends Model {
 
     Kingdom getKingdom();
 
-    Date getCreatedAt();
+    Instant getCreatedAt();
 
     boolean isValid();
 

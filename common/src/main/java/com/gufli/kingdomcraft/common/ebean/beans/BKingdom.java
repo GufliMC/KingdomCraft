@@ -27,8 +27,8 @@ import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -65,10 +65,10 @@ public class BKingdom extends BaseModel implements Kingdom {
     public int memberCount;
 
     @WhenCreated
-    Date createdAt;
+    Instant createdAt;
 
     @WhenModified
-    Date updatedAt;
+    Instant updatedAt;
 
     //
 
@@ -233,7 +233,7 @@ public class BKingdom extends BaseModel implements Kingdom {
     }
 
     @Override
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 }

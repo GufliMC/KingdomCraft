@@ -40,6 +40,12 @@ import io.ebean.migration.MigrationRunner;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -247,9 +253,7 @@ public class StorageContext {
     }
 
     public void purgeUsers() {
-        Date date = new Date();
-        date.setTime(date.getTime() + 14 * 24 * 60 * 60 * 1000);
-        new QBUser().updatedAt.before(date).delete();
+        new QBUser().updatedAt.before(Instant.now().minus(2, ChronoUnit.WEEKS)).delete();
     }
 
     public Set<User> getOnlineUsers() {
@@ -299,15 +303,21 @@ public class StorageContext {
         return user;
     }
 
-    public void update(User user, PlatformPlayer player) {
+    public void updateName(User user, PlatformPlayer player) {
         BUser buser = (BUser) user;
-        buser.update(player.getUniqueId(), player.getName());
+        buser.setName(player.getName());
         saveAsync(buser);
+    }
+
+    public void updateUUID(User user, PlatformPlayer player) {
+        BUser buser = (BUser) user;
+        new QBUser().id.eq(buser.id).asUpdate().set("id", player.getUniqueId().toString()).update();
+        buser.setUUID(player.getUniqueId());
     }
 
     public void login(User user) {
         BUser buser = (BUser) user;
-        buser.updatedAt = new Date();
+        buser.setLastJoin(Instant.now());
         saveAsync(buser);
     }
 

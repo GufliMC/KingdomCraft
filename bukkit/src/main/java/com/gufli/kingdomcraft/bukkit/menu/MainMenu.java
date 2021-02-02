@@ -6,12 +6,16 @@ import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.gufli.kingdomcraft.bukkit.gui.InventoryBuilder;
 import com.gufli.kingdomcraft.bukkit.gui.ItemStackBuilder;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import org.apache.commons.lang3.time.DateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -118,7 +122,8 @@ public class MainMenu {
 
         InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + target.getName());
 
-        DateFormat df = kdc.getConfig().getDateFormat();
+        ZoneId timeZone = kdc.getConfig().getTimeZone();
+
         builder.withItem(ItemStackBuilder.skull()
                 .withName(ChatColor.GOLD + target.getName())
                 .apply(b -> {
@@ -135,11 +140,20 @@ public class MainMenu {
                     b.withLore("");
                     if ( kdc.getPlayer(target) != null ) {
                         b.withLore(ChatColor.GRAY + "Last seen: " + ChatColor.GOLD + "now");
+                        return;
+                    }
+
+                    ZonedDateTime zdt = target.getUpdatedAt().atZone(timeZone);
+
+                    if ( zdt.toLocalDate().equals(LocalDate.now(timeZone)) ) {
+                        b.withLore(ChatColor.GRAY + "Last seen: " + ChatColor.GOLD
+                                + zdt.format(kdc.getConfig().getTimeFormat()));
                     } else {
-                        b.withLore(ChatColor.GRAY + "Last seen: " + ChatColor.GOLD + df.format(target.getUpdatedAt()));
+                        b.withLore(ChatColor.GRAY + "Last seen: " + ChatColor.GOLD
+                                + zdt.format(kdc.getConfig().getDateFormat()));
                     }
                 })
-                .withLore(ChatColor.GRAY + "First login: " + ChatColor.GOLD + df.format(target.getCreatedAt()))
+                .withLore(ChatColor.GRAY + "First login: " + ChatColor.GOLD + target.getCreatedAt().atZone(timeZone).format(kdc.getConfig().getDateFormat()))
                 .withSkullOwner(((BukkitPlayer) player).getPlayer())
                 .build()
         );
@@ -495,7 +509,10 @@ public class MainMenu {
                         b.withLore(ChatColor.GRAY + "Max members: " + ChatColor.GOLD + kingdom.getMaxMembers());
                     }
                 })
-                .withLore(ChatColor.GRAY + "Created at: " + ChatColor.GOLD + kdc.getConfig().getDateFormat().format(kingdom.getCreatedAt()))
+                .withLore(ChatColor.GRAY + "Created at: " + ChatColor.GOLD +
+                        kingdom.getCreatedAt()
+                        .atZone(kdc.getConfig().getTimeZone())
+                        .format(kdc.getConfig().getDateFormat()))
                 .build();
     }
 

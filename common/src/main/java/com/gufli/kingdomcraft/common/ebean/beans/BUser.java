@@ -21,13 +21,14 @@ import com.gufli.kingdomcraft.api.KingdomCraftProvider;
 import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
 import com.gufli.kingdomcraft.common.event.EventDispatcher;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.*;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,10 +57,10 @@ public class BUser extends BaseModel implements User {
     public List<BUserChatChannel> chatChannels;
 
     @WhenCreated
-    public Date createdAt;
+    public Instant createdAt;
 
     @WhenModified
-    public Date updatedAt;
+    public Instant updatedAt;
 
     //
 
@@ -79,9 +80,16 @@ public class BUser extends BaseModel implements User {
         super.save();
     }
 
-    public void update(UUID uuid, String name) {
-        this.id = uuid.toString();
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setUUID(UUID uuid) {
+        this.id = uuid.toString();
+    }
+
+    public void setLastJoin(Instant Instant) {
+        this.updatedAt = Instant;
     }
 
     // interface
@@ -227,12 +235,12 @@ public class BUser extends BaseModel implements User {
     }
 
     @Override
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
     @Override
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 }

@@ -17,7 +17,7 @@
 
 package com.gufli.kingdomcraft.api.domain;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,8 +47,8 @@ public interface User extends Model {
 
     UserChatChannel getChatChannel(String channel);
 
-    Date getCreatedAt();
+    Instant getCreatedAt();
 
-    Date getUpdatedAt();
+    Instant getUpdatedAt();
 
 }
