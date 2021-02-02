@@ -19,12 +19,12 @@ package com.gufli.kingdomcraft.api.gui;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
-public interface InventoryCallback {
+public interface InventoryCallback<T> {
 
     void onOpen(PlatformPlayer player);
 
     void onClose(PlatformPlayer player);
 
-    void onClick(PlatformPlayer player, InventoryClickType clickType, int slot, InventoryItem<?> item);
+    void onClick(PlatformPlayer player, InventoryClickType clickType, int slot, InventoryItem<T> item);
 
 }

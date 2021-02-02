@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.bukkit.gui;
 
+import com.gufli.kingdomcraft.api.KingdomCraft;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.gui.Inventory;
 import com.gufli.kingdomcraft.api.gui.InventoryClickType;
@@ -24,7 +25,6 @@ import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -32,16 +32,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class InventoryListener implements Listener {
 
-    private final KingdomCraftBukkitPlugin plugin;
-
+    private final KingdomCraft kdc;
+    
     public InventoryListener(KingdomCraftBukkitPlugin plugin) {
-        this.plugin = plugin;
-        new BukkitInventoryFactory();
+        this.kdc = plugin.getKdc();
     }
-
-    @EventHandler(priority = EventPriority.LOW)
+    
+    @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
+        PlatformPlayer player = kdc.getPlayer(e.getPlayer().getUniqueId());
         handleClose(player);
     }
 
@@ -51,7 +50,7 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
+        PlatformPlayer player = kdc.getPlayer(e.getPlayer().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -65,7 +64,7 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        PlatformPlayer player = plugin.getKdc().getPlayer(e.getWhoClicked().getUniqueId());
+        PlatformPlayer player = kdc.getPlayer(e.getWhoClicked().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -76,9 +75,12 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        if ( !inv.getHandle().equals(e.getView().getTopInventory()) ) {
+        if ( e.getRawSlot() >= e.getView().getTopInventory().getSize() ) {
             return;
         }
+//        if ( !inv.getHandle().equals(e.getView().getTopInventory()) ) {
+//            return;
+//        }
 
         e.setCancelled(true);
 

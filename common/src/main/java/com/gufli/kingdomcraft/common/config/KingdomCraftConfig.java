@@ -17,10 +17,11 @@
 
 package com.gufli.kingdomcraft.common.config;
 
-import com.gufli.kingdomcraft.api.domain.RelationType;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class KingdomCraftConfig {
@@ -41,6 +42,49 @@ public class KingdomCraftConfig {
 
     public List<String> getWorlds() {
         return config.contains("worlds") ? config.getStringList("worlds") : new ArrayList<>();
+    }
+
+    public TimeZone getTimeZone() {
+        if ( config.contains("timezone") ) {
+            return TimeZone.getTimeZone(config.getString("timezone"));
+        }
+        return TimeZone.getDefault();
+    }
+
+    public DateFormat getDateFormat() {
+        DateFormat df;
+        try {
+            df = new SimpleDateFormat(config.contains("date-format") ? config.getString("date-format") : "yyyy-MM-dd");
+        } catch (IllegalArgumentException ex) {
+            df = new SimpleDateFormat("yyyy-MM-dd");
+        }
+        df.setTimeZone(getTimeZone());
+        return df;
+    }
+
+    public DateFormat getTimeFormat() {
+        DateFormat df;
+        try {
+            df = new SimpleDateFormat(config.contains("time-format") ? config.getString("time-format") : "HH:mm");
+        } catch (IllegalArgumentException ex) {
+            df = new SimpleDateFormat("HH:mm");
+        }
+        df.setTimeZone(getTimeZone());
+        return df;
+    }
+
+    public DateFormat getDateTimeFormat() {
+        DateFormat df;
+        try {
+            df = new SimpleDateFormat((
+                    config.contains("date-format") ? config.getString("date-format") : "yyyy-MM-dd") + " " +
+                    (config.contains("time-format") ? config.getString("time-format") : "HH:mm")
+            );
+        } catch (IllegalArgumentException ex) {
+            df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        }
+        df.setTimeZone(getTimeZone());
+        return df;
     }
 
     public boolean isWorldEnabled(String world) {

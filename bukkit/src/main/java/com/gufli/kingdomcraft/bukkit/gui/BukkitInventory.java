@@ -17,21 +17,33 @@
 
 package com.gufli.kingdomcraft.bukkit.gui;
 
-import com.gufli.kingdomcraft.api.gui.Inventory;
+import com.gufli.kingdomcraft.api.gui.AbstractInventory;
 import com.gufli.kingdomcraft.api.gui.InventoryCallback;
+import com.gufli.kingdomcraft.api.gui.InventoryItem;
+import com.gufli.kingdomcraft.api.gui.InventoryItemCallback;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
-public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.inventory.Inventory> {
+public class BukkitInventory extends AbstractInventory<Inventory, ItemStack> {
 
-    public BukkitInventory(org.bukkit.inventory.Inventory inv, InventoryCallback callback) {
+    public BukkitInventory(int size, String title, InventoryCallback<ItemStack> callback) {
+        super(Bukkit.createInventory(null, size, title), callback);
+    }
+
+    public BukkitInventory(int size, String title) {
+        super(Bukkit.createInventory(null, size, title));
+    }
+
+    public BukkitInventory(Inventory inv, InventoryCallback<ItemStack> callback) {
         super(inv, callback);
     }
 
-    public BukkitInventory(org.bukkit.inventory.Inventory inv) {
+    public BukkitInventory(Inventory inv) {
         super(inv);
     }
 
-    public BukkitInventory(String name, int size, InventoryCallback callback) {
+    public BukkitInventory(String name, int size, InventoryCallback<ItemStack> callback) {
         this(Bukkit.createInventory(null, size, name), callback);
     }
 
@@ -40,14 +52,22 @@ public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.i
     }
 
     @Override
-    public void setItem(int slot, BukkitInventoryItem item) {
+    public void removeItem(int slot) {
+        super.removeItem(slot);
+        handle.setItem(slot, null);
+    }
+
+    @Override
+    public <V extends InventoryItem<ItemStack>> void setItem(int slot, V item) {
         super.setItem(slot, item);
         handle.setItem(slot, item.getHandle());
     }
 
-    @Override
-    public void removeItem(int slot) {
-        super.removeItem(slot);
-        handle.setItem(slot, null);
+    public void setItem(int slot, ItemStack item) {
+        this.setItem(slot, new BukkitInventoryItem(item));
+    }
+
+    public void setItem(int slot, ItemStack item, InventoryItemCallback callback) {
+        this.setItem(slot, new BukkitInventoryItem(item, callback));
     }
 }

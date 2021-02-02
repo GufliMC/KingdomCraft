@@ -17,16 +17,30 @@
 
 package com.gufli.kingdomcraft.api.gui;
 
-public class InventoryFactoryRegistry {
+import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
-    private static InventoryFactory factory;
+public abstract class AbstractInventoryItem<T> implements InventoryItem<T> {
 
-    public static void register(InventoryFactory _factory) {
-        factory = _factory;
+    protected T handle;
+    protected InventoryItemCallback callback;
+
+    public AbstractInventoryItem(T handle, InventoryItemCallback callback) {
+        this.handle = handle;
+        this.callback = callback;
     }
 
-    public static InventoryFactory getFactory() {
-        return factory;
+    public AbstractInventoryItem(T handle) {
+        this(handle, null);
     }
-    
+
+    public boolean dispatchClick(PlatformPlayer player, InventoryClickType type) {
+        if ( callback == null ) {
+            return false;
+        }
+        return callback.onClick(player, type);
+    }
+
+    public T getHandle() {
+        return handle;
+    }
 }

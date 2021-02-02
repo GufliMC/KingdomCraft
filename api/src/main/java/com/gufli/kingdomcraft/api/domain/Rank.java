@@ -18,6 +18,8 @@
 package com.gufli.kingdomcraft.api.domain;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public interface Rank extends Model, AttributeHolder {
 
@@ -63,7 +65,7 @@ public interface Rank extends Model, AttributeHolder {
 
     int getMemberCount();
 
-    List<String> getMembers();
+    Map<UUID, String> getMembers();
 
     Rank clone(Kingdom kingdom, boolean withAttributes);
 }

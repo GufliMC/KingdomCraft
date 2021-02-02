@@ -17,11 +17,11 @@
 
 package com.gufli.kingdomcraft.bukkit.gui;
 
-import com.gufli.kingdomcraft.api.gui.InventoryItem;
+import com.gufli.kingdomcraft.api.gui.AbstractInventoryItem;
 import com.gufli.kingdomcraft.api.gui.InventoryItemCallback;
 import org.bukkit.inventory.ItemStack;
 
-public class BukkitInventoryItem extends InventoryItem<ItemStack> {
+public class BukkitInventoryItem extends AbstractInventoryItem<ItemStack> {
 
     public BukkitInventoryItem(ItemStack itemStack, InventoryItemCallback callback) {
         super(itemStack, callback);

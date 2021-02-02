@@ -24,9 +24,8 @@ import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "ranks")
@@ -211,8 +210,9 @@ public class BRank extends BaseModel implements Rank {
     }
 
     @Override
-    public List<String> getMembers() {
-        return new QBUser().rank.id.eq(this.id).select("name").findSingleAttributeList();
+    public Map<UUID, String> getMembers() {
+        QBUser alias = QBUser.alias();
+        return new QBUser().rank.id.eq(this.id).select(alias.id, alias.name).findStream().collect(Collectors.toMap(BUser::getUniqueId, BUser::getName));
     }
 
     @Override
