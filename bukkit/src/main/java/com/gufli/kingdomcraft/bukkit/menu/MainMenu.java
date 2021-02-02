@@ -361,22 +361,22 @@ public class MainMenu {
             ItemStack item;
             if ( rel == RelationType.ALLY ) {
                 item = ItemStackBuilder.of(Material.SLIME_BALL)
-                        .withName(colorify(kd.getDisplay()))
+                        .withName(ChatColor.WHITE + colorify(kd.getDisplay()))
                         .withLore("", ChatColor.AQUA + "Ally of " + ChatColor.GOLD + colorify(kingdom.getDisplay()))
                         .build();
             } else if ( rel == RelationType.ENEMY ) {
                 item = ItemStackBuilder.of(Material.FIREBALL)
-                        .withName(colorify(kd.getDisplay()))
+                        .withName(ChatColor.WHITE + colorify(kd.getDisplay()))
                         .withLore("", ChatColor.RED + "Enemy of " + ChatColor.GOLD + colorify(kingdom.getDisplay()))
                         .build();
             } else if ( rel == RelationType.TRUCE ) {
                 item = ItemStackBuilder.of(Material.MAGMA_CREAM)
-                        .withName(colorify(kd.getDisplay()))
+                        .withName(ChatColor.WHITE + colorify(kd.getDisplay()))
                         .withLore("", ChatColor.DARK_PURPLE + "In truce with " + ChatColor.GOLD + colorify(kingdom.getDisplay()))
                         .build();
             } else {
                 item = ItemStackBuilder.of(Material.FIREWORK_CHARGE)
-                        .withName(colorify(kd.getDisplay()))
+                        .withName(ChatColor.WHITE + colorify(kd.getDisplay()))
                         .withLore("", ChatColor.GRAY + "Neutral with " + ChatColor.GOLD + colorify(kingdom.getDisplay()))
                         .build();
             }
