@@ -206,12 +206,27 @@ public class KingdomCraftImpl implements KingdomCraft {
     }
 
     @Override
+    public Set<Kingdom> getKingdoms(boolean includeTemplate) {
+        Set<Kingdom> kingdoms = context.getKingdoms();
+        if ( includeTemplate ) {
+            kingdoms.add(getTemplateKingdom());
+        }
+        return kingdoms;
+    }
+
+    @Override
     public Kingdom getKingdom(String name) {
+        if ( name.equalsIgnoreCase("template") ) {
+            return getTemplateKingdom();
+        }
         return context.getKingdom(name);
     }
 
     @Override
     public Kingdom getKingdom(long id) {
+        if ( id == -1 ) {
+            return getTemplateKingdom();
+        }
         return context.getKingdom(id);
     }
 
@@ -223,6 +238,11 @@ public class KingdomCraftImpl implements KingdomCraft {
         Kingdom kingdom = context.createKingdom(name);
         eventDispatcher.dispatchKingdomCreate(kingdom);
         return kingdom;
+    }
+
+    @Override
+    public Kingdom getTemplateKingdom() {
+        return context.getTemplateKingdom();
     }
 
     // relations
@@ -310,7 +330,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     }
 
     @Override
-    public CompletableFuture<Void> saveAsync(Collection<Model> models) {
+    public <T extends Model> CompletableFuture<Void> saveAsync(Collection<T> models) {
         return context.saveAsync(models);
     }
 
@@ -320,7 +340,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     }
 
     @Override
-    public CompletableFuture<Void> deleteAsync(Collection<Model> models) {
+    public <T extends Model> CompletableFuture<Void> deleteAsync(Collection<T> models) {
         return context.deleteAsync(models);
     }
 

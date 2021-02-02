@@ -18,12 +18,14 @@
 package com.gufli.kingdomcraft.common.commands.edit.kingdom;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
+import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
+import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 
 public class CreateCommand extends CommandBase {
@@ -53,16 +55,40 @@ public class CreateCommand extends CommandBase {
             return;
         }
 
+        Kingdom template = kdc.getTemplateKingdom();
+
         Kingdom kingdom = kdc.createKingdom(args[0]);
+        template.copyTo(kingdom, true);
         CompletableFuture<Void> future = kdc.saveAsync(kingdom);
 
-        kdc.getPlugin().getScheduler().executeSync(() ->
-                kdc.getMessageManager().send(sender, "cmdCreate", kingdom.getName()));
+        future = future.thenCompose(unused -> {
+            // Add template ranks
+            for ( Rank rank : template.getRanks() ) {
+                rank.clone(kingdom, true);
+            }
+            return kdc.saveAsync(kingdom.getRanks());
+        }).thenCompose(unused -> {
+            // Add default rank
+            if ( template.getDefaultRank() != null ) {
+                kingdom.setDefaultRank(kingdom.getRank(template.getDefaultRank().getName()));
+            }
+            return kdc.saveAsync(kingdom);
+        });
+
+        kdc.getMessageManager().send(sender, "cmdCreate", kingdom.getName());
 
         if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
             User user = kdc.getUser((PlatformPlayer) sender);
             user.setKingdom(kingdom);
-            future.thenRun(user::save);
+
+            future.thenRun(() -> {
+                if ( kingdom.getDefaultRank() != null ) {
+                    user.setRank(kingdom.getDefaultRank());
+                } else if ( !kingdom.getRanks().isEmpty() ) {
+                    user.setRank(kingdom.getRanks().stream().min(Comparator.comparing(Rank::getLevel)).orElse(null));
+                }
+                kdc.saveAsync(user);
+            });
         }
 
 

@@ -17,9 +17,7 @@
 
 package com.gufli.kingdomcraft.common.ebean.beans;
 
-import com.gufli.kingdomcraft.api.domain.Kingdom;
-import com.gufli.kingdomcraft.api.domain.KingdomAttribute;
-import com.gufli.kingdomcraft.api.domain.Rank;
+import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
@@ -235,5 +233,29 @@ public class BKingdom extends BaseModel implements Kingdom {
     @Override
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public void copyTo(Kingdom target, boolean withAttributes) {
+        if ( this.prefix != null ) {
+            target.setPrefix(this.prefix.replace("{kingdom_name}", target.getName()));
+        }
+        if ( this.suffix != null ) {
+            target.setSuffix(this.suffix.replace("{kingdom_name}", target.getName()));
+        }
+        if ( this.display != null ) {
+            target.setDisplay(this.display.replace("{kingdom_name}", target.getName()));
+        }
+        target.setMaxMembers(this.maxMembers);
+        target.setInviteOnly(this.inviteOnly);
+
+        if ( withAttributes ) {
+            for (KingdomAttribute attr : this.attributes ) {
+                if ( target.getAttribute(attr.getName()) != null ) {
+                    continue;
+                }
+                target.createAttribute(attr.getName()).setValue(attr.getValue());
+            }
+        }
     }
 }

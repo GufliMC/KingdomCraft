@@ -58,11 +58,15 @@ public interface KingdomCraft {
 
     Set<Kingdom> getKingdoms();
 
+    Set<Kingdom> getKingdoms(boolean includeTemplate);
+
     Kingdom getKingdom(String name);
 
     Kingdom getKingdom(long id);
 
     Kingdom createKingdom(String name);
+
+    Kingdom getTemplateKingdom();
 
     // relations
 
@@ -96,10 +100,10 @@ public interface KingdomCraft {
 
     CompletableFuture<Void> saveAsync(Model... models);
 
-    CompletableFuture<Void> saveAsync(Collection<Model> models);
+    <T extends Model> CompletableFuture<Void> saveAsync(Collection<T> models);
 
     CompletableFuture<Void> deleteAsync(Model... models);
 
-    CompletableFuture<Void> deleteAsync(Collection<Model> models);
+    <T extends Model> CompletableFuture<Void> deleteAsync(Collection<T> models);
 
 }

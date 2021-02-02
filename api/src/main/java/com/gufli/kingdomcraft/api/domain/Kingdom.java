@@ -74,4 +74,10 @@ public interface Kingdom extends Model, AttributeHolder {
 
     Instant getCreatedAt();
 
+    default boolean isTemplate() {
+        return getId() == -1;
+    }
+
+   void copyTo(Kingdom kingdom, boolean withAttributes);
+
 }

@@ -64,7 +64,7 @@ public class DeleteOtherCommand extends CommandBase {
         }
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
-        if ( kingdom == null ) {
+        if ( kingdom == null || kingdom.isTemplate() ) {
             kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }

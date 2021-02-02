@@ -42,6 +42,7 @@ public class ModelSerializer {
 
     public Map<String, Object> serialize(Kingdom kingdom) {
         Map<String, Object> map = new HashMap<>();
+        map.put("name", kingdom.getName());
         map.put("display", kingdom.getDisplay());
         map.put("prefix", kingdom.getPrefix());
         map.put("suffix", kingdom.getSuffix());

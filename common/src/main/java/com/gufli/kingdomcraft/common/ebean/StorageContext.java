@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 
 public class StorageContext {
 
+    public static BKingdom templateKingdom;
     public static final Set<BKingdom> kingdoms = new CopyOnWriteArraySet<>();
     public static final Set<BRelation> relations = new CopyOnWriteArraySet<>();
 
@@ -91,6 +92,44 @@ public class StorageContext {
         // load cache
         kingdoms.addAll(new QBKingdom().findList());
 
+        // load template
+        for ( Kingdom kd : kingdoms ) {
+            if ( kd.getId() == -1 ) {
+                templateKingdom = (BKingdom) kd;
+                templateKingdom.name = "template";
+                kingdoms.remove(kd);
+                break;
+            }
+        }
+
+        // create template
+        if ( templateKingdom == null ) {
+            templateKingdom = new BKingdom();
+            templateKingdom.id = -1;
+            templateKingdom.name = "template";
+
+            Rank member = templateKingdom.createRank("member");
+            member.setDisplay("&7Member");
+            member.setLevel(0);
+            member.setPrefix("&7[Member]");
+
+            Rank duke = templateKingdom.createRank("duke");
+            duke.setDisplay("&2Duke");
+            duke.setLevel(20);
+            duke.setPrefix("&7[&2Duke&7]");
+
+            Rank king = templateKingdom.createRank("king");
+            king.setDisplay("&6King");
+            king.setLevel(30);
+            king.setPrefix("&7[&6King&7]");
+
+            saveAsync(templateKingdom, member, duke, king).thenRun(() -> {
+                templateKingdom.setDefaultRank(member);
+                saveAsync(templateKingdom);
+            });
+        }
+
+        // load relations
         new QBRelation().findList().forEach(rel ->  {
             reassign(rel);
             relations.add(rel);
@@ -159,6 +198,10 @@ public class StorageContext {
         kingdom.name = name;
         kingdoms.add(kingdom);
         return kingdom;
+    }
+
+    public Kingdom getTemplateKingdom() {
+        return templateKingdom;
     }
 
     // relations

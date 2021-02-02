@@ -42,10 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EditorImpl implements Editor {
@@ -99,7 +96,7 @@ public class EditorImpl implements Editor {
         ObjectNode node = mapper.createObjectNode();
 
         Map<String, Map<String, Object>> kingdoms = new HashMap<>();
-        kdc.getKingdoms().forEach(kingdom -> kingdoms.put(kingdom.getName(), serializer.serialize(kingdom)));
+        kdc.getKingdoms(true).forEach(kingdom -> kingdoms.put(kingdom.getName(), serializer.serialize(kingdom)));
         node.set("kingdoms", mapper.valueToTree(kingdoms));
 
         Map<String, String> kingdomAttributes = new HashMap<>();
@@ -139,8 +136,8 @@ public class EditorImpl implements Editor {
 
         try {
             if ( json.has("deleted_kingdoms") ) {
-                ObjectReader reader = mapper.readerFor(new TypeReference<List<String>>() {});
-                List<String> kingdoms = reader.readValue(json.get("deleted_kingdoms"));
+                ObjectReader reader = mapper.readerFor(new TypeReference<List<Integer>>() {});
+                List<Integer> kingdoms = reader.readValue(json.get("deleted_kingdoms"));
                 kingdoms.stream().map(kdc::getKingdom).filter(Objects::nonNull).forEach(Model::delete);
             }
 
@@ -152,13 +149,13 @@ public class EditorImpl implements Editor {
             ObjectReader reader = mapper.readerFor(new TypeReference<Map<String, JsonNode>>() {});
             Map<String, JsonNode> kingdoms = reader.readValue(json.get("kingdoms"));
 
-            for ( String kingdomname : kingdoms.keySet() ) {
-                Kingdom kingdom = kdc.getKingdom(kingdomname);
+            for ( String key : kingdoms.keySet() ) {
+                Kingdom kingdom = kdc.getKingdom(key);
                 if ( kingdom == null ) {
-                    kingdom = kdc.createKingdom(kingdomname);
+                    String name = kingdoms.get(key).has("name") ? kingdoms.get(key).get("name").asText(): key;
+                    kingdom = kdc.createKingdom(name.replace(" ", ""));
                 }
-
-                deserializer.deserialize(kingdom, kingdoms.get(kingdomname));
+                deserializer.deserialize(kingdom, kingdoms.get(key));
             }
 
             kdc.getPlugin().reload();

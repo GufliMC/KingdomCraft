@@ -57,7 +57,7 @@ public class TpSpawnOtherCommand extends CommandBase {
         }
 
         Kingdom kingdom = kdc.getKingdom(args[1]);
-        if ( kingdom == null ) {
+        if ( kingdom == null || kingdom.isTemplate() ) {
             kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[1]);
             return;
         }

@@ -39,7 +39,7 @@ public class EditDefaultRankOtherCommand extends CommandBase {
     @Override
     public List<String> autocomplete(PlatformPlayer sender, String[] args) {
         if ( args.length == 1 ) {
-            return kdc.getKingdoms().stream().map(Kingdom::getName).collect(Collectors.toList());
+            return kdc.getKingdoms(true).stream().map(Kingdom::getName).collect(Collectors.toList());
         }
         if ( args.length == 2 ) {
             Kingdom kingdom = kdc.getKingdom(args[0]);
