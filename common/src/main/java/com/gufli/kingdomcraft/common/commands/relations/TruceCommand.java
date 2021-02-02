@@ -99,7 +99,7 @@ public class TruceCommand extends CommandBase {
             kdc.getMessageManager().send(sender, "cmdTruceRequest", target.getName());
 
             for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
-                if ( kdc.getUser(member).getKingdom() != target ) continue;
+                if ( kdc.getUser(member).getKingdom() != target && member.has("kingdom.truce")) continue;
                 kdc.getMessageManager().send(member, "cmdTruceRequestTarget", kingdom.getName());
             }
             return;

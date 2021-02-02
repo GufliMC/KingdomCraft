@@ -93,7 +93,7 @@ public class NeutralCommand extends CommandBase {
                 kdc.getMessageManager().send(sender, "cmdNeutralRequest", target.getName());
 
                 for (PlatformPlayer member : kdc.getOnlinePlayers()) {
-                    if (kdc.getUser(member).getKingdom() != target) continue;
+                    if ( kdc.getUser(member).getKingdom() != target && member.hasPermission("kingdom.neutral") ) continue;
                     kdc.getMessageManager().send(member, "cmdNeutralRequestTarget", kingdom.getName());
                 }
 

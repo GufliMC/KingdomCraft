@@ -173,20 +173,36 @@ public class StorageContext {
     }
 
     public void setRelation(Kingdom kingdom, Kingdom other, RelationType type) {
+        // remove old relation
         Relation oldrel = getRelation(kingdom, other);
         if ( oldrel != null ) {
+            relations.remove(oldrel);
             oldrel.delete();
+        }
+
+        // remove relation requests
+        Set<Relation> requests = relations.stream()
+                .filter(Relation::isRequest)
+                .filter(r -> (r.kingdom.equals(kingdom) && r.otherKingdom.equals(other))
+                        || (r.otherKingdom.equals(kingdom) && r.kingdom.equals(other)))
+                .collect(Collectors.toSet());
+        relations.removeAll(requests);
+        deleteAsync(requests);
+
+        if ( type == RelationType.NEUTRAL ) {
+            return;
         }
 
         BRelation newrel = createRelation(kingdom, other, type, false);
         relations.add(newrel);
-        plugin.getScheduler().async().execute(newrel::save);
+        saveAsync(newrel);
     }
 
     public void addRelationRequest(Kingdom kingdom, Kingdom other, RelationType type) {
+        removeRelationRequest(kingdom, other);
         BRelation rel = createRelation(kingdom, other, type, true);
         relations.add(rel);
-        plugin.getScheduler().async().execute(rel::save);
+        saveAsync(rel);
     }
 
     public Relation getRelationRequest(Kingdom kingdom, Kingdom other) {
@@ -202,7 +218,7 @@ public class StorageContext {
             return;
         }
         relations.remove(rel);
-        plugin.getScheduler().async().execute(rel::delete);
+        deleteAsync(rel);
     }
 
     private BRelation createRelation(Kingdom kingdom, Kingdom other, RelationType type, boolean isRequest) {
@@ -286,13 +302,13 @@ public class StorageContext {
     public void update(User user, PlatformPlayer player) {
         BUser buser = (BUser) user;
         buser.update(player.getUniqueId(), player.getName());
-        saveAsync(Collections.singleton(buser));
+        saveAsync(buser);
     }
 
     public void login(User user) {
         BUser buser = (BUser) user;
         buser.updatedAt = new Date();
-        saveAsync(Collections.singleton(buser));
+        saveAsync(buser);
     }
 
     private CompletableFuture<User> reassign(CompletableFuture<User> future) {
@@ -342,12 +358,15 @@ public class StorageContext {
 
     public PlatformPlayer getPlayer(String name) {
         return players.keySet().stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-
     }
 
     //
 
-    public CompletableFuture<Void> saveAsync(Collection<Model> models) {
+    public CompletableFuture<Void> saveAsync(Model... models) {
+        return saveAsync(Arrays.asList(models));
+    }
+
+    public <T extends Model> CompletableFuture<Void> saveAsync(Collection<T> models) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             save(models);
         }).handle((v, ex) -> {
@@ -359,7 +378,7 @@ public class StorageContext {
         });
     }
 
-    private void save(Collection<Model> models) {
+    private <T extends Model> void save(Collection<T> models) {
         try (Transaction transaction = DB.byName("kingdomcraft").beginTransaction()) {
             for (Model m : models) {
                 m.save();
@@ -369,7 +388,11 @@ public class StorageContext {
         }
     }
 
-    public CompletableFuture<Void> deleteAsync(Collection<Model> models) {
+    public CompletableFuture<Void> deleteAsync(Model... models) {
+        return deleteAsync(Arrays.asList(models));
+    }
+
+    public <T extends Model> CompletableFuture<Void> deleteAsync(Collection<T> models) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             delete(models);
         }).handle((v, ex) -> {
@@ -381,7 +404,7 @@ public class StorageContext {
         });
     }
 
-    private void delete(Collection<Model> models) {
+    private <T extends Model> void delete(Collection<T> models) {
         try (Transaction transaction = DB.byName("kingdomcraft").beginTransaction()) {
             for (Model m : models) {
                 m.delete();
