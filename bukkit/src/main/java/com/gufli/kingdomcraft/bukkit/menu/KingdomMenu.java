@@ -2,24 +2,25 @@ package com.gufli.kingdomcraft.bukkit.menu;
 
 import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.gui.InventoryClickType;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.gufli.kingdomcraft.bukkit.gui.BukkitInventory;
 import com.gufli.kingdomcraft.bukkit.gui.InventoryBuilder;
 import com.gufli.kingdomcraft.bukkit.gui.ItemStackBuilder;
+import com.gufli.kingdomcraft.bukkit.item.BukkitItem;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
-import org.apache.commons.lang3.time.DateUtils;
+import com.gufli.kingdomcraft.common.util.Teleporter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class KingdomMenu {
@@ -43,7 +44,7 @@ public class KingdomMenu {
             builder.withHotbarItem(4, ItemStackBuilder.of(Material.BARRIER)
                             .withName(ChatColor.RED + "Back")
                             .build(),
-                    (player1, clickType) -> {
+                    (p, ct) -> {
                         back.run();
                         return true;
                     }
@@ -248,7 +249,14 @@ public class KingdomMenu {
     static void openKingdomInfo(PlatformPlayer player, Kingdom target, Runnable back) {
         InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + target.getName());
 
-        builder.withItem(getKingdomItem(target));
+        if ( player.hasPermission("kingdom.edit.item.other") || (player.hasPermission("kingdom.edit.item") && player.getUser().getKingdom() == target) ){
+            builder.withItem(getKingdomItem(target), (p, ct) -> {
+                openKingdomSelectItem(player, target, () -> openKingdomInfo(player, target, back));
+            });
+        } else {
+            builder.withItem(getKingdomItem(target));
+        }
+
 
         if ( !target.getRanks().isEmpty() ) {
             builder.withItem(ItemStackBuilder.of(Material.BOOK)
@@ -271,18 +279,131 @@ public class KingdomMenu {
                 .withName(ChatColor.GOLD + "Members" + ChatColor.GRAY + " (" + ChatColor.GREEN + target.getMemberCount() + ChatColor.GRAY + ")")
                 .build(),
                 (p, ct) -> {
+                    if ( target.getMemberCount() == 0 ) {
+                        return false;
+                    }
                     openKingdomPlayerList(player, target, () -> openKingdomInfo(player, target, back));
+                    return true;
                 }
         );
+
+        if ( player.getUser().getKingdom() == target || player.hasPermission("kingdom.spawn.other") ) {
+            builder.withItem(ItemStackBuilder.of("RED_BED", "BED")
+                            .withName(ChatColor.GREEN + "Kingdom spawn")
+                            .apply(b -> {
+                                if (target.getSpawn() != null) {
+                                    b.withLore("", ChatColor.GRAY + "X: " + (int) target.getSpawn().getX() + ", Y: " + (int) target.getSpawn().getY() + ", Z: " + (int) target.getSpawn().getZ());
+
+                                    if (player.hasPermission("kingdom.setspawn.other") || (player.hasPermission("kingdom.setspawn") && player.getUser().getKingdom() == target)) {
+                                        b.withLore("", ChatColor.GRAY + "Left-Click to teleport", ChatColor.GRAY + "Right-Click to change spawn");
+                                    } else {
+                                        b.withLore("", ChatColor.GRAY + "Left-Click to teleport");
+                                    }
+                                } else {
+                                    b.withLore("", ChatColor.GRAY + "Spawn not set");
+                                }
+                            }).build(),
+                    (p, ct) -> {
+                        if ((player.hasPermission("kingdom.setspawn.other") || (player.hasPermission("kingdom.setspawn")
+                                && player.getUser().getKingdom() == target)) && ct == InventoryClickType.RIGHT) {
+                            openConfirmMenu(player, ChatColor.DARK_GRAY + "Change kingdom spawn", () -> {
+                                target.setSpawn(player.getLocation());
+                                kdc.saveAsync(target);
+                                openKingdomInfo(player, target, back);
+                            }, () -> {
+                                openKingdomInfo(player, target, back);
+                            });
+                        } else if ( target.getSpawn() != null && (player.hasPermission("kingdom.spawn.other")
+                                || (player.hasPermission("kingdom.spawn") && player.getUser().getKingdom() == target)) ) {
+                            Teleporter.teleport(player, target.getSpawn());
+                        }
+                    }
+            );
+        }
 
         withBack(builder, back);
         player.openInventory(builder.buildS());
     }
 
+    // Kingdom change item
+
+    private static String upperCaseWords(String str) {
+        List<String> words = new ArrayList<>();
+        for ( String word : str.split(Pattern.quote(" ")) ) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(word.substring(0, 1).toUpperCase());
+            if ( word.length() > 1 ) {
+                sb.append(word.substring(1).toLowerCase());
+            }
+            words.add(sb.toString());
+        }
+        return String.join(" ", words);
+    }
+
+    static void openKingdomSelectItem(PlatformPlayer player, Kingdom target, Runnable back) {
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Change item");
+
+        Map<ItemStack, String> items = new LinkedHashMap<>();
+
+        // WOOL
+        for ( ItemStackBuilder.ItemColor color: ItemStackBuilder.ItemColor.values() ) {
+            items.put(ItemStackBuilder.wool(color).build(), upperCaseWords(color.name().replace("_", " ")) + " Wool");
+        }
+
+        // TERRACOTTA
+        for ( ItemStackBuilder.ItemColor color: ItemStackBuilder.ItemColor.values() ) {
+            items.put(ItemStackBuilder.terracotta(color).build(), upperCaseWords(color.name().replace("_", " ")) + " Terracotta");
+        }
+
+        // STAINED GLASS
+        for ( ItemStackBuilder.ItemColor color: ItemStackBuilder.ItemColor.values() ) {
+            items.put(ItemStackBuilder.glass(color).build(), upperCaseWords(color.name().replace("_", " ")) + " Glass");
+        }
+
+        items.put(ItemStackBuilder.of(Material.CHEST).build(), "Chest");
+        items.put(ItemStackBuilder.of( "STONE_BRICKS", "SMOOTH_BRICK").build(), "Stone Bricks");
+        items.put(ItemStackBuilder.of( "NETHER_BRICKS", "NETHER_BRICK").build(), "Nether Bricks");
+        items.put(ItemStackBuilder.of( "BRICKS", "BRICK").build(), "Bricks");
+        items.put(ItemStackBuilder.of(Material.ICE).build(), "Ice");
+        items.put(ItemStackBuilder.of(Material.SNOW_BLOCK).build(), "Ice");
+        items.put(ItemStackBuilder.of("OAK_LOG", "LOG").build(), "Oak Log");
+        items.put(ItemStackBuilder.of("SPRUCE_LOG", "LOG", 1).build(), "Spruce Log");
+        items.put(ItemStackBuilder.of("BIRCH_LOG", "LOG", 2).build(), "Birch Log");
+        items.put(ItemStackBuilder.of("JUNGLE_LOG", "LOG", 3).build(), "Jungle Log");
+        items.put(ItemStackBuilder.of("DARK_OAK_LOG", "LOG_2", 1).build(), "Dark Oak Log");
+        items.put(ItemStackBuilder.of("ACACIA_LOG", "LOG_2", 2).build(), "Acacia Log");
+        items.put(ItemStackBuilder.of("CARVED_PUMPKIN", "PUMPKIN").build(), "Carved Pumpkin");
+        items.put(ItemStackBuilder.of(Material.GLOWSTONE).build(), "Glowstone");
+        items.put(ItemStackBuilder.of(Material.TNT).build(), "TNT");
+        items.put(ItemStackBuilder.of(Material.BOOKSHELF).build(), "Bookshelf");
+        items.put(ItemStackBuilder.of(Material.EMERALD_BLOCK).build(), "Emerald Block");
+        items.put(ItemStackBuilder.of(Material.DIAMOND_BLOCK).build(), "Diamond Block");
+        items.put(ItemStackBuilder.of(Material.IRON_BLOCK).build(), "Iron Block");
+        items.put(ItemStackBuilder.of(Material.GOLD_BLOCK).build(), "Gold Block");
+        items.put(ItemStackBuilder.of(Material.OBSIDIAN).build(), "Obsidian");
+        items.put(ItemStackBuilder.of(Material.FURNACE).build(), "Furnace");
+        items.put(ItemStackBuilder.of("CRAFTING_TABLE", "WORKBENCH").build(), "Crafting Table");
+        items.put(ItemStackBuilder.of(Material.JUKEBOX).build(), "Jukebox");
+
+
+        for ( ItemStack item : items.keySet() ) {
+            builder.withItem(ItemStackBuilder.of(item.clone())
+                    .withName(ChatColor.YELLOW + items.get(item))
+                    .build(), (p, ct) -> {
+                target.setItem(new BukkitItem(item));
+                kdc.saveAsync(target);
+                back.run();
+            });
+        }
+
+        withBack(builder, back);
+        player.openInventory(builder.build());
+    }
+
     // Kingdom player list
 
     static void openKingdomPlayerList(PlatformPlayer player, Kingdom target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + target.getName());
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Members of " + target.getName());
 
         kdc.getPlugin().getScheduler().async().execute(() -> {
             Map<UUID, String> members = target.getMembers();
@@ -319,7 +440,7 @@ public class KingdomMenu {
     // Rank list
 
     static void openRankList(PlatformPlayer player, Kingdom target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + target.getName());
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Ranks of " + target.getName());
 
         for ( Rank rank : target.getRanks() ) {
             builder.withItem(getRankItem(rank), (p, ct) -> {
@@ -338,7 +459,7 @@ public class KingdomMenu {
     // Rank player list
 
     static void openRankPlayerList(PlatformPlayer player, Rank target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + target.getName());
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Members of rank " + target.getName());
 
         kdc.getPlugin().getScheduler().async().execute(() -> {
             Map<UUID, String> members = target.getMembers();
@@ -375,7 +496,7 @@ public class KingdomMenu {
     // Rank selection
 
     static void openRankSelection(PlatformPlayer player, User target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Select rank");
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Change rank of " + target.getName());
 
         for ( Rank rank : target.getKingdom().getRanks() ) {
             if ( rank == target.getRank() || (!player.hasPermission("kingdom.setrank.other") && player.getUser().getKingdom() == target.getKingdom()
@@ -463,7 +584,7 @@ public class KingdomMenu {
     // Kingdom relation menu
 
     static void openKingdomRelationSelect(PlatformPlayer player, Kingdom kingdom, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Relations with " + kingdom.getName());
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Change relation with " + kingdom.getName());
 
         Relation relation = kdc.getRelation(player.getUser().getKingdom(), kingdom);
         RelationType rel = relation != null ? relation.getType() : RelationType.NEUTRAL;
@@ -588,8 +709,14 @@ public class KingdomMenu {
     }
 
     static ItemStack getKingdomItem(Kingdom kingdom) {
-        return ItemStackBuilder.of(Material.DIAMOND_SWORD)
-                .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
+        ItemStackBuilder builder = null;
+        if ( kingdom.getItem() != null && kingdom.getItem().getHandle() != null) {
+            builder = ItemStackBuilder.of((ItemStack) kingdom.getItem().getHandle());
+        } else {
+            builder = ItemStackBuilder.of("WHITE_BANNER", "BANNER");
+        }
+
+        return builder.withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
                 .withLore("")
                 .withLore(ChatColor.GRAY + "Online members: "
                         + ChatColor.GREEN + kdc.getOnlineUsers().stream().filter(u -> u.getKingdom() == kingdom).count()

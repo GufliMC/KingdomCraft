@@ -164,8 +164,9 @@ public class InventoryBuilder {
         BukkitInventory inv = new BukkitInventory(54, title);
 
         // fill with items
-        for ( int i = 0; i < Math.max(items.size(), 36); i++ ) {
-            inv.setItem(i, items.get(i));
+        int offset = page * 36;
+        for ( int i = 0; i < Math.min(items.size() - offset, 36); i++ ) {
+            inv.setItem(i, items.get(offset + i));
         }
 
         // fill hotbar
@@ -179,14 +180,14 @@ public class InventoryBuilder {
 
         if ( page > 0 ) {
             inv.setItem(47, new BukkitInventoryItem(previousItem, (player, clickType) -> {
-                player.openInventory(page(page + 1));
+                player.openInventory(page(page - 1));
                 return true;
             }));
         }
 
         if ( page < pages - 1 ) {
             inv.setItem(51, new BukkitInventoryItem(nextItem, (player, clickType) -> {
-                player.openInventory(page(page - 1));
+                player.openInventory(page(page + 1));
                 return true;
             }));
         }

@@ -18,6 +18,7 @@
 package com.gufli.kingdomcraft.api.domain;
 
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
+import com.gufli.kingdomcraft.api.item.Item;
 
 import java.time.Instant;
 import java.util.List;
@@ -55,6 +56,10 @@ public interface Kingdom extends Model, AttributeHolder {
     Rank getDefaultRank();
 
     void setDefaultRank(Rank defaultRank);
+
+    Item getItem();
+
+    void setItem(Item item);
 
     List<Rank> getRanks();
 

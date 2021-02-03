@@ -21,6 +21,7 @@ import com.gufli.kingdomcraft.bukkit.command.CommandHandler;
 import com.gufli.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.gufli.kingdomcraft.bukkit.gui.InventoryListener;
+import com.gufli.kingdomcraft.bukkit.item.BukkitItemSerializer;
 import com.gufli.kingdomcraft.bukkit.listeners.*;
 import com.gufli.kingdomcraft.bukkit.messages.MessageManager;
 import com.gufli.kingdomcraft.bukkit.permissions.VaultPermissionHandler;
@@ -99,6 +100,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 			disable();
 			return;
 		}
+
+		// item serializer
+		new BukkitItemSerializer();
 
 		// For some reason, required ebean classes are not in the classpath of the current classloader.
 		// Fix this by changing the class loader to the one of the current class.

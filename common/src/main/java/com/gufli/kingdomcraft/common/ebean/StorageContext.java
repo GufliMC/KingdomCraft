@@ -166,6 +166,7 @@ public class StorageContext {
         config.addClass(BUser.class);
         config.addClass(BUserChatChannel.class);
         config.addClass(PlatformLocationConverter.class);
+        config.addClass(ItemConverter.class);
 
         DatabaseFactory.create(config);
     }

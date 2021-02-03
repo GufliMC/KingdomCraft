@@ -20,6 +20,31 @@ import java.util.function.Supplier;
 
 public class ItemStackBuilder {
 
+    public enum ItemColor {
+        WHITE(0),
+        ORANGE(1),
+        MAGENTA(2),
+        LIGHT_BLUE(3),
+        YELLOW(4),
+        LIME(5),
+        PINK(6),
+        GRAY(7),
+        LIGHT_GRAY(8),
+        CYAN(9),
+        PURPLE(10),
+        BLUE(11),
+        BROWN(12),
+        GREEN(13),
+        RED(14),
+        BLACK(15);
+
+        public final int data;
+
+        ItemColor(int data) {
+            this.data = data;
+        }
+    }
+
     private final ItemStack itemStack;
 
     public static ItemStackBuilder of(Material material) {
@@ -30,15 +55,63 @@ public class ItemStackBuilder {
         return new ItemStackBuilder(itemStack).hideAttributes();
     }
 
-    public static ItemStackBuilder skull() {
-        ItemStack item = null;
+    public static ItemStackBuilder of(String material, String fallback) {
         try {
-            item = new ItemStack(Material.valueOf("PLAYER_HEAD"));
+            return ItemStackBuilder.of(Material.valueOf(material));
         } catch (IllegalArgumentException ex) {
-            item = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (byte) 3);
+            return ItemStackBuilder.of(Material.valueOf(fallback));
         }
-        return new ItemStackBuilder(item);
     }
+
+    public static ItemStackBuilder of(String material, String fallback, int data) {
+        try {
+            return ItemStackBuilder.of(Material.valueOf(material));
+        } catch (IllegalArgumentException ex) {
+            return ItemStackBuilder.of(Material.valueOf(fallback)).withDurability(data);
+        }
+    }
+
+    //
+
+    public static ItemStackBuilder skull() {
+        return ItemStackBuilder.of("PLAYER_HEAD", "SKULL_ITEM", 3);
+    }
+
+    public static ItemStackBuilder wool(ItemColor color) {
+        return ItemStackBuilder.of(color.name() + "_WOOL", "WOOL", color.data);
+    }
+
+    public static ItemStackBuilder terracotta(ItemColor color) {
+        return ItemStackBuilder.of(color.name() + "_TERRACOTTA", "STAINED_CLAY", color.data);
+    }
+
+    public static ItemStackBuilder glass(ItemColor color) {
+        return ItemStackBuilder.of(color.name() + "_STAINED_GLASS", "STAINED_GLASS", color.data);
+    }
+
+    public static ItemStackBuilder bed(ItemColor color) {
+        return ItemStackBuilder.of(color.name() + "_BED", "BED", color.data);
+    }
+
+    public static ItemStackBuilder carpet(ItemColor color) {
+        return ItemStackBuilder.of(color.name() + "_CARPET", "CARPET", color.data);
+    }
+
+    public static ItemStackBuilder dye(ItemColor color) {
+        return ItemStackBuilder.of(color.name() + "_DYE", "INK_SACK", color.data);
+    }
+
+    public static ItemStackBuilder banner(ItemColor color) {
+        try {
+            return ItemStackBuilder.of(Material.valueOf(color.name() + "_BANNER"));
+        } catch (IllegalArgumentException ex) {
+            return ItemStackBuilder.of(Material.valueOf("BANNER")).transformMeta(BannerMeta.class, bannerMeta -> {
+                bannerMeta.setBaseColor(DyeColor.valueOf(color.name()));
+            });
+        }
+    }
+
+    //
 
     private ItemStackBuilder(ItemStack itemStack) {
         this.itemStack = Objects.requireNonNull(itemStack, "itemStack");

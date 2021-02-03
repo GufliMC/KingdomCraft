@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Reflection {
 
@@ -332,6 +333,43 @@ public class Reflection {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 *
+	 * @param v1 version number to compare with
+	 * @param v2 version number
+	 * @return -1 if v2 is lower than v1, 0 if equal and 1 if v2 is higher than v1
+	 */
+	public static int compareVersions(String v1, String v2) {
+		String[] va1 = v1.split(Pattern.quote("."));
+		String[] va2 = v2.split(Pattern.quote("."));
+
+		for ( int i = 0; i < Math.min(va2.length, va1.length); i++ ) {
+			int num1 = Integer.parseInt(va1[i]);
+			int num2 = Integer.parseInt(va2[i]);
+
+			if ( num1 < num2 ) return 1;
+			if ( num1 > num2 ) return -1;
+		}
+
+		return 0;
+	}
+
+	public static boolean isMcLowerOrEqualTo(String version) {
+		return compareVersions(version, getVersion()) <= 0;
+	}
+
+	public static boolean isMcLowerThan(String version) {
+		return compareVersions(version, getVersion()) < 0;
+	}
+
+	public static boolean isMcGreaterThan(String version) {
+		return compareVersions(version, getVersion()) > 0;
+	}
+
+	public static boolean isMcGreaterOrEqualTo(String version) {
+		return compareVersions(version, getVersion()) >= 0;
 	}
 
 }

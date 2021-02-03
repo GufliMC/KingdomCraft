@@ -19,12 +19,14 @@ package com.gufli.kingdomcraft.common.ebean.beans;
 
 import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
+import com.gufli.kingdomcraft.api.item.Item;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,10 @@ public class BKingdom extends BaseModel implements Kingdom {
 
     public boolean inviteOnly;
     public int maxMembers;
+
+    @Convert(converter = ItemConverter.class, attributeName = "item")
+    @Size(max = 1023)
+    public Item item;
 
     @OneToOne
     @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
@@ -171,6 +177,16 @@ public class BKingdom extends BaseModel implements Kingdom {
             throw new IllegalArgumentException("The given defaultRank does not belong to this kingdom.");
         }
         this.defaultRank = (BRank) defaultRank;
+    }
+
+    @Override
+    public Item getItem() {
+        return item;
+    }
+
+    @Override
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     @Override

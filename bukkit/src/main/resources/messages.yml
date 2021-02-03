@@ -238,6 +238,8 @@ cmdDeleteConfirm: '&aType &2/k delete confirm &ato delete &2{0}&a!'
 cmdEdit: '&aChanged {0} of your kingdom to &2{1}&a!'
 cmdEditOther: '&aChanged {0} of kingdom &2{1} &ato &2{2}&a!'
 
+cmdEditItemInvalid: '&cYou must hold a valid item in your hand!'
+
 # /k ranks create
 cmdRanksCreate: '&aYou created the rank &2{0}&a!'
 cmdRanksCreateOther: '&aYou created the rank &2{0} &afor kingdom &2{1}&a!'
