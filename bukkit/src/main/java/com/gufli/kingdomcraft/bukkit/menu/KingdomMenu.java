@@ -313,19 +313,41 @@ public class KingdomMenu {
                                 }
                             }).build(),
                     (p, ct) -> {
-                        if ((player.hasPermission("kingdom.setspawn.other") || (player.hasPermission("kingdom.setspawn")
-                                && player.getUser().getKingdom() == target)) && ct == InventoryClickType.RIGHT) {
-                            openConfirmMenu(player, ChatColor.DARK_GRAY + "Change kingdom spawn", () -> {
-                                target.setSpawn(player.getLocation());
-                                kdc.saveAsync(target);
-                                openKingdomInfo(player, target, back);
-                            }, () -> {
-                                openKingdomInfo(player, target, back);
-                            });
-                        } else if (target.getSpawn() != null && (player.hasPermission("kingdom.spawn.other")
-                                || (player.hasPermission("kingdom.spawn") && player.getUser().getKingdom() == target))) {
-                            Teleporter.teleport(player, target.getSpawn());
+                        if ( ct == InventoryClickType.RIGHT ) {
+                            if ( player.hasPermission("kingdom.setspawn.other") ) {
+                                openConfirmMenu(player, "Change spawn of " + target.getName(), () -> {
+                                    kdc.getCommandDispatcher().execute(player, new String[]{"setspawn", target.getName()});
+                                    openKingdomInfo(player, target, back);
+                                }, () -> {
+                                    openKingdomInfo(player, target, back);
+                                });
+                                return true;
+                            }
+                            else if ( player.hasPermission("kingdom.setspawn") && player.getUser().getKingdom() == target ) {
+                                openConfirmMenu(player, "Change spawn", () -> {
+                                    kdc.getCommandDispatcher().execute(player, new String[]{"setspawn"});
+                                    openKingdomInfo(player, target, back);
+                                }, () -> {
+                                    openKingdomInfo(player, target, back);
+                                });
+                                return true;
+                            }
                         }
+
+                        if ( target.getSpawn() == null ) {
+                            return false;
+                        }
+
+                        if ( target.getSpawn() != null && player.hasPermission("kingdom.spawn.other") ) {
+                            kdc.getCommandDispatcher().execute(player, new String[]{"spawn", target.getName()});
+                            return true;
+                        }
+
+                        if ( player.hasPermission("kingdom.spawn") && player.getUser().getKingdom() == target ) {
+                            kdc.getCommandDispatcher().execute(player, new String[]{"spawn"});
+                            return true;
+                        }
+                        return false;
                     }
             );
         }
