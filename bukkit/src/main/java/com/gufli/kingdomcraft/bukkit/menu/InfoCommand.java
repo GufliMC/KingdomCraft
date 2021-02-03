@@ -50,13 +50,13 @@ public class InfoCommand extends CommandBase {
         User user = kdc.getUser(player);
 
         if ( args.length == 0 || args[0].equalsIgnoreCase(player.getName()) ) {
-            MainMenu.openPlayerInfo(player, user);
+            KingdomMenu.openPlayerInfo(player, user);
             return;
         }
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom != null ) {
-            MainMenu.openKingdomInfo(player, kingdom);
+            KingdomMenu.openKingdomInfo(player, kingdom);
             return;
         }
 
@@ -68,7 +68,7 @@ public class InfoCommand extends CommandBase {
                     return;
                 }
 
-                kdc.getPlugin().getScheduler().executeSync(() -> MainMenu.openPlayerInfo(player, target));
+                kdc.getPlugin().getScheduler().executeSync(() -> KingdomMenu.openPlayerInfo(player, target));
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

@@ -28,6 +28,9 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kingdoms")
@@ -226,8 +229,9 @@ public class BKingdom extends BaseModel implements Kingdom {
     }
 
     @Override
-    public List<String> getMembers() {
-        return new QBUser().kingdom.id.eq(this.id).select("name").findSingleAttributeList();
+    public Map<UUID, String> getMembers() {
+        QBUser alias = QBUser.alias();
+        return new QBUser().kingdom.id.eq(this.id).select(alias.id, alias.name).findStream().collect(Collectors.toMap(BUser::getUniqueId, BUser::getName));
     }
 
     @Override

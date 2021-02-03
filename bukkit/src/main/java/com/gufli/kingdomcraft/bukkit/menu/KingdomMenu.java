@@ -3,6 +3,7 @@ package com.gufli.kingdomcraft.bukkit.menu;
 import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
+import com.gufli.kingdomcraft.bukkit.gui.BukkitInventory;
 import com.gufli.kingdomcraft.bukkit.gui.InventoryBuilder;
 import com.gufli.kingdomcraft.bukkit.gui.ItemStackBuilder;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.DateFormat;
@@ -20,7 +22,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class MainMenu {
+public class KingdomMenu {
 
     static KingdomCraftImpl kdc;
 
@@ -62,6 +64,14 @@ public class MainMenu {
                 }
         );
 
+        if ( player.getUser().getKingdom() != null ) {
+            builder.withItem(getKingdomItem(player.getUser().getKingdom()),
+                    (p, ct) -> {
+                        openKingdomInfo(player, player.getUser().getKingdom(), () -> open(player));
+                    }
+            );
+        }
+
         builder.withItem(ItemStackBuilder.skull()
                 .withName(ChatColor.GOLD + "Players")
                 .build(),
@@ -99,7 +109,7 @@ public class MainMenu {
         for ( User user : kdc.getOnlineUsers() ) {
             builder.withItem(ItemStackBuilder.skull()
                             .withName(ChatColor.GREEN + user.getName())
-                            .withSkullOwner(Bukkit.getOfflinePlayer(user.getUniqueId()))
+                            .withSkullOwner(Bukkit.getPlayer(user.getUniqueId()))
                             .build(),
                     (p, ct) -> {
                         openPlayerInfo(player, user, () -> openPlayerList(player, back));
@@ -154,7 +164,12 @@ public class MainMenu {
                     }
                 })
                 .withLore(ChatColor.GRAY + "First login: " + ChatColor.GOLD + target.getCreatedAt().atZone(timeZone).format(kdc.getConfig().getDateFormat()))
-                .withSkullOwner(((BukkitPlayer) player).getPlayer())
+                .apply(b -> {
+                    Player p = Bukkit.getPlayer(target.getUniqueId());
+                    if ( p != null ) {
+                        b.withSkullOwner(p);
+                    }
+                })
                 .build()
         );
 
@@ -176,7 +191,12 @@ public class MainMenu {
                                 .withName(ChatColor.RED + "Kick")
                                 .build(),
                         (p, ct) -> {
-                            ((BukkitPlayer) player).getPlayer().chat("/k kick " + user.getName());
+                            openConfirmMenu(player, ChatColor.DARK_GRAY + "Kick " + user.getName(), () -> {
+                                ((BukkitPlayer) player).getPlayer().chat("/k kick " + user.getName());
+                                openPlayerInfo(player, target, back);
+                            }, () -> {
+                                openPlayerInfo(player, target, back);
+                            });
                         }
                 );
             }
@@ -195,16 +215,13 @@ public class MainMenu {
                                 .withName(ChatColor.GREEN + "Change rank")
                                 .build(),
                         (p, ct) -> {
-                            openRankSelection(player, target, rank -> {
-                                ((BukkitPlayer) player).getPlayer().chat("/k setrank " + user.getName() + " " + rank.getName());
-                            }, () -> {
+                            openRankSelection(player, target, () -> {
                                 openPlayerInfo(player, target, back);
                             });
                             return true;
                         }
                 );
             }
-
         } else {
             if ( player.getUser().getKingdom() != null && player.getUser().getKingdom().isInviteOnly()
                     && player.hasPermission("kingdom.invite") ) {
@@ -250,8 +267,53 @@ public class MainMenu {
                 }
         );
 
+        builder.withItem(ItemStackBuilder.skull()
+                .withName(ChatColor.GOLD + "Members" + ChatColor.GRAY + " (" + ChatColor.GREEN + target.getMemberCount() + ChatColor.GRAY + ")")
+                .build(),
+                (p, ct) -> {
+                    openKingdomPlayerList(player, target, () -> openKingdomInfo(player, target, back));
+                }
+        );
+
         withBack(builder, back);
         player.openInventory(builder.buildS());
+    }
+
+    // Kingdom player list
+
+    static void openKingdomPlayerList(PlatformPlayer player, Kingdom target, Runnable back) {
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + target.getName());
+
+        kdc.getPlugin().getScheduler().async().execute(() -> {
+            Map<UUID, String> members = target.getMembers();
+
+            List<UUID> sorted = members.keySet().stream()
+                    .sorted(Comparator.comparing(uuid -> kdc.getPlayer(uuid) != null))
+                    .collect(Collectors.toList());
+
+            for ( UUID uuid : sorted ) {
+                String name = members.get(uuid);
+                boolean isOnline = kdc.getPlayer(uuid) != null;
+
+                builder.withItem(ItemStackBuilder.skull()
+                                .withName(isOnline ? ChatColor.GREEN + name : ChatColor.GRAY + name)
+                                .apply(isOnline, (b) -> b.withSkullOwner(Bukkit.getPlayer(uuid)))
+                                .build(),
+                        (p, ct) -> {
+                            kdc.getUser(uuid).thenAccept((u) -> {
+                                kdc.getPlugin().getScheduler().sync().execute(() -> {
+                                    openPlayerInfo(player, u, () -> openKingdomPlayerList(player, target, back));
+                                });
+                            });
+                            return true;
+                        }
+                );
+            }
+
+            withBack(builder, back);
+            kdc.getPlugin().getScheduler().sync().execute(() ->
+                    player.openInventory(builder.buildS()));
+        });
     }
 
     // Rank list
@@ -291,9 +353,9 @@ public class MainMenu {
 
                 builder.withItem(ItemStackBuilder.skull()
                                 .withName(isOnline ? ChatColor.GREEN + name : ChatColor.GRAY + name)
-                                .apply(isOnline, (b) -> b.withSkullOwner(((BukkitPlayer) player).getPlayer()))
+                                .apply(isOnline, (b) -> b.withSkullOwner(Bukkit.getOfflinePlayer(uuid)))
                                 .build(),
-                        (player1, clickType) -> {
+                        (p, ct) -> {
                             kdc.getUser(uuid).thenAccept((u) -> {
                                 kdc.getPlugin().getScheduler().sync().execute(() -> {
                                     openPlayerInfo(player, u, () -> openRankPlayerList(player, target, back));
@@ -312,16 +374,20 @@ public class MainMenu {
 
     // Rank selection
 
-    static void openRankSelection(PlatformPlayer player, User target, Consumer<Rank> callback, Runnable back) {
+    static void openRankSelection(PlatformPlayer player, User target, Runnable back) {
         InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Select rank");
 
         for ( Rank rank : target.getKingdom().getRanks() ) {
-            if ( rank == target.getRank() ) {
+            if ( rank == target.getRank() || (!player.hasPermission("kingdom.setrank.other") && player.getUser().getKingdom() == target.getKingdom()
+                    && rank.getLevel() >= player.getUser().getRank().getLevel()) ) {
                 continue;
             }
 
             builder.withItem(getRankItem(rank), (p, ct) -> {
-                callback.accept(rank);
+                openConfirmMenu(player, ChatColor.DARK_GRAY + "Change rank of " + target.getName() + " to " + rank.getName(), () -> {
+                    ((BukkitPlayer) player).getPlayer().chat("/k setrank " + target.getName() + " " + rank.getName());
+                    openPlayerInfo(player, target, back);
+                }, () -> openRankSelection(player, target, back));
             });
         }
 
@@ -473,6 +539,32 @@ public class MainMenu {
 
         withBack(builder, back);
         player.openInventory(builder.build());
+    }
+
+    // CONFIRM
+
+    static void openConfirmMenu(PlatformPlayer player, String title, Runnable confirm, Runnable cancel) {
+        BukkitInventory inv = new BukkitInventory(27, title);
+
+        inv.setItem(11, ItemStackBuilder.of(Material.EMERALD_BLOCK)
+                .withName(ChatColor.GREEN + "Confirm")
+                .build(),
+                (p, ct) -> {
+                    confirm.run();
+                    return true;
+                }
+        );
+
+        inv.setItem(15, ItemStackBuilder.of(Material.REDSTONE_BLOCK)
+                .withName(ChatColor.RED + "Cancel")
+                .build(),
+                (p, ct) -> {
+                    cancel.run();
+                    return true;
+                }
+        );
+
+        player.openInventory(inv);
     }
 
     // ITEMS

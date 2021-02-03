@@ -12,12 +12,12 @@ public class MenuCommand extends CommandBase {
         addCommand("panel");
         setExplanationMessage(kdc.getMessageManager().getMessage("cmdMenuExplanation"));
         setPermissions("kingdom.menu");
-        MainMenu.kdc = kdc;
+        KingdomMenu.kdc = kdc;
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        MainMenu.open((PlatformPlayer) sender);
+        KingdomMenu.open((PlatformPlayer) sender);
     }
 
 

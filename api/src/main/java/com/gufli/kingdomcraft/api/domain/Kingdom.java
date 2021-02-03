@@ -21,6 +21,8 @@ import com.gufli.kingdomcraft.api.entity.PlatformLocation;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public interface Kingdom extends Model, AttributeHolder {
 
@@ -70,7 +72,7 @@ public interface Kingdom extends Model, AttributeHolder {
 
     int getMemberCount();
 
-    List<String> getMembers();
+    Map<UUID, String> getMembers();
 
     Instant getCreatedAt();
 
