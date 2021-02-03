@@ -17,7 +17,7 @@ public class InventoryBuilder {
             InventoryScheme.of("000101000"),
             InventoryScheme.of("001010100"),
             InventoryScheme.of("010101010"),
-            InventoryScheme.of("010111010"),
+            InventoryScheme.of("011010110"),
             InventoryScheme.of("011101110"),
             InventoryScheme.of("011111110"),
             InventoryScheme.of("111101111"),

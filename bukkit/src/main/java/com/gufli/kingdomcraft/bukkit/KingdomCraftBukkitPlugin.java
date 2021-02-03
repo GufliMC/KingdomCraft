@@ -23,6 +23,7 @@ import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.gufli.kingdomcraft.bukkit.gui.InventoryListener;
 import com.gufli.kingdomcraft.bukkit.item.BukkitItemSerializer;
 import com.gufli.kingdomcraft.bukkit.listeners.*;
+import com.gufli.kingdomcraft.bukkit.menu.MenuChatListener;
 import com.gufli.kingdomcraft.bukkit.messages.MessageManager;
 import com.gufli.kingdomcraft.bukkit.permissions.VaultPermissionHandler;
 import com.gufli.kingdomcraft.bukkit.placeholders.PlaceholderReplacer;
@@ -190,6 +191,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// placeholders
 		new PlaceholderReplacer(this);
 		new VaultPlaceholderReplacer(this);
+
+		// menu chat callback
+		pm.registerEvents(new MenuChatListener(this), this);
 
 		// bStats
 		Metrics metrics = new Metrics(this, 10101);
