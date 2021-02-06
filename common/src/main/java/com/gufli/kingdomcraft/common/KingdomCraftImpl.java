@@ -99,6 +99,10 @@ public class KingdomCraftImpl implements KingdomCraft {
         Teleporter.register(this);
     }
 
+    public void stop() {
+        context.stop();
+    }
+
     //
 
     public KingdomCraftPlugin getPlugin() {

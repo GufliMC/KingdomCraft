@@ -175,6 +175,10 @@ public class StorageContext {
         return initialized;
     }
 
+    public void stop() {
+        DB.byName("kingdomcraft").shutdown(true, true);
+    }
+
     public void registerDumpCommand(KingdomCraftImpl kdc) {
         Database db = DB.byName("kingdomcraft");
         if ( db.getPlatform() == Platform.H2 ) {

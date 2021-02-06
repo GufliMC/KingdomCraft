@@ -34,6 +34,7 @@ import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
 import com.gufli.kingdomcraft.common.config.Configuration;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.scheduler.AbstractScheduler;
+import io.ebean.DB;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -217,6 +218,11 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		}));
 
 		getLogger().info("Enabled " + this.getDescription().getFullName());
+	}
+
+	@Override
+	public void onDisable() {
+		kdc.stop();
 	}
 
 	private void disable() {
