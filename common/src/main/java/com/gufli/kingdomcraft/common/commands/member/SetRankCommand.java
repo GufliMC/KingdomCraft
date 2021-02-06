@@ -108,7 +108,7 @@ public class SetRankCommand extends CommandBase {
                         return;
                     }
                     if ( user.getRank() == null || user.getRank().getLevel() <= rank.getLevel() ) {
-                        kdc.getMessageManager().send(sender, "cmdSetRankLowLevelTarget");
+                        kdc.getMessageManager().send(sender, "cmdSetRankLowLevelTarget", rank.getName());
                         return;
                     }
                     if ( target.getRank() != null && user.getRank().getLevel() <= target.getRank().getLevel() ) {

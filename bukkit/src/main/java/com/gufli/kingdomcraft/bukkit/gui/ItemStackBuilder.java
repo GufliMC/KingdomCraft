@@ -160,7 +160,7 @@ public class ItemStackBuilder {
     // Basic
 
     public ItemStackBuilder withName(String name) {
-        return transformMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
+        return transformMeta(meta -> meta.setDisplayName(name));
     }
 
     public ItemStackBuilder withType(Material material) {

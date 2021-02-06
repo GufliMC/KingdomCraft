@@ -1,0 +1,455 @@
+# Message file
+# Single quotes have to be doubled: ''
+#
+# Created by: iGufGuf
+#
+#
+prefix: '&6KingdomCraft &2> &a'
+
+# Common messages
+
+noPermission: '&cJe hebt geen permissie voor dat!'
+
+friendlyFire: '&cFriendly fire staat uit!'
+
+teleport: '&aJe wordt geteleporteerd in &2{0} &aseconden, niet bewegen!'
+teleportCancel: '&cTeleportatie geannuleerd!'
+
+chatNoChannel: '&cEr is geen beschikbaar chat kanaal om je bericht te versturen!'
+chatChannelDisabled: '&cJe hebt het &4{0} &ckanaal uitgezet!'
+chatChannelCooldown: '&cJe moet nog &4{0} &cseconden wachten voordat je kan praten in dit kanaal!'
+
+socialSpyPrefix: '&b[SS] '
+
+# Command error messages
+
+cmdDefaultHelp: '&aVoor hulp, type &2/k help'
+
+cmdErrorNoPermission: '&cJe hebt geen permissie voor dit commando!'
+
+cmdErrorInvalid: '&cOnjuist commando, probeer &4/k help'
+cmdErrorInvalidHint: '&cOnjuist commando, bedoelde je: &4{0}&c?'
+cmdErrorInvalidUsage: '&cVerkeerde argumenten, probeer: &4{0}'
+
+cmdErrorSenderNoKingdom: '&cJe zit niet in een koninkrijk!'
+cmdErrorTargetNoKingdom: '&4{0} &czit niet in een koninkrijk!'
+cmdErrorKingdomNotExist: '&cHet koninkrijk &4{0} &cbestaat niet!'
+cmdErrorRankNotExist: '&cDe rang &4{0} &cbestaat niet!'
+cmdErrorPlayerNotExist: '&cDe speler &4{0} &cbestaat niet!'
+cmdErrorNotOnline: '&cDe speler &4{0} &cis niet online!'
+cmdErrorSameKingdom: '&cJe kan je eigen koninkrijk niet invullen!'
+cmdErrorPermissionGroupNotExist: '&cDe permissie groep &4{0} &cbestaat niet.'
+cmdErrorKingdomNoDefaultRank: '&cHet koninkrijk &4{0} &cheeft geen standaardrang!'
+cmdErrorKingdomAlreadyExists: '&cHet koninkrijk &4{0} &cbestaat al!'
+cmdErrorRankAlreadyExists: '&cDe rang &4{0} &cbestaa al!'
+
+cmdErrorInvalidName: '&cDe naam moet alfanumeriek zin!'
+cmdErrorInvalidString: '&4{0} &cis incorrect!'
+cmdErrorInvalidNumber: '&4{0} &cis geen nummer!'
+cmdErrorInvalidBoolean: '&4{0} &cis incorrect, het moet &4true &cof &4false &czijn!'
+
+# Help messages
+
+cmdHelpHeader: '&e+----<->----+ &6KingdomCraft &e+----<->----+'
+cmdHelpFooter: '&ePagina &a{0}&f/&a{1}'
+cmdHelpFormat: '&f{0} &a{1}'
+cmdHelpPageLimit: '&cEr zijn maar &4{0} &cpagina''s.'
+
+cmdJoinExplanation: 'Sluit je aan bij een koninkrijk'
+cmdListExplanation: 'Bekijk een lijst van koninkrijken'
+cmdSpawnExplanation: 'Teleporteer naar de spawn van je koninkrijk'
+cmdInfoExplanation: 'Bekijk info van een speler of koninkrijk'
+cmdMenuExplanation: 'Open het menu'
+cmdLeaveExplanation: 'Verlaat een koninkrijk'
+cmdChatChannelExplanation: 'Zet een chat kanaal aan of uit'
+cmdDefaultChatChannelExplanation: 'Kies een kanaal om standaard in te praten'
+cmdSetRankExplanation: 'Verander de rang van een speler'
+cmdEnemyExplanation: 'Word vijanden met een ander koninkrijk'
+cmdTruceExplanation: 'Accepteer of vraag een wapenstilstand aan'
+cmdAllyExplanation: 'Accepteer of vraag een bondgenootschap aan'
+cmdNeutralExplanation: 'Verander de statis met een koninkrijk naar neutraal'
+cmdSetSpawnExplanation: 'Verander de spawn van je koninkrijk'
+cmdSetSpawnOtherExplanation: 'Verander de spawn van een koninkrijk'
+cmdKickExplanation: 'Schop een speler uit zijn koninkrijk'
+cmdSetKingdomExplanation: 'Zet een speler in een koninkrijk'
+cmdInviteExplanation: 'Nodig een speler uit voor je koninkrijk'
+cmdReloadExplanation: 'Herlaad KingdomCraft'
+cmdTpHereExplanation: 'Teleporteer iedereen van je koninkrijk naar jou'
+cmdTpHereOtherExplanation: 'Teleporteer iedereen van een koninkrijk naar jou'
+cmdChatExplanation: 'Stuur een bericht in een chat kanaal'
+cmdAdminExplanation: 'Zet admin modus aan of uit'
+cmdEditorExplanation: 'Start een webbewerker sessie'
+cmdTpSpawnExplanation: 'Teleporteer een speler naar de spawn van zijn koninkrijk'
+cmdTpSpawnOtherExplanation: 'Teleporteer een speler naar de spawn van een koninkrijk'
+cmdSocialSpyExplanation: 'Zet social spy aan of uit'
+
+
+cmdGroupsExplanation: 'Bekijk een lijst van alle permissie groepen'
+cmdGroupsAddExplanation: 'Voeg een permissie groep toe aan een rang'
+cmdGroupsAddOtherExplanation: 'Voeg een permissie groep toe aan een rang'
+cmdGroupsListExplanation: 'Bekijk een lijst van permissie groepen voor een rang'
+cmdGroupsListOtherExplanation: 'Bekijk een lijst van permissie groepen voor een rang'
+cmdGroupsRemoveExplanation: 'Verwijder een permissie groep van een rang'
+cmdGroupsRemoveOtherExplanation: 'Verwijder een permissie groep van een rang'
+
+cmdCreateExplanation: 'Maak een koninkrijk'
+cmdRenameExplanation: 'Hernoem je koninkrijk'
+cmdRenameOtherExplanation: 'Hernoem een koninkrijk'
+cmdDeleteExplanation: 'Verwijder je koninkrijk'
+cmdEditDefaultRankExplanation: 'Verander de standaardrang van je koninkrijk'
+cmdEditDefaultRankOtherExplanation: 'Verander de standaardrang van een koninkrijk'
+cmdEditDisplayExplanation: 'Verander de weergavenaam van je koninkrijk'
+cmdEditDisplayOtherExplanation: 'Verander de weergavenaam van een koninkrijk'
+cmdEditInviteOnlyExplanation: 'Zet invite only aan of uit voor je koninkrijk'
+cmdEditInviteOnlyOtherExplanation: 'Zet invite only aan of uit voor een koninkrijk'
+cmdEditMaxMembersExplanation: 'Verander de max leden van je koninkrijk'
+cmdEditMaxMembersOtherExplanation: 'Verander de max leden van een koninkrijk'
+cmdEditPrefixExplanation: 'Verander de prefix van je koninkrijk'
+cmdEditPrefixOtherExplanation: 'Verander de prefix van een koninkrijk'
+cmdEditSuffixExplanation: 'Verander de suffix van je koninkrijk'
+cmdEditSuffixOtherExplanation: 'Verander de suffix van een koninkrijk'
+
+cmdRanksCloneExplanation: 'Kopieer een rank van een koninkrijk naar een ander koninkrijk'
+cmdRanksCreateExplanation: 'Maak een rang in je koninkrijk'
+cmdRanksCreateOtherExplanation: 'Maak een rang in een koninkrijk'
+cmdRanksRenameExplanation: 'Hernoem een rang in je koninkrijk'
+cmdRanksRenameOtherExplanation: 'Hernoem een rang in een koninkrijk'
+cmdRanksDeleteExplanation: 'Verwijder een rang uit je koninkrijk'
+cmdRanksDeleteOtherExplanation: 'Verwijder een rang uit een koninkrijk'
+cmdRanksEditDisplayExplanation: 'Verander de weergavenaam van een rang in je koninkrijk'
+cmdRanksEditDisplayOtherExplanation: 'Verander de weergavenaam van een rang in een koninkrijk'
+cmdRanksEditLevelExplanation: 'Verander het level van een rang in je koninkrijk'
+cmdRanksEditLevelOtherExplanation: 'Verander het level van een rang in een koninkrijk'
+cmdRanksEditMaxMembersExplanation: 'Verander de max leden van een rang in je koninkrijk'
+cmdRanksEditMaxMembersOtherExplanation: 'Verander de max leden van een rang in een koninkrijk'
+cmdRanksEditPrefixExplanation: 'Verander de prefix van een rang in je koninkrijk'
+cmdRanksEditPrefixOtherExplanation: 'Verander de prefix van een rang in een koninkrijk'
+cmdRanksEditSuffixExplanation: 'Verander de suffix van een rang in je koninkrijk'
+cmdRanksEditSuffixOtherExplanation: 'Verander de suffix van een rang in een koninkrijk'
+cmdRanksListExplanation: 'Bekijk een lijst van alle rangen in je koninkrijk'
+cmdRanksListOtherExplanation: 'Bekijk een lijst van alle rangen in een koninkrijk'
+
+# Command messages
+
+# /k join
+cmdJoinAlready: '&aJe behoort al tot een koninkrijk!'
+cmdJoin: '&aJe hebt je aangesloten bij &2{0}&a!'
+cmdJoinMembers: '&2{0} &aheeft zich aangesloten bij jouw koninkrijk!'
+cmdJoinNoInvite: '&aJe hebt een uitnodiging nodig om je aan te sluiten bij &2{0}&a!'
+cmdJoinNoInviteMembers: '&2{0} &awilt zich bij jouw koninkrijk aansluiten!'
+cmdJoinFull: '&aHet koninkrijk &2{0} &ais vol!'
+
+# /k leave
+cmdLeave: '&aJe hebt &2{0} &averlaten!'
+cmdLeaveMembers: '&2{0} &aheeft je koninkrijk verlaten!'
+
+# /k list
+cmdListDelimiter: '&a, &2'
+cmdList: '&aLijst van koninkrijken: &2{0}'
+
+# /k chatchannel
+cmdChatChannelEnable: '&aJe hebt het chat kanaal &2{0} &aaangezet!'
+cmdChatChannelDisable: '&aJe hebt het chat kanaal &2{0} &auitgezet!'
+cmdChatChannelNoToggle: '&aJe kan het chat kanaal &2{0} &aniet uitzetten!'
+cmdChatChannelNotExist: '&cHet chat kanaal &4{0} &cbestaat niet!'
+
+# /k defaultchatchannel
+cmdDefaultChatChannel: '&aJe hebt van &2{0} &ajouw standaard kanaal gemaakt!'
+cmdDefaultChatChannelDisable: '&aJe hebt nu geen standaard kanaal meer!'
+
+# /k invite
+cmdInviteAlreadyKingdom: '&cDe speler &4{0} &cbehoort al tot je koninkrijk!'
+cmdInviteAlready: '&cDe speler &4{0} &cheeft al een uitnodiging voor jouw koninkrijk!'
+cmdInviteTarget: '&aJe bent door ²2{0} uitgenodigd om je aan te sluiten bij het koninkrijk &2{1}&a!'
+cmdInviteSender: '&aJe hebt &2{0} &auitgenodigd om zich aan te sluiten bij &2{1}&a!'
+
+# /k spawn
+cmdSpawnNotExists: '&aDe spawn van het koninkrijk is niet ingesteld!'
+cmdSpawnOtherNotExists: '&aDe spawn van het &2{0} &ais niet ingesteld!'
+cmdSpawn: '&aJe bent geteleporteerd naar &2{0}&a!'
+
+# /k tpspawn
+cmdTpSpawn: '&aJe hebt &2{0} &ageteleporteerd naar &2{1}'
+cmdTpSpawnTarget: '&aJe bent geteleporteerd naar &2{0}'
+
+# /k setspawn
+cmdSetSpawn: '&aJe hebt de spawn van je koninkrijk veranderd naar &2{0}&a!'
+cmdSetSpawnOther: '&aJe hebt de spawn van &2{0} &averanderd naar &2{1}&a!'
+
+# /k enemy
+cmdEnemy: '&aJe bent nu vijanden met &2{0}&a!'
+cmdEnemyMembers: '&aJouw koninkrijk is nu vijanden met &2{0}&a!'
+cmdEnemyAlready: '&cJe bent al vijanden met &4{0}&c!'
+
+# /k ally
+cmdAllyRequest: '&aJe hebt een bondgenootschap aangevraagd met &2{0}&a!'
+cmdAllyRequestAlready: '&cJe hebt al een bondgenootschap aangevraagd met &4{0}&c!'
+cmdAllyRequestTarget: '&2{0} &aheeft een bondgenootschap aangevraagd met jouw koninkrijk!'
+cmdAllyAccepted: '&aJe bent nu bondgenoten met &2{0}&a!'
+cmdAllyAlready: '&4{0} &cis al een bondgenoot!'
+
+# /k truce
+cmdTruceRequest: '&aJe hebt een wapenstilstand aangevraagd met &2{0}&a!'
+cmdTruceRequestAlready: '&cJe hebt al een wapenstilstand aangevraagd met &4{0}&c!'
+cmdTruceRequestTarget: '&2{0} &aheeft een wapenstilstand aangevraagd met jouw koninkrijk!'
+cmdTruceAccepted: '&aJe hebt nu een wapenstilstand met &2{0}&a!'
+cmdTruceAlready: '&cJe hebt al een wapenstilstand met &4{0}&c!'
+cmdTruceNotEnemies: '&cJe moet vijanden zijn met &4{0} &com een wapenstilstand aan te vragen!'
+
+# /k neutral
+cmdNeutralRequest: '&aJe hebt een neutrale status aangevraagd met &2{0}&a!'
+cmdNeutralRequestAlready: '&cJe hebt al een neutrale status aangevraagd met &4{0}&c!'
+cmdNeutralRequestTarget: '&2{0} &aheeft een neutrale status aangevraagd met jouw koninkrijk!'
+cmdNeutralAccepted: '&aJe bent nu neutraal met &2{0}&a!'
+cmdNeutralAlready: '&4{0} &cis al een neutraal koninkrijk!'
+
+# /k kick
+cmdKickTarget: '&aJe bent uit &2{0} &ageschopt!'
+cmdKickSender: '&aJe hebt &2{0} &auit &2{1} &ageschopt!'
+cmdKickLowLevel: '&cJe rang level moet hoger zijn dan dat van &4{0}&c!'
+
+# /k setrank
+cmdSetRankLowLevelTarget: '&cJe rang level moet hoger zijn dan dat van &4{0}&c!'
+cmdSetRankLowLevelCurrent: '&cJe rang level moet hoger zijn dan de rang van &4{0}&c!'
+cmdSetRankNotExist: '&aDe rang &2{0} &abestaat niet!'
+cmdSetRankAlready: '&c{0} &4heeft de rang &4{1} &cal!'
+cmdSetRankSender: '&aJe hebt de rang van &2{0} &averanderd naar &2{1}&a!'
+cmdSetRankTarget: '&aJouw rang is veranderd naar &2{0}&a!'
+cmdSetRankFull: '&cDe rang &4{0} &cis vol!'
+
+# /k setkingdom
+cmdSetKingdomAlready: '&c{0} &4hoort al bij &4{1}&c!'
+cmdSetKingdomTarget: '&aJe bent bent nu aangesloten bij &2{0}&a!'
+cmdSetKingdomSender: '&aJe hebt &2{0} &aaangesloten bij &2{1}&a!'
+
+# /k create
+cmdCreate: '&aJe hebt het koninkrijk &2{0} &aaangemaakt!'
+
+# /k rename
+cmdRename: '&aJe hebt je koninkrijk hernoemd naar &2{0}&a!'
+cmdRenameOther: '&aJe hebt &2{0} &ahernoemd naar &2{1}&a!'
+
+# /k delete
+cmdDelete: '&aJe hebt &2{0} &averwijderd!'
+cmdDeleteMembers: '&aJe koninkrijk werd verwijderd!'
+cmdDeleteConfirm: '&aType &2/k delete confirm &aom &2{0} &ate verwijderen!'
+
+# /k edit
+cmdEdit: '&aJe hebt de {0} van je koninkrijk veranderd naar &2{1}&a!'
+cmdEditOther: '&aJe hebt de {0} van &2{1} &averanderd naar &2{2}&a!'
+
+cmdEditItemInvalid: '&cJe moet een voorwerp vasthebben!'
+
+# /k ranks create
+cmdRanksCreate: '&aJe hebt de rang &2{0} &aaangemaakt!'
+cmdRanksCreateOther: '&aJe hebt de rang &2{0} &aaangemaakt voor &2{1}&a!'
+
+# /k rank rename
+cmdRanksRename: '&aJe hebt &2{0} &ahernoemd &2{1}&a!'
+cmdRanksRenameOther: '&aJe hebt &2{0} &ain &2{2} &ahernoemd naar &2{1}&a!'
+
+# /k ranks delete
+cmdRanksDelete: '&aJe hebt de rang &2{0} &averwijderd!'
+cmdRanksDeleteOther: '&aJe hebt de rang &2{0} &avan &2{1} &averwijderd!'
+cmdRanksDeleteDefault: '&aJe hebt de standaard rang verwijderd!'
+cmdRanksDeleteOtherDefault: '&aJe hebt de standaard rang van &a{0} &averwijderd!'
+
+# /k ranks list
+cmdRanksList: '&aLijst van rangen: &2{0}'
+cmdRanksListOther: '&aLijst van rangen voor &2{0}&a: &2{1}'
+
+# /k ranks edit
+cmdRanksEdit: '&aJe hebt de {0} van de rang &2{1} &averanderd naar &2{2}&a!'
+cmdRanksEditOther: '&aJe hebt de {0} van de rang &2{1} &ain &2{2} &averanderd naar &2{3}&a!'
+
+# /k groups
+cmdGroupsDelimiter: '&7, &2'
+cmdGroups: '&aLijst van permissie groepen: &2{0}'
+
+# /k groups add
+cmdGroupsAddAlreadyExists: '&cDe permissie groep &4{0} &cbehoort al tot de rang &4{1}&c!'
+cmdGroupsAdd: '&aJe hebt de permissie groep &2{0} &atoegevoegd aan de rang &2{1}&a!'
+cmdGroupsAddOther: '&aJe hebt de permissie groep &2{0} &atoegevoegd aan de rang &2{1} &ain &2{2}&a!'
+
+# /k groups remove
+cmdGroupsRemoveNotExist: '&cDe permissie groep &4{0} &cbehoort niet tot de rang &4{1}&c!'
+cmdGroupsRemove: '&aJe hebt de permissie groep &2{0} &averwijderd van de rang &2{1}&a!'
+cmdGroupsRemoveOther: '&aJe hebt de permissie groep &2{0} &averwijderd van de rang &2{1} &ain &2{2}&a!'
+
+# /k groups list
+cmdGroupsList: '&aPermissie groepen van de rang &2{0}&a: &2{1}'
+cmdGroupsListOther: '&aPermissie groepen van de rang &2{0} &avin &2{1}&a: &2{2}'
+
+# /k ranks clone
+cmdRanksClone: '&aJe hebt de rang &2{0} &afvan &2{1} &anaar &2{2} &agekopieerd!'
+
+# /k tphere
+cmdTpHere: '&aJe hebt iedereen van je koninkrijk naar jouw geteleporteerd!'
+cmdTphereTarget: '&aJe bent geteleporteerd naar &2{0}&a!'
+cmdTpHereOther: '&aJe hebt iedereen van &2{0} &anaar jouw geteleporteerd!'
+
+# /k chat
+cmdChatNoChannel: '&cHet chat kanaal &4{0} &cbestaat niet!'
+cmdChatEmptyMessage: '&cJe kan geen leeg bericht sturen!'
+
+# /k admin
+cmdAdminEnable: '&aJe hebt admin modus aangezet!'
+cmdAdminDisable: '&aJe hebt admin modus uitgezet!'
+
+cmdAdminEnableSender: '&aJe hebt admin modus aangezet voor &2{0}&a!'
+cmdAdminDisableSender: '&aJe hebt admin modus uitgezet voor &2{0}&a!'
+
+cmdAdminEnableTarget: '&aAdmin modus werd voor je aangezet!'
+cmdAdminDisableTarget: '&aAdmin modus werd voor je uitgezet!'
+
+# /k socialspy
+cmdSocialSpyEnable: '&aJe hebt social spy aangezet!'
+cmdSocialSpyDisable: '&aJe hebt social spy uitgezet!'
+
+# /k reload
+cmdReload: '&aKingdomCraft werd herladen!'
+
+# /k editor
+cmdEditorStarting: '&aSessie wordt aangemaakt...'
+cmdEditorStarted: '&aSessie is aangemaakt! Ga naar &2{0}'
+cmdEditorSaving: '&aDe aanpassingen worden opgeslagen...'
+cmdEditorSaved: '&aDe aanpassingen zijn opgeslagen!'
+cmdEditorErrorUpload: '&cEr kan geen sessie worden gemaakt, probeer later opnieuw.'
+cmdEditorErrorDownload: '&cDe aanpassingen kunnen niet worden opgehaald, is de link correct?'
+cmdEditorErrorFormat: '&cDe aanpassingen zijn in een fout formaat. Contacteer de ontwikkelaar!'
+cmdEditorErrorSave: '&cDe aanpassingen konden niet worden opgeslagen. Contacteer de ontwikkelaar!'
+
+# /k sqldump
+cmdSqlDump: '&aDe SQL dump werd opgeslagen naar &2{0}&a!'
+
+# MENU
+menuConfirmAccept: '&aAccepteer'
+menuConfirmCancel: '&cAnnuleer'
+
+menuQueryCancel: '&7Type &8cancel &7om te annuleren.'
+
+menuTitle: '&8Koninkrijk menu'
+
+menuItemKingdomsList: '&6Koninkrijken'
+menuItemPlayersList: '&6Spelers'
+
+menuKingdomsListTitle: '&8Koninkrijken'
+menuPlayersListTitle: '&8Spelers'
+
+menuInfoKingdom: '&7Koninkrijk: {0}'
+menuInfoRank: '&7Rang: {0}'
+menuInfoLastSeen: '&7Laatst gezien: &6{0}'
+menuInfoFirstLogin: '&7Eerste login: &6{0}'
+menuInfoCreatedAt: '&7Aangemaakt op: &6{0}'
+menuInfoOnlineMembers: '&7Online leden: &a{0} &7/ &f{1}'
+menuInfoMaxMembers: '&7Max leden: &f{0}'
+
+menuPlayerInfoItemKick: '&cSchop speler uit koninkrijk'
+menuPlayerInfoItemLoreKick: '&7Klik op deze speler uit zijn koninkrijk te schoppen'
+menuPlayerKickConfirmTitle: '&8Schop {0}'
+
+menuPlayerInfoItemChangeRank: '&aWijzig rang'
+menuPlayerInfoItemLoreChangeRank: '&7Klik om de rang van deze speler te wijzigen'
+
+menuPlayerInfoItemInvite: '&bSpeler uitnodigen'
+menuPlayerInfoItemLoreInvite: '&7Klik om deze speler uit te nodigen voor jouw koninkrijk'
+
+menuKingdomInfoItemLore: '&7Klik om dit koninkrijk te bewerken'
+
+menuKingdomInfoItemRanks: '&6Rangen &7(&a{0}&7)'
+menuKingdomInfoItemLoreRanks: '&7Klik om alle rangen van dit koninkrijk te bekijken'
+
+menuKingdomInfoItemRelations: '&6Relaties'
+menuKingdomInfoItemLoreRelations: '&7Klik om alle relaties met van dit koninkrijk te bekijken'
+
+menuKingdomInfoItemMembers: '&6Leden &7(&a{0}&a)'
+menuKingdomInfoItemLoreMembers: '&7Klik om alle leden van dit koninkrijk te bekijken'
+
+menuKingdomInfoItemSpawn: '&6Spawn van het koninkrijk'
+menuKingdomInfoItemLoreSpawnTeleport: '&7Klik om te teleporteren'
+menuKingdomInfoItemLoreSpawnChange: '&7Rechterklik om de locatie te wijzigen'
+menuKingdomInfoItemLoreSpawnNotSet: '&7Spawn is niet ingesteld'
+
+menuChangeKingdomSpawnConfirmTitle: '&8Verander spawn van je koninkrijk'
+menuChangeKingdomSpawnOtherConfirmTitle: '&8Verander spawn van {0}'
+
+menuKingdomEditTitle: '&8Bewerk koninkrijk'
+
+menuKingdomEditItemChangeItem: '&eWijzig voorwerp'
+menuKingdomEditItemLoreChangeItem: '&7Klik om het voorwerp van dit koninkrijk te wijzigen'
+menuKingdomChangeItemTitle: '&8Selecteer een voorwerp'
+
+menuKingdomEditItemRename: '&eHernoem koninkrijk'
+menuKingdomEditItemLoreRename: '&7Huidige naam: &f{0}\n\n&7Klik om de naam van het te wijzigen'
+menuKingdomEditRenameQuery: '&aVul een nieuwe naam in.'
+
+menuKingdomEditItemChangeDisplay: '&eWijzig weergavenaam'
+menuKingdomEditItemLoreChangeDisplay: '&7Huidige weergavenaam: &f{0}\n\n&7Klik om de weergave naam te wijzigen'
+menuKingdomEditChangeDisplayQuery: '&aVul een weergavenaam in.'
+
+menuKingdomEditItemChangePrefix: '&eWijzig prefix'
+menuKingdomEditItemLoreChangePrefix: '&7Huidige prefix: &f{0}\n\n&7Klik om de prefix te wijzigen'
+menuKingdomEditChangePrefixQuery: '&aVul een prefix in.'
+
+menuKingdomEditItemChangeSuffix: '&eWijzig suffix'
+menuKingdomEditItemLoreChangeSuffix: '&7Huidige suffix: &f{0}\n\n&7Klik om de suffix te wijzigen'
+menuKingdomEditChangeSuffixQuery: '&aVul een suffix in.'
+
+menuKingdomEditItemChangeMaxMembers: '&eWijzig max leden'
+menuKingdomEditItemLoreChangeMaxMembers: '&7Max leden: &f{0}\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
+
+menuKingdomEditItemToggleInviteOnly: '&eSwitch invite only'
+menuKingdomEditItemLoreToggleInviteOnly: '&7Invite only: &f{0}\n\n&7Klik om te switchen tussen aan of uit'
+
+menuKingdomMembersListTitle: '&8Leden van {0}'
+
+menuKingdomRanksListTitle: '&8Rangen van {0}'
+menuKingdomRanksListItemLore: '&7Klik om deze rang te bewerken'
+
+menuRankEditTitle: '&8Bewerk rang'
+
+menuRankEditItemRename: '&eHernoem rang'
+menuRankEditItemLoreRename: '&7Huidige naam: &f{0}\n\n&7Klik om de naam te wijzigen'
+menuRankEditRenameQuery: '&aVul een nieuwe naam in.'
+
+menuRankEditItemChangeDisplay: '&eWijzig weergavenaam'
+menuRankEditItemLoreChangeDisplay: '&7Huidige weergavenaam: &f{0}\n\n&7Klik om de weergavenaam te wijzigen'
+menuRankEditChangeDisplayQuery: '&aVul een weergavenaam in.'
+
+menuRankEditItemChangePrefix: '&eWijzig chat prefix'
+menuRankEditItemLoreChangePrefix: '&7Huidige prefix: &f{0}\n\n&7Klik om de chat prefix te wijzigen'
+menuRankEditChangePrefixQuery: '&aVul een chat prefix in.'
+
+menuRankEditItemChangeSuffix: '&eWijzig chat suffix'
+menuRankEditItemLoreChangeSuffix: '&7Current suffix: &f{0}\n\n&7Klik om de chat suffix te wijzigen'
+menuRankEditChangeSuffixQuery: '&aVul een chat suffix in.'
+
+menuRankEditItemChangeMaxMembers: '&eWijzig max leden'
+menuRankEditItemLoreChangeMaxMembers: '&7Max leden: &f{0}\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
+
+menuRankEditItemChangeLevel: '&eWijzig level'
+menuRankEditItemLoreChangeLevel: '&7Huidig level: &f{0}\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
+
+menuChangePlayerRankTitle: '&8Verander rang van {0}'
+menuChangePlayerRankConfirmTitle: '&8Verander rang van {0} naar {1}'
+
+menuRelationsTitle: '&8Relaties met {0}'
+
+menuChangeRelationTitle: '&8Verander relatie met {0}'
+
+menuChangeRelationItemLoreAllyRequested: '&7Bondgenootschap aangevraagd'
+menuChangeRelationItemLoreAllyAccept: '&7Klik om een bondgenootschap te accepteren'
+menuChangeRelationItemLoreAllyRequest: '&7Klik om een bondgenootschap aan te vragen'
+
+menuChangeRelationItemLoreEnemy: '&7Klik om vijanden te worden'
+
+menuChangeRelationItemLoreTruceRequested: '&7Wapenstilstand aangevraagd'
+menuChangeRelationItemLoreTruceAccept: '&7Klik om een wapenstilstand aan te vragen'
+menuChangeRelationItemLoreTruceRequest: '&7Klik om een wapenstilstand te accepteren'
+
+menuChangeRelationItemLoreNeutralRequested: '&7Neutrale status aangevraagd'
+menuChangeRelationItemLoreNeutralAccept: '&7Klik om een neutrale status te accepteren'
+menuChangeRelationItemLoreNeutralRequest: '&7Klik om een neutrale status aan te vragen'
+menuChangeRelationItemLoreNeutralEndAlliance: '&7Klik om de bondgenootschap te stoppen'
+
+
