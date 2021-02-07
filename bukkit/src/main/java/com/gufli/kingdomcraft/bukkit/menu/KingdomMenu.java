@@ -369,7 +369,7 @@ public class KingdomMenu {
     // Kingdom edit
 
     static boolean openKingdomEdit(PlatformPlayer player, Kingdom target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle("menuKingdomEditTitle");
+        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuKingdomEditTitle"));
 
         // Edit item
         if (player.hasPermission("kingdom.edit.item.other")
