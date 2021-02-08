@@ -707,7 +707,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.ranks.edit.prefix") && player.getUser().getKingdom() == target.getKingdom())) {
             builder.withItem(ItemStackBuilder.of(Material.GOLD_INGOT)
                             .withName(text("menuRankEditItemChangePrefix"))
-                            .withLore(text("menuRankEditItemLoreChangeSuffix", colorify(target.getPrefix())).split("\n"))
+                            .withLore(text("menuRankEditItemLoreChangePrefix", colorify(target.getPrefix())).split("\n"))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessageManager().send(player, "menuRankEditChangePrefixQuery");
