@@ -91,6 +91,6 @@ public class BKingdomInvite extends BaseModel implements KingdomInvite {
     @Override
     public boolean isValid() {
         return sender.getKingdom().equals(kingdom)
-                && System.currentTimeMillis() - createdAt.getEpochSecond() <= 3600; // 1h
+                && Instant.now().minusSeconds(3600).isBefore(createdAt); // 1h
     }
 }
