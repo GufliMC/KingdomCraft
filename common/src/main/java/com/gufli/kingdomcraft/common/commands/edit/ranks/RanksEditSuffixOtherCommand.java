@@ -69,6 +69,6 @@ public class RanksEditSuffixOtherCommand extends CommandBase {
         kdc.saveAsync(rank);
 
         kdc.getMessageManager().send(sender, "cmdRanksEditOther", "suffix",
-                kingdom.getName(), rank.getName(), args[2]);
+                rank.getName(), kingdom.getName(), args[2]);
     }
 }

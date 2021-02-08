@@ -74,6 +74,6 @@ public class RanksEditLevelOtherCommand extends CommandBase {
         kdc.saveAsync(rank);
 
         kdc.getMessageManager().send(sender, "cmdRanksEditOther", "level",
-                kingdom.getName(), rank.getName(), args[2]);
+                rank.getName(), kingdom.getName(), args[2]);
     }
 }
