@@ -136,8 +136,8 @@ public class EditorImpl implements Editor {
 
         try {
             if ( json.has("deleted_kingdoms") ) {
-                ObjectReader reader = mapper.readerFor(new TypeReference<List<Integer>>() {});
-                List<Integer> kingdoms = reader.readValue(json.get("deleted_kingdoms"));
+                ObjectReader reader = mapper.readerFor(new TypeReference<List<String>>() {});
+                List<String> kingdoms = reader.readValue(json.get("deleted_kingdoms"));
                 kingdoms.stream().map(kdc::getKingdom).filter(Objects::nonNull).forEach(Model::delete);
             }
 
@@ -150,10 +150,10 @@ public class EditorImpl implements Editor {
             Map<String, JsonNode> kingdoms = reader.readValue(json.get("kingdoms"));
 
             for ( String key : kingdoms.keySet() ) {
+                key = key.replace(" ", "");
                 Kingdom kingdom = kdc.getKingdom(key);
                 if ( kingdom == null ) {
-                    String name = kingdoms.get(key).has("name") ? kingdoms.get(key).get("name").asText(): key;
-                    kingdom = kdc.createKingdom(name.replace(" ", ""));
+                    kingdom = kdc.createKingdom(key);
                 }
                 deserializer.deserialize(kingdom, kingdoms.get(key));
             }
