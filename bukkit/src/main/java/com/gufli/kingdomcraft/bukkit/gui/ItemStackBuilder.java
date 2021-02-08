@@ -282,6 +282,9 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder withSkullOwner(OfflinePlayer owner) {
+        if ( owner == null ) {
+            return this;
+        }
         return transformMeta(SkullMeta.class, meta -> {
             if ( CraftMetaSkull_setOwningPlayer != null ) {
                 try {

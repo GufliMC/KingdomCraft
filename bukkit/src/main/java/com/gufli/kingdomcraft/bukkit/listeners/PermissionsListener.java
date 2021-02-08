@@ -29,6 +29,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.permissions.PermissionAttachment;
+import org.slf4j.event.Level;
 
 import java.util.Map;
 
@@ -139,6 +140,7 @@ public class PermissionsListener implements Listener, EventListener {
                 .getTotalPermissions(player);
 
         Player p = ((BukkitPlayer) player).getPlayer();
+
         PermissionAttachment pa = p.addAttachment(plugin);
         permissions.forEach(pa::setPermission);
         player.set(PERMISSIONS_KEY, pa);

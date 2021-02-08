@@ -253,6 +253,14 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 			log("An error occured, cannot reload chat.yml", Level.WARNING);
 		}
 
+		// remove players that shouldnt be online
+		kdc.getOnlinePlayers().stream()
+				.filter(p -> !((BukkitPlayer) p).getPlayer().isOnline())
+				.forEach(p -> {
+					log(p.getName() + " was not correctly removed. Please contact the developer!", Level.WARNING);
+					kdc.onQuit(p);
+				});
+
 		kdc.getEventDispatcher().dispatchReload();
 	}
 
