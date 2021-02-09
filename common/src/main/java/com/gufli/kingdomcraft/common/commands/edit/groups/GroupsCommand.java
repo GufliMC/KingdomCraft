@@ -45,10 +45,10 @@ public class GroupsCommand extends CommandBase {
         List<String> groups = kdc.getPermissionManager().getGroups().stream()
                 .map(PermissionGroup::getName).collect(Collectors.toList());
 
-        String delimiter = kdc.getMessageManager().getMessage("cmdGroupsDelimiter");
+        String delimiter = kdc.getMessages().getMessage("cmdGroupsDelimiter");
         delimiter = delimiter != null ? delimiter : "&a, &2";
 
         String result = String.join(delimiter, groups);
-        kdc.getMessageManager().send(sender, "cmdGroups", result);
+        kdc.getMessages().send(sender, "cmdGroups", result);
     }
 }

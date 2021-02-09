@@ -30,8 +30,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.concurrent.TimeUnit;
-
 public class ConnectionListener implements Listener, EventListener {
 
     private final KingdomCraftBukkitPlugin plugin;
@@ -47,7 +45,7 @@ public class ConnectionListener implements Listener, EventListener {
         }
         plugin.getScheduler().executeAsync(() -> {
             if ( !plugin.getKdc().onLogin(new BukkitPlayer(e.getPlayer())) ) {
-                e.getPlayer().kickPlayer(plugin.getKdc().getMessageManager().getPrefix() +
+                e.getPlayer().kickPlayer(plugin.getKdc().getMessages().getPrefix() +
                         ChatColor.RED + "An error occured! Could not load your user data.");
             }
         });

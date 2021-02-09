@@ -38,13 +38,13 @@ public class EditSuffixCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         kingdom.setSuffix(args[0]);
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEdit", "suffix", args[0]);
+        kdc.getMessages().send(sender, "cmdEdit", "suffix", args[0]);
     }
 }

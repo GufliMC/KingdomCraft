@@ -36,7 +36,7 @@ public class LeaveCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         User user = kdc.getUser((PlatformPlayer) sender);
         if (user.getKingdom() == null) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
@@ -44,11 +44,11 @@ public class LeaveCommand extends CommandBase {
         user.setKingdom(null);
         kdc.saveAsync(user);
 
-        kdc.getMessageManager().send(sender, "cmdLeave", oldKingdom.getName());
+        kdc.getMessages().send(sender, "cmdLeave", oldKingdom.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != oldKingdom ) continue;
-            kdc.getMessageManager().send(member, "cmdLeaveMembers", user.getName());
+            kdc.getMessages().send(member, "cmdLeaveMembers", user.getName());
         }
     }
 }

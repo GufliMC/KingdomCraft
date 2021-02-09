@@ -51,19 +51,19 @@ public class EditInviteOnlyOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( !args[1].equalsIgnoreCase("true")
                 && !args[1].equalsIgnoreCase("false") ) {
-            kdc.getMessageManager().send(sender, "errorInvalidBoolean", args[1]);
+            kdc.getMessages().send(sender, "errorInvalidBoolean", args[1]);
             return;
         }
 
         kingdom.setInviteOnly(Boolean.parseBoolean(args[1]));
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditOther", "invite-only", kingdom.getName(), kingdom.isInviteOnly() + "");
+        kdc.getMessages().send(sender, "cmdEditOther", "invite-only", kingdom.getName(), kingdom.isInviteOnly() + "");
     }
 }

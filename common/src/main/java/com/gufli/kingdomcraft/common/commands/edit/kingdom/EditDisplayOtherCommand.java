@@ -47,13 +47,13 @@ public class EditDisplayOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         kingdom.setDisplay(args[1]);
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditOther", "display", kingdom.getName(), args[1]);
+        kdc.getMessages().send(sender, "cmdEditOther", "display", kingdom.getName(), args[1]);
     }
 }

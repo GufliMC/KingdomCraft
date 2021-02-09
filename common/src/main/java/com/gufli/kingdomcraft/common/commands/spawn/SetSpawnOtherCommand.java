@@ -49,7 +49,7 @@ public class SetSpawnOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if (kingdom == null || kingdom.isTemplate()) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
@@ -60,6 +60,6 @@ public class SetSpawnOtherCommand extends CommandBase {
         DecimalFormat df = new DecimalFormat("#");
         String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-        kdc.getMessageManager().send(sender, "cmdSetSpawnOther", kingdom.getName(), str);
+        kdc.getMessages().send(sender, "cmdSetSpawnOther", kingdom.getName(), str);
     }
 }

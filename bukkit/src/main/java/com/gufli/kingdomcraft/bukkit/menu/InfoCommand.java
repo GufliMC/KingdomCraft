@@ -32,7 +32,7 @@ public class InfoCommand extends CommandBase {
 
     public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", -1, true);
-        setExplanationMessage(kdc.getMessageManager().getMessage("cmdInfoExplanation"));
+        setExplanationMessage(kdc.getMessages().getMessage("cmdInfoExplanation"));
         setPermissions("kingdom.menu", "kingdom.info");
     }
 
@@ -64,7 +64,7 @@ public class InfoCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if ( target == null ) {
-                    kdc.getMessageManager().send(player, "cmdErrorPlayerNotExist", args[0]);
+                    kdc.getMessages().send(player, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 

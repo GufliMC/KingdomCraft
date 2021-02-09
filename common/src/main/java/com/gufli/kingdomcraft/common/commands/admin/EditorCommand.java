@@ -31,9 +31,9 @@ public class EditorCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        kdc.getMessageManager().send(sender, "cmdEditorStarting");
+        kdc.getMessages().send(sender, "cmdEditorStarting");
         kdc.getPlugin().getScheduler().executeAsync(() -> {
-            kdc.getEditorImpl().startSession(sender);
+            kdc.getEditor().startSession(sender);
         });
     }
 }

@@ -37,10 +37,10 @@ public class SocialSpyCommand extends CommandBase {
 
         if ( player.has("SOCIAL_SPY") && player.get("SOCIAL_SPY", Boolean.class) ) {
             player.remove("SOCIAL_SPY");
-            kdc.getMessageManager().send(sender, "cmdSocialSpyDisable");
+            kdc.getMessages().send(sender, "cmdSocialSpyDisable");
         } else {
             player.set("SOCIAL_SPY", true);
-            kdc.getMessageManager().send(sender, "cmdSocialSpyEnable");
+            kdc.getMessages().send(sender, "cmdSocialSpyEnable");
         }
     }
 }

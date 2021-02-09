@@ -20,7 +20,6 @@ package com.gufli.kingdomcraft.bukkit.commands;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
-import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class VersionCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        String prefix = kdc.getMessageManager().getPrefix();
+        String prefix = kdc.getMessages().getPrefix();
         sender.sendMessage(prefix + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
         sender.sendMessage(prefix + "Created by " + String.join(", ", plugin.getDescription().getAuthors()));
     }

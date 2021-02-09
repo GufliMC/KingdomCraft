@@ -110,10 +110,10 @@ public class EditorImpl implements Editor {
         try {
             String result = upload(mapper.writeValueAsString(node));
             JsonNode resultNode = mapper.readTree(result);
-            kdc.getMessageManager().send(sender, "cmdEditorStarted", editorUrl + resultNode.get("key").asText());
+            kdc.getMessages().send(sender, "cmdEditorStarted", editorUrl + resultNode.get("key").asText());
         } catch (Exception e) {
             e.printStackTrace();
-            kdc.getMessageManager().send(sender, "cmdEditorErrorUpload");
+            kdc.getMessages().send(sender, "cmdEditorErrorUpload");
         }
     }
 
@@ -126,11 +126,11 @@ public class EditorImpl implements Editor {
             json = mapper.readTree(result);
         }  catch (JsonProcessingException e) {
             e.printStackTrace();
-            kdc.getMessageManager().send(sender, "cmdEditorErrorFormat");
+            kdc.getMessages().send(sender, "cmdEditorErrorFormat");
             return;
         } catch (IOException e) {
             e.printStackTrace();
-            kdc.getMessageManager().send(sender, "cmdEditorErrorDownload");
+            kdc.getMessages().send(sender, "cmdEditorErrorDownload");
             return;
         }
 
@@ -142,7 +142,7 @@ public class EditorImpl implements Editor {
             }
 
             if ( !json.has("kingdoms") ) {
-                kdc.getMessageManager().send(sender, "cmdEditorErrorFormat");
+                kdc.getMessages().send(sender, "cmdEditorErrorFormat");
                 return;
             }
 
@@ -160,10 +160,10 @@ public class EditorImpl implements Editor {
 
             kdc.getPlugin().reload();
 
-            kdc.getMessageManager().send(sender, "cmdEditorSaved");
+            kdc.getMessages().send(sender, "cmdEditorSaved");
         } catch (Exception ex) {
             ex.printStackTrace();
-            kdc.getMessageManager().send(sender, "cmdEditorErrorSave");
+            kdc.getMessages().send(sender, "cmdEditorErrorSave");
         }
     }
 

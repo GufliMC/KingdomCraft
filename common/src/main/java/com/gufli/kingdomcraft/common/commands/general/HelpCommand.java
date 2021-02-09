@@ -61,13 +61,13 @@ public class HelpCommand extends CommandBase {
         }
 
         if ( page > totalpages ) {
-            kdc.getMessageManager().send(sender, "cmdHelpPageLimit", totalpages + "");
+            kdc.getMessages().send(sender, "cmdHelpPageLimit", totalpages + "");
             return;
         }
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(kdc.getMessageManager().getMessage("cmdHelpHeader"));
+        sb.append(kdc.getMessages().getMessage("cmdHelpHeader"));
         sb.append("\n");
 
         int startindex = (page - 1) * pagesize;
@@ -75,19 +75,19 @@ public class HelpCommand extends CommandBase {
             CommandBase cmd = commands.get(i);
 
             String command = "/k " + cmd.getCommands().get(0) + (cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint());
-            String explanation = kdc.getMessageManager().getMessage(cmd.getExplanationMessage());
+            String explanation = kdc.getMessages().getMessage(cmd.getExplanationMessage());
 
-            sb.append(kdc.getMessageManager().getMessage("cmdHelpFormat", command, explanation));
+            sb.append(kdc.getMessages().getMessage("cmdHelpFormat", command, explanation));
             sb.append("\n");
         }
 
-        sb.append(kdc.getMessageManager().getMessage("cmdHelpFooter", page + "", totalpages + ""));
+        sb.append(kdc.getMessages().getMessage("cmdHelpFooter", page + "", totalpages + ""));
         sender.sendMessage(sb.toString());
     }
 
     private List<CommandBase> getAvailableCommands(PlatformSender sender) {
         List<CommandBase> commands = kdc.getCommandManager().getCommands().stream()
-                .filter(cmd -> kdc.getMessageManager().hasMessage(cmd.getExplanationMessage())).collect(Collectors.toList());
+                .filter(cmd -> kdc.getMessages().getMessage(cmd.getExplanationMessage()) != null).collect(Collectors.toList());
 
         if ( sender instanceof PlatformPlayer ) {
             commands = commands.stream().filter(cmd -> hasAnyPermission(sender, cmd)).collect(Collectors.toList());

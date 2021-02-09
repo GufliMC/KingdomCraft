@@ -22,6 +22,6 @@ public class SqlDumpCommand extends CommandBase {
         Database db = DB.byName("kingdomcraft");
         db.sqlQuery("SCRIPT TO '" + file.getAbsolutePath() + "';").findList();
 
-        kdc.getMessageManager().send(sender, "cmdSqlDump", file.getName());
+        kdc.getMessages().send(sender, "cmdSqlDump", file.getName());
     }
 }

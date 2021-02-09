@@ -19,7 +19,6 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -77,7 +76,7 @@ public class DeathListener implements Listener {
 
             msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
             msg = plugin.getKdc().getPlaceholderManager().handle(k, msg, "killer_");
-            msg = plugin.getKdc().getMessageManager().colorify(msg);
+            msg = plugin.getKdc().getMessages().colorify(msg);
             event.setDeathMessage(msg);
             return;
         }
@@ -95,7 +94,7 @@ public class DeathListener implements Listener {
 
         String msg = plugin.getKdc().getConfig().getOnDeathMessage();
         msg = plugin.getKdc().getPlaceholderManager().handle(p, msg);
-        msg = plugin.getKdc().getMessageManager().colorify(msg);
+        msg = plugin.getKdc().getMessages().colorify(msg);
         event.setDeathMessage(msg);
     }
 

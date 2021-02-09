@@ -18,8 +18,6 @@
 package com.gufli.kingdomcraft.common.commands.chat;
 
 import com.gufli.kingdomcraft.api.chat.ChatChannel;
-import com.gufli.kingdomcraft.api.domain.User;
-import com.gufli.kingdomcraft.api.domain.UserChatChannel;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
@@ -54,17 +52,17 @@ public class DefaultChatChannelCommand extends CommandBase {
 
         if ( args.length == 0 ) {
             player.remove("DEFAULT_CHATCHANNEL");
-            kdc.getMessageManager().send(sender, "cmdDefaultChatChannelDisable");
+            kdc.getMessages().send(sender, "cmdDefaultChatChannelDisable");
             return;
         }
 
         ChatChannel cc = kdc.getChatManager().getChatChannel(args[0]);
         if ( cc == null || !kdc.getChatManager().canTalk(player, cc)) {
-            kdc.getMessageManager().send(sender, "cmdChatChannelNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdChatChannelNotExist", args[0]);
             return;
         }
 
         player.set("DEFAULT_CHATCHANNEL", cc.getName());
-        kdc.getMessageManager().send(sender, "cmdDefaultChatChannel", cc.getName());
+        kdc.getMessages().send(sender, "cmdDefaultChatChannel", cc.getName());
     }
 }

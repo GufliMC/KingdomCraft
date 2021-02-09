@@ -40,7 +40,7 @@ public class RanksListCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
@@ -48,6 +48,6 @@ public class RanksListCommand extends CommandBase {
                 .sorted((o1, o2) -> o2.getLevel() - o1.getLevel())
                 .map(Rank::getName)
                 .collect(Collectors.joining(", "));
-        kdc.getMessageManager().send(sender, "cmdRanksList", list);
+        kdc.getMessages().send(sender, "cmdRanksList", list);
     }
 }

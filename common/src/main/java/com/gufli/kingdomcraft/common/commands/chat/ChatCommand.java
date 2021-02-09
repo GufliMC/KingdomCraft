@@ -52,26 +52,26 @@ public class ChatCommand extends CommandBase {
         PlatformPlayer player = (PlatformPlayer) sender;
 
         if ( args.length < 2 ) {
-            kdc.getMessageManager().send(sender, "cmdErrorInvalidUsage", "/k chat " + getArgumentsHint());
+            kdc.getMessages().send(sender, "cmdErrorInvalidUsage", "/k chat " + getArgumentsHint());
             return;
         }
 
         ChatChannel channel = kdc.getChatManager().getChatChannel(args[0]);
         if ( channel == null ) {
-            kdc.getMessageManager().send(sender, "cmdChatNoChannel", args[0]);
+            kdc.getMessages().send(sender, "cmdChatNoChannel", args[0]);
             return;
         }
 
         if ( !kdc.getChatManager().canTalk(player, channel)
                 && !player.hasPermission("kingdom.chat.other") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+            kdc.getMessages().send(sender, "cmdErrorNoPermission");
             return;
         }
 
         String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        String stripped = kdc.getMessageManager().decolorify(kdc.getMessageManager().colorify(msg)).trim();
+        String stripped = kdc.getMessages().decolorify(kdc.getMessages().colorify(msg)).trim();
         if ( stripped.equals("") ) {
-            kdc.getMessageManager().send(sender, "cmdChatEmptyMessage");
+            kdc.getMessages().send(sender, "cmdChatEmptyMessage");
             return;
         }
 

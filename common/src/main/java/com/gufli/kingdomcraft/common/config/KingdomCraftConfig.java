@@ -17,69 +17,176 @@
 
 package com.gufli.kingdomcraft.common.config;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import com.gufli.kingdomcraft.api.domain.RelationType;
+
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class KingdomCraftConfig {
 
-    private Configuration config;
+    private int teleportDelay = 0;
+    private String language = "en";
+    private List<String> worlds = new ArrayList<>();
+    private ZoneId timezone = ZoneId.systemDefault();
+    private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");;
+    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");;
+    private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
+    private List<RelationType> friendlyFireRelations = new ArrayList<>();
+    private boolean friendlyFire = false;
+    private List<String> kingdomJoinCommands = new ArrayList<>();
+    private List<String> kingdomLeaveCommands = new ArrayList<>();
+    private boolean respawnAtKingdom = true;
 
-    public KingdomCraftConfig(Configuration config) {
-        this.config = config;
-    }
+    private String joinMessage;
+    private String leaveMessage;
+    private String deathMessage;
+    private String killMessage;
+    private String killWeaponMessage;
 
-    public void reload(Configuration config) {
-        this.config = config;
-    }
+    private String noKingdomPrefix;
+    private String noKingdomSuffix;
+    private String noKingdomDisplay;
 
-    public int getTeleportDelay() {
-        return config.contains("teleport-delay") ? config.getInt("teleport-delay") : 0;
-    }
+    private boolean isChatEnabledInDisabledWorlds = false;
+    private boolean showJoinAndLeaveMessagesKingdomOnly = false;
 
-    public List<String> getWorlds() {
-        return config.contains("worlds") ? config.getStringList("worlds") : new ArrayList<>();
-    }
+    public void load(Configuration config) {
+        if ( config.contains("teleport-delay") ) {
+            teleportDelay = config.getInt("teleport-delay");
+        }
 
-    public ZoneId getTimeZone() {
+        if ( config.contains("worlds") ) {
+            worlds = config.getStringList("worlds");
+        }
+
+        if ( config.contains("language") ) {
+            language = config.getString("language");
+        }
+
         if ( config.contains("timezone") ) {
             try {
-                return ZoneId.of(config.getString("timezone"));
+                timezone = ZoneId.of(config.getString("timezone"));
             } catch (Exception ignored) {}
         }
-        return ZoneId.systemDefault();
-    }
 
-    public DateTimeFormatter getDateFormat() {
         if ( config.contains("date-format") ) {
             try {
-                return DateTimeFormatter.ofPattern(config.getString("date-format"));
+                dateFormat = DateTimeFormatter.ofPattern(config.getString("date-format"));
             } catch (Exception ignored) {}
         }
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    }
 
-    public DateTimeFormatter getTimeFormat() {
         if ( config.contains("time-format") ) {
             try {
-                return DateTimeFormatter.ofPattern(config.getString("time-format"));
+                timeFormat = DateTimeFormatter.ofPattern(config.getString("time-format"));
             } catch (Exception ignored) {}
         }
-        return DateTimeFormatter.ofPattern("HH:mm");
-    }
 
-    public DateTimeFormatter getDateTimeFormat() {
         String dateFormat = config.contains("date-format") ? config.getString("date-format") : "yyyy-MM-dd";
         String timeFormat = config.contains("time-format") ? config.getString("time-format") : "HH:mm";
         try {
-            return DateTimeFormatter.ofPattern(dateFormat + " " + timeFormat);
+            dateTimeFormat = DateTimeFormatter.ofPattern(dateFormat + " " + timeFormat);
         } catch (Exception ignored) {}
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        if ( config.contains("friendly-fire-relationships") ) {
+            friendlyFireRelations = config.getStringList("friendly-fire-relationships").stream()
+                    .map(s -> RelationType.valueOf(s.toUpperCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if ( config.contains("friendly-fire") ) {
+            friendlyFire = config.getBoolean("friendly-fire");
+        }
+
+        if ( config.contains("events.kingdom-join") ) {
+            kingdomJoinCommands = config.getStringList("events.kingdom-join");
+        }
+        // TODO remove old key
+        else if ( config.contains("events.kingdom_join") ) {
+            kingdomJoinCommands = config.getStringList("events.kingdom_join");
+        }
+
+        if ( config.contains("events.kingdom-leave") ) {
+            kingdomLeaveCommands = config.getStringList("events.kingdom-leave");
+        }
+        // TODO remove old key
+        else if ( config.contains("events.kingdom_leave") ) {
+            kingdomLeaveCommands = config.getStringList("events.kingdom_leave");
+        }
+
+        if ( config.contains("respawn-at-kingdom") ) {
+            respawnAtKingdom = config.getBoolean("respawn-at-kingdom");
+        }
+
+        if ( config.contains("messages.join") ) {
+            joinMessage = config.getString("messages.join");
+        }
+
+        if ( config.contains("messages.leave") ) {
+            leaveMessage = config.getString("messages.leave");
+        }
+
+        if ( config.contains("messages.death") ) {
+            deathMessage = config.getString("messages.death");
+        }
+
+        if ( config.contains("messages.kill") ) {
+            killMessage = config.getString("messages.kill");
+        }
+
+        if ( config.contains("messages.kill-weapon") ) {
+            killWeaponMessage = config.getString("messages.kill-weapon");
+        }
+
+        if ( config.contains("nokingdom.prefix") ) {
+            noKingdomPrefix = config.getString("nokingdom.prefix");
+        }
+
+        if ( config.contains("nokingdom.suffix") ) {
+            noKingdomSuffix = config.getString("nokingdom.suffix");
+        }
+
+        if ( config.contains("nokingdom.display") ) {
+            noKingdomDisplay = config.getString("nokingdom.display");
+        }
+
+        if ( config.contains("enable-chat-in-disabled-worlds") ) {
+            isChatEnabledInDisabledWorlds = config.getBoolean("enable-chat-in-disabled-worlds");
+        }
+
+        if ( config.contains("join-and-leave-kingdom-only") ) {
+            showJoinAndLeaveMessagesKingdomOnly = config.getBoolean("join-and-leave-kingdom-only");
+        }
+    }
+
+    public int getTeleportDelay() {
+        return teleportDelay;
+    }
+
+    public List<String> getWorlds() {
+        return worlds;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public ZoneId getTimeZone() {
+        return timezone;
+    }
+
+    public DateTimeFormatter getDateFormat() {
+        return dateFormat;
+    }
+
+    public DateTimeFormatter getTimeFormat() {
+        return timeFormat;
+    }
+
+    public DateTimeFormatter getDateTimeFormat() {
+        return dateTimeFormat;
     }
 
     public boolean isWorldEnabled(String world) {
@@ -87,76 +194,63 @@ public class KingdomCraftConfig {
         return worlds.isEmpty() || worlds.stream().anyMatch(s -> s.equalsIgnoreCase(world));
     }
 
-    public List<String> getFriendlyFireRelationTypes() {
-        return config.contains("friendly-fire-relationships") ?
-                config.getStringList("friendly-fire-relationships").stream()
-                        .map(String::toUpperCase).collect(Collectors.toList())
-                : new ArrayList<>();
+    public List<RelationType> getFriendlyFireRelationTypes() {
+        return friendlyFireRelations;
     }
 
     public boolean isFriendlyFireEnabled() {
-        return config.contains("friendly-fire") && config.getBoolean("friendly-fire");
+        return friendlyFire;
     }
 
     public List<String> getOnKingdomJoinCommands() {
-        if ( config.contains("events.kingdom-join") ) {
-            return config.getStringList("events.kingdom-join");
-        } else if ( config.contains("events.kingdom_join") ) {
-            return config.getStringList("events.kingdom_join");
-        }
-        return new ArrayList<>();
+        return kingdomJoinCommands;
     }
 
     public List<String> getOnKingdomLeaveCommands() {
-        if ( config.contains("events.kingdom-leave") ) {
-            return config.getStringList("events.kingdom-leave");
-        } else if ( config.contains("events.kingdom_leave") ) {
-            return config.getStringList("events.kingdom_leave");
-        }
-        return new ArrayList<>();
+        return kingdomLeaveCommands;
     }
 
     public boolean respawnAtKingdom() {
-        return config.contains("respawn-at-kingdom") && config.getBoolean("respawn-at-kingdom");
+        return respawnAtKingdom;
     }
 
     public String getOnJoinMessage() {
-        return config.contains("messages.join") ? config.getString("messages.join") : null;
+        return joinMessage;
     }
 
     public String getOnLeaveMessage() {
-        return config.contains("messages.leave") ? config.getString("messages.leave") : null;
+        return leaveMessage;
     }
 
     public String getOnDeathMessage() {
-        return config.contains("messages.death") ? config.getString("messages.death") : null;
+        return deathMessage;
     }
 
     public String getOnKillMessage() {
-        return config.contains("messages.kill") ? config.getString("messages.kill") : null;
+        return killMessage;
     }
 
     public String getOnKillWeaponMessage() {
-        return config.contains("messages.kill-weapon") ? config.getString("messages.kill-weapon") : null;
+        return killWeaponMessage;
     }
 
     public String getNoKingdomPrefix() {
-        return config.contains("nokingdom.prefix") ? config.getString("nokingdom.prefix") : "";
+        return noKingdomPrefix;
     }
 
     public String getNoKingdomSuffix() {
-        return config.contains("nokingdom.suffix") ? config.getString("nokingdom.suffix") : "";
+        return noKingdomSuffix;
     }
 
     public String getNoKingdomDisplay() {
-        return config.contains("nokingdom.display") ? config.getString("nokingdom.display") : "";
+        return noKingdomDisplay;
     }
 
     public boolean isChatEnabledInDisabledWorlds() {
-        return config.contains("enable-chat-in-disabled-worlds") && config.getBoolean("enable-chat-in-disabled-worlds");
+        return isChatEnabledInDisabledWorlds;
     }
 
     public boolean showJoinAndLeaveKingdomOnly() {
-        return config.contains("join-and-leave-kingdom-only") && config.getBoolean("join-and-leave-kingdom-only");
+        return showJoinAndLeaveMessagesKingdomOnly;
     }
 }

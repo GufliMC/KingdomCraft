@@ -60,29 +60,29 @@ public class TruceCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Kingdom target = kdc.getKingdom(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( target == kingdom ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSameKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSameKingdom");
             return;
         }
 
         Relation existing = kdc.getRelation(kingdom, target);
         if ( existing != null && existing.getType() == RelationType.TRUCE ) {
-            kdc.getMessageManager().send(sender, "cmdTruceAlready", target.getName());
+            kdc.getMessages().send(sender, "cmdTruceAlready", target.getName());
             return;
         }
 
         if ( existing == null || existing.getType() != RelationType.ENEMY ) {
-            kdc.getMessageManager().send(sender, "cmdTruceNotEnemies", target.getName());
+            kdc.getMessages().send(sender, "cmdTruceNotEnemies", target.getName());
             return;
         }
 
@@ -91,27 +91,27 @@ public class TruceCommand extends CommandBase {
 
             request = kdc.getRelationRequest(kingdom, target);
             if ( request != null && request.getType() == RelationType.TRUCE ) {
-                kdc.getMessageManager().send(sender, "cmdTruceRequestAlready", target.getName());
+                kdc.getMessages().send(sender, "cmdTruceRequestAlready", target.getName());
                 return;
             }
 
             kdc.addRelationRequest(kingdom, target, RelationType.TRUCE);
-            kdc.getMessageManager().send(sender, "cmdTruceRequest", target.getName());
+            kdc.getMessages().send(sender, "cmdTruceRequest", target.getName());
 
             for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
                 if ( kdc.getUser(member).getKingdom() != target && member.has("kingdom.truce")) continue;
-                kdc.getMessageManager().send(member, "cmdTruceRequestTarget", kingdom.getName());
+                kdc.getMessages().send(member, "cmdTruceRequestTarget", kingdom.getName());
             }
             return;
         }
 
         kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.TRUCE);
-        kdc.getMessageManager().send(sender, "cmdTruceAccepted", target.getName());
+        kdc.getMessages().send(sender, "cmdTruceAccepted", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessageManager().send(member, "cmdTruceAccepted", kingdom.getName());
+            kdc.getMessages().send(member, "cmdTruceAccepted", kingdom.getName());
         }
     }
 }

@@ -55,23 +55,23 @@ public class RanksRenameOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[0]);
             return;
         }
 
         if ( !args[2].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNameInvalid");
+            kdc.getMessages().send(sender, "cmdErrorNameInvalid");
             return;
         }
 
         if ( kingdom.getRank(args[2]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankAlreadyExists", args[2]);
+            kdc.getMessages().send(sender, "cmdErrorRankAlreadyExists", args[2]);
             return;
         }
 
@@ -79,6 +79,6 @@ public class RanksRenameOtherCommand extends CommandBase {
         rank.renameTo(args[2]);
         kdc.saveAsync(rank);
 
-        kdc.getMessageManager().send(sender, "cmdRanksRenameOther", oldName, rank.getName(), kingdom.getName());
+        kdc.getMessages().send(sender, "cmdRanksRenameOther", oldName, rank.getName(), kingdom.getName());
     }
 }

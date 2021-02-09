@@ -45,12 +45,12 @@ public class DeleteCommand extends CommandBase {
         User user = kdc.getUser(player);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         ((PlatformPlayer) sender).set(DeleteOtherCommand.DELETE_KEY, new DeleteOtherCommand.DeleteRequest(kingdom));
-        kdc.getMessageManager().send(sender, "cmdDeleteConfirm", kingdom.getName());
+        kdc.getMessages().send(sender, "cmdDeleteConfirm", kingdom.getName());
     }
 
 }

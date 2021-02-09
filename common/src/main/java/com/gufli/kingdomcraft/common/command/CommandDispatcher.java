@@ -63,7 +63,7 @@ public class CommandDispatcher {
 
                 if ( cb.getPermissions() != null && cb.getPermissions().length > 0 ) {
                     if (Arrays.stream(cb.getPermissions()).noneMatch(sender::hasPermission)) {
-                        commandManager.kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+                        commandManager.kdc.getMessages().send(sender, "cmdErrorNoPermission");
                         return;
                     }
                 }
@@ -74,7 +74,7 @@ public class CommandDispatcher {
         }
 
         if ( invalidBase != null ) {
-            commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalidUsage",
+            commandManager.kdc.getMessages().send(sender, "cmdErrorInvalidUsage",
                     "/k " + invalidBase + " " + invalidArguments);
             return;
         }
@@ -131,7 +131,7 @@ public class CommandDispatcher {
         }
 
         if ( candidates.isEmpty() ) {
-            commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalid");
+            commandManager.kdc.getMessages().send(sender, "cmdErrorInvalid");
             return;
         }
 
@@ -142,7 +142,7 @@ public class CommandDispatcher {
                     return Math.abs((baseLength + argsLength) - args.length);
                 })).orElse(null);
 
-        commandManager.kdc.getMessageManager().send(sender, "cmdErrorInvalidHint",
+        commandManager.kdc.getMessages().send(sender, "cmdErrorInvalidHint",
                 "/k " + bestCommand.getCommands().get(0) +
                         (bestCommand.getArgumentsHint() != null  ? " " + bestCommand.getArgumentsHint() : ""));
 

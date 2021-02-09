@@ -54,7 +54,7 @@ public class Teleporter {
         }
 
         CompletableFuture<Void> future = new CompletableFuture<>();
-        kdc.getMessageManager().send(player, "teleport", delay + "");
+        kdc.getMessages().send(player, "teleport", delay + "");
 
         player.set(TELEPORT_KEY, kdc.getPlugin().getScheduler().syncLater(() -> {
             player.remove(TELEPORT_KEY);
@@ -69,7 +69,7 @@ public class Teleporter {
         if ( player == null || !player.has(TELEPORT_KEY) ) {
             return;
         }
-        kdc.getMessageManager().send(player, "teleportCancel");
+        kdc.getMessages().send(player, "teleportCancel");
         player.get(TELEPORT_KEY, SchedulerTask.class).cancel();
         player.remove(TELEPORT_KEY);
     }

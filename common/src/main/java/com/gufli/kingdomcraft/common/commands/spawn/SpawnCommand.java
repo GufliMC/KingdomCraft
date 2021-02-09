@@ -42,13 +42,13 @@ public class SpawnCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if (kingdom == null) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         PlatformLocation loc = kingdom.getSpawn();
         if ( loc == null ) {
-            kdc.getMessageManager().send(sender, "cmdSpawnNotExists");
+            kdc.getMessages().send(sender, "cmdSpawnNotExists");
             return;
         }
 
@@ -56,7 +56,7 @@ public class SpawnCommand extends CommandBase {
             DecimalFormat df = new DecimalFormat("#");
             String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-             kdc.getMessageManager().send(sender, "cmdSpawn", str);
+             kdc.getMessages().send(sender, "cmdSpawn", str);
         });
     }
 }

@@ -47,17 +47,17 @@ public class RenameOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null || kingdom.isTemplate() ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( !args[1].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
+            kdc.getMessages().send(sender, "cmdErrorInvalidName");
             return;
         }
 
         if ( kdc.getKingdom(args[1]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomAlreadyExists", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomAlreadyExists", args[1]);
             return;
         }
 
@@ -66,6 +66,6 @@ public class RenameOtherCommand extends CommandBase {
         kdc.saveAsync(kingdom);
 
         kdc.getPlugin().getScheduler().executeSync(() ->
-                kdc.getMessageManager().send(sender, "cmdRenameOther", oldName, kingdom.getName()));
+                kdc.getMessages().send(sender, "cmdRenameOther", oldName, kingdom.getName()));
     }
 }

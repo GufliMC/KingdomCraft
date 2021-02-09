@@ -22,6 +22,7 @@ import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.editor.Editor;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventManager;
+import com.gufli.kingdomcraft.api.language.Messages;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
 
 import java.util.Collection;
@@ -33,6 +34,8 @@ import java.util.concurrent.CompletableFuture;
 public interface KingdomCraft {
 
     // managers
+
+    Messages getMessages();
 
     EventManager getEventManager();
 

@@ -38,13 +38,13 @@ public class EditDisplayCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         kingdom.setDisplay(args[0]);
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEdit", "display", args[0]);
+        kdc.getMessages().send(sender, "cmdEdit", "display", args[0]);
     }
 }

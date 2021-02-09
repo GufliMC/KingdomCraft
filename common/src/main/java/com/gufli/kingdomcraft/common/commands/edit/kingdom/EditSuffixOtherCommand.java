@@ -47,13 +47,13 @@ public class EditSuffixOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         kingdom.setSuffix(args[1]);
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditOther", "suffix", kingdom.getName(), args[1]);
+        kdc.getMessages().send(sender, "cmdEditOther", "suffix", kingdom.getName(), args[1]);
     }
 }

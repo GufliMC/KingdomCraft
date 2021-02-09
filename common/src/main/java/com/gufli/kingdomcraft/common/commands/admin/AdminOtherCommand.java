@@ -46,18 +46,18 @@ public class AdminOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         PlatformPlayer target = kdc.getPlayer(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNotOnline", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorNotOnline", args[0]);
             return;
         }
 
         if ( target.isAdmin() ) {
             target.setAdmin(false);
-            kdc.getMessageManager().send(target, "cmdAdminDisableTarget");
-            kdc.getMessageManager().send(sender, "cmdAdminDisableSender", target.getName());
+            kdc.getMessages().send(target, "cmdAdminDisableTarget");
+            kdc.getMessages().send(sender, "cmdAdminDisableSender", target.getName());
         } else {
             target.setAdmin(true);
-            kdc.getMessageManager().send(target, "cmdAdminEnableTarget");
-            kdc.getMessageManager().send(sender, "cmdAdminEnableSender", target.getName());
+            kdc.getMessages().send(target, "cmdAdminEnableTarget");
+            kdc.getMessages().send(sender, "cmdAdminEnableSender", target.getName());
         }
     }
 }

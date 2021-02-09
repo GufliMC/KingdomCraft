@@ -30,9 +30,9 @@ public class EditorSaveCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        kdc.getMessageManager().send(sender, "cmdEditorSaving");
+        kdc.getMessages().send(sender, "cmdEditorSaving");
         kdc.getPlugin().getScheduler().executeAsync(() -> {
-            kdc.getEditorImpl().finish(sender, args[0]);
+            kdc.getEditor().finish(sender, args[0]);
         });
     }
 }

@@ -50,12 +50,12 @@ public class ChatChannelCommand extends CommandBase {
         PlatformPlayer player = (PlatformPlayer) sender;
         ChatChannel cc = kdc.getChatManager().getChatChannel(args[0]);
         if ( cc == null || !kdc.getChatManager().canTalk(player, cc)) {
-            kdc.getMessageManager().send(sender, "cmdChatChannelNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdChatChannelNotExist", args[0]);
             return;
         }
 
         if ( !cc.isToggleable() ) {
-            kdc.getMessageManager().send(sender, "cmdChatChannelNoToggle", cc.getName());
+            kdc.getMessages().send(sender, "cmdChatChannelNoToggle", cc.getName());
             return;
         }
 
@@ -70,11 +70,11 @@ public class ChatChannelCommand extends CommandBase {
             }
             ucc.setEnabled(false);
             kdc.saveAsync(ucc);
-            kdc.getMessageManager().send(sender, "cmdChatChannelDisable", cc.getName());
+            kdc.getMessages().send(sender, "cmdChatChannelDisable", cc.getName());
         } else {
             ucc.setEnabled(true);
             kdc.saveAsync(ucc);
-            kdc.getMessageManager().send(sender, "cmdChatChannelEnable", cc.getName());
+            kdc.getMessages().send(sender, "cmdChatChannelEnable", cc.getName());
         }
     }
 }

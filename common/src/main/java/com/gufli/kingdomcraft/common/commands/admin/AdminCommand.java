@@ -36,10 +36,10 @@ public class AdminCommand extends CommandBase {
 
         if ( player.isAdmin() ) {
             player.setAdmin(false);
-            kdc.getMessageManager().send(sender, "cmdAdminDisable");
+            kdc.getMessages().send(sender, "cmdAdminDisable");
         } else {
             player.setAdmin(true);
-            kdc.getMessageManager().send(sender, "cmdAdminEnable");
+            kdc.getMessages().send(sender, "cmdAdminEnable");
         }
     }
 }

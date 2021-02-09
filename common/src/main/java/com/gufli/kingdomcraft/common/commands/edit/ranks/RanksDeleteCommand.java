@@ -47,20 +47,20 @@ public class RanksDeleteCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Rank rank = kingdom.getRank(args[0]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[0]);
             return;
         }
 
         if ( kingdom.getDefaultRank().equals(rank) ) {
-            kdc.getMessageManager().send(sender, "cmdRanksDeleteDefault");
+            kdc.getMessages().send(sender, "cmdRanksDeleteDefault");
         } else {
-            kdc.getMessageManager().send(sender, "cmdRanksDelete", rank.getName());
+            kdc.getMessages().send(sender, "cmdRanksDelete", rank.getName());
         }
 
         kdc.deleteAsync(rank);

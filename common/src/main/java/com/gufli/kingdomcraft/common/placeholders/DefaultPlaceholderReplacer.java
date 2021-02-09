@@ -33,14 +33,14 @@ public class DefaultPlaceholderReplacer {
             } else {
                 display = user.getKingdom() != null ? user.getKingdom().getDisplay() : "";
             }
-            return kdc.getMessageManager().colorify(display);
+            return kdc.getMessages().colorify(display);
         }, "kingdom");
         pm.addPlaceholderReplacer((user, placeholder) -> {
            return user.getKingdom() != null ? user.getKingdom().getName() : "";
         }, "kingdom_name");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getDisplay()) : "";
+            return user.getRank() != null ? kdc.getMessages().colorify(user.getRank().getDisplay()) : "";
         }, "rank");
         pm.addPlaceholderReplacer((user, placeholder) -> {
             return user.getRank() != null ? user.getRank().getName() : "";
@@ -53,7 +53,7 @@ public class DefaultPlaceholderReplacer {
             } else {
                 prefix = user.getKingdom().getPrefix();
             }
-            return kdc.getMessageManager().colorify(prefix);
+            return kdc.getMessages().colorify(prefix);
         }, "kingdom_prefix");
         pm.addPlaceholderReplacer((user, placeholder) -> {
             String suffix;
@@ -62,14 +62,14 @@ public class DefaultPlaceholderReplacer {
             } else {
                 suffix = user.getKingdom().getSuffix();
             }
-            return kdc.getMessageManager().colorify(suffix);
+            return kdc.getMessages().colorify(suffix);
         }, "kingdom_suffix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getPrefix()) : "";
+            return user.getRank() != null ? kdc.getMessages().colorify(user.getRank().getPrefix()) : "";
         }, "rank_prefix");
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            return user.getRank() != null ? kdc.getMessageManager().colorify(user.getRank().getSuffix()) : "";
+            return user.getRank() != null ? kdc.getMessages().colorify(user.getRank().getSuffix()) : "";
         }, "rank_suffix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {

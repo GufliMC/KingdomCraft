@@ -64,29 +64,29 @@ public class GroupsRemoveCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Rank rank = kingdom.getRank(args[0]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[0]);
             return;
         }
 
         PermissionGroup group = kdc.getPermissionManager().getGroup(args[1]);
         if ( group == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorPermissionGroupNotExist", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorPermissionGroupNotExist", args[1]);
             return;
         }
 
         RankPermissionGroup rpg = rank.getPermissionGroup(group.getName());
         if ( rpg == null ) {
-            kdc.getMessageManager().send(sender, "cmdGroupsRemoveNotExist", group.getName(), rank.getName());
+            kdc.getMessages().send(sender, "cmdGroupsRemoveNotExist", group.getName(), rank.getName());
             return;
         }
 
         kdc.deleteAsync(rpg);
-        kdc.getMessageManager().send(sender, "cmdGroupsRemove", group.getName(), rank.getName());
+        kdc.getMessages().send(sender, "cmdGroupsRemove", group.getName(), rank.getName());
     }
 }

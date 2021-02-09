@@ -48,7 +48,7 @@ public class TpHereOtherCommand extends CommandBase {
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null || kingdom.isTemplate() ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
@@ -61,10 +61,10 @@ public class TpHereOtherCommand extends CommandBase {
             User pu = kdc.getUser(p);
             if ( pu.getKingdom() == kingdom ) {
                 p.teleport(loc);
-                kdc.getMessageManager().send(p, "cmdTpHereTarget", player.getName());
+                kdc.getMessages().send(p, "cmdTpHereTarget", player.getName());
             }
         }
 
-        kdc.getMessageManager().send(player, "cmdTpHereOther", kingdom.getName());
+        kdc.getMessages().send(player, "cmdTpHereOther", kingdom.getName());
     }
 }

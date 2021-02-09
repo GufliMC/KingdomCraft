@@ -48,7 +48,7 @@ public class RanksListOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
@@ -56,6 +56,6 @@ public class RanksListOtherCommand extends CommandBase {
                 .sorted((o1, o2) -> o2.getLevel() - o1.getLevel())
                 .map(Rank::getName)
                 .collect(Collectors.joining(", "));
-        kdc.getMessageManager().send(sender, "cmdRanksListOther", kingdom.getName(), list);
+        kdc.getMessages().send(sender, "cmdRanksListOther", kingdom.getName(), list);
     }
 }

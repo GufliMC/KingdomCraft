@@ -49,19 +49,19 @@ public class EditInviteOnlyCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         if ( !args[0].equalsIgnoreCase("true")
                 && !args[0].equalsIgnoreCase("false") ) {
-            kdc.getMessageManager().send(sender, "errorInvalidBoolean", args[0]);
+            kdc.getMessages().send(sender, "errorInvalidBoolean", args[0]);
             return;
         }
 
         kingdom.setInviteOnly(Boolean.parseBoolean(args[0]));
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEdit", "invite-only", kingdom.isInviteOnly() + "");
+        kdc.getMessages().send(sender, "cmdEdit", "invite-only", kingdom.isInviteOnly() + "");
     }
 }

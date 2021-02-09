@@ -17,54 +17,65 @@
 
 package com.gufli.kingdomcraft.common.messages;
 
-import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
-import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import com.gufli.kingdomcraft.api.language.Messages;
+import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
+import com.gufli.kingdomcraft.common.config.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
 
-public class MessageManager {
+public class MessagesImpl implements Messages {
 
-	private final KingdomCraftImpl kdc;
+	private final KingdomCraftPlugin plugin;
 
 	private String prefix;
-	private final Map<String, String> messages = new HashMap<>();
 
-	public MessageManager(KingdomCraftImpl kdc) {
-		this.kdc = kdc;
+	private Configuration fallback;
+	private Configuration messages;
+
+	public MessagesImpl(KingdomCraftPlugin plugin) {
+		this.plugin = plugin;
 	}
 
-	public final void addMessage(String name, String msg) {
-		messages.put(name, msg);
+	public void setFallback(Configuration fallbackMessages) {
+		this.fallback = fallbackMessages;
 	}
 
-	public final void removeMessage(String name) {
-		messages.remove(name);
+	public void setMessages(Configuration messages) {
+		this.messages = messages;
+
+		if ( messages.contains("prefix") ) {
+			this.prefix = messages.getString("prefix");
+		} else {
+			this.prefix = fallback.getString("prefix");
+		}
 	}
 
+	@Override
 	public final String getPrefix() {
 		return prefix;
 	}
 
-	public final void setPrefix(String prefix) {
-		this.prefix = colorify(prefix);
-	}
-
 	private boolean isEmpty(String name) {
-		return !messages.containsKey(name) || messages.get(name).replaceAll(Pattern.quote(" "), "").equals("");
+		return !messages.contains(name) || messages.getString(name).replace(" ", "").equals("");
 	}
 
-	public boolean hasMessage(String name) {
-		return messages.containsKey(name);
+	private boolean hasMessage(String name) {
+		return messages.contains(name) || fallback.contains(name);
 	}
 
+	@Override
 	public String getMessage(String name) {
-		if ( !hasMessage(name) ) return null;
-		return colorify(messages.get(name));
+		String msg = messages.getString(name);
+		if ( msg == null ) {
+			msg = fallback.getString(name);
+		}
+		if ( msg == null ) {
+			return null;
+		}
+		return colorify(msg);
 	}
 
+	@Override
 	public String getMessage(String name, boolean colorify, String... placeholders) {
 		if ( colorify ) {
 			String msg = getMessage(name, placeholders);
@@ -74,6 +85,7 @@ public class MessageManager {
 		return getMessage(name, placeholders);
 	}
 
+	@Override
 	public String getMessage(String name, String... placeholders) {
 		String message = getMessage(name);
 		if ( message == null ) return null;
@@ -86,32 +98,26 @@ public class MessageManager {
 		return message;
 	}
 
-	public void send(PlatformPlayer player, String name, String... placeholders) {
-		if ( isEmpty(name) ) return;
-		player.sendMessage(colorify(prefix) + getMessage(name, placeholders));
-	}
-
+	@Override
 	public void send(PlatformSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
 		sender.sendMessage(colorify(prefix) + getMessage(name, placeholders));
 	}
 
-	public void send(PlatformPlayer player, String name, boolean colorify, String... placeholders) {
-		if ( isEmpty(name) ) return;
-		player.sendMessage(colorify(prefix) + getMessage(name, colorify, placeholders));
-	}
-
+	@Override
 	public void send(PlatformSender sender, String name, boolean colorify, String... placeholders) {
 		if ( isEmpty(name) ) return;
 		sender.sendMessage(colorify(prefix) + getMessage(name, colorify, placeholders));
 	}
 
+	@Override
 	public String colorify(String msg) {
-		return kdc.getPlugin().colorify(msg);
+		return plugin.colorify(msg);
 	}
 
+	@Override
 	public String decolorify(String msg) {
-		return kdc.getPlugin().decolorify(msg);
+		return plugin.decolorify(msg);
 	}
 
 }

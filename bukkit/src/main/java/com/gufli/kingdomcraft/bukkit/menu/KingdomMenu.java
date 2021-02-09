@@ -28,19 +28,19 @@ public class KingdomMenu {
     static KingdomCraftImpl kdc;
 
     private static String text(String key) {
-        String msg = kdc.getMessageManager().getMessage(key, true);
+        String msg = kdc.getMessages().getMessage(key, true);
         if ( msg == null ) return "";
         return msg;
     }
 
     private static String text(String key, String... placeholders) {
-        String msg = kdc.getMessageManager().getMessage(key, true, placeholders);
+        String msg = kdc.getMessages().getMessage(key, true, placeholders);
         if ( msg == null ) return "";
         return msg;
     }
 
     private static String colorify(String text) {
-        return kdc.getMessageManager().colorify(text);
+        return kdc.getMessages().colorify(text);
     }
 
     static void withBack(InventoryBuilder builder, Runnable back) {
@@ -392,7 +392,7 @@ public class KingdomMenu {
                             .withLore(text("menuKingdomEditItemLoreRename", ChatColor.WHITE + target.getName()).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuKingdomEditRenameQuery");
+                        kdc.getMessages().send(player, "menuKingdomEditRenameQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
                                 kdc.getCommandDispatcher().execute(player, new String[]{"rename", value});
@@ -413,7 +413,7 @@ public class KingdomMenu {
                             .withLore(text("menuKingdomEditItemLoreChangeDisplay", colorify(target.getDisplay())).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuKingdomEditChangeDisplayQuery");
+                        kdc.getMessages().send(player, "menuKingdomEditChangeDisplayQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
                                 kdc.getCommandDispatcher().execute(player, new String[]{"edit", "display", value});
@@ -434,7 +434,7 @@ public class KingdomMenu {
                             .withLore(text("menuKingdomEditItemLoreChangePrefix", colorify(target.getPrefix())).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuKingdomEditChangePrefixQuery");
+                        kdc.getMessages().send(player, "menuKingdomEditChangePrefixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
                                 kdc.getCommandDispatcher().execute(player, new String[]{"edit", "prefix", value});
@@ -455,7 +455,7 @@ public class KingdomMenu {
                             .withLore(text("menuKingdomEditItemLoreChangeSuffix", colorify(target.getSuffix())).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuKingdomEditChangeSuffixQuery");
+                        kdc.getMessages().send(player, "menuKingdomEditChangeSuffixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
                                 kdc.getCommandDispatcher().execute(player, new String[]{"edit", "suffix", value});
@@ -664,7 +664,7 @@ public class KingdomMenu {
                             .withLore(text("menuRankEditItemLoreRename", target.getName()).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuRankEditRenameQuery");
+                        kdc.getMessages().send(player, "menuRankEditRenameQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
                                 kdc.getCommandDispatcher().execute(player,
@@ -687,7 +687,7 @@ public class KingdomMenu {
                             .withLore(text("menuRankEditItemLoreChangeDisplay", colorify(target.getDisplay())).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuRankEditChangeDisplayQuery");
+                        kdc.getMessages().send(player, "menuRankEditChangeDisplayQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
                                 kdc.getCommandDispatcher().execute(player,
@@ -710,7 +710,7 @@ public class KingdomMenu {
                             .withLore(text("menuRankEditItemLoreChangePrefix", colorify(target.getPrefix())).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuRankEditChangePrefixQuery");
+                        kdc.getMessages().send(player, "menuRankEditChangePrefixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
                                 kdc.getCommandDispatcher().execute(player,
@@ -733,7 +733,7 @@ public class KingdomMenu {
                             .withLore(text("menuRankEditItemLoreChangeSuffix", colorify(target.getSuffix())).split("\n"))
                             .build(),
                     (p, ct) -> {
-                        kdc.getMessageManager().send(player, "menuRankEditChangeSuffixQuery");
+                        kdc.getMessages().send(player, "menuRankEditChangeSuffixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
                                 kdc.getCommandDispatcher().execute(player,
@@ -1067,7 +1067,7 @@ public class KingdomMenu {
     }
 
     static void startChatQuery(PlatformPlayer player, Consumer<String> callback, Runnable cancel) {
-        kdc.getMessageManager().send(player, "menuQueryCancel");
+        kdc.getMessages().send(player, "menuQueryCancel");
         player.set("MENU_CHAT_CALLBACK", callback);
         player.set("MENU_CHAT_CANCEL", cancel);
         player.closeInventory();

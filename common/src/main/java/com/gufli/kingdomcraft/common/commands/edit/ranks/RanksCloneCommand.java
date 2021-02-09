@@ -20,7 +20,6 @@ package com.gufli.kingdomcraft.common.commands.edit.ranks;
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Model;
 import com.gufli.kingdomcraft.api.domain.Rank;
-import com.gufli.kingdomcraft.api.domain.RankPermissionGroup;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
@@ -65,19 +64,19 @@ public class RanksCloneCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom from = kdc.getKingdom(args[0]);
         if ( from == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Kingdom to = kdc.getKingdom(args[1]);
         if ( to == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[1]);
             return;
         }
 
         Rank rank = from.getRank(args[2]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[2]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[2]);
             return;
         }
 
@@ -89,6 +88,6 @@ public class RanksCloneCommand extends CommandBase {
         models.addAll(rank.getAttributes());
         kdc.saveAsync(models);
 
-        kdc.getMessageManager().send(sender, "cmdRanksClone", rank.getName(), from.getName(), to.getName());
+        kdc.getMessages().send(sender, "cmdRanksClone", rank.getName(), from.getName(), to.getName());
     }
 }

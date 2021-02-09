@@ -64,10 +64,10 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         }
 
         if ( args.length == 0 ) {
-            String prefix = kdc.getMessageManager().getPrefix();
+            String prefix = kdc.getMessages().getPrefix();
             sender.sendMessage(prefix + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
             sender.sendMessage(prefix + "Created by " + String.join(", ", plugin.getDescription().getAuthors()));
-            sender.sendMessage(prefix + kdc.getMessageManager().getMessage("cmdDefaultHelp"));
+            sender.sendMessage(prefix + kdc.getMessages().getMessage("cmdDefaultHelp"));
             return true;
         }
 

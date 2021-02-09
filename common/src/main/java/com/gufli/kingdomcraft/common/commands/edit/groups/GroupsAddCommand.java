@@ -63,30 +63,30 @@ public class GroupsAddCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Rank rank = kingdom.getRank(args[0]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[0]);
             return;
         }
 
         PermissionGroup group = kdc.getPermissionManager().getGroup(args[1]);
         if ( group == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorPermissionGroupNotExist", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorPermissionGroupNotExist", args[1]);
             return;
         }
 
         if ( rank.getPermissionGroup(group.getName()) != null ) {
-            kdc.getMessageManager().send(sender, "cmdGroupsAddAlreadyExists", group.getName(), rank.getName());
+            kdc.getMessages().send(sender, "cmdGroupsAddAlreadyExists", group.getName(), rank.getName());
             return;
         }
 
         RankPermissionGroup rpg = rank.createPermissionGroup(group.getName());
         kdc.saveAsync(rpg);
 
-        kdc.getMessageManager().send(sender, "cmdGroupsAdd", group.getName(), rank.getName());
+        kdc.getMessages().send(sender, "cmdGroupsAdd", group.getName(), rank.getName());
     }
 }

@@ -56,36 +56,36 @@ public class EnemyCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Kingdom target = kdc.getKingdom(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( target == kingdom ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSameKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSameKingdom");
             return;
         }
 
         Relation existing = kdc.getRelation(kingdom, target);
         if ( existing != null && existing.getType() == RelationType.ENEMY ) {
-            kdc.getMessageManager().send(sender, "cmdEnemyAlready", target.getName());
+            kdc.getMessages().send(sender, "cmdEnemyAlready", target.getName());
             return;
         }
 
         kdc.setRelation(kingdom, target, RelationType.ENEMY);
-        kdc.getMessageManager().send(sender, "cmdEnemy", target.getName());
+        kdc.getMessages().send(sender, "cmdEnemy", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             Kingdom kd = kdc.getUser(member).getKingdom();
             if ( kd == kingdom && !member.equals(sender) ) {
-                kdc.getMessageManager().send(member, "cmdEnemyMembers", target.getName());
+                kdc.getMessages().send(member, "cmdEnemyMembers", target.getName());
             } else if ( kd == target ) {
-                kdc.getMessageManager().send(member, "cmdEnemyMembers", kingdom.getName());
+                kdc.getMessages().send(member, "cmdEnemyMembers", kingdom.getName());
             }
         }
     }

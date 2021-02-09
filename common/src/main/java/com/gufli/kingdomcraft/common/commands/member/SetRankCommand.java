@@ -26,7 +26,6 @@ import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class SetRankCommand extends CommandBase {
@@ -85,46 +84,46 @@ public class SetRankCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdErrorPlayerNotExist", args[0]);
+                    kdc.getMessages().send(sender, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 
                 Kingdom kingdom = target.getKingdom();
                 if ( kingdom == null ) {
-                    kdc.getMessageManager().send(sender, "cmdErrorTargetNoKingdom", target.getName());
+                    kdc.getMessages().send(sender, "cmdErrorTargetNoKingdom", target.getName());
                     return;
                 }
 
                 Rank rank = kingdom.getRanks().stream().filter(r -> r.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
                 if ( rank == null ) {
-                    kdc.getMessageManager().send(sender, "cmdSetRankNotExist", args[1]);
+                    kdc.getMessages().send(sender, "cmdSetRankNotExist", args[1]);
                     return;
                 }
 
                 if ( !sender.hasPermission("kingdom.setrank.other") ) {
                     User user = kdc.getUser((PlatformPlayer) sender);
                     if ( user.getKingdom() != kingdom ) {
-                        kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+                        kdc.getMessages().send(sender, "cmdErrorNoPermission");
                         return;
                     }
                     if ( user.getRank() == null || user.getRank().getLevel() <= rank.getLevel() ) {
-                        kdc.getMessageManager().send(sender, "cmdSetRankLowLevelTarget", rank.getName());
+                        kdc.getMessages().send(sender, "cmdSetRankLowLevelTarget", rank.getName());
                         return;
                     }
                     if ( target.getRank() != null && user.getRank().getLevel() <= target.getRank().getLevel() ) {
-                        kdc.getMessageManager().send(sender, "cmdSetRankLowLevelCurrent", target.getName());
+                        kdc.getMessages().send(sender, "cmdSetRankLowLevelCurrent", target.getName());
                         return;
                     }
                 }
 
                 if ( target.getRank() == rank ) {
-                    kdc.getMessageManager().send(sender, "cmdSetRankAlready", target.getName(), rank.getName());
+                    kdc.getMessages().send(sender, "cmdSetRankAlready", target.getName(), rank.getName());
                     return;
                 }
 
                 if ( !sender.hasPermission("kingdom.setrank.other") && rank.getMaxMembers() > 0
                         && rank.getMaxMembers() <= rank.getMemberCount() ) {
-                    kdc.getMessageManager().send(sender, "cmdSetRankFull", rank.getName());
+                    kdc.getMessages().send(sender, "cmdSetRankFull", rank.getName());
                     return;
                 }
 
@@ -133,10 +132,10 @@ public class SetRankCommand extends CommandBase {
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
-                    kdc.getMessageManager().send(targetPlayer, "cmdSetRankTarget", rank.getName());
+                    kdc.getMessages().send(targetPlayer, "cmdSetRankTarget", rank.getName());
                 }
 
-                kdc.getMessageManager().send(sender, "cmdSetRankSender", target.getName(), rank.getName());
+                kdc.getMessages().send(sender, "cmdSetRankSender", target.getName(), rank.getName());
             } catch (Exception e) {
                 e.printStackTrace();
             }

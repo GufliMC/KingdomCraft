@@ -32,6 +32,6 @@ public class ReloadCommand extends CommandBase {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         kdc.getPlugin().reload();
-        kdc.getMessageManager().send(sender, "cmdReload");
+        kdc.getMessages().send(sender, "cmdReload");
     }
 }

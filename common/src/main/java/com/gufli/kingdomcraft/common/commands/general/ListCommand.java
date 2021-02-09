@@ -41,10 +41,10 @@ public class ListCommand extends CommandBase {
                 .map(Kingdom::getName)
                 .collect(Collectors.toList());
 
-        String delimiter = kdc.getMessageManager().getMessage("cmdListDelimiter");
+        String delimiter = kdc.getMessages().getMessage("cmdListDelimiter");
         delimiter = delimiter != null ? delimiter : "&a, &2";
 
         String result = String.join(delimiter, kingdoms);
-        kdc.getMessageManager().send(sender, "cmdList", result);
+        kdc.getMessages().send(sender, "cmdList", result);
     }
 }

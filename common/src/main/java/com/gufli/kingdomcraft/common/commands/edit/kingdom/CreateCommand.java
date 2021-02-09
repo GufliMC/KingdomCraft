@@ -40,18 +40,18 @@ public class CreateCommand extends CommandBase {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
+            kdc.getMessages().send(sender, "cmdErrorInvalidName");
             return;
         }
 
         if ( kdc.getKingdom(args[0]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomAlreadyExists", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomAlreadyExists", args[0]);
             return;
         }
 
         if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() != null
                 && !sender.hasPermission("kingdom.create.other") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+            kdc.getMessages().send(sender, "cmdErrorNoPermission");
             return;
         }
 
@@ -75,7 +75,7 @@ public class CreateCommand extends CommandBase {
             return kdc.saveAsync(kingdom);
         });
 
-        kdc.getMessageManager().send(sender, "cmdCreate", kingdom.getName());
+        kdc.getMessages().send(sender, "cmdCreate", kingdom.getName());
 
         if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
             User user = kdc.getUser((PlatformPlayer) sender);

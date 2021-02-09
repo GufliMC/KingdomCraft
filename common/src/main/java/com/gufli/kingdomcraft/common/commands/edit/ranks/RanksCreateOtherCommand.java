@@ -47,18 +47,18 @@ public class RanksCreateOtherCommand extends CommandBase {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         if ( !args[1].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNameInvalid");
+            kdc.getMessages().send(sender, "cmdErrorNameInvalid");
             return;
         }
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( kingdom.getRank(args[1]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankAlreadyExists", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorRankAlreadyExists", args[1]);
             return;
         }
 
@@ -73,6 +73,6 @@ public class RanksCreateOtherCommand extends CommandBase {
             }
         });
 
-        kdc.getMessageManager().send(sender, "cmdRanksCreateOther", rank.getName(), kingdom.getName());
+        kdc.getMessages().send(sender, "cmdRanksCreateOther", rank.getName(), kingdom.getName());
     }
 }

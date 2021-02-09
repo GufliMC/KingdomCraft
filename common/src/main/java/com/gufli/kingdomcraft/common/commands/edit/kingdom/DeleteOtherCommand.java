@@ -48,13 +48,13 @@ public class DeleteOtherCommand extends CommandBase {
         if ( sender instanceof PlatformPlayer && args[0].equalsIgnoreCase("confirm") ) {
             PlatformPlayer player = (PlatformPlayer) sender;
             if ( !player.has(DELETE_KEY) ) {
-                kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+                kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
                 return;
             }
 
             DeleteRequest req = player.get(DELETE_KEY, DeleteRequest.class);
             if ( System.currentTimeMillis() - req.timestamp > 1000 * 60 ) {
-                kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+                kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
                 return;
             }
 
@@ -65,14 +65,14 @@ public class DeleteOtherCommand extends CommandBase {
 
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null || kingdom.isTemplate() ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( sender instanceof PlatformPlayer ) {
             User user = kdc.getUser((PlatformPlayer) sender);
             if ( user.getKingdom() != kingdom && !sender.hasPermission("kingdom.delete.other")) {
-                kdc.getMessageManager().send(sender, "noPermission");
+                kdc.getMessages().send(sender, "noPermission");
                 return;
             }
         }
@@ -81,7 +81,7 @@ public class DeleteOtherCommand extends CommandBase {
             delete(sender, kingdom);
         } else {
             ((PlatformPlayer) sender).set(DELETE_KEY, new DeleteRequest(kingdom));
-            kdc.getMessageManager().send(sender, "cmdDeleteConfirm", kingdom.getName());
+            kdc.getMessages().send(sender, "cmdDeleteConfirm", kingdom.getName());
         }
     }
 
@@ -90,12 +90,12 @@ public class DeleteOtherCommand extends CommandBase {
             User user = kdc.getUser(p);
             if ( user.getKingdom() == kingdom) {
                 user.setKingdom(null);
-                kdc.getMessageManager().send(p, "cmdDeleteMembers");
+                kdc.getMessages().send(p, "cmdDeleteMembers");
             }
         }
 
         kdc.deleteAsync(kingdom);
-        kdc.getMessageManager().send(sender, "cmdDelete", kingdom.getName());
+        kdc.getMessages().send(sender, "cmdDelete", kingdom.getName());
     }
 
     public static class DeleteRequest {

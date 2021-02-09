@@ -54,18 +54,18 @@ public class SetKingdomCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if ( target == null ) {
-                    kdc.getMessageManager().send(sender, "cmdErrorPlayerNotExist", args[0]);
+                    kdc.getMessages().send(sender, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 
                 Kingdom kingdom = kdc.getKingdom(args[1]);
                 if ( kingdom == null || kingdom.isTemplate() ) {
-                    kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[1]);
+                    kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[1]);
                     return;
                 }
 
                 if ( target.getKingdom() == kingdom ) {
-                    kdc.getMessageManager().send(sender, "cmdSetKingdomAlready", target.getName(), kingdom.getName());
+                    kdc.getMessages().send(sender, "cmdSetKingdomAlready", target.getName(), kingdom.getName());
                     return;
                 }
 
@@ -74,10 +74,10 @@ public class SetKingdomCommand extends CommandBase {
 
                 PlatformPlayer tplayer = kdc.getPlayer(target);
                 if ( tplayer != null ) {
-                    kdc.getMessageManager().send(tplayer, "cmdSetKingdomTarget", kingdom.getName());
+                    kdc.getMessages().send(tplayer, "cmdSetKingdomTarget", kingdom.getName());
                 }
 
-                kdc.getMessageManager().send(sender, "cmdSetKingdomSender", target.getName(), kingdom.getName());
+                kdc.getMessages().send(sender, "cmdSetKingdomSender", target.getName(), kingdom.getName());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

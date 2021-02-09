@@ -19,7 +19,6 @@ package com.gufli.kingdomcraft.common.commands.edit.groups;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
-import com.gufli.kingdomcraft.api.domain.RankPermissionGroup;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
@@ -57,17 +56,17 @@ public class GroupsListOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[1]);
             return;
         }
 
-        kdc.getMessageManager().send(sender, "cmdGroupsListOther", rank.getName(), kingdom.getName(),
+        kdc.getMessages().send(sender, "cmdGroupsListOther", rank.getName(), kingdom.getName(),
                 kdc.getPermissionManager().getGroups(rank).stream().map(PermissionGroup::getName)
                         .collect(Collectors.joining(", ")));
     }

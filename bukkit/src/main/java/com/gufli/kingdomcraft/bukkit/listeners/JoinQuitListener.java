@@ -21,7 +21,6 @@ import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -82,7 +81,7 @@ public class JoinQuitListener implements Listener, EventListener {
         }
 
         msg = plugin.getKdc().getPlaceholderManager().handle(player, msg);
-        msg = plugin.getKdc().getMessageManager().colorify(msg);
+        msg = plugin.getKdc().getMessages().colorify(msg);
 
         if ( plugin.getKdc().getConfig().showJoinAndLeaveKingdomOnly() ) {
             User user = player.getUser();

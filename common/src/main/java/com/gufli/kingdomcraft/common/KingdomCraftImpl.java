@@ -35,7 +35,7 @@ import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.editor.EditorImpl;
 import com.gufli.kingdomcraft.common.event.EventDispatcher;
 import com.gufli.kingdomcraft.common.event.EventManagerImpl;
-import com.gufli.kingdomcraft.common.messages.MessageManager;
+import com.gufli.kingdomcraft.common.messages.MessagesImpl;
 import com.gufli.kingdomcraft.common.permissions.PermissionManager;
 import com.gufli.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.gufli.kingdomcraft.common.util.Teleporter;
@@ -47,13 +47,13 @@ import java.util.concurrent.ExecutionException;
 public class KingdomCraftImpl implements KingdomCraft {
 
     private final KingdomCraftPlugin plugin;
-    private final KingdomCraftConfig config;
+    private final KingdomCraftConfig config = new KingdomCraftConfig();
     private final StorageContext context;
 
     private final CommandManager commandManager;
     private final CommandDispatcher commandDispatcher;
 
-    private final MessageManager messageManager;
+    private final MessagesImpl messages;
     private final PermissionManager permissionManager;
 
     private final EventManagerImpl eventManager;
@@ -68,17 +68,12 @@ public class KingdomCraftImpl implements KingdomCraft {
     //
 
     public KingdomCraftImpl(KingdomCraftPlugin plugin,
-                            StorageContext context,
-                            Configuration config,
-                            Configuration chatConfig,
-                            Configuration groupsConfig) {
+                            StorageContext context) {
 
         this.plugin = plugin;
         this.context = context;
 
-        this.config = new KingdomCraftConfig(config);
-
-        this.messageManager = new MessageManager(this);
+        this.messages = new MessagesImpl(plugin);
 
         this.commandManager = new CommandManager(this);
         this.commandDispatcher = new CommandDispatcher(commandManager);
@@ -87,11 +82,11 @@ public class KingdomCraftImpl implements KingdomCraft {
         this.eventManager = new EventManagerImpl();
         this.eventDispatcher = new EventDispatcher(this.eventManager);
 
-        this.chatManager = new ChatManagerImpl(this, chatConfig);
+        this.chatManager = new ChatManagerImpl(this);
         this.chatDispatcher = new ChatDispatcher(this, chatManager);
 
         this.placeholderManager = new PlaceholderManagerImpl(this);
-        this.permissionManager = new PermissionManager(this, groupsConfig);
+        this.permissionManager = new PermissionManager(this);
 
         this.editor = new EditorImpl(this);
 
@@ -115,8 +110,9 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     // messages
 
-    public MessageManager getMessageManager() {
-        return messageManager;
+    @Override
+    public MessagesImpl getMessages() {
+        return messages;
     }
 
     // placeholders
@@ -135,16 +131,12 @@ public class KingdomCraftImpl implements KingdomCraft {
     // chat
 
     @Override
-    public ChatManager getChatManager() {
+    public ChatManagerImpl getChatManager() {
         return chatManager;
     }
 
     public ChatDispatcher getChatDispatcher() {
         return chatDispatcher;
-    }
-
-    public ChatManagerImpl getChatManagerImpl() {
-        return chatManager;
     }
 
     // events
@@ -171,11 +163,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     // editor
 
     @Override
-    public Editor getEditor() {
-        return editor;
-    }
-
-    public EditorImpl getEditorImpl() {
+    public EditorImpl getEditor() {
         return editor;
     }
 

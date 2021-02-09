@@ -57,7 +57,7 @@ public class InviteCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         User user = kdc.getUser((PlatformPlayer) sender);
         if (user.getKingdom() == null) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
@@ -65,18 +65,18 @@ public class InviteCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdErrorPlayerNotExist", args[0]);
+                    kdc.getMessages().send(sender, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 
                 if (target.getKingdom() == user.getKingdom()) {
-                    kdc.getMessageManager().send(sender, "cmdInviteAlreadyKingdom", target.getName());
+                    kdc.getMessages().send(sender, "cmdInviteAlreadyKingdom", target.getName());
                     return;
                 }
 
                 KingdomInvite invite = target.getInvite(user.getKingdom());
                 if ( invite != null && invite.isValid() && invite.getSender().equals(user) ) {
-                    kdc.getMessageManager().send(sender, "cmdInviteAlready", target.getName());
+                    kdc.getMessages().send(sender, "cmdInviteAlready", target.getName());
                     return;
                 }
 
@@ -89,11 +89,11 @@ public class InviteCommand extends CommandBase {
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if (targetPlayer != null ) {
-                    kdc.getMessageManager().send(targetPlayer, "cmdInviteTarget", user.getName(),
+                    kdc.getMessages().send(targetPlayer, "cmdInviteTarget", user.getName(),
                             user.getKingdom().getName());
                 }
 
-                kdc.getMessageManager().send(sender, "cmdInviteSender", target.getName(), user.getKingdom().getName());
+                kdc.getMessages().send(sender, "cmdInviteSender", target.getName(), user.getKingdom().getName());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

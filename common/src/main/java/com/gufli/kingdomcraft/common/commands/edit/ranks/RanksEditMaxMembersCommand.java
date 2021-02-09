@@ -54,24 +54,24 @@ public class RanksEditMaxMembersCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Rank rank = kingdom.getRank(args[0]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[0]);
             return;
         }
 
         if ( !args[1].matches("[0-9]+") ) {
-            kdc.getMessageManager().send(sender, "errorInvalidNumber", args[1]);
+            kdc.getMessages().send(sender, "errorInvalidNumber", args[1]);
             return;
         }
 
         rank.setMaxMembers(Integer.parseInt(args[1]));
         kdc.saveAsync(rank);
 
-        kdc.getMessageManager().send(sender, "cmdRanksEdit", "max-members", rank.getName(), args[1]);
+        kdc.getMessages().send(sender, "cmdRanksEdit", "max-members", rank.getName(), args[1]);
     }
 }

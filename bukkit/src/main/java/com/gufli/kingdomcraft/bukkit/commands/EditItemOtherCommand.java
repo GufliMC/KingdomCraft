@@ -18,12 +18,10 @@
 package com.gufli.kingdomcraft.bukkit.commands;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
-import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.gufli.kingdomcraft.bukkit.item.BukkitItem;
-import com.gufli.kingdomcraft.bukkit.reflection.Reflection;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 import org.bukkit.Material;
@@ -53,19 +51,19 @@ public class EditItemOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         ItemStack item = ((BukkitPlayer) sender).getPlayer().getItemInHand();
         if ( item == null || item.getType() == Material.AIR ) {
-            kdc.getMessageManager().send(sender, "cmdEditItemInvalid");
+            kdc.getMessages().send(sender, "cmdEditItemInvalid");
             return;
         }
 
         kingdom.setItem(new BukkitItem(item));
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditOther", "item", kingdom.getName(), item.getType().name());
+        kdc.getMessages().send(sender, "cmdEditOther", "item", kingdom.getName(), item.getType().name());
     }
 }

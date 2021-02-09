@@ -81,7 +81,7 @@ public class ChatDispatcher {
 
         if ( channel == null ) {
             if (chatManager.getDefaultChatChannel() == null) {
-                kdc.getMessageManager().send(player, "chatNoChannel");
+                kdc.getMessages().send(player, "chatNoChannel");
                 return;
             }
 
@@ -98,7 +98,7 @@ public class ChatDispatcher {
             if ( diff < channel.getCooldown() * 1000L) {
                 float remaining = ((channel.getCooldown() * 1000) - diff) / 1000f;
                 DecimalFormat df = new DecimalFormat("0.0");
-                kdc.getMessageManager().send(player, "chatChannelCooldown", df.format(remaining));
+                kdc.getMessages().send(player, "chatChannelCooldown", df.format(remaining));
                 return;
             }
         }
@@ -117,10 +117,10 @@ public class ChatDispatcher {
         String result = channel.getFormat();
         result = StringEscapeUtils.unescapeJava(result);
         result = kdc.getPlaceholderManager().handle(player, result);
-        result = kdc.getMessageManager().colorify(result);
+        result = kdc.getMessages().colorify(result);
 
         if ( player.hasPermission("kingdom.chat.colors") ) {
-            message = kdc.getMessageManager().colorify(message);
+            message = kdc.getMessages().colorify(message);
         }
 
         result = kdc.getPlaceholderManager().strip(result, "message", "player");
@@ -149,7 +149,7 @@ public class ChatDispatcher {
                 .filter(p -> p.has("SOCIAL_SPY") && p.get("SOCIAL_SPY", Boolean.class))
                 .filter(p -> !receivers.contains(p))
                 .forEach(p -> {
-            p.sendMessage(kdc.getMessageManager().getMessage("socialSpyPrefix") + finalResult);
+            p.sendMessage(kdc.getMessages().getMessage("socialSpyPrefix") + finalResult);
         });
 
         System.out.println("[" + channel.getName() + "] " + player.getName() + ": " + message);

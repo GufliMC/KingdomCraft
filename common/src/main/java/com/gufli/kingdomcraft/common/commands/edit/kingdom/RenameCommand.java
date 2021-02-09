@@ -49,17 +49,17 @@ public class RenameCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         if ( !args[0].matches("[a-zA-Z0-9]+") ) {
-            kdc.getMessageManager().send(sender, "cmdErrorInvalidName");
+            kdc.getMessages().send(sender, "cmdErrorInvalidName");
             return;
         }
 
         if ( kdc.getKingdom(args[0]) != null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomAlreadyExists", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomAlreadyExists", args[1]);
             return;
         }
 
@@ -67,6 +67,6 @@ public class RenameCommand extends CommandBase {
         kdc.saveAsync(kingdom);
 
         kdc.getPlugin().getScheduler().executeSync(() ->
-                kdc.getMessageManager().send(sender, "cmdRename", kingdom.getName()));
+                kdc.getMessages().send(sender, "cmdRename", kingdom.getName()));
     }
 }

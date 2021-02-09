@@ -47,18 +47,18 @@ public class EditMaxMembersOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( !args[1].matches("[0-9]+") ) {
-            kdc.getMessageManager().send(sender, "errorInvalidNumber", args[1]);
+            kdc.getMessages().send(sender, "errorInvalidNumber", args[1]);
             return;
         }
 
         kingdom.setMaxMembers(Integer.parseInt(args[1]));
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEditOther", "max-members", kingdom.getName(), kingdom.getMaxMembers() + "");
+        kdc.getMessages().send(sender, "cmdEditOther", "max-members", kingdom.getName(), kingdom.getMaxMembers() + "");
     }
 }

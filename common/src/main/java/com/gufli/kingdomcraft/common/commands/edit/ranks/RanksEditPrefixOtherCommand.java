@@ -55,20 +55,20 @@ public class RanksEditPrefixOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         Rank rank = kingdom.getRank(args[1]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[1]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[1]);
             return;
         }
 
         rank.setPrefix(args[2]);
         kdc.saveAsync(rank);
 
-        kdc.getMessageManager().send(sender, "cmdRanksEditOther", "prefix",
+        kdc.getMessages().send(sender, "cmdRanksEditOther", "prefix",
                 rank.getName(), kingdom.getName(), args[2]);
     }
 }

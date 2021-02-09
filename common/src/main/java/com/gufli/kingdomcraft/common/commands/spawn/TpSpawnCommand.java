@@ -49,19 +49,19 @@ public class TpSpawnCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         PlatformPlayer target = kdc.getPlayer(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorNotOnline", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorNotOnline", args[0]);
             return;
         }
 
         Kingdom kingdom = kdc.getUser(target).getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorTargetNoKingdom", target.getName());
+            kdc.getMessages().send(sender, "cmdErrorTargetNoKingdom", target.getName());
             return;
         }
 
         PlatformLocation loc = kingdom.getSpawn();
         if ( loc == null ) {
-            kdc.getMessageManager().send(sender, "cmdSpawnOtherNotExists", kingdom.getName());
+            kdc.getMessages().send(sender, "cmdSpawnOtherNotExists", kingdom.getName());
             return;
         }
 
@@ -70,7 +70,7 @@ public class TpSpawnCommand extends CommandBase {
         DecimalFormat df = new DecimalFormat("#");
         String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-        kdc.getMessageManager().send(sender, "cmdTpSpawn", str);
-        kdc.getMessageManager().send(target, "cmdTpSpawnTarget", str);
+        kdc.getMessages().send(sender, "cmdTpSpawn", str);
+        kdc.getMessages().send(target, "cmdTpSpawnTarget", str);
     }
 }

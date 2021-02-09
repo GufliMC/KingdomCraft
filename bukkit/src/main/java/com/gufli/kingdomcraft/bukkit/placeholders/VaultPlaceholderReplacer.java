@@ -22,7 +22,6 @@ import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultPlaceholderReplacer {
@@ -44,14 +43,14 @@ public class VaultPlaceholderReplacer {
             OfflinePlayer p = Bukkit.getOfflinePlayer(user.getUniqueId());
             if ( p == null ) return null;
 
-            return plugin.getKdc().getMessageManager().colorify(chat.getPlayerPrefix(null, p));
+            return plugin.getKdc().getMessages().colorify(chat.getPlayerPrefix(null, p));
         }, "prefix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
             OfflinePlayer p = Bukkit.getOfflinePlayer(user.getUniqueId());
             if ( p == null ) return null;
 
-            return plugin.getKdc().getMessageManager().colorify(chat.getPlayerSuffix(null, p));
+            return plugin.getKdc().getMessages().colorify(chat.getPlayerSuffix(null, p));
         }, "suffix");
 
     }

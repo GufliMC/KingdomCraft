@@ -48,19 +48,19 @@ public class EditItemCommand extends CommandBase {
 
         Kingdom kingdom = player.getUser().getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         ItemStack item = ((BukkitPlayer) player).getPlayer().getItemInHand();
         if ( item == null || item.getType() == Material.AIR ) {
-            kdc.getMessageManager().send(sender, "cmdEditItemInvalid");
+            kdc.getMessages().send(sender, "cmdEditItemInvalid");
             return;
         }
 
         kingdom.setItem(new BukkitItem(item));
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEdit", "item", item.getType().name());
+        kdc.getMessages().send(sender, "cmdEdit", "item", item.getType().name());
     }
 }

@@ -56,24 +56,24 @@ public class AllyCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Kingdom target = kdc.getKingdom(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( target == kingdom ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSameKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSameKingdom");
             return;
         }
 
         Relation existing = kdc.getRelation(kingdom, target);
         if ( existing != null && existing.getType() == RelationType.ALLY ) {
-            kdc.getMessageManager().send(sender, "cmdAllyAlready", target.getName());
+            kdc.getMessages().send(sender, "cmdAllyAlready", target.getName());
             return;
         }
 
@@ -82,27 +82,27 @@ public class AllyCommand extends CommandBase {
 
             request = kdc.getRelationRequest(kingdom, target);
             if ( request != null && request.getType() == RelationType.ALLY ) {
-                kdc.getMessageManager().send(sender, "cmdAllyRequestAlready", target.getName());
+                kdc.getMessages().send(sender, "cmdAllyRequestAlready", target.getName());
                 return;
             }
 
             kdc.addRelationRequest(kingdom, target, RelationType.ALLY);
-            kdc.getMessageManager().send(sender, "cmdAllyRequest", target.getName());
+            kdc.getMessages().send(sender, "cmdAllyRequest", target.getName());
 
             for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
                 if ( kdc.getUser(member).getKingdom() != target && member.hasPermission("kingdom.ally") ) continue;
-                kdc.getMessageManager().send(member, "cmdAllyRequestTarget", kingdom.getName());
+                kdc.getMessages().send(member, "cmdAllyRequestTarget", kingdom.getName());
             }
             return;
         }
 
         kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.ALLY);
-        kdc.getMessageManager().send(sender, "cmdAllyAccepted", target.getName());
+        kdc.getMessages().send(sender, "cmdAllyAccepted", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessageManager().send(member, "cmdAllyAccepted", kingdom.getName());
+            kdc.getMessages().send(member, "cmdAllyAccepted", kingdom.getName());
         }
     }
 }

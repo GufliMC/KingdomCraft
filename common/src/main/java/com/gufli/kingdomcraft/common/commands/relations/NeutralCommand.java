@@ -56,24 +56,24 @@ public class NeutralCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Kingdom target = kdc.getKingdom(args[0]);
         if ( target == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         if ( target == kingdom ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSameKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSameKingdom");
             return;
         }
 
         Relation existing = kdc.getRelation(kingdom, target);
         if ( existing == null || existing.getType() == RelationType.NEUTRAL ) {
-            kdc.getMessageManager().send(sender, "cmdNeutralAlready", target.getName());
+            kdc.getMessages().send(sender, "cmdNeutralAlready", target.getName());
             return;
         }
 
@@ -85,16 +85,16 @@ public class NeutralCommand extends CommandBase {
 
                 request = kdc.getRelationRequest(kingdom, target);
                 if ( request != null && request.getType() == RelationType.NEUTRAL ) {
-                    kdc.getMessageManager().send(sender, "cmdNeutralRequestAlready", target.getName());
+                    kdc.getMessages().send(sender, "cmdNeutralRequestAlready", target.getName());
                     return;
                 }
 
                 kdc.addRelationRequest(kingdom, target, RelationType.NEUTRAL);
-                kdc.getMessageManager().send(sender, "cmdNeutralRequest", target.getName());
+                kdc.getMessages().send(sender, "cmdNeutralRequest", target.getName());
 
                 for (PlatformPlayer member : kdc.getOnlinePlayers()) {
                     if ( kdc.getUser(member).getKingdom() != target && member.hasPermission("kingdom.neutral") ) continue;
-                    kdc.getMessageManager().send(member, "cmdNeutralRequestTarget", kingdom.getName());
+                    kdc.getMessages().send(member, "cmdNeutralRequestTarget", kingdom.getName());
                 }
 
                 return;
@@ -103,11 +103,11 @@ public class NeutralCommand extends CommandBase {
 
         kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.NEUTRAL);
-        kdc.getMessageManager().send(sender, "cmdNeutralAccepted", target.getName());
+        kdc.getMessages().send(sender, "cmdNeutralAccepted", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessageManager().send(member, "cmdNeutralAccepted", kingdom.getName());
+            kdc.getMessages().send(member, "cmdNeutralAccepted", kingdom.getName());
         }
     }
 }

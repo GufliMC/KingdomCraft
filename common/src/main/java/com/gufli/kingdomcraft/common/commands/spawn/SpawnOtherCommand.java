@@ -51,13 +51,13 @@ public class SpawnOtherCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null || kingdom.isTemplate()) {
-            kdc.getMessageManager().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
         PlatformLocation loc = kingdom.getSpawn();
         if ( loc == null ) {
-            kdc.getMessageManager().send(sender, "cmdSpawnOtherNotExists", kingdom.getName());
+            kdc.getMessages().send(sender, "cmdSpawnOtherNotExists", kingdom.getName());
             return;
         }
 
@@ -65,7 +65,7 @@ public class SpawnOtherCommand extends CommandBase {
             DecimalFormat df = new DecimalFormat("#");
             String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
 
-            kdc.getMessageManager().send(sender, "cmdSpawn", str);
+            kdc.getMessages().send(sender, "cmdSpawn", str);
         };
 
         Teleporter.teleport((PlatformPlayer) sender, loc).thenRun(r);

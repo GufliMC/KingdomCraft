@@ -25,7 +25,6 @@ import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
@@ -34,7 +33,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 
 public class FriendlyFireListener implements Listener {
@@ -135,7 +133,7 @@ public class FriendlyFireListener implements Listener {
         if ( k1 != k2 ) {
             Relation rel = plugin.getKdc().getRelation(k1, k2);
             RelationType type = rel == null ? RelationType.NEUTRAL : rel.getType();
-            if ( !plugin.getKdc().getConfig().getFriendlyFireRelationTypes().contains(type.name()) ) {
+            if ( !plugin.getKdc().getConfig().getFriendlyFireRelationTypes().contains(type) ) {
                 return;
             }
         }
@@ -151,7 +149,7 @@ public class FriendlyFireListener implements Listener {
         }
 
         if ( System.currentTimeMillis() - lastNotification > 5000 ) {
-            plugin.getKdc().getMessageManager().send(d, "friendlyFire");
+            plugin.getKdc().getMessages().send(d, "friendlyFire");
             d.set("LAST_FRIENDLYFIRE_NOTIFICATION", System.currentTimeMillis());
         }
     }

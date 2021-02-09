@@ -54,19 +54,19 @@ public class EditDefaultRankCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         Kingdom kingdom = user.getKingdom();
         if ( kingdom == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
             return;
         }
 
         Rank rank = kingdom.getRank(args[0]);
         if ( rank == null ) {
-            kdc.getMessageManager().send(sender, "cmdErrorRankNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[0]);
             return;
         }
 
         kingdom.setDefaultRank(rank);
         kdc.saveAsync(kingdom);
 
-        kdc.getMessageManager().send(sender, "cmdEdit", "default rank", rank.getName());
+        kdc.getMessages().send(sender, "cmdEdit", "default rank", rank.getName());
     }
 }

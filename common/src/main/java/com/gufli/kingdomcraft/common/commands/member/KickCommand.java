@@ -59,13 +59,13 @@ public class KickCommand extends CommandBase {
             try {
                 User target = kdc.getUser(args[0]).get();
                 if (target == null) {
-                    kdc.getMessageManager().send(sender, "cmdErrorPlayerNotExist", args[0]);
+                    kdc.getMessages().send(sender, "cmdErrorPlayerNotExist", args[0]);
                     return;
                 }
 
                 Kingdom kingdom = target.getKingdom();
                 if (kingdom == null) {
-                    kdc.getMessageManager().send(sender, "cmdErrorTargetNoKingdom", target.getName());
+                    kdc.getMessages().send(sender, "cmdErrorTargetNoKingdom", target.getName());
                     return;
                 }
 
@@ -73,11 +73,11 @@ public class KickCommand extends CommandBase {
                     User user = kdc.getUser((PlatformPlayer) sender);
                     if ( !sender.hasPermission("kingdom.kick.other") ) {
                         if (kingdom != user.getKingdom() ) {
-                            kdc.getMessageManager().send(sender, "cmdErrorNoPermission");
+                            kdc.getMessages().send(sender, "cmdErrorNoPermission");
                             return;
                         }
                         if (user.getRank() == null || user.getRank().getLevel() <= target.getRank().getLevel()) {
-                            kdc.getMessageManager().send(sender, "cmdKickLowLevel", target.getName());
+                            kdc.getMessages().send(sender, "cmdKickLowLevel", target.getName());
                             return;
                         }
                     }
@@ -88,10 +88,10 @@ public class KickCommand extends CommandBase {
 
                 PlatformPlayer targetPlayer = kdc.getPlayer(target);
                 if ( targetPlayer != null ) {
-                    kdc.getMessageManager().send(targetPlayer, "cmdKickTarget", kingdom.getName());
+                    kdc.getMessages().send(targetPlayer, "cmdKickTarget", kingdom.getName());
                 }
 
-                kdc.getMessageManager().send(sender, "cmdKickSender", target.getName(), kingdom.getName());
+                kdc.getMessages().send(sender, "cmdKickSender", target.getName(), kingdom.getName());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
