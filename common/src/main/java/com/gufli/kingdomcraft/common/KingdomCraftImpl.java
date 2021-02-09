@@ -19,50 +19,44 @@ package com.gufli.kingdomcraft.common;
 
 import com.gufli.kingdomcraft.api.KingdomCraft;
 import com.gufli.kingdomcraft.api.KingdomCraftProvider;
-import com.gufli.kingdomcraft.api.chat.ChatManager;
 import com.gufli.kingdomcraft.api.domain.*;
-import com.gufli.kingdomcraft.api.editor.Editor;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.event.EventManager;
+import com.gufli.kingdomcraft.api.events.KingdomCreateEvent;
+import com.gufli.kingdomcraft.api.events.PlayerLeaveEvent;
+import com.gufli.kingdomcraft.api.events.PlayerLoginEvent;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
-import com.gufli.kingdomcraft.common.chat.ChatDispatcher;
 import com.gufli.kingdomcraft.common.chat.ChatManagerImpl;
-import com.gufli.kingdomcraft.common.command.CommandDispatcher;
-import com.gufli.kingdomcraft.common.command.CommandManager;
-import com.gufli.kingdomcraft.common.config.Configuration;
-import com.gufli.kingdomcraft.common.config.KingdomCraftConfig;
+import com.gufli.kingdomcraft.common.command.CommandManagerImpl;
+import com.gufli.kingdomcraft.common.config.Config;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.editor.EditorImpl;
-import com.gufli.kingdomcraft.common.event.EventDispatcher;
 import com.gufli.kingdomcraft.common.event.EventManagerImpl;
 import com.gufli.kingdomcraft.common.messages.MessagesImpl;
 import com.gufli.kingdomcraft.common.permissions.PermissionManager;
 import com.gufli.kingdomcraft.common.placeholders.PlaceholderManagerImpl;
 import com.gufli.kingdomcraft.common.util.Teleporter;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class KingdomCraftImpl implements KingdomCraft {
 
     private final KingdomCraftPlugin plugin;
-    private final KingdomCraftConfig config = new KingdomCraftConfig();
+    private final Config config = new Config();
     private final StorageContext context;
 
-    private final CommandManager commandManager;
-    private final CommandDispatcher commandDispatcher;
-
     private final MessagesImpl messages;
+
+    private final CommandManagerImpl commandManager;
     private final PermissionManager permissionManager;
-
     private final EventManagerImpl eventManager;
-    private final EventDispatcher eventDispatcher;
-
     private final ChatManagerImpl chatManager;
-    private final ChatDispatcher chatDispatcher;
-
     private final PlaceholderManagerImpl placeholderManager;
+
     private final EditorImpl editor;
 
     //
@@ -73,25 +67,23 @@ public class KingdomCraftImpl implements KingdomCraft {
         this.plugin = plugin;
         this.context = context;
 
+        // load messages
         this.messages = new MessagesImpl(plugin);
 
-        this.commandManager = new CommandManager(this);
-        this.commandDispatcher = new CommandDispatcher(commandManager);
-        context.registerDumpCommand(this);
-
+        // load managers
+        this.commandManager = new CommandManagerImpl(this);
         this.eventManager = new EventManagerImpl();
-        this.eventDispatcher = new EventDispatcher(this.eventManager);
-
         this.chatManager = new ChatManagerImpl(this);
-        this.chatDispatcher = new ChatDispatcher(this, chatManager);
-
         this.placeholderManager = new PlaceholderManagerImpl(this);
         this.permissionManager = new PermissionManager(this);
 
+        // load other systems
         this.editor = new EditorImpl(this);
 
+        context.registerDumpCommand(this);
+
         KingdomCraftProvider.register(this);
-        Teleporter.register(this);
+        Teleporter.register(getPlugin().getScheduler());
     }
 
     public void stop() {
@@ -104,7 +96,10 @@ public class KingdomCraftImpl implements KingdomCraft {
         return plugin;
     }
 
-    public KingdomCraftConfig getConfig() {
+    // config
+
+    @Override
+    public Config getConfig() {
         return config;
     }
 
@@ -115,56 +110,35 @@ public class KingdomCraftImpl implements KingdomCraft {
         return messages;
     }
 
-    // placeholders
+    // managers
 
     @Override
     public PlaceholderManager getPlaceholderManager() {
         return placeholderManager;
     }
 
-    // permissions
-
-    public PermissionManager getPermissionManager() {
-        return permissionManager;
-    }
-
-    // chat
-
     @Override
     public ChatManagerImpl getChatManager() {
         return chatManager;
     }
 
-    public ChatDispatcher getChatDispatcher() {
-        return chatDispatcher;
-    }
-
-    // events
-
     @Override
-    public EventManager getEventManager() {
+    public EventManagerImpl getEventManager() {
         return eventManager;
     }
 
-    public EventDispatcher getEventDispatcher() {
-        return this.eventDispatcher;
-    }
-
-    // commands
-
-    public CommandManager getCommandManager() {
+    @Override
+    public CommandManagerImpl getCommandManager() {
         return commandManager;
     }
-
-    public CommandDispatcher getCommandDispatcher() {
-        return commandDispatcher;
-    }
-
-    // editor
 
     @Override
     public EditorImpl getEditor() {
         return editor;
+    }
+
+    public PermissionManager getPermissionManager() {
+        return permissionManager;
     }
 
     // players
@@ -228,7 +202,7 @@ public class KingdomCraftImpl implements KingdomCraft {
             throw new IllegalArgumentException("A kingdom with that name already exists.");
         }
         Kingdom kingdom = context.createKingdom(name);
-        eventDispatcher.dispatchKingdomCreate(kingdom);
+        eventManager.dispatch(new KingdomCreateEvent(kingdom));
         return kingdom;
     }
 
@@ -366,14 +340,14 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     public boolean onLogin(PlatformPlayer player) {
         if ( onLoad(player) ) {
-            eventDispatcher.dispatchLogin(player);
+            eventManager.dispatch(new PlayerLoginEvent(player));
             return true;
         }
         return false;
     }
 
     public void onQuit(PlatformPlayer player) {
-        eventDispatcher.dispatchQuit(player);
+        eventManager.dispatch(new PlayerLeaveEvent(player));
         context.removePlayer(player);
     }
 }

@@ -10,6 +10,9 @@
 
 settings:
 
+    # enter the filename (without .yml) for the messages
+    language: 'en'
+
     nokingdom:
         display: '&eHobo'
         prefix: '&7[&eHobo&7]'
@@ -43,11 +46,9 @@ settings:
     events:
         kingdom-join:
         - CONSOLE k tpspawn {username}
-        - CONSOLE clearinv {username}
 
         kingdom-leave:
         - CONSOLE k tpspawn {username}
-        - CONSOLE clearinv {username}
 
     # Show the custom join and leave messages (defined below) only for your own kingdom members
     join-and-leave-kingdom-only: false

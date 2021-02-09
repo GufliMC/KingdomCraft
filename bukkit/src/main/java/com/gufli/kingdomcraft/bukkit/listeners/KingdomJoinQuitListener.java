@@ -19,44 +19,42 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.User;
-import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.event.EventListener;
+import com.gufli.kingdomcraft.api.events.UserJoinKingdomEvent;
+import com.gufli.kingdomcraft.api.events.UserLeaveKingdomEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
-import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class KingdomJoinQuitListener implements EventListener {
+public class KingdomJoinQuitListener {
 
     private final KingdomCraftBukkitPlugin plugin;
 
     public KingdomJoinQuitListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
-        plugin.getKdc().getEventManager().addListener(this);
+        plugin.getKdc().getEventManager().addListener(UserJoinKingdomEvent.class, this::onKingdomJoin);
+        plugin.getKdc().getEventManager().addListener(UserLeaveKingdomEvent.class, this::onKingdomLeave);
     }
 
 
     // kingdom join & kingdom leave commands
 
-    @Override
-    public void onKingdomJoin(User user) {
+    public void onKingdomJoin(UserJoinKingdomEvent e) {
         if ( plugin.getKdc().getConfig().getOnKingdomJoinCommands().isEmpty() ) {
             return;
         }
         plugin.getScheduler().sync().execute(() -> {
-            execute(user, user.getKingdom(), plugin.getKdc().getConfig().getOnKingdomJoinCommands());
+            execute(e.getUser(), e.getUser().getKingdom(), plugin.getKdc().getConfig().getOnKingdomJoinCommands());
         });
     }
 
-    @Override
-    public void onKingdomLeave(User user, Kingdom oldKingdom) {
+    public void onKingdomLeave(UserLeaveKingdomEvent e) {
         if ( plugin.getKdc().getConfig().getOnKingdomLeaveCommands().isEmpty() ) {
             return;
         }
         plugin.getScheduler().sync().execute(() -> {
-            execute(user, oldKingdom, plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
+            execute(e.getUser(), e.getKingdom(), plugin.getKdc().getConfig().getOnKingdomLeaveCommands());
         });
     }
 

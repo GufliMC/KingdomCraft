@@ -17,10 +17,14 @@
 
 package com.gufli.kingdomcraft.api.event;
 
+import com.gufli.kingdomcraft.api.events.Event;
+
+import java.util.function.Consumer;
+
 public interface EventManager {
 
-    void addListener(EventListener listener);
+    <T extends Event> EventExecutor addListener(Class<T> type, Consumer<T> consumer);
 
-    void removeListener(EventListener listener);
+    <T extends Event> void dispatch(T event);
 
 }

@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.common.commands.general;
 
+import com.gufli.kingdomcraft.api.commands.Command;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
@@ -38,7 +39,7 @@ public class HelpCommand extends CommandBase {
     @Override
     public List<String> autocomplete(PlatformPlayer player, String[] args) {
         if ( args.length == 1 ) {
-            List<CommandBase> commands = getAvailableCommands(player);
+            List<Command> commands = getAvailableCommands(player);
             int totalpages = (int) Math.ceil(commands.size() * 1d / pagesize);
             List<String> result = new ArrayList<>();
             for ( int i = 1; i <= totalpages; i++ ) {
@@ -51,7 +52,7 @@ public class HelpCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        List<CommandBase> commands = getAvailableCommands(sender);
+        List<Command> commands = getAvailableCommands(sender);
 
         int totalpages = (int) Math.ceil(commands.size() * 1d / pagesize);
 
@@ -72,7 +73,7 @@ public class HelpCommand extends CommandBase {
 
         int startindex = (page - 1) * pagesize;
         for ( int i = startindex; i < Math.min(commands.size(), startindex + pagesize); i++ ) {
-            CommandBase cmd = commands.get(i);
+            Command cmd = commands.get(i);
 
             String command = "/k " + cmd.getCommands().get(0) + (cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint());
             String explanation = kdc.getMessages().getMessage(cmd.getExplanationMessage());
@@ -85,8 +86,8 @@ public class HelpCommand extends CommandBase {
         sender.sendMessage(sb.toString());
     }
 
-    private List<CommandBase> getAvailableCommands(PlatformSender sender) {
-        List<CommandBase> commands = kdc.getCommandManager().getCommands().stream()
+    private List<Command> getAvailableCommands(PlatformSender sender) {
+        List<Command> commands = kdc.getCommandManager().getCommands().stream()
                 .filter(cmd -> kdc.getMessages().getMessage(cmd.getExplanationMessage()) != null).collect(Collectors.toList());
 
         if ( sender instanceof PlatformPlayer ) {
@@ -95,7 +96,7 @@ public class HelpCommand extends CommandBase {
         return commands;
     }
 
-    private boolean hasAnyPermission(PlatformSender sender, CommandBase command) {
+    private boolean hasAnyPermission(PlatformSender sender, Command command) {
         return Arrays.stream(command.getPermissions()).anyMatch(sender::hasPermission);
     }
 }

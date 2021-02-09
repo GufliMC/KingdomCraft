@@ -19,10 +19,9 @@ package com.gufli.kingdomcraft.common.ebean.beans;
 
 import com.gufli.kingdomcraft.api.KingdomCraftProvider;
 import com.gufli.kingdomcraft.api.domain.*;
-import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.common.KingdomCraftImpl;
-import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
-import com.gufli.kingdomcraft.common.event.EventDispatcher;
+import com.gufli.kingdomcraft.api.events.UserJoinKingdomEvent;
+import com.gufli.kingdomcraft.api.events.UserLeaveKingdomEvent;
+import com.gufli.kingdomcraft.api.events.UserRankChangeEvent;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.*;
 
@@ -132,8 +131,7 @@ public class BUser extends BaseModel implements User {
         if ( kingdom == null ) {
             this.kingdom = null;
             this.rank = null;
-            ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
-                    .dispatchKingdomLeave(this, oldKingdom);
+            KingdomCraftProvider.get().getEventManager().dispatch(new UserLeaveKingdomEvent(this, oldKingdom));
             return;
         }
 
@@ -148,12 +146,10 @@ public class BUser extends BaseModel implements User {
         }
 
         if ( oldKingdom != null ) {
-            ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
-                    .dispatchKingdomLeave(this, oldKingdom);
+            KingdomCraftProvider.get().getEventManager().dispatch(new UserLeaveKingdomEvent(this, oldKingdom));
         }
 
-        ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
-                .dispatchKingdomJoin(this);
+        KingdomCraftProvider.get().getEventManager().dispatch(new UserJoinKingdomEvent(this));
     }
 
     @Override
@@ -179,8 +175,7 @@ public class BUser extends BaseModel implements User {
             this.rank.memberCount++;
         }
 
-        ((KingdomCraftImpl) KingdomCraftProvider.get()).getEventDispatcher()
-                .dispatchRankChange(this, oldRank);
+        KingdomCraftProvider.get().getEventManager().dispatch(new UserRankChangeEvent(this, oldRank));
     }
 
     @Override

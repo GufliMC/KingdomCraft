@@ -17,9 +17,11 @@
 
 package com.gufli.kingdomcraft.common.util;
 
+import com.gufli.kingdomcraft.api.KingdomCraftProvider;
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
+import com.gufli.kingdomcraft.common.scheduler.AbstractScheduler;
 import com.gufli.kingdomcraft.common.scheduler.SchedulerTask;
 
 import java.util.concurrent.CompletableFuture;
@@ -29,15 +31,16 @@ public class Teleporter {
 
     private final static String TELEPORT_KEY = "teleporter";
 
-    private static KingdomCraftImpl kdc;
-    public static void register(KingdomCraftImpl kdc) {
-        Teleporter.kdc = kdc;
+    private static AbstractScheduler scheduler;
+
+    public static void register(AbstractScheduler scheduler) {
+        Teleporter.scheduler = scheduler;
     }
 
     public static CompletableFuture<Void> teleport(PlatformPlayer player, PlatformLocation target) {
         int delay = 0;
         if ( !player.isAdmin() ) {
-            delay = kdc.getConfig().getTeleportDelay();
+            delay = KingdomCraftProvider.get().getConfig().getTeleportDelay();
         }
 
         return teleport(player, target, delay);
@@ -54,9 +57,9 @@ public class Teleporter {
         }
 
         CompletableFuture<Void> future = new CompletableFuture<>();
-        kdc.getMessages().send(player, "teleport", delay + "");
+        KingdomCraftProvider.get().getMessages().send(player, "teleport", delay + "");
 
-        player.set(TELEPORT_KEY, kdc.getPlugin().getScheduler().syncLater(() -> {
+        player.set(TELEPORT_KEY, scheduler.syncLater(() -> {
             player.remove(TELEPORT_KEY);
             player.teleport(target);
             future.complete(null);
@@ -69,7 +72,7 @@ public class Teleporter {
         if ( player == null || !player.has(TELEPORT_KEY) ) {
             return;
         }
-        kdc.getMessages().send(player, "teleportCancel");
+        KingdomCraftProvider.get().getMessages().send(player, "teleportCancel");
         player.get(TELEPORT_KEY, SchedulerTask.class).cancel();
         player.remove(TELEPORT_KEY);
     }

@@ -3,40 +3,20 @@ enabled: true
 
 channels:
   public:
-    prefix: ''
-    format: '&6[P]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
+    format: '&7[&6P&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{player}&a: &f{message}'
+    prefix: '!'
+    cooldown: 5 # Cooldown in seconds
     toggleable: false
     default: true # players without kingdom will talk in this channel by default
 
   kingdom:
-    prefix: '!'
-    format: '&6[K]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
+    prefix: ''
+    format: '&7[{kingdom}&7]&f{rank_prefix}{prefix} &f{player}&a: &f{message}'
     kingdoms: '*' # every kingdom gets it's own channel
     toggleable: false
 
-  hkm:
-    prefix: '@'
-    format: '&6[HKM]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
+  admin:
+    prefix: '%'
+    format: '&6[ADMIN]&f{kingdom_prefix}{rank_prefix}{prefix} &f{player}&a: &f{message}'
     restrict: 'read'
     toggleable: true
-
-  roleplay:
-    format: '&6[RP]&a{prefix}{kingdom_prefix}{rank_prefix}&a{player}&a: &f{message}'
-    prefix: '*'
-    restrict: 'talk'
-    cooldown: 5 # Cooldown in seconds
-
-  trade:
-    prefix: '$'
-    format: '&6[K][T]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-    kingdoms: '*' # every kingdom gets it's own trade channel
-    toggleable: true
-    range: 20
-
-  gufland-jenava:
-    prefix: '#'
-    format: '&6[K][O]&a{prefix}{rank_prefix}&a{player}&a: &f{message}'
-    toggleable: true
-    kingdoms:
-    - 'gufland'
-    - 'jenava'

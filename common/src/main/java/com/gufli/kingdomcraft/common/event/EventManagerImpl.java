@@ -17,26 +17,45 @@
 
 package com.gufli.kingdomcraft.common.event;
 
-import com.gufli.kingdomcraft.api.event.EventListener;
 import com.gufli.kingdomcraft.api.event.EventManager;
+import com.gufli.kingdomcraft.api.events.Event;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 public class EventManagerImpl implements EventManager {
 
-    final List<EventListener> listeners = new CopyOnWriteArrayList<>();
+    private final List<EventExecutor<?>> executors = new CopyOnWriteArrayList<>();
 
-    @Override
-    public void addListener(EventListener listener) {
-        if ( !listeners.contains(listener) ) {
-            this.listeners.add(listener);
+    public <T extends Event> EventExecutor<T> addListener(Class<T> type, Consumer<T> consumer) {
+        EventExecutor<T> executor = new EventExecutor<>(type, consumer);
+        executors.add(executor);
+        return executor;
+    }
+
+    public <T extends Event> void dispatch(T event) {
+        for ( EventExecutor ex : executors ) {
+            if ( ex.type.isAssignableFrom(event.getClass()) ) {
+                ex.consumer.accept(event);
+            }
         }
     }
 
-    @Override
-    public void removeListener(EventListener listener) {
-        this.listeners.remove(listener);
+    private class EventExecutor<T extends Event> implements com.gufli.kingdomcraft.api.event.EventExecutor {
+
+        private final Class<T> type;
+        private final Consumer<T> consumer;
+
+        private EventExecutor(Class<T> type, Consumer<T> consumer) {
+            this.type = type;
+            this.consumer = consumer;
+        }
+
+        public void unregister() {
+            executors.remove(this);
+        }
+
     }
 
 }

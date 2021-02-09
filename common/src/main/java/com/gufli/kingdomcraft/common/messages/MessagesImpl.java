@@ -27,7 +27,7 @@ public class MessagesImpl implements Messages {
 
 	private final KingdomCraftPlugin plugin;
 
-	private String prefix;
+	private String prefix = "&6KingdomCraft &2> &a";
 
 	private Configuration fallback;
 	private Configuration messages;
@@ -42,12 +42,6 @@ public class MessagesImpl implements Messages {
 
 	public void setMessages(Configuration messages) {
 		this.messages = messages;
-
-		if ( messages.contains("prefix") ) {
-			this.prefix = messages.getString("prefix");
-		} else {
-			this.prefix = fallback.getString("prefix");
-		}
 	}
 
 	@Override
@@ -55,16 +49,15 @@ public class MessagesImpl implements Messages {
 		return prefix;
 	}
 
-	private boolean isEmpty(String name) {
-		return !messages.contains(name) || messages.getString(name).replace(" ", "").equals("");
-	}
-
-	private boolean hasMessage(String name) {
-		return messages.contains(name) || fallback.contains(name);
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 
 	@Override
 	public String getMessage(String name) {
+		if ( name == null ) {
+			return null;
+		}
 		String msg = messages.getString(name);
 		if ( msg == null ) {
 			msg = fallback.getString(name);
@@ -96,6 +89,10 @@ public class MessagesImpl implements Messages {
 		}
 
 		return message;
+	}
+
+	private boolean isEmpty(String name) {
+		return messages.contains(name) && messages.getString(name).replace(" ", "").equals("");
 	}
 
 	@Override

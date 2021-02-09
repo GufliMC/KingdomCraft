@@ -15,23 +15,26 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.kingdomcraft.common.commands.admin;
+package com.gufli.kingdomcraft.bukkit.commands;
 
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
-import com.gufli.kingdomcraft.common.KingdomCraftImpl;
+import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
 public class ReloadCommand extends CommandBase {
 
-    public ReloadCommand(KingdomCraftImpl kdc) {
-        super(kdc, "reload", 0);
+    private final KingdomCraftBukkitPlugin plugin;
+
+    public ReloadCommand(KingdomCraftBukkitPlugin plugin) {
+        super(plugin.getKdc(), "reload", 0);
         setExplanationMessage("cmdReloadExplanation");
         setPermissions("kingdom.reload");
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        kdc.getPlugin().reload();
+        plugin.reload();
         kdc.getMessages().send(sender, "cmdReload");
     }
 }

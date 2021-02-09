@@ -18,8 +18,13 @@
 package com.gufli.kingdomcraft.api.chat;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 
+import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public interface ChatManager {
 
@@ -36,7 +41,14 @@ public interface ChatManager {
     ChatChannel getDefaultChatChannel();
 
     //
+
     boolean canTalk(PlatformPlayer player, ChatChannel chatChannel);
 
     boolean canRead(PlatformPlayer player, ChatChannel chatChannel);
+
+    //
+
+    void dispatch(PlatformPlayer player, String message);
+
+    void dispatch(PlatformPlayer player, ChatChannel channel, String message);
 }

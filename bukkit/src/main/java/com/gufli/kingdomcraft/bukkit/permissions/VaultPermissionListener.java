@@ -1,10 +1,9 @@
 package com.gufli.kingdomcraft.bukkit.permissions;
 
-import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.event.EventListener;
+import com.gufli.kingdomcraft.api.events.*;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -14,7 +13,7 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VaultPermissionListener implements Listener, EventListener {
+public class VaultPermissionListener implements Listener {
 
     private final KingdomCraftBukkitPlugin plugin;
     private final Permission permissionProvider;
@@ -25,36 +24,37 @@ public class VaultPermissionListener implements Listener, EventListener {
         this.plugin = plugin;
         this.permissionProvider = permissionProvider;
         loadExternals();
+
+        plugin.getKdc().getEventManager().addListener(PluginReloadEvent.class, this::onReload);
+        plugin.getKdc().getEventManager().addListener(PlayerLoadedEvent.class, this::onJoin);
+        plugin.getKdc().getEventManager().addListener(PlayerLeaveEvent.class, this::onLeave);
+        plugin.getKdc().getEventManager().addListener(UserJoinKingdomEvent.class, this::onKingdomJoin);
+        plugin.getKdc().getEventManager().addListener(UserLeaveKingdomEvent.class, this::onKingdomLeave);
+        plugin.getKdc().getEventManager().addListener(UserRankChangeEvent.class, this::onRankChange);
     }
 
-    @Override
-    public void onReload() {
+    public void onReload(PluginReloadEvent e) {
         loadExternals();
     }
 
-    @Override
-    public void onJoin(PlatformPlayer player) {
-        update(player);
+    public void onJoin(PlayerLoadedEvent e) {
+        update(e.getPlayer());
     }
 
-    @Override
-    public void onQuit(PlatformPlayer player) {
-        update(player);
+    public void onLeave(PlayerLeaveEvent e) {
+        update(e.getPlayer());
     }
 
-    @Override
-    public void onKingdomJoin(User user) {
-        update(user);
+    public void onKingdomJoin(UserJoinKingdomEvent e) {
+        update(e.getUser());
     }
 
-    @Override
-    public void onKingdomLeave(User user, Kingdom oldKingdom) {
-        update(user);
+    public void onKingdomLeave(UserLeaveKingdomEvent e) {
+        update(e.getUser());
     }
 
-    @Override
-    public void onRankChange(User user, Rank oldRank) {
-        update(user);
+    public void onRankChange(UserRankChangeEvent e) {
+        update(e.getUser());
     }
 
     private void loadExternals() {

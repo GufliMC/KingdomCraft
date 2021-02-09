@@ -34,8 +34,6 @@ public interface KingdomCraftPlugin {
 
     String decolorify(String msg);
 
-    void reload();
-
     File getDataFolder();
 
 }

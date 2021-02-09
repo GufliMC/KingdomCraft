@@ -18,7 +18,7 @@
 package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.event.EventListener;
+import com.gufli.kingdomcraft.api.events.PlayerLoadedEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.Bukkit;
@@ -30,12 +30,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class ConnectionListener implements Listener, EventListener {
+public class ConnectionListener implements Listener {
 
     private final KingdomCraftBukkitPlugin plugin;
 
     public ConnectionListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
+        plugin.getKdc().getEventManager().addListener(com.gufli.kingdomcraft.api.events.PlayerLoginEvent.class, this::onLogin);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -67,11 +68,11 @@ public class ConnectionListener implements Listener, EventListener {
             return;
         }
         player.set("LOADED", true);
-        plugin.getKdc().getEventDispatcher().dispatchJoin(player);
+        plugin.getKdc().getEventManager().dispatch(new PlayerLoadedEvent(player));
     }
 
-    @Override
-    public void onLogin(PlatformPlayer player) {
+    public void onLogin(com.gufli.kingdomcraft.api.events.PlayerLoginEvent e) {
+        PlatformPlayer player = e.getPlayer();
         plugin.getScheduler().sync().execute(() -> {
             if ( Bukkit.getPlayer(player.getUniqueId()) == null ) {
                 return; // player is still joining
@@ -80,7 +81,7 @@ public class ConnectionListener implements Listener, EventListener {
                 return;
             }
             player.set("LOADED", true);
-            plugin.getKdc().getEventDispatcher().dispatchJoin(player);
+            plugin.getKdc().getEventManager().dispatch(new PlayerLoadedEvent(player));
         });
     }
 }

@@ -24,28 +24,59 @@ import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.domain.UserChatChannel;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.events.KingdomCreateEvent;
+import com.gufli.kingdomcraft.api.events.KingdomDeleteEvent;
+import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
+import com.gufli.kingdomcraft.api.events.PlayerLoadedEvent;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.chat.channels.BasicChatChannel;
 import com.gufli.kingdomcraft.common.chat.channels.KingdomChatChannel;
 import com.gufli.kingdomcraft.common.config.Configuration;
+import org.apache.commons.text.StringEscapeUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ChatManagerImpl implements ChatManager {
 
     private final KingdomCraftImpl kdc;
 
-    final List<ChatChannelFactory> factories = new ArrayList<>();
-    final List<ChatChannel> chatChannels = new ArrayList<>();
+    private final List<ChatChannelFactory> factories = new ArrayList<>();
+    private final List<ChatChannel> chatChannels = new ArrayList<>();
 
-    ChatChannel defaultChannel;
+    private ChatChannel defaultChannel;
 
     public ChatManagerImpl(KingdomCraftImpl kdc) {
         this.kdc = kdc;
-        kdc.getEventManager().addListener(new ChatEventListener(this));
+
+        // enable social spy on join
+        kdc.getEventManager().addListener(PlayerLoadedEvent.class, (e) -> {
+            if ( e.getPlayer().hasPermission("kingdom.socialspy") ) {
+                e.getPlayer().set("SOCIAL_SPY", true);
+            }
+        });
+
+        kdc.getEventManager().addListener(KingdomDeleteEvent.class, (e) -> {
+            getKingdomChannels(e.getKingdom()).forEach(ch -> {
+                KingdomChatChannel kch = ((KingdomChatChannel) ch);
+                kch.getKingdoms().remove(e.getKingdom());
+                if ( kch.getKingdoms().isEmpty() ) {
+                    removeChatChannel(kch);
+                }
+            });
+        });
+
+        kdc.getEventManager().addListener(KingdomCreateEvent.class, (e) -> {
+            for (ChatChannelFactory f : factories ) {
+                if ( !f.shouldCreate(e.getKingdom()) ) continue;
+                addChatChannel(f.create(e.getKingdom()));
+            }
+        });
     }
 
     @Override
@@ -132,12 +163,130 @@ public class ChatManagerImpl implements ChatManager {
         return true;
     }
 
-    //
-
     List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
         return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel)
                 .filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
     }
+
+    @Override
+    public void dispatch(PlatformPlayer player, String message) {
+        List<ChatChannel> channels = getChatChannels().stream()
+                .filter(c -> canTalk(player, c))
+                .sorted(Comparator.comparingInt(ch -> ch.getPrefix() == null ? 0 : -ch.getPrefix().length()))
+                .collect(Collectors.toList());
+
+        String strippedMessage = kdc.getPlugin().decolorify(message);
+
+        ChatChannel channel = null;
+        if (player.has("DEFAULT_CHATCHANNEL") ) {
+            channel = channels.stream().filter(ch -> ch.getName().equals(player.get("DEFAULT_CHATCHANNEL", String.class)))
+                    .findFirst().orElse(null);
+        }
+
+        for ( ChatChannel ch : channels ) {
+            if ( ch == channel ) {
+                continue;
+            }
+
+            if ( ch.getPrefix() != null && !strippedMessage.startsWith(ch.getPrefix()) ) {
+                continue;
+            }
+
+            // If the player is using a default channel, use that prefix instead to talk in the channel without prefix
+            if ( channel != null && channel.getPrefix() != null && ch.getPrefix() != null && ch.getPrefix().equals("") ) {
+                if ( strippedMessage.startsWith(channel.getPrefix()) ) {
+                    message = message.replaceFirst(Pattern.quote(channel.getPrefix()), "");
+                    channel = ch;
+                    break;
+                }
+                continue;
+            }
+
+            if ( ch.getPrefix() != null ) {
+                message = message.replaceFirst(Pattern.quote(ch.getPrefix()), "");
+            }
+            channel = ch;
+            break;
+        }
+
+        if ( channel == null ) {
+            if (getDefaultChatChannel() == null) {
+                kdc.getMessages().send(player, "chatNoChannel");
+                return;
+            }
+
+            channel = getDefaultChatChannel();
+        }
+
+        // Chat cooldown check
+        String cooldownKey = "CHAT_COOLDOWN_" + channel.getName();
+        if ( channel.getCooldown() > 0 && player.has(cooldownKey)
+                && !player.isAdmin() && !player.hasPermission("kingdom.chat.bypass.cooldown")) {
+
+            long lastMessage = player.get(cooldownKey, Long.class);
+            long diff = System.currentTimeMillis() - lastMessage;
+            if ( diff < channel.getCooldown() * 1000L) {
+                float remaining = ((channel.getCooldown() * 1000) - diff) / 1000f;
+                DecimalFormat df = new DecimalFormat("0.0");
+                kdc.getMessages().send(player, "chatChannelCooldown", df.format(remaining));
+                return;
+            }
+        }
+
+        PlayerChatEvent event = new PlayerChatEvent(player, channel, message);
+        kdc.getEventManager().dispatch(event);
+
+        if ( event.isCancelled() ) {
+            return;
+        }
+
+        dispatch(player, channel, event.getMessage());
+    }
+
+    @Override
+    public void dispatch(PlatformPlayer player, ChatChannel channel, String message) {
+        String result = channel.getFormat();
+        result = StringEscapeUtils.unescapeJava(result);
+        result = kdc.getPlaceholderManager().handle(player, result);
+        result = kdc.getMessages().colorify(result);
+
+        if ( player.hasPermission("kingdom.chat.colors") ) {
+            message = kdc.getMessages().colorify(message);
+        }
+
+        result = kdc.getPlaceholderManager().strip(result, "message", "player");
+        result = result.replace("{message}", message);
+        result = result.replace("{player}", player.getName());
+
+        String finalResult = result;
+        List<PlatformPlayer> receivers = kdc.getOnlinePlayers().stream()
+                .filter(p -> canRead(p, channel))
+                .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
+                .collect(Collectors.toList());
+
+        if ( channel.getCooldown() > 0 && !player.isAdmin() && !player.hasPermission("kingdom.chat.bypass.cooldown") ) {
+            player.set("CHAT_COOLDOWN_" + channel.getName(), System.currentTimeMillis());
+        }
+
+        if ( !receivers.contains(player) ) {
+            receivers.add(player);
+        }
+
+        for ( PlatformPlayer p : receivers ) {
+            p.sendMessage(finalResult);
+        }
+
+        kdc.getOnlinePlayers().stream()
+                .filter(p -> p.has("SOCIAL_SPY") && p.get("SOCIAL_SPY", Boolean.class))
+                .filter(p -> !receivers.contains(p))
+                .forEach(p -> {
+                    p.sendMessage(kdc.getMessages().getMessage("socialSpyPrefix") + finalResult);
+                });
+
+        System.out.println("[" + channel.getName() + "] " + player.getName() + ": " + message);
+    }
+
+    // SETUP
 
     public void load(Configuration config) {
         if ( !config.contains("enabled") || !config.getBoolean("enabled") ) {

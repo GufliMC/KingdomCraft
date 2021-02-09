@@ -75,6 +75,6 @@ public class ChatCommand extends CommandBase {
             return;
         }
 
-        kdc.getChatDispatcher().send(player, channel, msg);
+        kdc.getChatManager().dispatch(player, channel, msg);
     }
 }

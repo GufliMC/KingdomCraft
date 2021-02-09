@@ -22,7 +22,7 @@ import com.gufli.kingdomcraft.api.domain.Relation;
 import com.gufli.kingdomcraft.api.domain.RelationType;
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.events.PlayerAttackPlayerEvent;
+import com.gufli.kingdomcraft.api.events.FriendlyFireCancelEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -65,6 +65,11 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
+        // friendly fire is enabled, do nothing
+        if ( plugin.getKdc().getConfig().isFriendlyFireEnabled() ) {
+            return;
+        }
+
         PlatformPlayer p;
         if ( entity instanceof Player) {
             p = plugin.getKdc().getPlayer(entity.getUniqueId());
@@ -92,22 +97,7 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
-        PlayerAttackPlayerEvent event = new PlayerAttackPlayerEvent(p, d);
-        plugin.getKdc().getEventDispatcher().dispatchPlayerAttack(event);
-
-        if ( event.getResult() == PlayerAttackPlayerEvent.Result.DENY ) {
-            if ( damager instanceof Projectile ) {
-                damager.remove();
-            }
-
-            e.setCancelled(true);
-            return;
-        }
-
-        if ( event.getResult() == PlayerAttackPlayerEvent.Result.ALLOW ) {
-            return;
-        }
-
+        // admin bypasses
         if ( d.isAdmin() ) {
             return;
         }
@@ -126,16 +116,21 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
-        if ( plugin.getKdc().getConfig().isFriendlyFireEnabled() ) {
-            return;
-        }
-
         if ( k1 != k2 ) {
             Relation rel = plugin.getKdc().getRelation(k1, k2);
             RelationType type = rel == null ? RelationType.NEUTRAL : rel.getType();
             if ( !plugin.getKdc().getConfig().getFriendlyFireRelationTypes().contains(type) ) {
                 return;
             }
+        }
+
+        // FRIENDLY FIRE
+        FriendlyFireCancelEvent event = new FriendlyFireCancelEvent(p, d);
+        plugin.getKdc().getEventManager().dispatch(event);
+
+        // allowed = ignore, do nothing
+        if ( event.isAllowed() ) {
+            return;
         }
 
         e.setCancelled(true);

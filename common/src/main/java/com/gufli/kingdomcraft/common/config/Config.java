@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.common.config;
 
+import com.gufli.kingdomcraft.api.config.KingdomCraftConfig;
 import com.gufli.kingdomcraft.api.domain.RelationType;
 
 import java.time.ZoneId;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class KingdomCraftConfig {
+public class Config implements KingdomCraftConfig {
 
     private int teleportDelay = 0;
     private String language = "en";
@@ -161,95 +162,118 @@ public class KingdomCraftConfig {
         }
     }
 
+    @Override
     public int getTeleportDelay() {
         return teleportDelay;
     }
 
+    @Override
     public List<String> getWorlds() {
         return worlds;
     }
 
+    @Override
     public String getLanguage() {
         return language;
     }
 
+    @Override
     public ZoneId getTimeZone() {
         return timezone;
     }
 
+    @Override
     public DateTimeFormatter getDateFormat() {
         return dateFormat;
     }
 
+    @Override
     public DateTimeFormatter getTimeFormat() {
         return timeFormat;
     }
 
+    @Override
     public DateTimeFormatter getDateTimeFormat() {
         return dateTimeFormat;
     }
 
+    @Override
     public boolean isWorldEnabled(String world) {
         List<String> worlds = getWorlds();
         return worlds.isEmpty() || worlds.stream().anyMatch(s -> s.equalsIgnoreCase(world));
     }
 
+    @Override
     public List<RelationType> getFriendlyFireRelationTypes() {
         return friendlyFireRelations;
     }
 
+    @Override
     public boolean isFriendlyFireEnabled() {
         return friendlyFire;
     }
 
+    @Override
     public List<String> getOnKingdomJoinCommands() {
         return kingdomJoinCommands;
     }
 
+    @Override
     public List<String> getOnKingdomLeaveCommands() {
         return kingdomLeaveCommands;
     }
 
+    @Override
     public boolean respawnAtKingdom() {
         return respawnAtKingdom;
     }
 
+    @Override
     public String getOnJoinMessage() {
         return joinMessage;
     }
 
+    @Override
     public String getOnLeaveMessage() {
         return leaveMessage;
     }
 
+    @Override
     public String getOnDeathMessage() {
         return deathMessage;
     }
 
+    @Override
     public String getOnKillMessage() {
         return killMessage;
     }
 
+    @Override
     public String getOnKillWeaponMessage() {
         return killWeaponMessage;
     }
 
+    @Override
     public String getNoKingdomPrefix() {
         return noKingdomPrefix;
     }
 
+    @Override
     public String getNoKingdomSuffix() {
         return noKingdomSuffix;
     }
 
+    @Override
     public String getNoKingdomDisplay() {
         return noKingdomDisplay;
     }
 
+    @Override
     public boolean isChatEnabledInDisabledWorlds() {
         return isChatEnabledInDisabledWorlds;
     }
 
+    @Override
     public boolean showJoinAndLeaveKingdomOnly() {
         return showJoinAndLeaveMessagesKingdomOnly;
     }

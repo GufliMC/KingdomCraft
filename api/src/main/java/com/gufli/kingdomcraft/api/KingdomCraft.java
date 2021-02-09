@@ -18,6 +18,8 @@
 package com.gufli.kingdomcraft.api;
 
 import com.gufli.kingdomcraft.api.chat.ChatManager;
+import com.gufli.kingdomcraft.api.commands.CommandManager;
+import com.gufli.kingdomcraft.api.config.KingdomCraftConfig;
 import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.editor.Editor;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
@@ -33,11 +35,17 @@ import java.util.concurrent.CompletableFuture;
 
 public interface KingdomCraft {
 
-    // managers
+    // config
+
+    KingdomCraftConfig getConfig();
 
     Messages getMessages();
 
+    // managers
+
     EventManager getEventManager();
+
+    CommandManager getCommandManager();
 
     ChatManager getChatManager();
 

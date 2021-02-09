@@ -17,11 +17,9 @@
 
 package com.gufli.kingdomcraft.bukkit.listeners;
 
-import com.gufli.kingdomcraft.api.domain.Kingdom;
-import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.event.EventListener;
+import com.gufli.kingdomcraft.api.events.*;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.entity.Player;
@@ -29,11 +27,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.permissions.PermissionAttachment;
-import org.slf4j.event.Level;
 
 import java.util.Map;
 
-public class PermissionsListener implements Listener, EventListener {
+public class PermissionsListener implements Listener {
 
     private final static String PERMISSIONS_KEY = "permission_attachement";
 
@@ -43,7 +40,12 @@ public class PermissionsListener implements Listener, EventListener {
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        plugin.getKdc().getEventManager().addListener(this);
+
+        plugin.getKdc().getEventManager().addListener(PlayerLoadedEvent.class, this::onJoin);
+        plugin.getKdc().getEventManager().addListener(UserRankChangeEvent.class, this::onRankChange);
+        plugin.getKdc().getEventManager().addListener(UserLeaveKingdomEvent.class, this::onKingdomLeave);
+        plugin.getKdc().getEventManager().addListener(UserJoinKingdomEvent.class, this::onKingdomJoin);
+        plugin.getKdc().getEventManager().addListener(PluginReloadEvent.class, this::onReload);
 
         plugin.getKdc().getOnlinePlayers().forEach(this::update);
 
@@ -89,28 +91,23 @@ public class PermissionsListener implements Listener, EventListener {
         }
     }
 
-    @Override
-    public void onJoin(PlatformPlayer player) {
-        update(player);
+    public void onJoin(PlayerLoadedEvent e) {
+        update(e.getPlayer());
     }
 
-    @Override
-    public void onRankChange(User user, Rank oldRank) {
-        update(user);
+    public void onRankChange(UserRankChangeEvent e) {
+        update(e.getUser());
     }
 
-    @Override
-    public void onKingdomLeave(User user, Kingdom oldKingdom) {
-        update(user);
+    public void onKingdomLeave(UserLeaveKingdomEvent e) {
+        update(e.getUser());
     }
 
-    @Override
-    public void onKingdomJoin(User user) {
-        update(user);
+    public void onKingdomJoin(UserJoinKingdomEvent e) {
+        update(e.getUser());
     }
 
-    @Override
-    public void onReload() {
+    public void onReload(PluginReloadEvent e) {
         plugin.getKdc().getOnlinePlayers().forEach(this::update);
     }
 

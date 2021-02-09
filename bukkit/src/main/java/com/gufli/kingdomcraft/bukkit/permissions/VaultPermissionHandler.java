@@ -18,7 +18,6 @@ public class VaultPermissionHandler {
 
         VaultPermissionListener listener = new VaultPermissionListener(plugin, permissionProvider.getProvider());
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
-        plugin.getKdc().getEventManager().addListener(listener);
     }
 
 }

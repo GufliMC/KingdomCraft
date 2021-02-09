@@ -19,20 +19,25 @@ package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.event.EventListener;
+import com.gufli.kingdomcraft.api.events.PlayerLeaveEvent;
+import com.gufli.kingdomcraft.api.events.PlayerLoadedEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class JoinQuitListener implements Listener, EventListener {
+public class JoinQuitListener implements Listener {
 
     private final KingdomCraftBukkitPlugin plugin;
 
     public JoinQuitListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
-        plugin.getKdc().getEventManager().addListener(this);
+
+        plugin.getKdc().getEventManager().addListener(PlayerLoadedEvent.class, this::onJoin);
+        plugin.getKdc().getEventManager().addListener(PlayerLeaveEvent.class, this::onLeave);
+
+
     }
 
     // join & quit messages
@@ -55,24 +60,22 @@ public class JoinQuitListener implements Listener, EventListener {
 
     // kingdomcraft events
 
-    @Override
-    public void onJoin(PlatformPlayer player) {
+    public void onJoin(PlayerLoadedEvent e) {
         String msg = plugin.getKdc().getConfig().getOnJoinMessage();
         if ( msg == null || msg.equals("") ) {
             return;
         }
 
-        send(player, msg);
+        send(e.getPlayer(), msg);
     }
 
-    @Override
-    public void onQuit(PlatformPlayer player) {
+    public void onLeave(PlayerLeaveEvent e) {
         String msg = plugin.getKdc().getConfig().getOnLeaveMessage();
         if ( msg == null || msg.equals("")) {
             return;
         }
 
-        send(player, msg);
+        send(e.getPlayer(), msg);
     }
 
     private void send(PlatformPlayer player, String msg) {

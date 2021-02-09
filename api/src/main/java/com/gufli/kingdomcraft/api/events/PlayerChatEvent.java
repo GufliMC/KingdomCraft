@@ -20,9 +20,7 @@ package com.gufli.kingdomcraft.api.events;
 import com.gufli.kingdomcraft.api.chat.ChatChannel;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
-public class PlayerChatEvent {
-
-    private final PlatformPlayer player;
+public class PlayerChatEvent extends PlayerEvent {
 
     private final ChatChannel chatChannel;
 
@@ -31,13 +29,9 @@ public class PlayerChatEvent {
     private boolean cancelled = false;
 
     public PlayerChatEvent(PlatformPlayer player, ChatChannel channel, String message) {
-        this.player = player;
+        super(player);
         this.chatChannel = channel;
         this.message = message;
-    }
-
-    public PlatformPlayer getPlayer() {
-        return player;
     }
 
     public ChatChannel getChatChannel() {

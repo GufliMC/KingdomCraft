@@ -21,12 +21,13 @@ import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.commands.EditItemCommand;
 import com.gufli.kingdomcraft.bukkit.commands.EditItemOtherCommand;
+import com.gufli.kingdomcraft.bukkit.commands.ReloadCommand;
 import com.gufli.kingdomcraft.bukkit.commands.VersionCommand;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitSender;
 import com.gufli.kingdomcraft.bukkit.menu.InfoCommand;
 import com.gufli.kingdomcraft.bukkit.menu.MenuCommand;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
-import com.gufli.kingdomcraft.common.command.CommandManager;
+import com.gufli.kingdomcraft.common.command.CommandManagerImpl;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,7 +46,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         this.plugin = plugin;
         this.kdc = plugin.getKdc();
 
-        CommandManager cm = plugin.getKdc().getCommandManager();
+        CommandManagerImpl cm = plugin.getKdc().getCommandManager();
+        cm.addCommand(new ReloadCommand(plugin));
         cm.addCommand(new VersionCommand(plugin));
         cm.addCommand(new MenuCommand(kdc));
         cm.addCommand(new InfoCommand(kdc));
@@ -71,7 +73,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        kdc.getCommandDispatcher().execute(wrap(sender), args);
+        kdc.getCommandManager().dispatch(wrap(sender), args);
         return true;
     }
 
@@ -80,7 +82,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         if ( !(sender instanceof Player) ) {
             return null;
         }
-        return kdc.getCommandDispatcher().autocomplete(kdc.getPlayer(((Player) sender).getUniqueId()), args);
+        return kdc.getCommandManager().dispatchAutocomplete(kdc.getPlayer(((Player) sender).getUniqueId()), args);
     }
 
     private PlatformSender wrap(CommandSender sender) {

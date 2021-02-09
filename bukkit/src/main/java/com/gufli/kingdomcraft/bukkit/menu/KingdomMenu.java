@@ -326,7 +326,7 @@ public class KingdomMenu {
                         if ( ct == InventoryClickType.RIGHT ) {
                             if ( player.hasPermission("kingdom.setspawn.other") ) {
                                 openConfirmMenu(player, text("menuChangeKingdomSpawnOtherConfirmTitle", target.getName()), () -> {
-                                    kdc.getCommandDispatcher().execute(player, new String[]{"setspawn", target.getName()});
+                                    kdc.getCommandManager().dispatch(player, new String[]{"setspawn", target.getName()});
                                     openKingdomInfo(player, target, back);
                                 }, () -> {
                                     openKingdomInfo(player, target, back);
@@ -335,7 +335,7 @@ public class KingdomMenu {
                             }
                             else if ( player.hasPermission("kingdom.setspawn") && player.getUser().getKingdom() == target ) {
                                 openConfirmMenu(player, text("menuChangeKingdomSpawnConfirmTitle"), () -> {
-                                    kdc.getCommandDispatcher().execute(player, new String[]{"setspawn"});
+                                    kdc.getCommandManager().dispatch(player, new String[]{"setspawn"});
                                     openKingdomInfo(player, target, back);
                                 }, () -> {
                                     openKingdomInfo(player, target, back);
@@ -349,12 +349,12 @@ public class KingdomMenu {
                         }
 
                         if ( target.getSpawn() != null && player.hasPermission("kingdom.spawn.other") ) {
-                            kdc.getCommandDispatcher().execute(player, new String[]{"spawn", target.getName()});
+                            kdc.getCommandManager().dispatch(player, new String[]{"spawn", target.getName()});
                             return true;
                         }
 
                         if ( player.hasPermission("kingdom.spawn") && player.getUser().getKingdom() == target ) {
-                            kdc.getCommandDispatcher().execute(player, new String[]{"spawn"});
+                            kdc.getCommandManager().dispatch(player, new String[]{"spawn"});
                             return true;
                         }
                         return false;
@@ -395,9 +395,9 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuKingdomEditRenameQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"rename", value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"rename", value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"rename", target.getName(), value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"rename", target.getName(), value});
                             }
                             openKingdomEdit(player, target, back);
                         }, () -> openKingdomEdit(player, target, back));
@@ -416,9 +416,9 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuKingdomEditChangeDisplayQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"edit", "display", value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"edit", "display", value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"edit", "display", target.getName(), value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"edit", "display", target.getName(), value});
                             }
                             openKingdomEdit(player, target, back);
                         }, () -> openKingdomEdit(player, target, back));
@@ -437,9 +437,9 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuKingdomEditChangePrefixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"edit", "prefix", value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"edit", "prefix", value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"edit", "prefix", target.getName(), value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"edit", "prefix", target.getName(), value});
                             }
                             openKingdomEdit(player, target, back);
                         }, () -> openKingdomEdit(player, target, back));
@@ -458,9 +458,9 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuKingdomEditChangeSuffixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target) {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"edit", "suffix", value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"edit", "suffix", value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player, new String[]{"edit", "suffix", target.getName(), value});
+                                kdc.getCommandManager().dispatch(player, new String[]{"edit", "suffix", target.getName(), value});
                             }
                             openKingdomEdit(player, target, back);
                         }, () -> openKingdomEdit(player, target, back));
@@ -667,10 +667,10 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuRankEditRenameQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "rename", target.getName(), value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "rename", target.getKingdom().getName(), target.getName(), value});
                             }
                             openRankEdit(player, target, back);
@@ -690,10 +690,10 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuRankEditChangeDisplayQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "edit", "display", target.getName(), value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "edit", "display", target.getKingdom().getName(), target.getName(), value});
                             }
                             openRankEdit(player, target, back);
@@ -713,10 +713,10 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuRankEditChangePrefixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "edit", "prefix", target.getName(), value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "edit", "prefix", target.getKingdom().getName(), target.getName(), value});
                             }
                             openRankEdit(player, target, back);
@@ -736,10 +736,10 @@ public class KingdomMenu {
                         kdc.getMessages().send(player, "menuRankEditChangeSuffixQuery");
                         startChatQuery(player, (value) -> {
                             if (player.getUser().getKingdom() == target.getKingdom()) {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "edit", "suffix", target.getName(), value});
                             } else {
-                                kdc.getCommandDispatcher().execute(player,
+                                kdc.getCommandManager().dispatch(player,
                                         new String[]{"ranks", "edit", "suffix", target.getKingdom().getName(), target.getName(), value});
                             }
                             openRankEdit(player, target, back);
@@ -768,10 +768,10 @@ public class KingdomMenu {
                         }
 
                         if (player.getUser().getKingdom() == target.getKingdom()) {
-                            kdc.getCommandDispatcher().execute(player,
+                            kdc.getCommandManager().dispatch(player,
                                     new String[]{"ranks", "edit", "max-members", target.getName(), mm + ""});
                         } else {
-                            kdc.getCommandDispatcher().execute(player,
+                            kdc.getCommandManager().dispatch(player,
                                     new String[]{"ranks", "edit", "max-members", target.getKingdom().getName(), target.getName(), mm + ""});
                         }
                         openRankEdit(player, target, back);
@@ -799,10 +799,10 @@ public class KingdomMenu {
                         }
 
                         if (player.getUser().getKingdom() == target.getKingdom()) {
-                            kdc.getCommandDispatcher().execute(player,
+                            kdc.getCommandManager().dispatch(player,
                                     new String[]{"ranks", "edit", "level", target.getName(), level + ""});
                         } else {
-                            kdc.getCommandDispatcher().execute(player,
+                            kdc.getCommandManager().dispatch(player,
                                     new String[]{"ranks", "edit", "level", target.getKingdom().getName(), target.getName(), level + ""});
                         }
                         openRankEdit(player, target, back);
@@ -918,7 +918,7 @@ public class KingdomMenu {
                                 })
                                 .build(),
                         (p, ct) -> {
-                            kdc.getCommandDispatcher().execute(player, new String[]{"ally", kingdom.getName()});
+                            kdc.getCommandManager().dispatch(player, new String[]{"ally", kingdom.getName()});
                             openKingdomRelationSelect(player, kingdom, back);
                         }
                 );
@@ -933,7 +933,7 @@ public class KingdomMenu {
                             })
                             .build(),
                     (p, ct) -> {
-                        kdc.getCommandDispatcher().execute(player, new String[]{"enemy", kingdom.getName()});
+                        kdc.getCommandManager().dispatch(player, new String[]{"enemy", kingdom.getName()});
                         openKingdomRelationSelect(player, kingdom, back);
                     }
             );
@@ -958,7 +958,7 @@ public class KingdomMenu {
                                 })
                                 .build(),
                         (p, ct) -> {
-                            kdc.getCommandDispatcher().execute(player, new String[]{"truce", kingdom.getName()});
+                            kdc.getCommandManager().dispatch(player, new String[]{"truce", kingdom.getName()});
                             openKingdomRelationSelect(player, kingdom, back);
                         }
                 );
@@ -987,7 +987,7 @@ public class KingdomMenu {
                                 })
                                 .build(),
                         (p, ct) -> {
-                            kdc.getCommandDispatcher().execute(player, new String[]{"neutral", kingdom.getName()});
+                            kdc.getCommandManager().dispatch(player, new String[]{"neutral", kingdom.getName()});
                             openKingdomRelationSelect(player, kingdom, back);
                         }
                 );

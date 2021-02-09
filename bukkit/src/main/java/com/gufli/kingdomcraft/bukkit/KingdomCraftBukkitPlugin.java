@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.bukkit;
 
+import com.gufli.kingdomcraft.api.events.PluginReloadEvent;
 import com.gufli.kingdomcraft.bukkit.command.CommandHandler;
 import com.gufli.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
@@ -33,6 +34,11 @@ import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
 import com.gufli.kingdomcraft.common.config.Configuration;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.scheduler.AbstractScheduler;
+import io.avaje.classpath.scanner.Resource;
+import io.avaje.classpath.scanner.core.Scanner;
+import io.ebean.migration.runner.LocalMigrationResources;
+import io.ebeaninternal.server.lib.Str;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,11 +51,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.impl.SimpleLogger;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
 public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraftPlugin {
@@ -184,7 +190,6 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		ConnectionListener cl = new ConnectionListener(this);
 		pm.registerEvents(cl, this);
-		kdc.getEventManager().addListener(cl);
 
 		// chat
 		if ( chatConfig.contains("enabled") && chatConfig.getBoolean("enabled") ) {
@@ -237,12 +242,13 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		this.getPluginLoader().disablePlugin(this);
 	}
 
-	@Override
 	public void reload() {
 		ConfigurationSection config = initConfig("config.yml");
 		if ( config != null && config.contains("settings") ) {
-			ConfigurationSection pluginConfig = config.getConfigurationSection("settings");
-			kdc.getConfig().load(new BukkitConfiguration(pluginConfig));
+			config = config.getConfigurationSection("settings");
+
+			kdc.getConfig().load(new BukkitConfiguration(config));
+			loadMessages(config.getString("language"));
 		} else {
 			log("An error occured, cannot reload config.yml", Level.WARNING);
 		}
@@ -269,7 +275,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 					kdc.onQuit(p);
 				});
 
-		kdc.getEventDispatcher().dispatchReload();
+		kdc.getEventManager().dispatch(new PluginReloadEvent());
 	}
 
 	private ConfigurationSection initConfig(String name) {
@@ -289,26 +295,71 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		return config;
 	}
 
+	private final static String[] defaultLanguages = new String[] { "en", "nl" };
+
 	private void loadMessages(String language) {
-		InputStream in = getResource("languages/" + language + ".yml");
-		if ( in == null ) {
-			in = getResource("languages/en.yml");
+		File directory = new File(getDataFolder(), "languages");
+		if ( !directory.exists() ) {
+			directory.mkdirs();
+		}
+
+		for ( String lang : defaultLanguages ) {
+			File outFile = new File(directory, lang + ".yml");
+			if ( !outFile.exists() ) {
+				URL inurl = getClassLoader().getResource("languages/" + lang + ".yml");
+				try (
+						InputStream in = inurl.openStream();
+						OutputStream out = new FileOutputStream(outFile)
+				){
+
+					byte[] buf = new byte[1024];
+					int len;
+					while ((len = in.read(buf)) > 0) {
+						out.write(buf, 0, len);
+					}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 
 		try {
-			YamlConfiguration fallbackMessages = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
-			kdc.getMessages().setFallback(new BukkitConfiguration(fallbackMessages));
-		} catch (Exception ex) {
-			System.out.println("Unable to load internal language file!");
-			throw ex;
-		}
-
-		try {
-			YamlConfiguration messages = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "/languages/" + language + ".yml"));
+			YamlConfiguration messages = YamlConfiguration.loadConfiguration(new File(directory, language + ".yml"));
 			kdc.getMessages().setMessages(new BukkitConfiguration(messages));
 		} catch (Exception ex) {
 			System.out.println("Unable load custom language file.");
-			throw ex;
+			ex.printStackTrace();
+		}
+
+		InputStream fallback = null;
+		try {
+			File file = new File(directory, language + ".yml");
+			if ( file.exists() ) {
+				System.out.println("abc");
+				fallback = new FileInputStream(file);
+			} else {
+				fallback = getClassLoader().getResource("languages/en.yml").openStream();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if ( fallback == null ) {
+			return;
+		}
+
+		try {
+			YamlConfiguration fallbackMessages = YamlConfiguration.loadConfiguration(new InputStreamReader(fallback, StandardCharsets.UTF_8));
+			kdc.getMessages().setFallback(new BukkitConfiguration(fallbackMessages));
+		} catch (Exception ex) {
+			System.out.println("Unable to load fallback language file!");
+			ex.printStackTrace();
+		} finally {
+			try {
+				fallback.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

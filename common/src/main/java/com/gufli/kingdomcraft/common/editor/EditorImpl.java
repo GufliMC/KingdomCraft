@@ -28,6 +28,7 @@ import com.gufli.kingdomcraft.api.domain.Model;
 import com.gufli.kingdomcraft.api.editor.Editor;
 import com.gufli.kingdomcraft.api.editor.EditorAttribute;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
+import com.gufli.kingdomcraft.api.events.EditorSaveEvent;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.EntityBuilder;
@@ -158,7 +159,7 @@ public class EditorImpl implements Editor {
                 deserializer.deserialize(kingdom, kingdoms.get(key));
             }
 
-            kdc.getPlugin().reload();
+            kdc.getEventManager().dispatch(new EditorSaveEvent());
 
             kdc.getMessages().send(sender, "cmdEditorSaved");
         } catch (Exception ex) {

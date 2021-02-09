@@ -19,35 +19,26 @@ package com.gufli.kingdomcraft.api.events;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
-public class PlayerAttackPlayerEvent {
+public class FriendlyFireCancelEvent extends PlayerEvent {
 
-    private final PlatformPlayer player;
     private final PlatformPlayer attacker;
 
-    private Result result = Result.NEUTRAL;
+    private boolean allowed = false;
 
-    public PlayerAttackPlayerEvent(PlatformPlayer player, PlatformPlayer attacker) {
-        this.player = player;
+    public FriendlyFireCancelEvent(PlatformPlayer player, PlatformPlayer attacker) {
+        super(player);
         this.attacker = attacker;
-    }
-
-    public PlatformPlayer getPlayer() {
-        return player;
     }
 
     public PlatformPlayer getAttacker() {
         return attacker;
     }
 
-    public Result getResult() {
-        return result;
+    public boolean isAllowed() {
+        return allowed;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
-    }
-
-    public enum Result {
-        ALLOW, DENY, NEUTRAL;
+    public void setAllowed(boolean allowed) {
+        this.allowed = allowed;
     }
 }

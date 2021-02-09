@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.common.command;
 
+import com.gufli.kingdomcraft.api.commands.Command;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
@@ -24,79 +25,23 @@ import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommandBase  {
+public abstract class CommandBase extends Command {
 
     protected final KingdomCraftImpl kdc;
 
-    private final List<String> commands = new ArrayList<>();
-
-    private boolean isPlayerOnly;
-    private int expectedArguments = -1;
-
-    private String argumentsHint;
-    private String explanationMessage;
-
-    private String[] permissions;
-
     public CommandBase(KingdomCraftImpl kdc, String command) {
+        super(command);
         this.kdc = kdc;
-        this.commands.add(command);
     }
 
     public CommandBase(KingdomCraftImpl kdc, String command, int expectedArguments) {
-        this(kdc, command);
-        this.expectedArguments = expectedArguments;
+        super(command, expectedArguments);
+        this.kdc = kdc;
     }
 
     public CommandBase(KingdomCraftImpl kdc, String command, int expectedArguments, boolean isPlayerOnly) {
-        this(kdc, command, expectedArguments);
-        this.isPlayerOnly = isPlayerOnly;
+        super(command, expectedArguments, isPlayerOnly);
+        this.kdc = kdc;
     }
 
-
-    protected void addCommand(String alias) {
-        commands.add(alias);
-    }
-
-    public boolean isPlayerOnly() {
-        return isPlayerOnly;
-    }
-
-    public int getExpectedArguments() {
-        return expectedArguments;
-    }
-
-    public String getArgumentsHint() {
-        return argumentsHint;
-    }
-
-    protected void setArgumentsHint(String argumentsHint) {
-        this.argumentsHint = argumentsHint;
-    }
-
-    public String getExplanationMessage() {
-        return explanationMessage;
-    }
-
-    protected void setExplanationMessage(String explanationMessage) {
-        this.explanationMessage = explanationMessage;
-    }
-
-    public String[] getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(String... permissions) {
-        this.permissions = permissions;
-    }
-
-    public List<String> getCommands() {
-        return commands;
-    }
-
-    public abstract void execute(PlatformSender sender, String[] args);
-    
-    public List<String> autocomplete(PlatformPlayer player, String[] args) {
-        return null;
-    }
 }
