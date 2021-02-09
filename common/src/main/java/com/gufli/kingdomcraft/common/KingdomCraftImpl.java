@@ -190,9 +190,6 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     @Override
     public Kingdom getKingdom(long id) {
-        if ( id == -1 ) {
-            return getTemplateKingdom();
-        }
         return context.getKingdom(id);
     }
 
