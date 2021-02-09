@@ -17,6 +17,7 @@ public class MessagesLoader {
             File outFile = new File(directory, lang + ".yml");
             if ( !outFile.exists() ) {
                 URL inurl = classLoader.getResource("languages/" + lang + ".yml");
+                if ( inurl == null ) continue;
                 try (
                         InputStream in = inurl.openStream();
                         OutputStream out = new FileOutputStream(outFile)
@@ -38,7 +39,6 @@ public class MessagesLoader {
             messages.setMessages(new BukkitConfiguration(config));
         } catch (Exception ex) {
             System.out.println("Unable load custom language file.");
-            ex.printStackTrace();
         }
 
         InputStream fallback = null;

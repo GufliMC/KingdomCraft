@@ -70,9 +70,7 @@ public class Reflection {
 	}
 	
 	public static String getVersion() {
-		String name = Bukkit.getServer().getClass().getPackage().getName();
-		String version = name.substring(name.lastIndexOf('.') + 1) + ".";
-		return version;
+		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1).replace("_", ".");
 	}
 
 	public static Object getHandle(Object obj) {
