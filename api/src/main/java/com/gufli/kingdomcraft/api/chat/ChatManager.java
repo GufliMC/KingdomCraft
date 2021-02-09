@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 
 public interface ChatManager {
 
+    boolean isEnabled();
+
     List<ChatChannel> getChatChannels();
 
     ChatChannel getChatChannel(String name);

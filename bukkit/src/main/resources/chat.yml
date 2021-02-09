@@ -1,13 +1,18 @@
 
+# Enable or disable the chat system with channels here
 enabled: true
 
+# Players without a kingdom will talk in this channel by default without using a prefix
+default-channel: 'public'
+
+# Create, remove or change chat channels here
 channels:
+
   public:
     format: '&7[&6P&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{player}&a: &f{message}'
     prefix: '!'
     cooldown: 5 # Cooldown in seconds
     toggleable: false
-    default: true # players without kingdom will talk in this channel by default
 
   kingdom:
     prefix: ''

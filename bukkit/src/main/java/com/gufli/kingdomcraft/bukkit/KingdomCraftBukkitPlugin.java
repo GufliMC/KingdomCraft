@@ -64,6 +64,8 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 	private final BukkitScheduler scheduler;
 
+	//
+
 	public KingdomCraftBukkitPlugin() {
 		this.scheduler = new BukkitScheduler(this);
 	}
@@ -110,7 +112,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 			return;
 		}
 
-		// item serializer
+		// item serializer for saving itemstacks in database, must be loaded before ebean initialization
 		new BukkitItemSerializer();
 
 		// For some reason, required ebean classes are not in the classpath of the current classloader.
@@ -138,39 +140,15 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// revert class loader to original
 		Thread.currentThread().setContextClassLoader(originalContextClassLoader);
 
-		// load plugin config
-		Configuration pluginConfig = new BukkitConfiguration(config.getConfigurationSection("settings"));
-
-		// load chat config
-		ConfigurationSection chatConfig = initConfig("chat.yml");
-		if ( chatConfig == null ) {
-			log("Cannot load chat.yml. Shutting down plugin.", Level.SEVERE);
-			disable();
-			return;
-		}
-
-		// load permissions config
-		ConfigurationSection permissionsConfig = initConfig("permissions.yml");
-		if ( permissionsConfig == null ) {
-			log("Cannot load permissions.yml. Shutting down plugin.", Level.SEVERE);
-			disable();
-			return;
-		}
-
 		this.kdc = new KingdomCraftImpl(this, context);
 
-		// Initialize config files
-		this.kdc.getConfig().load(pluginConfig);
-		this.kdc.getChatManager().load(new BukkitConfiguration(chatConfig));
-		this.kdc.getPermissionManager().load(new BukkitConfiguration(permissionsConfig));
+		// Load configurations
+		load();
 
 		// Load online players
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
 			this.kdc.onLoad(new BukkitPlayer(p));
 		}
-
-		// initialize messages
-		loadMessages(pluginConfig.getString("language"));
 
 		// commands
 		CommandHandler commandHandler = new CommandHandler(this);
@@ -187,27 +165,19 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		pm.registerEvents(new InventoryListener(this), this);
 		pm.registerEvents(new PermissionsListener(this), this);
 		pm.registerEvents(new MoveListener(this), this);
-
-		ConnectionListener cl = new ConnectionListener(this);
-		pm.registerEvents(cl, this);
-
-		// chat
-		if ( chatConfig.contains("enabled") && chatConfig.getBoolean("enabled") ) {
-			pm.registerEvents(new ChatListener(this), this);
-		}
+		pm.registerEvents(new ChatListener(this), this);
+		pm.registerEvents(new ConnectionListener(this), this);
+		pm.registerEvents(new MenuChatListener(this), this);
 
 		// vault permissions hook
 		new VaultPermissionHandler(this);
 
-		// kingdom events
+		// kingdom join & quit messages
 		new KingdomJoinQuitListener(this);
 
-		// placeholders
+		// internal placeholders system
 		new PlaceholderReplacer(this);
 		new VaultPlaceholderReplacer(this);
-
-		// menu chat callback
-		pm.registerEvents(new MenuChatListener(this), this);
 
 		// bStats
 		Metrics metrics = new Metrics(this, 10101);
@@ -242,7 +212,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		this.getPluginLoader().disablePlugin(this);
 	}
 
-	public void reload() {
+	public void load() {
 		ConfigurationSection config = initConfig("config.yml");
 		if ( config != null && config.contains("settings") ) {
 			config = config.getConfigurationSection("settings");
@@ -250,21 +220,24 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 			kdc.getConfig().load(new BukkitConfiguration(config));
 			loadMessages(config.getString("language"));
 		} else {
-			log("An error occured, cannot reload config.yml", Level.WARNING);
+			log("An error occured, cannot load config.yml", Level.WARNING);
+			kdc.getChatManager().load(getConfigResource("config.yml"));
 		}
 
 		ConfigurationSection permissionsConfig = initConfig("permissions.yml");
 		if ( permissionsConfig != null ) {
 			kdc.getPermissionManager().load(new BukkitConfiguration(permissionsConfig));
 		} else {
-			log("An error occured, cannot reload permissions.yml", Level.WARNING);
+			log("An error occured, cannot load permissions.yml", Level.WARNING);
+			kdc.getChatManager().load(getConfigResource("permissions.yml"));
 		}
 
 		ConfigurationSection chatConfig = initConfig("chat.yml");
 		if ( chatConfig != null ) {
 			kdc.getChatManager().load(new BukkitConfiguration(chatConfig));
 		} else {
-			log("An error occured, cannot reload chat.yml", Level.WARNING);
+			log("An error occured, cannot load chat.yml", Level.WARNING);
+			kdc.getChatManager().load(getConfigResource("chat.yml"));
 		}
 
 		// remove players that shouldnt be online
@@ -276,6 +249,10 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 				});
 
 		kdc.getEventManager().dispatch(new PluginReloadEvent());
+	}
+
+	private Configuration getConfigResource(String filename) {
+		return new BukkitConfiguration(YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(filename), StandardCharsets.UTF_8)));
 	}
 
 	private ConfigurationSection initConfig(String name) {
@@ -295,72 +272,13 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		return config;
 	}
 
-	private final static String[] defaultLanguages = new String[] { "en", "nl" };
-
 	private void loadMessages(String language) {
 		File directory = new File(getDataFolder(), "languages");
 		if ( !directory.exists() ) {
 			directory.mkdirs();
 		}
 
-		for ( String lang : defaultLanguages ) {
-			File outFile = new File(directory, lang + ".yml");
-			if ( !outFile.exists() ) {
-				URL inurl = getClassLoader().getResource("languages/" + lang + ".yml");
-				try (
-						InputStream in = inurl.openStream();
-						OutputStream out = new FileOutputStream(outFile)
-				){
-
-					byte[] buf = new byte[1024];
-					int len;
-					while ((len = in.read(buf)) > 0) {
-						out.write(buf, 0, len);
-					}
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-
-		try {
-			YamlConfiguration messages = YamlConfiguration.loadConfiguration(new File(directory, language + ".yml"));
-			kdc.getMessages().setMessages(new BukkitConfiguration(messages));
-		} catch (Exception ex) {
-			System.out.println("Unable load custom language file.");
-			ex.printStackTrace();
-		}
-
-		InputStream fallback = null;
-		try {
-			File file = new File(directory, language + ".yml");
-			if ( file.exists() ) {
-				System.out.println("abc");
-				fallback = new FileInputStream(file);
-			} else {
-				fallback = getClassLoader().getResource("languages/en.yml").openStream();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if ( fallback == null ) {
-			return;
-		}
-
-		try {
-			YamlConfiguration fallbackMessages = YamlConfiguration.loadConfiguration(new InputStreamReader(fallback, StandardCharsets.UTF_8));
-			kdc.getMessages().setFallback(new BukkitConfiguration(fallbackMessages));
-		} catch (Exception ex) {
-			System.out.println("Unable to load fallback language file!");
-			ex.printStackTrace();
-		} finally {
-			try {
-				fallback.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		MessagesLoader.load(kdc.getMessages(), getClassLoader(), directory, language);
 	}
 
 }

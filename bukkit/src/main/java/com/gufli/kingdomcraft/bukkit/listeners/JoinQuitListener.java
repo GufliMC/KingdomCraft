@@ -36,8 +36,6 @@ public class JoinQuitListener implements Listener {
 
         plugin.getKdc().getEventManager().addListener(PlayerLoadedEvent.class, this::onJoin);
         plugin.getKdc().getEventManager().addListener(PlayerLeaveEvent.class, this::onLeave);
-
-
     }
 
     // join & quit messages

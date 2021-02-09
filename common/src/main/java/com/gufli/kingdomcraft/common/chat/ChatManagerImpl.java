@@ -51,6 +51,8 @@ public class ChatManagerImpl implements ChatManager {
 
     private ChatChannel defaultChannel;
 
+    private boolean enabled;
+
     public ChatManagerImpl(KingdomCraftImpl kdc) {
         this.kdc = kdc;
 
@@ -77,6 +79,10 @@ public class ChatManagerImpl implements ChatManager {
                 addChatChannel(f.create(e.getKingdom()));
             }
         });
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override
@@ -289,7 +295,9 @@ public class ChatManagerImpl implements ChatManager {
     // SETUP
 
     public void load(Configuration config) {
-        if ( !config.contains("enabled") || !config.getBoolean("enabled") ) {
+        enabled = config.contains("enabled") && config.getBoolean("enabled");
+
+        if ( !enabled ) {
             return;
         }
 
@@ -299,6 +307,8 @@ public class ChatManagerImpl implements ChatManager {
 
         factories.clear();
         chatChannels.clear();
+
+        String defaultchannel = config.getString("default-channel");
 
         Configuration channels = config.getConfigurationSection("channels");
         for ( String name : channels.getKeys(false) ) {
@@ -320,6 +330,13 @@ public class ChatManagerImpl implements ChatManager {
                 if ( cs.contains("default") && cs.getBoolean("default") ) {
                     setDefaultChatChannel(ch);
                 }
+            }
+        }
+
+        if ( defaultchannel != null ) {
+            ChatChannel ch = getChatChannel(defaultchannel);
+            if ( ch != null ) {
+                setDefaultChatChannel(ch);
             }
         }
     }

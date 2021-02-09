@@ -35,6 +35,10 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
+        if ( !plugin.getKdc().getChatManager().isEnabled() ) {
+            return;
+        }
+
         World world = event.getPlayer().getWorld();
         if ( !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) && !plugin.getKdc().getConfig().isChatEnabledInDisabledWorlds() ) {
             return;
