@@ -4,9 +4,7 @@ import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.gui.InventoryClickType;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
-import com.gufli.kingdomcraft.bukkit.gui.BukkitInventory;
-import com.gufli.kingdomcraft.bukkit.gui.InventoryBuilder;
-import com.gufli.kingdomcraft.bukkit.gui.ItemStackBuilder;
+import com.gufli.kingdomcraft.bukkit.gui.*;
 import com.gufli.kingdomcraft.bukkit.item.BukkitItem;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import org.bukkit.Bukkit;
@@ -56,6 +54,19 @@ public class KingdomMenu {
         }
     }
 
+    static void withBack(PaginationBuilder builder, Runnable back) {
+        if (back != null) {
+            builder.withHotbarItem(4, ItemStackBuilder.of(Material.BARRIER)
+                            .withName(ChatColor.RED + "Back")
+                            .build(),
+                    (p, ct) -> {
+                        back.run();
+                        return true;
+                    }
+            );
+        }
+    }
+
     // Main Menu
 
     public static void open(PlatformPlayer player) {
@@ -85,22 +96,23 @@ public class KingdomMenu {
                 }
         );
 
-        player.openInventory(builder.buildS());
+        player.openInventory(builder.build());
     }
 
     // Kingdoms list
 
     static void openKingdomsList(PlatformPlayer player, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuPlayersListTitle"));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuPlayersListTitle"));
 
-        for (Kingdom kingdom : kdc.getKingdoms()) {
-            builder.withItem(getKingdomItem(kingdom),
+        List<Kingdom> kingdoms = new ArrayList<>(kdc.getKingdoms());
+        builder.withItems(kingdoms.size(), index -> {
+            Kingdom kingdom = kingdoms.get(index);
+            return new BukkitInventoryItem(getKingdomItem(kingdom),
                     (p, ct) -> {
                         openKingdomInfo(player, kingdom, () -> openKingdomsList(player, back));
                         return true;
-                    }
-            );
-        }
+                    });
+        });
 
         withBack(builder, back);
         player.openInventory(builder.build());
@@ -109,27 +121,23 @@ public class KingdomMenu {
     // Players list
 
     static void openPlayerList(PlatformPlayer player, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuPlayersListTitle"));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuPlayersListTitle"));
 
-        kdc.getPlugin().getScheduler().async().execute(() -> {
-            for (User user : kdc.getOnlineUsers()) {
-                builder.withItem(ItemStackBuilder.skull()
-                                .withName(ChatColor.GREEN + user.getName())
-                                .withSkullOwner(Bukkit.getPlayer(user.getUniqueId()))
-                                .build(),
-                        (p, ct) -> {
-                            openPlayerInfo(player, user, () -> openPlayerList(player, back));
-                        }
-                );
-            }
-
-            withBack(builder, back);
-
-            BukkitInventory inv = builder.build();
-            kdc.getPlugin().getScheduler().sync().execute(() -> {
-                player.openInventory(inv);
-            });
+        List<User> users = new ArrayList<>(kdc.getOnlineUsers());
+        builder.withItems(users.size(), index -> {
+            User user = users.get(index);
+            return new BukkitInventoryItem(ItemStackBuilder.skull()
+                    .withName(ChatColor.GREEN + user.getName())
+                    .withSkullOwner(Bukkit.getPlayer(user.getUniqueId()))
+                    .build(),
+                    (p, ct) -> {
+                        openPlayerInfo(player, user, () -> openPlayerList(player, back));
+                        return true;
+                    });
         });
+
+        withBack(builder, back);
+        builder.buildAsync(player, kdc.getPlugin().getScheduler().sync(), kdc.getPlugin().getScheduler().async());
     }
 
     // Player info
@@ -250,7 +258,7 @@ public class KingdomMenu {
 
             withBack(builder, back);
 
-            BukkitInventory inv = builder.buildS();
+            BukkitInventory inv = builder.build();
             kdc.getPlugin().getScheduler().sync().execute(() -> {
                 player.openInventory(inv);
             });
@@ -283,7 +291,7 @@ public class KingdomMenu {
             );
         }
 
-        builder.withItem(ItemStackBuilder.of(Material.GOLD_CHESTPLATE)
+        builder.withItem(ItemStackBuilder.of("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE")
                         .withName(text("menuKingdomInfoItemRelations"))
                         .withLore(text("menuKingdomInfoItemLoreRelations"))
                         .build(),
@@ -363,7 +371,7 @@ public class KingdomMenu {
         }
 
         withBack(builder, back);
-        player.openInventory(builder.buildS());
+        player.openInventory(builder.build());
     }
 
     // Kingdom edit
@@ -501,7 +509,7 @@ public class KingdomMenu {
         // Invite only
         if (player.hasPermission("kingdom.edit.invite-only.other")
                 || (player.hasPermission("kingdom.edit.invite-only") && player.getUser().getKingdom() == target)) {
-            builder.withItem(ItemStackBuilder.of(Material.EYE_OF_ENDER)
+            builder.withItem(ItemStackBuilder.of("ENDER_EYE", "EYE_OF_ENDER")
                             .withName(ChatColor.YELLOW + "Toggle Invite Only")
                             .withLore(text("menuKingdomEditItemLoreToggleInviteOnly", target.isInviteOnly() + "").split("\n"))
                             .build(),
@@ -517,7 +525,7 @@ public class KingdomMenu {
         }
 
         withBack(builder, back);
-        player.openInventory(builder.buildS());
+        player.openInventory(builder.build());
         return true;
     }
 
@@ -537,7 +545,7 @@ public class KingdomMenu {
     }
 
     static void openKingdomSelectItem(PlatformPlayer player, Kingdom target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuKingdomChangeItemTitle"));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuKingdomChangeItemTitle"));
 
         Map<ItemStack, String> items = new LinkedHashMap<>();
 
@@ -581,16 +589,19 @@ public class KingdomMenu {
         items.put(ItemStackBuilder.of("CRAFTING_TABLE", "WORKBENCH").build(), "Crafting Table");
         items.put(ItemStackBuilder.of(Material.JUKEBOX).build(), "Jukebox");
 
-
+        List<ItemStack> items2 = new ArrayList<>();
         for (ItemStack item : items.keySet()) {
-            builder.withItem(ItemStackBuilder.of(item.clone())
+            items2.add(ItemStackBuilder.of(item.clone())
                     .withName(ChatColor.YELLOW + items.get(item))
-                    .build(), (p, ct) -> {
-                target.setItem(new BukkitItem(item));
-                kdc.saveAsync(target);
-                back.run();
-            });
+                    .build());
         }
+
+        builder.withItems(items2.size(), index -> new BukkitInventoryItem(items2.get(index), (p, ct) -> {
+            target.setItem(new BukkitItem(items2.get(index)));
+            kdc.saveAsync(target);
+            back.run();
+            return true;
+        }));
 
         withBack(builder, back);
         player.openInventory(builder.build());
@@ -599,7 +610,7 @@ public class KingdomMenu {
     // Kingdom player list
 
     static void openKingdomMembersList(PlatformPlayer player, Kingdom target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuKingdomMembersListTitle", target.getName()));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuKingdomMembersListTitle", target.getName()));
 
         kdc.getPlugin().getScheduler().async().execute(() -> {
             Map<UUID, String> members = target.getMembers();
@@ -608,47 +619,51 @@ public class KingdomMenu {
                     .sorted(Comparator.comparing(uuid -> kdc.getPlayer(uuid) != null))
                     .collect(Collectors.toList());
 
-            for (UUID uuid : sorted) {
+            builder.withItems(sorted.size(), index -> {
+                UUID uuid = sorted.get(index);
                 String name = members.get(uuid);
                 boolean isOnline = kdc.getPlayer(uuid) != null;
 
-                builder.withItem(ItemStackBuilder.skull()
-                                .withName(isOnline ? ChatColor.GREEN + name : ChatColor.GRAY + name)
-                                .apply(isOnline, (b) -> b.withSkullOwner(Bukkit.getPlayer(uuid)))
-                                .build(),
+                return new BukkitInventoryItem(ItemStackBuilder.skull()
+                        .withName(isOnline ? ChatColor.GREEN + name : ChatColor.GRAY + name)
+                        .apply(isOnline, (b) -> b.withSkullOwner(Bukkit.getPlayer(uuid)))
+                        .build(),
                         (p, ct) -> {
-                            kdc.getUser(uuid).thenAccept((u) -> {
-                                kdc.getPlugin().getScheduler().sync().execute(() -> {
-                                    openPlayerInfo(player, u, () -> openKingdomMembersList(player, target, back));
-                                });
-                            });
-                            return true;
-                        }
-                );
-            }
+                    kdc.getUser(uuid).thenAccept((u) -> {
+                        kdc.getPlugin().getScheduler().sync().execute(() -> {
+                            openPlayerInfo(player, u, () -> openKingdomMembersList(player, target, back));
+                        });
+                    });
+                    return true;
+                });
+            });
 
             withBack(builder, back);
             kdc.getPlugin().getScheduler().sync().execute(() ->
-                    player.openInventory(builder.buildS()));
+                    player.openInventory(builder.build()));
         });
     }
 
     // Rank list
 
     static void openKingdomRanksList(PlatformPlayer player, Kingdom target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuKingdomRanksListTitle", target.getName()));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuKingdomRanksListTitle", target.getName()));
 
-        for (Rank rank : target.getRanks()) {
-            builder.withItem(ItemStackBuilder.of(getRankItem(rank))
-                            .withLore("", text("menuKingdomRanksListItemLore"))
-                            .build(),
+        List<Rank> ranks = new ArrayList<>(target.getRanks());
+        builder.withItems(ranks.size(), index -> {
+            Rank rank = ranks.get(index);
+            return new BukkitInventoryItem(
+                    ItemStackBuilder.of(getRankItem(rank))
+                    .withLore("", text("menuKingdomRanksListItemLore"))
+                    .build(),
                     (p, ct) -> {
-                openRankEdit(player, rank, () -> openKingdomRanksList(player, target, back));
-            });
-        }
+                        openRankEdit(player, rank, () -> openKingdomRanksList(player, target, back));
+                        return true;
+                    });
+        });
 
         withBack(builder, back);
-        player.openInventory(builder.buildS());
+        player.openInventory(builder.build());
     }
 
     // Rank edit
@@ -812,30 +827,36 @@ public class KingdomMenu {
         }
 
         withBack(builder, back);
-        player.openInventory(builder.buildS());
+        player.openInventory(builder.build());
         return true;
     }
 
     // Rank selection
 
     static void openRankSelection(PlatformPlayer player, User target, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuChangePlayerRankTitle", target.getName()));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuChangePlayerRankTitle", target.getName()));
 
+        List<Rank> ranks = new ArrayList<>();
         for (Rank rank : target.getKingdom().getRanks()) {
             if (rank == target.getRank() || (!player.hasPermission("kingdom.setrank.other")
                     && player.getUser().getKingdom() == target.getKingdom()
                     && rank.getLevel() >= player.getUser().getRank().getLevel())) {
                 continue;
             }
+            ranks.add(rank);
+        }
 
-            builder.withItem(getRankItem(rank), (p, ct) -> {
+        builder.withItems(ranks.size(), index -> {
+            Rank rank = ranks.get(index);
+            return new BukkitInventoryItem(getRankItem(rank), (p, ct) -> {
                 openConfirmMenu(player, text("menuChangePlayerRankConfirmTitle", target.getName(), rank.getName()),
                         () -> {
-                    ((BukkitPlayer) player).getPlayer().chat("/k setrank " + target.getName() + " " + rank.getName());
-                    openPlayerInfo(player, target, back);
-                }, () -> openRankSelection(player, target, back));
+                            ((BukkitPlayer) player).getPlayer().chat("/k setrank " + target.getName() + " " + rank.getName());
+                            openPlayerInfo(player, target, back);
+                        }, () -> openRankSelection(player, target, back));
+                return true;
             });
-        }
+        });
 
         withBack(builder, back);
         player.openInventory(builder.build());
@@ -854,7 +875,7 @@ public class KingdomMenu {
     }
 
     static void openKingdomRelationsList(PlatformPlayer player, Kingdom kingdom, Runnable back) {
-        InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuRelationsTitle", kingdom.getName()));
+        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuRelationsTitle", kingdom.getName()));
 
         Map<Kingdom, RelationType> relations = kdc.getRelations(kingdom).stream()
                 .collect(Collectors.toMap(rel -> rel.getOther(kingdom), Relation::getType));
@@ -867,7 +888,8 @@ public class KingdomMenu {
                 .filter(kd -> kd != kingdom && !kingdoms.contains(kd))
                 .collect(Collectors.toSet()));
 
-        for (Kingdom kd : kingdoms) {
+        builder.withItems(kingdoms.size(), index -> {
+            Kingdom kd = kingdoms.get(index);
             RelationType rel = relations.getOrDefault(kd, RelationType.NEUTRAL);
 
             ItemStack item = ItemStackBuilder.of(getKingdomItem(kd))
@@ -876,13 +898,14 @@ public class KingdomMenu {
                     .build();
 
             if (kingdom == player.getUser().getKingdom()) {
-                builder.withItem(item, (p, ct) -> {
+                return new BukkitInventoryItem(item, (p, ct) -> {
                     openKingdomRelationSelect(player, kd, () -> openKingdomRelationsList(player, kingdom, back));
+                    return true;
                 });
             } else {
-                builder.withItem(item);
+                return new BukkitInventoryItem(item);
             }
-        }
+        });
 
         withBack(builder, back);
         player.openInventory(builder.build());
@@ -926,7 +949,7 @@ public class KingdomMenu {
         }
 
         if (rel != RelationType.ENEMY && player.hasPermission("kingdom.enemy")) {
-            builder.withItem(ItemStackBuilder.of(Material.FIREBALL)
+            builder.withItem(ItemStackBuilder.of("FIRE_CHARGE", "FIREBALL")
                             .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
                             .apply(b -> {
                                 b.withLore(text("menuChangeRelationItemLoreEnemy"));
@@ -966,13 +989,13 @@ public class KingdomMenu {
         }
         if (rel != RelationType.NEUTRAL && player.hasPermission("kingdom.neutral")) {
             if (sentRequest != null && sentRequest.getType() == RelationType.NEUTRAL) {
-                builder.withItem(ItemStackBuilder.of(Material.SNOW_BALL)
+                builder.withItem(ItemStackBuilder.of("SNOWBALL", "SNOW_BALL")
                         .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
                         .withLore(text("menuChangeRelationItemLoreNeutralRequested"))
                         .build()
                 );
             } else {
-                builder.withItem(ItemStackBuilder.of(Material.SNOW_BALL)
+                builder.withItem(ItemStackBuilder.of("SNOWBALL", "SNOW_BALL")
                                 .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
                                 .apply(b -> {
                                     if (rel != RelationType.ALLY) {
@@ -995,7 +1018,7 @@ public class KingdomMenu {
         }
 
         withBack(builder, back);
-        player.openInventory(builder.buildS());
+        player.openInventory(builder.build());
     }
 
     // CONFIRM
