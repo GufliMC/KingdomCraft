@@ -23,6 +23,18 @@ public class InventoryBuilder {
             new MenuScheme("000000000", "001010100", "010101010", "001010100") // 10 items
     };
 
+    private final static MenuScheme[] ROW_SCHEMES = new MenuScheme[] {
+            new MenuScheme("000010000"), // 1 item
+            new MenuScheme("000101000"), // 2 items
+            new MenuScheme("001010100"), // 3 items
+            new MenuScheme("010101010"), // 4 items
+            new MenuScheme("101010101"), // 5 items
+            new MenuScheme("011101110"), // 6 items
+            new MenuScheme("011111110"), // 7 items
+            new MenuScheme("111101111"), // 8 items
+            new MenuScheme("111111111"), // 9 items
+    };
+
     //
 
     protected InventoryBuilder() {}
@@ -88,15 +100,30 @@ public class InventoryBuilder {
         return this;
     }
 
+    public BukkitInventory buildRow() {
+        if ( items.size() > 9 ) {
+            throw new UnsupportedOperationException("More than 9 items is not supported.");
+        }
+
+        MenuScheme scheme = ROW_SCHEMES[items.size() - 1];
+        return build(scheme);
+    }
+
     public BukkitInventory build() {
         if ( items.size() > 10 ) {
             throw new UnsupportedOperationException("More than 10 items is not supported.");
         }
 
         MenuScheme scheme = SCHEMES[items.size() - 1];
-        int size = scheme.getRows() + 1;
+        return build(scheme);
+    }
+
+    private BukkitInventory build(MenuScheme scheme) {
+        int size = scheme.getRows();
 
         if ( !hotbar.isEmpty() ) {
+            size += 2;
+        } else if ( size != 1 ) {
             size += 1;
         }
 
