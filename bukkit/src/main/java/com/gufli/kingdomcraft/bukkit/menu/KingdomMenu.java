@@ -202,8 +202,8 @@ public class KingdomMenu {
                                     .withLore(text("menuPlayerInfoItemLoreKick"))
                                     .build(),
                             (p, ct) -> {
-                                openConfirmMenu(player, text("menuPlayerKickConfirmTitle", user.getName()), () -> {
-                                    ((BukkitPlayer) player).getPlayer().chat("/k kick " + user.getName());
+                                openConfirmMenu(player, text("menuPlayerKickConfirmTitle", target.getName()), () -> {
+                                    ((BukkitPlayer) player).getPlayer().chat("/k kick " + target.getName());
                                     openPlayerInfo(player, target, back);
                                 }, () -> {
                                     openPlayerInfo(player, target, back);
