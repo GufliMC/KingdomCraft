@@ -69,6 +69,11 @@ public class PaginationBuilder {
         return this;
     }
 
+    public final PaginationBuilder withHotbarItem(int slot, BukkitInventoryItem item) {
+        hotbar.put(slot, item);
+        return this;
+    }
+
     public final PaginationBuilder withHotbarItem(int slot, ItemStack item) {
         hotbar.put(slot, new BukkitInventoryItem(item));
         return this;

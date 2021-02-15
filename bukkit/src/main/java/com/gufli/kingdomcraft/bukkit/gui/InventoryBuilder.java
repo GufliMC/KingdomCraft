@@ -90,6 +90,11 @@ public class InventoryBuilder {
         return this;
     }
 
+    public final InventoryBuilder withHotbarItem(int slot, BukkitInventoryItem item) {
+        hotbar.put(slot, item);
+        return this;
+    }
+
     public final InventoryBuilder withHotbarItem(int slot, ItemStack item) {
         hotbar.put(slot, new BukkitInventoryItem(item));
         return this;
