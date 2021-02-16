@@ -175,7 +175,10 @@ public class ItemStackBuilder {
         return transformMeta(meta -> {
             List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
             for (String line : lines) {
-                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+                String[] split = line.split("\n");
+                for ( String s : split ) {
+                    lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                }
             }
             meta.setLore(lore);
         });

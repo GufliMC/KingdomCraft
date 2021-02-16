@@ -397,7 +397,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.rename") && player.getUser().getKingdom() == target)) {
             builder.withItem(ItemStackBuilder.of(Material.NAME_TAG)
                             .withName(text("menuKingdomEditItemRename"))
-                            .withLore(text("menuKingdomEditItemLoreRename", ChatColor.WHITE + target.getName()).split("\n"))
+                            .withLore(text("menuKingdomEditItemLoreRename", ChatColor.WHITE + target.getName()))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuKingdomEditRenameQuery");
@@ -418,7 +418,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.edit.display") && player.getUser().getKingdom() == target)) {
             builder.withItem(ItemStackBuilder.of(Material.PAPER)
                             .withName(text("menuKingdomEditItemChangeDisplay"))
-                            .withLore(text("menuKingdomEditItemLoreChangeDisplay", colorify(target.getDisplay())).split("\n"))
+                            .withLore(text("menuKingdomEditItemLoreChangeDisplay", colorify(target.getDisplay())))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuKingdomEditChangeDisplayQuery");
@@ -439,7 +439,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.edit.prefix") && player.getUser().getKingdom() == target)) {
             builder.withItem(ItemStackBuilder.of(Material.GOLD_INGOT)
                             .withName(text("menuKingdomEditItemChangePrefix"))
-                            .withLore(text("menuKingdomEditItemLoreChangePrefix", colorify(target.getPrefix())).split("\n"))
+                            .withLore(text("menuKingdomEditItemLoreChangePrefix", colorify(target.getPrefix())))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuKingdomEditChangePrefixQuery");
@@ -460,7 +460,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.edit.suffix") && player.getUser().getKingdom() == target)) {
             builder.withItem(ItemStackBuilder.of(Material.IRON_INGOT)
                             .withName(text("menuKingdomEditItemChangeSuffix"))
-                            .withLore(text("menuKingdomEditItemLoreChangeSuffix", colorify(target.getSuffix())).split("\n"))
+                            .withLore(text("menuKingdomEditItemLoreChangeSuffix", colorify(target.getSuffix())))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuKingdomEditChangeSuffixQuery");
@@ -481,9 +481,9 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.edit.max-members") && player.getUser().getKingdom() == target)) {
             builder.withItem(ItemStackBuilder.skull()
                             .withName(text("menuKingdomEditItemChangeMaxMembers"))
-                            .apply(target.getMaxMembers() == 0, (b) -> b.withLore(text("menuKingdomEditItemLoreChangeMaxMembersUnlimited").split("\n")))
+                            .apply(target.getMaxMembers() == 0, (b) -> b.withLore(text("menuKingdomEditItemLoreChangeMaxMembersUnlimited")))
                             .apply(target.getMaxMembers() != 0, (b) -> b.withLore(text("menuKingdomEditItemLoreChangeMaxMembers",
-                                    target.getMaxMembers() + "").split("\n")))
+                                    target.getMaxMembers() + "")))
                             .build(),
                     (p, ct) -> {
                         int mm = target.getMaxMembers();
@@ -511,7 +511,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.edit.invite-only") && player.getUser().getKingdom() == target)) {
             builder.withItem(ItemStackBuilder.of("ENDER_EYE", "EYE_OF_ENDER")
                             .withName(ChatColor.YELLOW + "Toggle Invite Only")
-                            .withLore(text("menuKingdomEditItemLoreToggleInviteOnly", target.isInviteOnly() + "").split("\n"))
+                            .withLore(text("menuKingdomEditItemLoreToggleInviteOnly", target.isInviteOnly() + ""))
                             .build(),
                     (p, ct) -> {
                         if (player.getUser().getKingdom() == target) {
@@ -676,7 +676,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.ranks.rename") && player.getUser().getKingdom() == target.getKingdom())) {
             builder.withItem(ItemStackBuilder.of(Material.NAME_TAG)
                             .withName(text("menuRankEditItemRename"))
-                            .withLore(text("menuRankEditItemLoreRename", target.getName()).split("\n"))
+                            .withLore(text("menuRankEditItemLoreRename", target.getName()))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuRankEditRenameQuery");
@@ -699,7 +699,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.ranks.edit.display") && player.getUser().getKingdom() == target.getKingdom())) {
             builder.withItem(ItemStackBuilder.of(Material.PAPER)
                             .withName(text("menuRankEditItemChangeDisplay"))
-                            .withLore(text("menuRankEditItemLoreChangeDisplay", colorify(target.getDisplay())).split("\n"))
+                            .withLore(text("menuRankEditItemLoreChangeDisplay", colorify(target.getDisplay())))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuRankEditChangeDisplayQuery");
@@ -722,7 +722,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.ranks.edit.prefix") && player.getUser().getKingdom() == target.getKingdom())) {
             builder.withItem(ItemStackBuilder.of(Material.GOLD_INGOT)
                             .withName(text("menuRankEditItemChangePrefix"))
-                            .withLore(text("menuRankEditItemLoreChangePrefix", colorify(target.getPrefix())).split("\n"))
+                            .withLore(text("menuRankEditItemLoreChangePrefix", colorify(target.getPrefix())))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuRankEditChangePrefixQuery");
@@ -745,7 +745,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.ranks.edit.suffix") && player.getUser().getKingdom() == target.getKingdom())) {
             builder.withItem(ItemStackBuilder.of(Material.IRON_INGOT)
                             .withName(text("menuRankEditItemChangeSuffix"))
-                            .withLore(text("menuRankEditItemLoreChangeSuffix", colorify(target.getSuffix())).split("\n"))
+                            .withLore(text("menuRankEditItemLoreChangeSuffix", colorify(target.getSuffix())))
                             .build(),
                     (p, ct) -> {
                         kdc.getMessages().send(player, "menuRankEditChangeSuffixQuery");
@@ -768,9 +768,9 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.ranks.edit.max-members") && player.getUser().getKingdom() == target.getKingdom())) {
             builder.withItem(ItemStackBuilder.skull()
                             .withName(text("menuRankEditItemChangeMaxMembers"))
-                            .apply(target.getMaxMembers() == 0, (b) -> b.withLore(text("menuRankEditItemLoreChangeMaxMembersUnlimited").split("\n")))
+                            .apply(target.getMaxMembers() == 0, (b) -> b.withLore(text("menuRankEditItemLoreChangeMaxMembersUnlimited")))
                             .apply(target.getMaxMembers() != 0, (b) -> b.withLore(text("menuRankEditItemLoreChangeMaxMembers",
-                                    target.getMaxMembers() + "").split("\n")))
+                                    target.getMaxMembers() + "")))
                             .build(),
                     (p, ct) -> {
                         int mm = target.getMaxMembers();
@@ -801,7 +801,7 @@ public class KingdomMenu {
             builder.withItem(ItemStackBuilder.of(Material.BLAZE_ROD)
                             .withName(text("menuRankEditItemChangeLevel"))
                             .withLore(text("menuRankEditItemLoreChangeLevel",
-                                    target.getLevel() + "").split("\n"))
+                                    target.getLevel() + ""))
                             .build(),
                     (p, ct) -> {
                         int level = target.getLevel();
