@@ -27,13 +27,13 @@ public class KingdomMenu {
 
     private static String text(String key) {
         String msg = kdc.getMessages().getMessage(key, true);
-        if ( msg == null ) return "";
+        if (msg == null) return "";
         return msg;
     }
 
     private static String text(String key, String... placeholders) {
         String msg = kdc.getMessages().getMessage(key, true, placeholders);
-        if ( msg == null ) return "";
+        if (msg == null) return "";
         return msg;
     }
 
@@ -158,7 +158,7 @@ public class KingdomMenu {
                     .apply(b -> {
                         if (target.getKingdom() != null) {
                             b.withLore("");
-                            b.withLore(text("menuInfoKingdom",  colorify(target.getKingdom().getDisplay())));
+                            b.withLore(text("menuInfoKingdom", colorify(target.getKingdom().getDisplay())));
 
                             if (target.getRank() != null) {
                                 b.withLore(text("menuInfoRank", colorify(target.getRank().getDisplay())));
@@ -278,15 +278,19 @@ public class KingdomMenu {
                         .withLore("", text("menuKingdomInfoItemLore"))
                         .build(),
                 (p, ct) -> {
-            openKingdomEdit(player, target, () -> openKingdomInfo(player, target, back));
-        });
+                    return openKingdomEdit(player, target, () -> openKingdomInfo(player, target, back));
+                });
 
         if (!target.getRanks().isEmpty()) {
             builder.withItem(ItemStackBuilder.of(Material.BOOK)
                             .withName(text("menuKingdomInfoItemRanks", target.getRanks().size() + ""))
                             .withLore(text("menuKingdomInfoItemLoreRanks"))
                             .build(), (p, cct) -> {
-                        openKingdomRanksList(player, target, () -> openKingdomInfo(player, target, back));
+                        if (player.hasPermission("kingdom.ranks.list")) {
+                            openKingdomRanksList(player, target, () -> openKingdomInfo(player, target, back));
+                            return true;
+                        }
+                        return false;
                     }
             );
         }
@@ -326,13 +330,13 @@ public class KingdomMenu {
                                 if (player.hasPermission("kingdom.setspawn.other") || (player.hasPermission("kingdom.setspawn") && player.getUser().getKingdom() == target)) {
                                     b.withLore("", text("menuKingdomInfoItemLoreSpawnTeleport"),
                                             text("menuKingdomInfoItemLoreSpawnChange"));
-                                } else if ( target.getSpawn() != null ) {
+                                } else if (player.hasPermission("kingdom.spawn") && target.getSpawn() != null) {
                                     b.withLore("", text("menuKingdomInfoItemLoreSpawnTeleport"));
                                 }
                             }).build(),
                     (p, ct) -> {
-                        if ( ct == InventoryClickType.RIGHT ) {
-                            if ( player.hasPermission("kingdom.setspawn.other") ) {
+                        if (ct == InventoryClickType.RIGHT) {
+                            if (player.hasPermission("kingdom.setspawn.other")) {
                                 openConfirmMenu(player, text("menuChangeKingdomSpawnOtherConfirmTitle", target.getName()), () -> {
                                     kdc.getCommandManager().dispatch(player, new String[]{"setspawn", target.getName()});
                                     openKingdomInfo(player, target, back);
@@ -340,8 +344,7 @@ public class KingdomMenu {
                                     openKingdomInfo(player, target, back);
                                 });
                                 return true;
-                            }
-                            else if ( player.hasPermission("kingdom.setspawn") && player.getUser().getKingdom() == target ) {
+                            } else if (player.hasPermission("kingdom.setspawn") && player.getUser().getKingdom() == target) {
                                 openConfirmMenu(player, text("menuChangeKingdomSpawnConfirmTitle"), () -> {
                                     kdc.getCommandManager().dispatch(player, new String[]{"setspawn"});
                                     openKingdomInfo(player, target, back);
@@ -352,16 +355,16 @@ public class KingdomMenu {
                             }
                         }
 
-                        if ( target.getSpawn() == null ) {
+                        if (target.getSpawn() == null) {
                             return false;
                         }
 
-                        if ( target.getSpawn() != null && player.hasPermission("kingdom.spawn.other") ) {
+                        if (target.getSpawn() != null && player.hasPermission("kingdom.spawn.other")) {
                             kdc.getCommandManager().dispatch(player, new String[]{"spawn", target.getName()});
                             return true;
                         }
 
-                        if ( player.hasPermission("kingdom.spawn") && player.getUser().getKingdom() == target ) {
+                        if (player.hasPermission("kingdom.spawn") && player.getUser().getKingdom() == target) {
                             kdc.getCommandManager().dispatch(player, new String[]{"spawn"});
                             return true;
                         }
@@ -379,9 +382,12 @@ public class KingdomMenu {
     static boolean openKingdomEdit(PlatformPlayer player, Kingdom target, Runnable back) {
         InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuKingdomEditTitle"));
 
+        boolean hasItem = false;
+
         // Edit item
         if (player.hasPermission("kingdom.edit.item.other")
                 || (player.hasPermission("kingdom.edit.item") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.DIAMOND)
                             .withName(text("menuKingdomEditItemChangeItem"))
                             .withLore(text("menuKingdomEditItemLoreChangeItem"))
@@ -395,6 +401,7 @@ public class KingdomMenu {
         // Edit name
         if (player.hasPermission("kingdom.rename.other")
                 || (player.hasPermission("kingdom.rename") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.NAME_TAG)
                             .withName(text("menuKingdomEditItemRename"))
                             .withLore(text("menuKingdomEditItemLoreRename", ChatColor.WHITE + target.getName()))
@@ -416,6 +423,7 @@ public class KingdomMenu {
         // Edit display
         if (player.hasPermission("kingdom.edit.display.other")
                 || (player.hasPermission("kingdom.edit.display") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.PAPER)
                             .withName(text("menuKingdomEditItemChangeDisplay"))
                             .withLore(text("menuKingdomEditItemLoreChangeDisplay", colorify(target.getDisplay())))
@@ -437,6 +445,7 @@ public class KingdomMenu {
         // Edit prefix
         if (player.hasPermission("kingdom.edit.prefix.other")
                 || (player.hasPermission("kingdom.edit.prefix") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.GOLD_INGOT)
                             .withName(text("menuKingdomEditItemChangePrefix"))
                             .withLore(text("menuKingdomEditItemLoreChangePrefix", colorify(target.getPrefix())))
@@ -458,6 +467,7 @@ public class KingdomMenu {
         // Edit suffix
         if (player.hasPermission("kingdom.edit.suffix.other")
                 || (player.hasPermission("kingdom.edit.suffix") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.IRON_INGOT)
                             .withName(text("menuKingdomEditItemChangeSuffix"))
                             .withLore(text("menuKingdomEditItemLoreChangeSuffix", colorify(target.getSuffix())))
@@ -479,6 +489,7 @@ public class KingdomMenu {
         // Edit max members
         if (player.hasPermission("kingdom.edit.max-members.other")
                 || (player.hasPermission("kingdom.edit.max-members") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.skull()
                             .withName(text("menuKingdomEditItemChangeMaxMembers"))
                             .apply(target.getMaxMembers() == 0, (b) -> b.withLore(text("menuKingdomEditItemLoreChangeMaxMembersUnlimited")))
@@ -509,6 +520,7 @@ public class KingdomMenu {
         // Invite only
         if (player.hasPermission("kingdom.edit.invite-only.other")
                 || (player.hasPermission("kingdom.edit.invite-only") && player.getUser().getKingdom() == target)) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of("ENDER_EYE", "EYE_OF_ENDER")
                             .withName(ChatColor.YELLOW + "Toggle Invite Only")
                             .withLore(text("menuKingdomEditItemLoreToggleInviteOnly", target.isInviteOnly() + ""))
@@ -522,6 +534,10 @@ public class KingdomMenu {
                         openKingdomEdit(player, target, back);
                     }
             );
+        }
+
+        if (!hasItem) {
+            return false;
         }
 
         withBack(builder, back);
@@ -629,13 +645,13 @@ public class KingdomMenu {
                         .apply(isOnline, (b) -> b.withSkullOwner(Bukkit.getPlayer(uuid)))
                         .build(),
                         (p, ct) -> {
-                    kdc.getUser(uuid).thenAccept((u) -> {
-                        kdc.getPlugin().getScheduler().sync().execute(() -> {
-                            openPlayerInfo(player, u, () -> openKingdomMembersList(player, target, back));
+                            kdc.getUser(uuid).thenAccept((u) -> {
+                                kdc.getPlugin().getScheduler().sync().execute(() -> {
+                                    openPlayerInfo(player, u, () -> openKingdomMembersList(player, target, back));
+                                });
+                            });
+                            return true;
                         });
-                    });
-                    return true;
-                });
             });
 
             withBack(builder, back);
@@ -654,12 +670,9 @@ public class KingdomMenu {
             Rank rank = ranks.get(index);
             return new BukkitInventoryItem(
                     ItemStackBuilder.of(getRankItem(rank))
-                    .withLore("", text("menuKingdomRanksListItemLore"))
-                    .build(),
-                    (p, ct) -> {
-                        openRankEdit(player, rank, () -> openKingdomRanksList(player, target, back));
-                        return true;
-                    });
+                            .withLore("", text("menuKingdomRanksListItemLore"))
+                            .build(),
+                    (p, ct) -> openRankEdit(player, rank, () -> openKingdomRanksList(player, target, back)));
         });
 
         withBack(builder, back);
@@ -671,9 +684,12 @@ public class KingdomMenu {
     static boolean openRankEdit(PlatformPlayer player, Rank target, Runnable back) {
         InventoryBuilder builder = InventoryBuilder.create().withTitle(ChatColor.DARK_GRAY + "Edit rank");
 
+        boolean hasItem = false;
+
         // Edit name
         if (player.hasPermission("kingdom.ranks.rename.other")
                 || (player.hasPermission("kingdom.ranks.rename") && player.getUser().getKingdom() == target.getKingdom())) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.NAME_TAG)
                             .withName(text("menuRankEditItemRename"))
                             .withLore(text("menuRankEditItemLoreRename", target.getName()))
@@ -697,6 +713,7 @@ public class KingdomMenu {
         // Edit display
         if (player.hasPermission("kingdom.ranks.edit.display.other")
                 || (player.hasPermission("kingdom.ranks.edit.display") && player.getUser().getKingdom() == target.getKingdom())) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.PAPER)
                             .withName(text("menuRankEditItemChangeDisplay"))
                             .withLore(text("menuRankEditItemLoreChangeDisplay", colorify(target.getDisplay())))
@@ -720,6 +737,7 @@ public class KingdomMenu {
         // Edit prefix
         if (player.hasPermission("kingdom.ranks.edit.prefix.other")
                 || (player.hasPermission("kingdom.ranks.edit.prefix") && player.getUser().getKingdom() == target.getKingdom())) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.GOLD_INGOT)
                             .withName(text("menuRankEditItemChangePrefix"))
                             .withLore(text("menuRankEditItemLoreChangePrefix", colorify(target.getPrefix())))
@@ -743,6 +761,7 @@ public class KingdomMenu {
         // Edit suffix
         if (player.hasPermission("kingdom.ranks.edit.suffix.other")
                 || (player.hasPermission("kingdom.ranks.edit.suffix") && player.getUser().getKingdom() == target.getKingdom())) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.IRON_INGOT)
                             .withName(text("menuRankEditItemChangeSuffix"))
                             .withLore(text("menuRankEditItemLoreChangeSuffix", colorify(target.getSuffix())))
@@ -766,6 +785,7 @@ public class KingdomMenu {
         // Edit max members
         if (player.hasPermission("kingdom.ranks.edit.max-members.other")
                 || (player.hasPermission("kingdom.ranks.edit.max-members") && player.getUser().getKingdom() == target.getKingdom())) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.skull()
                             .withName(text("menuRankEditItemChangeMaxMembers"))
                             .apply(target.getMaxMembers() == 0, (b) -> b.withLore(text("menuRankEditItemLoreChangeMaxMembersUnlimited")))
@@ -798,6 +818,7 @@ public class KingdomMenu {
         // Invite only
         if (player.hasPermission("kingdom.ranks.edit.level.other")
                 || (player.hasPermission("kingdom.ranks.edit.level") && player.getUser().getKingdom() == target.getKingdom())) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of(Material.BLAZE_ROD)
                             .withName(text("menuRankEditItemChangeLevel"))
                             .withLore(text("menuRankEditItemLoreChangeLevel",
@@ -824,6 +845,10 @@ public class KingdomMenu {
                         return true;
                     }
             );
+        }
+
+        if (!hasItem) {
+            return false;
         }
 
         withBack(builder, back);
@@ -899,8 +924,7 @@ public class KingdomMenu {
 
             if (kingdom == player.getUser().getKingdom()) {
                 return new BukkitInventoryItem(item, (p, ct) -> {
-                    openKingdomRelationSelect(player, kd, () -> openKingdomRelationsList(player, kingdom, back));
-                    return true;
+                    return openKingdomRelationSelect(player, kd, () -> openKingdomRelationsList(player, kingdom, back));
                 });
             } else {
                 return new BukkitInventoryItem(item);
@@ -913,8 +937,10 @@ public class KingdomMenu {
 
     // Kingdom relation menu
 
-    static void openKingdomRelationSelect(PlatformPlayer player, Kingdom kingdom, Runnable back) {
+    static boolean openKingdomRelationSelect(PlatformPlayer player, Kingdom kingdom, Runnable back) {
         InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuChangeRelationTitle", kingdom.getName()));
+
+        boolean hasItem = false;
 
         Relation relation = kdc.getRelation(player.getUser().getKingdom(), kingdom);
         RelationType rel = relation != null ? relation.getType() : RelationType.NEUTRAL;
@@ -923,6 +949,7 @@ public class KingdomMenu {
         Relation sentRequest = kdc.getRelationRequest(player.getUser().getKingdom(), kingdom);
 
         if (rel != RelationType.ALLY && player.hasPermission("kingdom.ally")) {
+            hasItem = true;
             if (sentRequest != null && sentRequest.getType() == RelationType.ALLY) {
                 builder.withItem(ItemStackBuilder.of(Material.SLIME_BALL)
                         .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
@@ -949,6 +976,7 @@ public class KingdomMenu {
         }
 
         if (rel != RelationType.ENEMY && player.hasPermission("kingdom.enemy")) {
+            hasItem = true;
             builder.withItem(ItemStackBuilder.of("FIRE_CHARGE", "FIREBALL")
                             .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
                             .apply(b -> {
@@ -963,6 +991,7 @@ public class KingdomMenu {
         }
 
         if (rel == RelationType.ENEMY && player.hasPermission("kingdom.truce")) {
+            hasItem = true;
             if (sentRequest != null && sentRequest.getType() == RelationType.TRUCE) {
                 builder.withItem(ItemStackBuilder.of(Material.MAGMA_CREAM)
                         .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
@@ -988,6 +1017,7 @@ public class KingdomMenu {
             }
         }
         if (rel != RelationType.NEUTRAL && player.hasPermission("kingdom.neutral")) {
+            hasItem = true;
             if (sentRequest != null && sentRequest.getType() == RelationType.NEUTRAL) {
                 builder.withItem(ItemStackBuilder.of("SNOWBALL", "SNOW_BALL")
                         .withName(ChatColor.WHITE + colorify(kingdom.getDisplay()))
@@ -1017,8 +1047,13 @@ public class KingdomMenu {
             }
         }
 
+        if (!hasItem) {
+            return false;
+        }
+
         withBack(builder, back);
         player.openInventory(builder.build());
+        return true;
     }
 
     // CONFIRM
@@ -1084,8 +1119,8 @@ public class KingdomMenu {
                     }
                 })
                 .withLore(text("menuInfoCreatedAt", kingdom.getCreatedAt()
-                                .atZone(kdc.getConfig().getTimeZone())
-                                .format(kdc.getConfig().getDateFormat())))
+                        .atZone(kdc.getConfig().getTimeZone())
+                        .format(kdc.getConfig().getDateFormat())))
                 .build();
     }
 
