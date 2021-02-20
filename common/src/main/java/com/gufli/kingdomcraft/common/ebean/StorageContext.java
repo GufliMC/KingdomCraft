@@ -298,6 +298,10 @@ public class StorageContext {
             user.setKingdom(null);
             ((BUser) user).insert();
         }
+        for ( BKingdom kingdom : kingdoms ) {
+            kingdom.resetMemberCount();
+        }
+        saveAsync(kingdoms);
     }
 
     public void purgeUsers() {

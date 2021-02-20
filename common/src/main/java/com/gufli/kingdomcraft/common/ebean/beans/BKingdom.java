@@ -244,6 +244,10 @@ public class BKingdom extends BaseModel implements Kingdom {
         return memberCount;
     }
 
+    public void resetMemberCount() {
+        memberCount = 0;
+    }
+
     @Override
     public Map<UUID, String> getMembers() {
         QBUser alias = QBUser.alias();
