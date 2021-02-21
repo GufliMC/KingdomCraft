@@ -107,6 +107,8 @@ public class StorageContext {
             templateKingdom = new BKingdom();
             templateKingdom.id = -1;
             templateKingdom.name = "template";
+            templateKingdom.setDisplay("&f{kingdom_name}");
+            templateKingdom.setPrefix("&7[&f{kingdom_name}&7]");
 
             Rank member = templateKingdom.createRank("member");
             member.setDisplay("&7Member");
