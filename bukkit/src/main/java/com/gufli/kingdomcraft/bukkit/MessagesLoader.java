@@ -41,34 +41,26 @@ public class MessagesLoader {
             System.out.println("Unable load custom language file.");
         }
 
-        InputStream fallback = null;
-        try {
-            File file = new File(directory, language + ".yml");
-            if ( file.exists() ) {
-                fallback = new FileInputStream(file);
-            } else {
-                fallback = classLoader.getResource("languages/en.yml").openStream();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        URL resource;
+        resource = classLoader.getResource("languages/" + language + ".yml");
+        if ( resource == null ) {
+            resource = classLoader.getResource("languages/en.yml");
         }
 
-        if ( fallback == null ) {
+        if ( resource == null ) {
+            System.out.println("Cannot find fallback language file!");
             return;
         }
 
-        try {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(fallback, StandardCharsets.UTF_8));
+        try (
+                InputStream fallback = resource.openStream();
+                InputStreamReader isr = new InputStreamReader(fallback, StandardCharsets.UTF_8)
+        ){
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(isr);
             messages.setFallback(new BukkitConfiguration(config));
         } catch (Exception ex) {
             System.out.println("Unable to load fallback language file!");
             ex.printStackTrace();
-        } finally {
-            try {
-                fallback.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
