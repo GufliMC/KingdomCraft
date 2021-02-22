@@ -73,7 +73,7 @@ public class KingdomMenu {
         InventoryBuilder builder = InventoryBuilder.create().withTitle(text("menuTitle"));
 
         builder.withItem(ItemStackBuilder.of(Material.DIAMOND_SWORD)
-                        .withName(text("menuItemKingdomsList"))
+                        .withName(text("menuItemKingdomsList", kdc.getKingdoms().size() + ""))
                         .build(),
                 (p, ct) -> {
                     openKingdomsList(player, () -> open(player));
@@ -89,7 +89,7 @@ public class KingdomMenu {
         }
 
         builder.withItem(ItemStackBuilder.skull()
-                        .withName(text("menuItemPlayersList"))
+                        .withName(text("menuItemPlayersList", kdc.getOnlinePlayers().size() + ""))
                         .build(),
                 (p, ct) -> {
                     openPlayerList(player, () -> open(player));
@@ -626,13 +626,14 @@ public class KingdomMenu {
     // Kingdom player list
 
     static void openKingdomMembersList(PlatformPlayer player, Kingdom target, Runnable back) {
-        PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuKingdomMembersListTitle", target.getName()));
-
         kdc.getPlugin().getScheduler().async().execute(() -> {
+            PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuKingdomMembersListTitle", target.getName()));
+
+            // get members, database operation = must be executed async
             Map<UUID, String> members = target.getMembers();
 
             List<UUID> sorted = members.keySet().stream()
-                    .sorted(Comparator.comparing(uuid -> kdc.getPlayer(uuid) != null))
+                    .sorted(Comparator.comparing(uuid -> kdc.getPlayer(uuid) == null))
                     .collect(Collectors.toList());
 
             builder.withItems(sorted.size(), index -> {
@@ -655,8 +656,7 @@ public class KingdomMenu {
             });
 
             withBack(builder, back);
-            kdc.getPlugin().getScheduler().sync().execute(() ->
-                    player.openInventory(builder.build()));
+            builder.buildAsync(player, kdc.getPlugin().getScheduler().sync(), kdc.getPlugin().getScheduler().async());
         });
     }
 

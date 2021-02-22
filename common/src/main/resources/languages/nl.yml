@@ -329,8 +329,8 @@ menuQueryCancel: '&7Type &8cancel &7om te annuleren.'
 
 menuTitle: '&8Koninkrijk menu'
 
-menuItemKingdomsList: '&6Koninkrijken'
-menuItemPlayersList: '&6Spelers'
+menuItemKingdomsList: '&6Koninkrijken &7(&a{0}&7)'
+menuItemPlayersList: '&6Spelers &7(&a{0}&7)'
 
 menuKingdomsListTitle: '&8Koninkrijken'
 menuPlayersListTitle: '&8Spelers'

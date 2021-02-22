@@ -329,8 +329,8 @@ menuQueryCancel: '&7Type &8cancel &7to cancel.'
 
 menuTitle: '&8Kingdom menu'
 
-menuItemKingdomsList: '&6Kingdoms'
-menuItemPlayersList: '&6Players'
+menuItemKingdomsList: '&6Kingdoms &7(&a{0}&7)'
+menuItemPlayersList: '&6Players &7(&a{0}&7)'
 
 menuKingdomsListTitle: '&8Kingdoms'
 menuPlayersListTitle: '&8Players'
