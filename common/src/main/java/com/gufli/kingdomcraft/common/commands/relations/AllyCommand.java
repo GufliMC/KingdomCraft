@@ -90,7 +90,7 @@ public class AllyCommand extends CommandBase {
             kdc.getMessages().send(sender, "cmdAllyRequest", target.getName());
 
             for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
-                if ( kdc.getUser(member).getKingdom() != target && member.hasPermission("kingdom.ally") ) continue;
+                if ( kdc.getUser(member).getKingdom() != target || !member.hasPermission("kingdom.ally") ) continue;
                 kdc.getMessages().send(member, "cmdAllyRequestTarget", kingdom.getName());
             }
             return;
