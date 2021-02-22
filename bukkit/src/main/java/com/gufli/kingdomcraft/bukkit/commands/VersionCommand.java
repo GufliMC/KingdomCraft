@@ -40,7 +40,7 @@ public class VersionCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        String prefix = kdc.getMessages().getPrefix();
+        String prefix = kdc.getMessages().colorify(kdc.getMessages().getPrefix());
         sender.sendMessage(prefix + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
         sender.sendMessage(prefix + "Created by " + String.join(", ", plugin.getDescription().getAuthors()));
     }
