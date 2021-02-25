@@ -35,9 +35,13 @@ public class EventManagerImpl implements EventManager {
     }
 
     public <T extends Event> void dispatch(T event) {
-        for ( EventExecutor ex : executors ) {
-            if ( ex.type.isAssignableFrom(event.getClass()) ) {
-                ex.consumer.accept(event);
+        for ( EventExecutor exe : executors ) {
+            try {
+                if (exe.type.isAssignableFrom(event.getClass())) {
+                    exe.consumer.accept(event);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }
