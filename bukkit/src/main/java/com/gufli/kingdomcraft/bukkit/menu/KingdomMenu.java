@@ -286,7 +286,8 @@ public class KingdomMenu {
                             .withName(text("menuKingdomInfoItemRanks", target.getRanks().size() + ""))
                             .withLore(text("menuKingdomInfoItemLoreRanks"))
                             .build(), (p, cct) -> {
-                        if (player.hasPermission("kingdom.ranks.list")) {
+                        if (player.hasPermission("kingdom.ranks.list.other")
+                                || (player.getUser().getKingdom() == target && player.hasPermission("kingdom.ranks.list"))) {
                             openKingdomRanksList(player, target, () -> openKingdomInfo(player, target, back));
                             return true;
                         }
