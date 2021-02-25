@@ -139,7 +139,9 @@ public class PermissionsListener implements Listener {
         Player p = ((BukkitPlayer) player).getPlayer();
 
         PermissionAttachment pa = p.addAttachment(plugin);
-        permissions.forEach(pa::setPermission);
+        for ( String perm : permissions.keySet() ) {
+            pa.setPermission(perm, permissions.get(perm));
+        }
         player.set(PERMISSIONS_KEY, pa);
     }
 
