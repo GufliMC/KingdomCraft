@@ -396,6 +396,7 @@ menuKingdomEditChangeSuffixQuery: '&aVul een suffix in.'
 
 menuKingdomEditItemChangeMaxMembers: '&eWijzig max leden'
 menuKingdomEditItemLoreChangeMaxMembers: '&7Max leden: &f{0}\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
+menuKingdomEditItemLoreChangeMaxMembersUnlimited: '&7Max leden: &fOngelimiteerd\n\n&7Linkerklik voor +1\n&7Rechterklik -1'
 
 menuKingdomEditItemToggleInviteOnly: '&eSwitch invite only'
 menuKingdomEditItemLoreToggleInviteOnly: '&7Invite only: &f{0}\n\n&7Klik om te switchen tussen aan of uit'
@@ -425,6 +426,7 @@ menuRankEditChangeSuffixQuery: '&aVul een chat suffix in.'
 
 menuRankEditItemChangeMaxMembers: '&eWijzig max leden'
 menuRankEditItemLoreChangeMaxMembers: '&7Max leden: &f{0}\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
+menuRankEditItemLoreChangeMaxMembersUnlimited: '&7Max leden: &fOngelimiteerd\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
 
 menuRankEditItemChangeLevel: '&eWijzig level'
 menuRankEditItemLoreChangeLevel: '&7Huidig level: &f{0}\n\n&7Linkerklik voor +1\n&7Rechterklik voor -1'
