@@ -94,31 +94,32 @@ kdc.getRelations(kingdom).forEach(rel -> System.out.println(rel.getType()));
 
 #### Events
 ```
-kdc.getEventManager().addListener(new EventListener() {
-    @Override
-    public void onKingdomJoin(User user) {
-        System.out.printf("%s joined kingdom %s%n", user.getName(), user.getKingdom().getName());
-    }
+kdc.getEventManager().addListener(PlayerLoadedEvent.class, (event) -> {
+    System.out.printf("The data of %s has been loaded.%n", event.getPlayer().getName());
+});
 
-    @Override
-    public void onKingdomLeave(User user, Kingdom oldKingdom) {
-        System.out.printf("%s left kingdom %s%n", user.getName(), oldKingdom.getName());
-    }
+kdc.getEventManager().addListener(UserJoinKingdomEvent.class, (event) -> {
+    User user = event.getUser();
+    System.out.printf("%s joined kingdom %s%n", user.getName(), user.getKingdom().getName());
+});
 
-    @Override
-    public void onKingdomCreate(Kingdom kingdom) {
-        System.out.printf("Created kingdom %s%n", kingdom.getName());
-    }
+kdc.getEventManager().addListener(UserLeaveKingdomEvent.class, (event) -> {
+    User user = event.getUser();
+    System.out.printf("%s left kingdom %s%n", user.getName(), oldKingdom.getName());
+});
 
-    @Override
-    public void onKingdomDelete(Kingdom kingdom) {
-        System.out.printf("Deleted kingdom %s%n", kingdom.getName());
-    }
+kdc.getEventManager().addListener(UserRankChangeEvent.class, (event) -> {
+    User user = event.getUser();
+    System.out.printf("Rank of %s changed from %s to %s%n", 
+            user.getName(), event.getPreviousRank().getName(), user.getRank().getName());
+});
 
-    @Override
-    public void onRankChange(User user, Rank oldRank) {
-        System.out.printf("Rank of %s changed from %s to %s%n", user.getName(), oldRank.getName(), user.getRank().getName());
-    }
+kdc.getEventManager().addListener(KingdomDeleteEvent.class, (event) -> {
+    System.out.printf("Deleted kingdom %s%n", event.getKingdom().getName());
+});
+
+kdc.getEventManager().addListener(KingdomCreateEvent.class, (event) -> {
+    System.out.printf("Created kingdom %s%n", event.getKingdom().getName());
 });
 ```
 
