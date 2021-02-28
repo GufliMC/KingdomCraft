@@ -433,12 +433,12 @@ public class StorageContext {
     public <T extends Model> CompletableFuture<Void> saveAsync(Collection<T> models) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             save(models);
-        }).handle((v, ex) -> {
+        }).exceptionally(ex -> {
             if ( ex != null ) {
                 ex.printStackTrace();
                 plugin.log(ex.getMessage(), Level.SEVERE);
             }
-            return v;
+            return null;
         });
     }
 
@@ -459,12 +459,12 @@ public class StorageContext {
     public <T extends Model> CompletableFuture<Void> deleteAsync(Collection<T> models) {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             delete(models);
-        }).handle((v, ex) -> {
+        }).exceptionally(ex -> {
             if ( ex != null ) {
                 ex.printStackTrace();
                 plugin.log(ex.getMessage(), Level.SEVERE);
             }
-            return v;
+            return null;
         });
     }
 

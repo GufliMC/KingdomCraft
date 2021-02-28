@@ -29,7 +29,7 @@ public class TpHereCommand extends CommandBase {
 
     public TpHereCommand(KingdomCraftImpl kdc) {
         super(kdc, "tphere", 0, true);
-        setExplanationMessage("cmdTpHereExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTpHereExplanation"));
         setPermissions("kingdom.tphere");
     }
 

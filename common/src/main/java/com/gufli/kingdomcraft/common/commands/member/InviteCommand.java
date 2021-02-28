@@ -34,7 +34,7 @@ public class InviteCommand extends CommandBase {
     public InviteCommand(KingdomCraftImpl kdc) {
         super(kdc, "invite", 1, true);
         setArgumentsHint("<player>");
-        setExplanationMessage("cmdInviteExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdInviteExplanation"));
         setPermissions("kingdom.invite");
     }
 

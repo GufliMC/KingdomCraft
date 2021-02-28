@@ -179,6 +179,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		new PlaceholderReplacer(this);
 		new VaultPlaceholderReplacer(this);
 
+		// admin mode join
+		new AdminJoinListener(this);
+
 		// bStats
 		Metrics metrics = new Metrics(this, 10101);
 

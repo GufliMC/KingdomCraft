@@ -29,7 +29,7 @@ public class EditSuffixCommand extends CommandBase {
     public EditSuffixCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit suffix", 1, true);
         setArgumentsHint("<suffix>");
-        setExplanationMessage("cmdExitSuffixExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdExitSuffixExplanation"));
         setPermissions("kingdom.edit.suffix");
     }
 

@@ -26,7 +26,7 @@ public class AdminCommand extends CommandBase {
 
     public AdminCommand(KingdomCraftImpl kdc) {
         super(kdc, "admin", 0, true);
-        setExplanationMessage("cmdAdminExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAdminExplanation"));
         setPermissions("kingdom.admin");
     }
 
@@ -36,9 +36,11 @@ public class AdminCommand extends CommandBase {
 
         if ( player.isAdmin() ) {
             player.setAdmin(false);
+            kdc.saveAsync(player.getUser());
             kdc.getMessages().send(sender, "cmdAdminDisable");
         } else {
             player.setAdmin(true);
+            kdc.saveAsync(player.getUser());
             kdc.getMessages().send(sender, "cmdAdminEnable");
         }
     }

@@ -34,7 +34,7 @@ public class TruceCommand extends CommandBase {
     public TruceCommand(KingdomCraftImpl kdc) {
         super(kdc, "truce", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdTruceExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTruceExplanation"));
         setPermissions("kingdom.truce");
     }
 
@@ -105,13 +105,15 @@ public class TruceCommand extends CommandBase {
             return;
         }
 
-        kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.TRUCE);
-        kdc.getMessages().send(sender, "cmdTruceAccepted", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
-            if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessages().send(member, "cmdTruceAccepted", kingdom.getName());
+            Kingdom kd = member.getUser().getKingdom();
+            if ( kd == kingdom ) {
+                kdc.getMessages().send(member, "cmdTruce", target.getName());
+            } else if ( kd == target ) {
+                kdc.getMessages().send(member, "cmdTruce", kingdom.getName());
+            }
         }
     }
 }

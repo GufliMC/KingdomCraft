@@ -33,7 +33,7 @@ public class RanksEditLevelCommand extends CommandBase {
     public RanksEditLevelCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit level", 2, true);
         setArgumentsHint("<rank> <amount>");
-        setExplanationMessage("cmdRanksEditLevelExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdRanksEditLevelExplanation"));
         setPermissions("kingdom.ranks.edit.level");
     }
 

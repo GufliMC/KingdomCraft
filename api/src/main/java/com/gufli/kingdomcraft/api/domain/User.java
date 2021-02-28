@@ -47,6 +47,14 @@ public interface User extends Model {
 
     UserChatChannel getChatChannel(String channel);
 
+    boolean isAdminModeEnabled();
+
+    void setAdminModeEnabled(boolean adminMode);
+
+    boolean isSocialSpyEnabled();
+
+    void setSocialSpyEnabled(boolean socialSpy);
+
     Instant getCreatedAt();
 
     Instant getUpdatedAt();

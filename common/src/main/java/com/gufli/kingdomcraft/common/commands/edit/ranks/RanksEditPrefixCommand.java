@@ -33,7 +33,7 @@ public class RanksEditPrefixCommand extends CommandBase {
     public RanksEditPrefixCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit prefix", 2, true);
         setArgumentsHint("<rank> <value>");
-        setExplanationMessage("cmdRanksEditPrefixExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdRanksEditPrefixExplanation"));
         setPermissions("kingdom.ranks.edit.prefix");
     }
 

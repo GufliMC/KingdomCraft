@@ -34,7 +34,7 @@ public class ChatChannelCommand extends CommandBase {
         super(kdc, "chatchannel", 1, true);
         setArgumentsHint("<chatchannel>");
         addCommand("channel");
-        setExplanationMessage("cmdChatChannelExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdChatChannelExplanation"));
         setPermissions("kingdom.chatchannel");
     }
 

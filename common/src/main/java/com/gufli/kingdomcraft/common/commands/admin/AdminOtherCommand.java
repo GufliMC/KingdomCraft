@@ -30,7 +30,7 @@ public class AdminOtherCommand extends CommandBase {
     public AdminOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "admin", 1);
         setArgumentsHint("<player>");
-        setExplanationMessage("cmdAdminExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAdminExplanation"));
         setPermissions("kingdom.admin.other");
     }
 

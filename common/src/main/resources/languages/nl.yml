@@ -20,6 +20,9 @@ chatChannelCooldown: '&cJe moet nog &4{0} &cseconden wachten voordat je kan prat
 
 socialSpyPrefix: '&b[SS] '
 
+adminModeJoin: '&aAdmin modus staat aan!'
+socialSpyJoin: '&aSocial spy staat aan!'
+
 # Command error messages
 
 cmdDefaultHelp: '&aVoor hulp, type &2/k help'
@@ -64,9 +67,13 @@ cmdChatChannelExplanation: 'Zet een chat kanaal aan of uit'
 cmdDefaultChatChannelExplanation: 'Kies een kanaal om standaard in te praten'
 cmdSetRankExplanation: 'Verander de rang van een speler'
 cmdEnemyExplanation: 'Word vijanden met een ander koninkrijk'
+cmdEnemyOtherExplanation: 'Start een vijandigheid tussen koninkrijken'
 cmdTruceExplanation: 'Accepteer of vraag een wapenstilstand aan'
+cmdTruceOtherExplanation: 'Start een wapenstilstand tussen koninkrijken'
 cmdAllyExplanation: 'Accepteer of vraag een bondgenootschap aan'
-cmdNeutralExplanation: 'Verander de statis met een koninkrijk naar neutraal'
+cmdAllyOtherExplanation: 'Start een bondgenootschap tussen koninkrijken'
+cmdNeutralExplanation: 'Verander de status met een koninkrijk naar neutraal'
+cmdNeutralOtherExplanation: 'Stop elke relatie tussen koninkrijken'
 cmdSetSpawnExplanation: 'Verander de spawn van je koninkrijk'
 cmdSetSpawnOtherExplanation: 'Verander de spawn van een koninkrijk'
 cmdKickExplanation: 'Schop een speler uit zijn koninkrijk'
@@ -107,6 +114,8 @@ cmdEditPrefixExplanation: 'Verander de prefix van je koninkrijk'
 cmdEditPrefixOtherExplanation: 'Verander de prefix van een koninkrijk'
 cmdEditSuffixExplanation: 'Verander de suffix van je koninkrijk'
 cmdEditSuffixOtherExplanation: 'Verander de suffix van een koninkrijk'
+cmdEditItemExplanation: 'Verander het voorwerp van je koninkrijk'
+cmdEditItemOtherExplanation: 'Verander het voorwerp van een koninkrijk'
 
 cmdRanksCloneExplanation: 'Kopieer een rank van een koninkrijk naar een ander koninkrijk'
 cmdRanksCreateExplanation: 'Maak een rang in je koninkrijk'
@@ -176,31 +185,42 @@ cmdSetSpawn: '&aJe hebt de spawn van je koninkrijk veranderd naar &2{0}&a!'
 cmdSetSpawnOther: '&aJe hebt de spawn van &2{0} &averanderd naar &2{1}&a!'
 
 # /k enemy
-cmdEnemy: '&aJe bent nu vijanden met &2{0}&a!'
-cmdEnemyMembers: '&aJouw koninkrijk is nu vijanden met &2{0}&a!'
+cmdEnemy: '&aJouw koninkrijk is nu vijanden met &2{0}&a!'
 cmdEnemyAlready: '&cJe bent al vijanden met &4{0}&c!'
+
+cmdEnemyOtherAlready: '&4{0} &cis al vijanden met &4{1}&c!'
+cmdEnemyOther: '&2{0} &ais nu vijanden met &2{1}&a!'
 
 # /k ally
 cmdAllyRequest: '&aJe hebt een bondgenootschap aangevraagd met &2{0}&a!'
 cmdAllyRequestAlready: '&cJe hebt al een bondgenootschap aangevraagd met &4{0}&c!'
 cmdAllyRequestTarget: '&2{0} &aheeft een bondgenootschap aangevraagd met jouw koninkrijk!'
-cmdAllyAccepted: '&aJe bent nu bondgenoten met &2{0}&a!'
+cmdAlly: '&aJouw koninkrijk is nu een bondgenoot met &2{0}&a!'
 cmdAllyAlready: '&4{0} &cis al een bondgenoot!'
+
+cmdAllyOtherAlready: '&4{0} &cis al een bondgenoot van &4{1}&c!'
+cmdAllyOther: '&2{0} &ais nu een bondgenoot met &2{1}&a!'
 
 # /k truce
 cmdTruceRequest: '&aJe hebt een wapenstilstand aangevraagd met &2{0}&a!'
 cmdTruceRequestAlready: '&cJe hebt al een wapenstilstand aangevraagd met &4{0}&c!'
 cmdTruceRequestTarget: '&2{0} &aheeft een wapenstilstand aangevraagd met jouw koninkrijk!'
-cmdTruceAccepted: '&aJe hebt nu een wapenstilstand met &2{0}&a!'
+cmdTruce: '&aJouw koninkrijk heeft nu een wapenstilstand met &2{0}&a!'
 cmdTruceAlready: '&cJe hebt al een wapenstilstand met &4{0}&c!'
 cmdTruceNotEnemies: '&cJe moet vijanden zijn met &4{0} &com een wapenstilstand aan te vragen!'
+
+cmdTruceOtherAlready: '&4{0} &cis al in een wapenstilstand met &4{1}&c!'
+cmdTruceOther: '&2{0} &ais nu in een wapenstilstand met &2{1}&a!'
 
 # /k neutral
 cmdNeutralRequest: '&aJe hebt een neutrale status aangevraagd met &2{0}&a!'
 cmdNeutralRequestAlready: '&cJe hebt al een neutrale status aangevraagd met &4{0}&c!'
 cmdNeutralRequestTarget: '&2{0} &aheeft een neutrale status aangevraagd met jouw koninkrijk!'
-cmdNeutralAccepted: '&aJe bent nu neutraal met &2{0}&a!'
+cmdNeutral: '&aJouw koninkrijk is nu neutraal met &2{0}&a!'
 cmdNeutralAlready: '&4{0} &cis al een neutraal koninkrijk!'
+
+cmdNeutralOtherAlready: '&4{0} &cis al neutraal met &4{1}&c!'
+cmdNeutralOther: '&2{0} &ais nu neutraal met &2{1}&a!'
 
 # /k kick
 cmdKickTarget: '&aJe bent uit &2{0} &ageschopt!'

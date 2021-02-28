@@ -152,3 +152,17 @@ permissions:
         description: 'Teleport a player to their kingdom spawn'
     kingdom.tpspawn.other:
         description: 'Teleport a player to any kingdom spawn'
+    kingdom.ally.other:
+        description: 'Change ally status between kingdoms'
+    kingdom.enemy.other:
+        description: 'Change enemy status between kingdoms'
+    kingdom.truce.other:
+        description: 'Change truce status between kingdoms'
+    kingdom.neutral.other:
+        description: 'Change neutral status between kingdoms'
+    kingdom.admin.other:
+        description: 'Give another player admin status'
+    kingdom.socialspy:
+        description: 'Toggle social spy'
+    kingdom.defaultchatchannel:
+        description: 'Change your personal default chat channel'

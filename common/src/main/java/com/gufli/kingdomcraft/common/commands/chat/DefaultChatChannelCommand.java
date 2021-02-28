@@ -35,7 +35,7 @@ public class DefaultChatChannelCommand extends CommandBase {
         addCommand("dcc");
         addCommand("defaultchannel");
         addCommand("dc");
-        setExplanationMessage("cmdDefaultChatChannelExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdDefaultChatChannelExplanation"));
         setPermissions("kingdom.defaultchatchannel");
     }
 

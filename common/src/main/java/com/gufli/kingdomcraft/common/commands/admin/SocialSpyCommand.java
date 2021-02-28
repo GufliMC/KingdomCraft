@@ -27,7 +27,7 @@ public class SocialSpyCommand extends CommandBase {
     public SocialSpyCommand(KingdomCraftImpl kdc) {
         super(kdc, "socialspy", 0, true);
         addCommand("ss");
-        setExplanationMessage("cmdSocialSpyExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdSocialSpyExplanation"));
         setPermissions("kingdom.socialspy");
     }
 
@@ -35,11 +35,13 @@ public class SocialSpyCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         PlatformPlayer player = (PlatformPlayer) sender;
 
-        if ( player.has("SOCIAL_SPY") && player.get("SOCIAL_SPY", Boolean.class) ) {
-            player.remove("SOCIAL_SPY");
+        if ( player.isSocialSpyEnabled() ) {
+            player.setSocialSpyEnabled(false);
+            kdc.saveAsync(player.getUser());
             kdc.getMessages().send(sender, "cmdSocialSpyDisable");
         } else {
-            player.set("SOCIAL_SPY", true);
+            player.setSocialSpyEnabled(true);
+            kdc.saveAsync(player.getUser());
             kdc.getMessages().send(sender, "cmdSocialSpyEnable");
         }
     }

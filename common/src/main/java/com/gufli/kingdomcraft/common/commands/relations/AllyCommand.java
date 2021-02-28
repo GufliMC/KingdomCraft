@@ -34,7 +34,7 @@ public class AllyCommand extends CommandBase {
     public AllyCommand(KingdomCraftImpl kdc) {
         super(kdc, "ally", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdAllyExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAllyExplanation"));
         setPermissions("kingdom.ally");
     }
 
@@ -96,13 +96,15 @@ public class AllyCommand extends CommandBase {
             return;
         }
 
-        kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.ALLY);
-        kdc.getMessages().send(sender, "cmdAllyAccepted", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
-            if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessages().send(member, "cmdAllyAccepted", kingdom.getName());
+            Kingdom kd = member.getUser().getKingdom();
+            if ( kd == kingdom ) {
+                kdc.getMessages().send(member, "cmdAlly", target.getName());
+            } else if ( kd == target ) {
+                kdc.getMessages().send(member, "cmdAlly", kingdom.getName());
+            }
         }
     }
 }

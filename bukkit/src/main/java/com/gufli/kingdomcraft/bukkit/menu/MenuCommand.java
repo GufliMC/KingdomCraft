@@ -10,7 +10,7 @@ public class MenuCommand extends CommandBase {
     public MenuCommand(KingdomCraftImpl kdc) {
         super(kdc, "menu", 0, true);
         addCommand("panel");
-        setExplanationMessage(kdc.getMessages().getMessage("cmdMenuExplanation"));
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdMenuExplanation"));
         setPermissions("kingdom.menu");
         KingdomMenu.kdc = kdc;
     }

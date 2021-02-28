@@ -31,7 +31,7 @@ public class EditPrefixOtherCommand extends CommandBase {
     public EditPrefixOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit prefix", 2);
         setArgumentsHint("<kingdom> <prefix>");
-        setExplanationMessage("cmdExitPrefixOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdExitPrefixOtherExplanation"));
         setPermissions("kingdom.edit.prefix.other");
     }
 

@@ -24,6 +24,7 @@ import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.FriendlyFireCancelEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -134,7 +135,9 @@ public class FriendlyFireListener implements Listener {
         }
 
         e.setCancelled(true);
-        if ( damager instanceof Projectile ) {
+
+        // remove sticking arrows
+        if ( damager instanceof Arrow ) {
             damager.remove();
         }
 

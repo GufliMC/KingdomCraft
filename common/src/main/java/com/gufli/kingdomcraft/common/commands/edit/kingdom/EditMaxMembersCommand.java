@@ -29,7 +29,7 @@ public class EditMaxMembersCommand extends CommandBase {
     public EditMaxMembersCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit max-members", 1, true);
         setArgumentsHint("<amount>");
-        setExplanationMessage("cmdExitMaxMembersExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdExitMaxMembersExplanation"));
         setPermissions("kingdom.edit.max-members");
     }
 

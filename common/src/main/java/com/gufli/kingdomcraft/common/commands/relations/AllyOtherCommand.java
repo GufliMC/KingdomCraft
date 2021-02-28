@@ -21,48 +21,48 @@ import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Relation;
 import com.gufli.kingdomcraft.api.domain.RelationType;
 import com.gufli.kingdomcraft.api.domain.User;
-import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EnemyCommand extends CommandBase {
+public class AllyOtherCommand extends CommandBase {
 
-    public EnemyCommand(KingdomCraftImpl kdc) {
-        super(kdc, "enemy", 1, true);
-        setArgumentsHint("<kingdom>");
-        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEnemyExplanation"));
-        setPermissions("kingdom.enemy");
+    public AllyOtherCommand(KingdomCraftImpl kdc) {
+        super(kdc, "ally", 2);
+        setArgumentsHint("<kingdom1> <kingdom2>");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAllyOtherExplanation"));
+        setPermissions("kingdom.ally.other");
     }
 
     @Override
     public List<String> autocomplete(PlatformPlayer player, String[] args) {
         if ( args.length == 1 ) {
-            User user = kdc.getUser(player);
-            Kingdom kingdom = user.getKingdom();
-            if ( kingdom != null ) {
-                return kdc.getKingdoms().stream().filter(k -> k != kingdom)
-                        .map(Kingdom::getName).collect(Collectors.toList());
-            }
+            return kdc.getKingdoms().stream().map(Kingdom::getName)
+                    .collect(Collectors.toList());
+        }
+        if ( args.length == 2 ) {
+            Kingdom kingdom = kdc.getKingdom(args[0]);
+            return kdc.getKingdoms().stream().filter(k -> k != kingdom)
+                    .map(Kingdom::getName).collect(Collectors.toList());
         }
         return null;
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        User user = kdc.getUser((PlatformPlayer) sender);
-        Kingdom kingdom = user.getKingdom();
+        Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
-        Kingdom target = kdc.getKingdom(args[0]);
+        Kingdom target = kdc.getKingdom(args[1]);
         if ( target == null ) {
-            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[1]);
             return;
         }
 
@@ -72,19 +72,20 @@ public class EnemyCommand extends CommandBase {
         }
 
         Relation existing = kdc.getRelation(kingdom, target);
-        if ( existing != null && existing.getType() == RelationType.ENEMY ) {
-            kdc.getMessages().send(sender, "cmdEnemyAlready", target.getName());
+        if ( existing != null && existing.getType() == RelationType.ALLY ) {
+            kdc.getMessages().send(sender, "cmdAllyOtherAlready", kingdom.getName(), target.getName());
             return;
         }
 
-        kdc.setRelation(kingdom, target, RelationType.ENEMY);
+        kdc.setRelation(kingdom, target, RelationType.ALLY);
+        kdc.getMessages().send(sender, "cmdAllyOther", kingdom.getName(), target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             Kingdom kd = member.getUser().getKingdom();
             if ( kd == kingdom ) {
-                kdc.getMessages().send(member, "cmdEnemy", target.getName());
+                kdc.getMessages().send(member, "cmdAlly", target.getName());
             } else if ( kd == target ) {
-                kdc.getMessages().send(member, "cmdEnemy", kingdom.getName());
+                kdc.getMessages().send(member, "cmdAlly", kingdom.getName());
             }
         }
     }

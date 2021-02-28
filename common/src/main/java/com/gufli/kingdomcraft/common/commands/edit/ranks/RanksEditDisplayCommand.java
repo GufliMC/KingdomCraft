@@ -33,7 +33,7 @@ public class RanksEditDisplayCommand extends CommandBase {
     public RanksEditDisplayCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit display", 2, true);
         setArgumentsHint("<rank> <value>");
-        setExplanationMessage("cmdRanksEditDisplayExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdRanksEditDisplayExplanation"));
         setPermissions("kingdom.ranks.edit.display");
     }
 

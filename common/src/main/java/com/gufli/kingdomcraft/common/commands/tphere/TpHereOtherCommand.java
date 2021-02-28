@@ -33,7 +33,7 @@ public class TpHereOtherCommand extends CommandBase {
     public TpHereOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "tphere", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdTpHereOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTpHereOtherExplanation"));
         setPermissions("kingdom.tphere.other");
     }
 

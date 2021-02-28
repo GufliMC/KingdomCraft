@@ -31,7 +31,7 @@ public class SetSpawnCommand extends CommandBase {
 
     public SetSpawnCommand(KingdomCraftImpl kdc) {
         super(kdc, "setspawn", 0, true);
-        setExplanationMessage("cmdSetSpawnExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdSetSpawnExplanation"));
         setPermissions("kingdom.setspawn");
     }
 
