@@ -5,7 +5,7 @@ description: 'The Ultimate Kingdom Plugin'
 softdepend: [Vault]
 website: 'kingdomcraft.be'
 main: com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin
-api-version: 1.16
+api-version: 1.13
 commands:
     kingdomcraft:
       aliases: [k, kd, kdc, kingdoms, kingdom]
