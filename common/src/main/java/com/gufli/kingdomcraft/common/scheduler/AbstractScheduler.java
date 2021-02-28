@@ -107,23 +107,28 @@ public abstract class AbstractScheduler {
     }
 
     public <T> CompletableFuture<T> makeAsyncFuture(Callable<T> supplier) {
-        return CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        async().execute(() -> {
             try {
-                return supplier.call();
-            } catch (Exception e) {
-                throw new CompletionException(e);
+                future.complete(supplier.call());
+            } catch (Exception ex) {
+                future.completeExceptionally(ex);
             }
-        }, async());
+        });
+        return future;
     }
 
     public CompletableFuture<Void> makeAsyncFuture(Runnable runnable) {
-        return CompletableFuture.runAsync(() -> {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        async().execute(() -> {
             try {
                 runnable.run();
+                future.complete(null);
             } catch (Exception e) {
-                throw new CompletionException(e);
+                future.completeExceptionally(e);
             }
-        }, async());
+        });
+        return future;
     }
 
 }
