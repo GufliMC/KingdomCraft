@@ -25,7 +25,7 @@ public class EditorCommand extends CommandBase {
 
     public EditorCommand(KingdomCraftImpl kdc) {
         super(kdc, "editor", 0);
-        setExplanationMessage("cmdEditorExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEditorExplanation"));
         setPermissions("kingdom.editor");
     }
 

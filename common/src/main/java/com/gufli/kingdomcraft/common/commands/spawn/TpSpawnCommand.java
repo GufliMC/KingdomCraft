@@ -33,7 +33,7 @@ public class TpSpawnCommand extends CommandBase {
     public TpSpawnCommand(KingdomCraftImpl kdc) {
         super(kdc, "tpspawn", 1);
         setArgumentsHint("<player>");
-        setExplanationMessage("cmdTpSpawnExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTpSpawnExplanation"));
         setPermissions("kingdom.tpspawn");
     }
 

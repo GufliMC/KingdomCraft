@@ -35,7 +35,7 @@ public class EditItemOtherCommand extends CommandBase {
     public EditItemOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit item", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdEditItemOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEditItemOtherExplanation"));
         setPermissions("kingdom.edit.item.other");
     }
 

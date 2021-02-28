@@ -32,7 +32,7 @@ public class InfoCommand extends CommandBase {
 
     public InfoCommand(KingdomCraftImpl kdc) {
         super(kdc, "info", -1, true);
-        setExplanationMessage(kdc.getMessages().getMessage("cmdInfoExplanation"));
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdInfoExplanation"));
         setPermissions("kingdom.menu", "kingdom.info");
     }
 

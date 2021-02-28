@@ -34,7 +34,7 @@ public class RanksCloneCommand extends CommandBase {
     public RanksCloneCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks clone", 3, true);
         setArgumentsHint("<from-kingdom> <to-kingdom> <rank>");
-        setExplanationMessage("cmdRanksCloneExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdRanksCloneExplanation"));
         setPermissions("kingdom.ranks.clone");
     }
 

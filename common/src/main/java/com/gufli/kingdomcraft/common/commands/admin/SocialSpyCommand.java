@@ -27,7 +27,7 @@ public class SocialSpyCommand extends CommandBase {
     public SocialSpyCommand(KingdomCraftImpl kdc) {
         super(kdc, "socialspy", 0, true);
         addCommand("ss");
-        setExplanationMessage("cmdSocialSpyExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdSocialSpyExplanation"));
         setPermissions("kingdom.socialspy");
     }
 

@@ -253,6 +253,12 @@ public class CommandManagerImpl implements CommandManager {
 
         Map<Command, String[]> candidates = new HashMap<>();
         for ( Command cb : commands ) {
+            // only suggest commands the player has permission for
+            if ( cb.getPermissions() != null && cb.getPermissions().length > 0
+                    && Arrays.stream(cb.getPermissions()).noneMatch(sender::hasPermission)) {
+                continue;
+            }
+
             candidates.put(cb, cb.getCommands().get(0).split(Pattern.quote(" ")));
         }
 

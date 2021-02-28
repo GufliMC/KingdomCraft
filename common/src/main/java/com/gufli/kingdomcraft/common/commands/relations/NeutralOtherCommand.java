@@ -34,7 +34,7 @@ public class NeutralOtherCommand extends CommandBase {
     public NeutralOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "neutral", 2);
         setArgumentsHint("<kingdom1> <kingdom2>");
-        setExplanationMessage("cmdNeutralOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdNeutralOtherExplanation"));
         setPermissions("kingdom.neutral.other");
     }
 

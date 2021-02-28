@@ -26,7 +26,7 @@ public class PlayerDataPurgeCommand extends CommandBase {
 
     public PlayerDataPurgeCommand(KingdomCraftImpl kdc) {
         super(kdc, "playerdata purge", 0, true);
-        setExplanationMessage("cmdPlayerDataPurgeExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdPlayerDataPurgeExplanation"));
         setPermissions("kingdom.playerdata.purge");
     }
 

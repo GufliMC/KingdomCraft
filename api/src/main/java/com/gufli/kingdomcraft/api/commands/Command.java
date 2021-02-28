@@ -5,6 +5,7 @@ import com.gufli.kingdomcraft.api.entity.PlatformSender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class Command {
 
@@ -14,7 +15,8 @@ public abstract class Command {
     private int expectedArguments = -1;
 
     private String argumentsHint;
-    private String explanationMessage;
+
+    private Supplier<String> explanationMessage;
 
     private String[] permissions;
 
@@ -31,7 +33,6 @@ public abstract class Command {
         this(command, expectedArguments);
         this.isPlayerOnly = isPlayerOnly;
     }
-
 
     protected void addCommand(String alias) {
         commands.add(alias);
@@ -54,11 +55,18 @@ public abstract class Command {
     }
 
     public String getExplanationMessage() {
-        return explanationMessage;
+        if ( hasExplanationMessage() ) {
+            return explanationMessage.get();
+        }
+        return null;
     }
 
-    protected void setExplanationMessage(String explanationMessage) {
-        this.explanationMessage = explanationMessage;
+    public boolean  hasExplanationMessage() {
+        return explanationMessage != null;
+    }
+
+    protected void setExplanationMessage(Supplier<String> supplier) {
+        this.explanationMessage = supplier;
     }
 
     public String[] getPermissions() {

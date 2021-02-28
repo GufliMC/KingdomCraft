@@ -33,7 +33,7 @@ public class RanksEditMaxMembersCommand extends CommandBase {
     public RanksEditMaxMembersCommand(KingdomCraftImpl kdc) {
         super(kdc, "ranks edit max-members", 2, true);
         setArgumentsHint("<rank> <amount>");
-        setExplanationMessage("cmdRanksEditMaxMembersExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdRanksEditMaxMembersExplanation"));
         setPermissions("kingdom.ranks.edit.max-members");
     }
 

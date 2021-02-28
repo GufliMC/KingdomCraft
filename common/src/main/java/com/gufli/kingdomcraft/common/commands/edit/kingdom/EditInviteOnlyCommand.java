@@ -32,7 +32,7 @@ public class EditInviteOnlyCommand extends CommandBase {
     public EditInviteOnlyCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit invite-only", 1, true);
         setArgumentsHint("[true/false]");
-        setExplanationMessage("cmdEditInviteOnlyExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEditInviteOnlyExplanation"));
         setPermissions("kingdom.edit.invite-only");
     }
 

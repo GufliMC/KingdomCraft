@@ -28,7 +28,7 @@ public class PlayerDataClearCommand extends CommandBase {
 
     public PlayerDataClearCommand(KingdomCraftImpl kdc) {
         super(kdc, "playerdata clear", -1);
-        setExplanationMessage("cmdPlayerDataClearExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdPlayerDataClearExplanation"));
         setPermissions("kingdom.playerdata.clear");
     }
 

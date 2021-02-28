@@ -34,7 +34,7 @@ public class EnemyOtherCommand extends CommandBase {
     public EnemyOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "enemy", 2);
         setArgumentsHint("<kingdom1> <kingdom2>");
-        setExplanationMessage("cmdEnemyOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEnemyOtherExplanation"));
         setPermissions("kingdom.enemy.other");
     }
 

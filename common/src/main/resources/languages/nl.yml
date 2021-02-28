@@ -114,6 +114,8 @@ cmdEditPrefixExplanation: 'Verander de prefix van je koninkrijk'
 cmdEditPrefixOtherExplanation: 'Verander de prefix van een koninkrijk'
 cmdEditSuffixExplanation: 'Verander de suffix van je koninkrijk'
 cmdEditSuffixOtherExplanation: 'Verander de suffix van een koninkrijk'
+cmdEditItemExplanation: 'Verander het voorwerp van je koninkrijk'
+cmdEditItemOtherExplanation: 'Verander het voorwerp van een koninkrijk'
 
 cmdRanksCloneExplanation: 'Kopieer een rank van een koninkrijk naar een ander koninkrijk'
 cmdRanksCreateExplanation: 'Maak een rang in je koninkrijk'

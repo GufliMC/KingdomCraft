@@ -114,6 +114,8 @@ cmdEditPrefixExplanation: 'Change the prefix of your kingdom'
 cmdEditPrefixOtherExplanation: 'Change the prefix of a kingdom'
 cmdEditSuffixExplanation: 'Change the suffix of your kingdom'
 cmdEditSuffixOtherExplanation: 'Change the suffix of a kingdom'
+cmdEditItemExplanation: 'Change the item of your kingdom'
+cmdEditItemOtherExplanation: 'Change the item of another kingdom'
 
 cmdRanksCloneExplanation: 'Clone a rank from one kingdom to another'
 cmdRanksCreateExplanation: 'Create a rank in your kingdom'

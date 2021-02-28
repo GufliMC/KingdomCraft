@@ -30,7 +30,7 @@ public class GroupsCommand extends CommandBase {
 
     public GroupsCommand(KingdomCraftImpl kdc) {
         super(kdc, "groups", 0);
-        setExplanationMessage("cmdGroupsExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdGroupsExplanation"));
         setPermissions("kingdom.groups");
     }
 

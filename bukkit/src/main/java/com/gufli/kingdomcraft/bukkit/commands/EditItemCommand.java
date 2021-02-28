@@ -33,7 +33,7 @@ public class EditItemCommand extends CommandBase {
 
     public EditItemCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit item", 0, true);
-        setExplanationMessage("cmdItemExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEditItemExplanation"));
         setPermissions("kingdom.edit.item");
     }
 

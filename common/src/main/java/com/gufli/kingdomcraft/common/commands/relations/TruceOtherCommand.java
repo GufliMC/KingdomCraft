@@ -34,7 +34,7 @@ public class TruceOtherCommand extends CommandBase {
     public TruceOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "truce", 2, false);
         setArgumentsHint("<kingdom1> <kingdom2>");
-        setExplanationMessage("cmdTruceOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTruceOtherExplanation"));
         setPermissions("kingdom.truce.other");
     }
 

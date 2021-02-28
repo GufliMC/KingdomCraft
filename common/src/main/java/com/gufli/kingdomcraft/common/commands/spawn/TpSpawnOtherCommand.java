@@ -33,7 +33,7 @@ public class TpSpawnOtherCommand extends CommandBase {
     public TpSpawnOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "tpspawn", 2);
         setArgumentsHint("<player> <kingdom>");
-        setExplanationMessage("cmdTpSpawnOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTpSpawnOtherExplanation"));
         setPermissions("kingdom.tpspawn");
     }
 

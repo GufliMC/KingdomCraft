@@ -34,7 +34,7 @@ public class TruceCommand extends CommandBase {
     public TruceCommand(KingdomCraftImpl kdc) {
         super(kdc, "truce", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdTruceExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdTruceExplanation"));
         setPermissions("kingdom.truce");
     }
 

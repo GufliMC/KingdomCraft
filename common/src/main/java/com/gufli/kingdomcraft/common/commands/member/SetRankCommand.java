@@ -33,7 +33,7 @@ public class SetRankCommand extends CommandBase {
     public SetRankCommand(KingdomCraftImpl kdc) {
         super(kdc, "setrank", 2);
         setArgumentsHint("<player> <rank>");
-        setExplanationMessage("cmdSetRankExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdSetRankExplanation"));
         setPermissions("kingdom.setrank", "kingdom.setrank.other");
     }
 

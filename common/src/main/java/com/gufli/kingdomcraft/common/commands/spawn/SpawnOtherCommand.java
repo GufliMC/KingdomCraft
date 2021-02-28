@@ -35,7 +35,7 @@ public class SpawnOtherCommand extends CommandBase {
         super(kdc, "spawn", 1, true);
         addCommand("s");
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdSpawnOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdSpawnOtherExplanation"));
         setPermissions("kingdom.spawn.other");
     }
 

@@ -30,7 +30,7 @@ public class ListCommand extends CommandBase {
 
     public ListCommand(KingdomCraftImpl kdc) {
         super(kdc, "list", 0);
-        setExplanationMessage("cmdListExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdListExplanation"));
         setPermissions("kingdom.list");
     }
 

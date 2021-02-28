@@ -27,7 +27,7 @@ public class ReloadCommand extends CommandBase {
 
     public ReloadCommand(KingdomCraftBukkitPlugin plugin) {
         super(plugin.getKdc(), "reload", 0);
-        setExplanationMessage("cmdReloadExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdReloadExplanation"));
         setPermissions("kingdom.reload");
         this.plugin = plugin;
     }

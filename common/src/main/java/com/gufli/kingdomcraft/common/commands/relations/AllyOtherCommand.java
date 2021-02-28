@@ -34,7 +34,7 @@ public class AllyOtherCommand extends CommandBase {
     public AllyOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "ally", 2);
         setArgumentsHint("<kingdom1> <kingdom2>");
-        setExplanationMessage("cmdAllyOtherExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAllyOtherExplanation"));
         setPermissions("kingdom.ally.other");
     }
 

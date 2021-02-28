@@ -34,7 +34,7 @@ public class AllyCommand extends CommandBase {
     public AllyCommand(KingdomCraftImpl kdc) {
         super(kdc, "ally", 1, true);
         setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdAllyExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAllyExplanation"));
         setPermissions("kingdom.ally");
     }
 

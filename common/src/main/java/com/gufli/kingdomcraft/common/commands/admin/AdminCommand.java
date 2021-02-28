@@ -26,7 +26,7 @@ public class AdminCommand extends CommandBase {
 
     public AdminCommand(KingdomCraftImpl kdc) {
         super(kdc, "admin", 0, true);
-        setExplanationMessage("cmdAdminExplanation");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdAdminExplanation"));
         setPermissions("kingdom.admin");
     }
 
