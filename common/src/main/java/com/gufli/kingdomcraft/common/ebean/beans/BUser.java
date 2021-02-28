@@ -55,6 +55,12 @@ public class BUser extends BaseModel implements User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     public List<BUserChatChannel> chatChannels;
 
+    @DbDefault(value = "false")
+    public boolean adminModeEnabled;
+
+    @DbDefault(value = "false")
+    public boolean socialSpyEnabled;
+
     @WhenCreated
     public Instant createdAt;
 
@@ -227,6 +233,26 @@ public class BUser extends BaseModel implements User {
     @Override
     public UserChatChannel getChatChannel(String channel) {
         return chatChannels.stream().filter(cs -> cs.channel.endsWith(channel)).findFirst().orElse(null);
+    }
+
+    @Override
+    public boolean isAdminModeEnabled() {
+        return adminModeEnabled;
+    }
+
+    @Override
+    public void setAdminModeEnabled(boolean adminMode) {
+        this.adminModeEnabled = adminMode;
+    }
+
+    @Override
+    public boolean isSocialSpyEnabled() {
+        return socialSpyEnabled;
+    }
+
+    @Override
+    public void setSocialSpyEnabled(boolean socialSpy) {
+        this.socialSpyEnabled = socialSpy;
     }
 
     @Override

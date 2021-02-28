@@ -56,13 +56,22 @@ public class ChatManagerImpl implements ChatManager {
     public ChatManagerImpl(KingdomCraftImpl kdc) {
         this.kdc = kdc;
 
-        // enable social spy on join
+        // disable social spy on join if permissions are removed
         kdc.getEventManager().addListener(PlayerLoadedEvent.class, (e) -> {
-            if ( e.getPlayer().hasPermission("kingdom.socialspy") ) {
-                e.getPlayer().set("SOCIAL_SPY", true);
+            if ( !e.getPlayer().isSocialSpyEnabled() ) {
+                return;
             }
+
+            if ( !e.getPlayer().hasPermission("kingdom.socialspy") ) {
+                e.getPlayer().setSocialSpyEnabled(false);
+                kdc.saveAsync(e.getPlayer().getUser());
+                return;
+            }
+
+            kdc.getMessages().send(e.getPlayer(), "socialSpyJoin");
         });
 
+        // update channels on kingdom delete
         kdc.getEventManager().addListener(KingdomDeleteEvent.class, (e) -> {
             getKingdomChannels(e.getKingdom()).forEach(ch -> {
                 KingdomChatChannel kch = ((KingdomChatChannel) ch);
@@ -73,6 +82,7 @@ public class ChatManagerImpl implements ChatManager {
             });
         });
 
+        // update channels on kingdom create
         kdc.getEventManager().addListener(KingdomCreateEvent.class, (e) -> {
             for (ChatChannelFactory f : factories ) {
                 if ( !f.shouldCreate(e.getKingdom()) ) continue;
@@ -283,7 +293,7 @@ public class ChatManagerImpl implements ChatManager {
         }
 
         kdc.getOnlinePlayers().stream()
-                .filter(p -> p.has("SOCIAL_SPY") && p.get("SOCIAL_SPY", Boolean.class))
+                .filter(PlatformPlayer::isSocialSpyEnabled)
                 .filter(p -> !receivers.contains(p))
                 .forEach(p -> {
                     p.sendMessage(kdc.getMessages().getMessage("socialSpyPrefix") + finalResult);

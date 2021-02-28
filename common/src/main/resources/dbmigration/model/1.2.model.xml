@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <addColumn tableName="users">
+            <column name="admin_mode_enabled" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="social_spy_enabled" type="boolean" defaultValue="false" notnull="true"/>
+        </addColumn>
+    </changeSet>
+</migration>

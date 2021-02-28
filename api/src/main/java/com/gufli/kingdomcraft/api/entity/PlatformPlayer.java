@@ -53,9 +53,23 @@ public interface PlatformPlayer extends PlatformSender {
 
     // admin mode
 
-    boolean isAdmin();
+    default boolean isAdmin() {
+        return getUser().isAdminModeEnabled();
+    }
 
-    void setAdmin(boolean admin);
+    default void setAdmin(boolean admin) {
+        getUser().setAdminModeEnabled(admin);
+    }
+
+    // social spy
+
+    default boolean isSocialSpyEnabled() {
+        return getUser().isSocialSpyEnabled();
+    }
+
+    default void setSocialSpyEnabled(boolean socialSpy) {
+        getUser().setSocialSpyEnabled(socialSpy);
+    }
 
     // cache
 

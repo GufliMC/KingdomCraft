@@ -20,6 +20,9 @@ chatChannelCooldown: '&cJe moet nog &4{0} &cseconden wachten voordat je kan prat
 
 socialSpyPrefix: '&b[SS] '
 
+adminModeJoin: '&aAdmin modus staat aan!'
+socialSpyJoin: '&aSocial spy staat aan!'
+
 # Command error messages
 
 cmdDefaultHelp: '&aVoor hulp, type &2/k help'

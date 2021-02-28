@@ -20,6 +20,9 @@ chatChannelCooldown: '&cYou have to wait &4{0} &cmore seconds to talk in this ch
 
 socialSpyPrefix: '&b[SS] '
 
+adminModeJoin: '&aAdmin mode is enabled!'
+socialSpyJoin: '&aSocial spy is enabled!'
+
 # Command error messages
 
 cmdDefaultHelp: '&aFor help, type &2/k help'
