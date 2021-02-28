@@ -67,9 +67,13 @@ cmdChatChannelExplanation: 'Enable/disable a channel to talk in'
 cmdDefaultChatChannelExplanation: 'Toggle channel to talk in without prefix'
 cmdSetRankExplanation: 'Change a players rank'
 cmdEnemyExplanation: 'Start a rivalry'
+cmdEnemyOtherExplanation: 'Start a rivalry between kingdoms'
 cmdTruceExplanation: 'Request or accept a truce'
+cmdTruceOtherExplanation: 'Start a truce between kingdoms'
 cmdAllyExplanation: 'Request or accept an alliance'
+cmdAllyOtherExplanation: 'Start an alliance between kingdoms'
 cmdNeutralExplanation: 'End an alliance or rivalry'
+cmdNeutralOtherExplanation: 'Remove any relation between kingdoms'
 cmdSetSpawnExplanation: 'Set your kingdom spawn'
 cmdSetSpawnOtherExplanation: 'Set a kingdom spawn'
 cmdKickExplanation: 'Kick a player from your kingdom'
@@ -179,31 +183,42 @@ cmdSetSpawn: '&aYou changed the spawn of your kingdom &ato &2{0}&a!'
 cmdSetSpawnOther: '&aYou changed the spawn of &2{0} &ato &2{1}&a!'
 
 # /k enemy
-cmdEnemy: '&aYou are now enemies with &2{0}&a!'
-cmdEnemyMembers: '&aYour kingdom is now enemies with &2{0}&a!'
+cmdEnemy: '&aYour kingdom is now enemies with &2{0}&a!'
 cmdEnemyAlready: '&cYou are already enemies with &4{0}&c!'
+
+cmdEnemyOtherAlready: '&4{0} &cis already enemies with &4{1}&c!'
+cmdEnemyOther: '&2{0} &ais now enemies with &2{1}&a!'
 
 # /k ally
 cmdAllyRequest: '&aYou requested an alliance with &2{0}&a!'
 cmdAllyRequestAlready: '&cYou already requested an alliance with &4{0}&c!'
 cmdAllyRequestTarget: '&2{0} &ahas requested an alliance with your kingdom!'
-cmdAllyAccepted: '&aYou are now allies with &2{0}&a!'
+cmdAlly: '&aYour kingdom is now allies with &2{0}&a!'
 cmdAllyAlready: '&4{0} &cis already an allied kingdom!'
+
+cmdAllyOtherAlready: '&4{0} &cis already an allied kingdom of &4{1}&c!'
+cdmAllyOther: '&2{0} &ais now allies with &2{1}&a!'
 
 # /k truce
 cmdTruceRequest: '&aYou requested a truce with &2{0}&a!'
 cmdTruceRequestAlready: '&cYou already requested a truce with &4{0}&c!'
 cmdTruceRequestTarget: '&2{0} &ahas requested a truce with your kingdom!'
-cmdTruceAccepted: '&aYou are now in a truce with &2{0}&a!'
+cmdTruce: '&aYour kingdom is now in a truce with &2{0}&a!'
 cmdTruceAlready: '&4{0} &cis already in a truce with your kingdom!'
 cmdTruceNotEnemies: '&cYou are not enemies with &4{0}&c!'
+
+cmdTruceOtherAlready: '&4{0} &cis already in truce with &4{1}&c!'
+cdmTruceOther: '&2{0} &ais now in truce with &2{1}&a!'
 
 # /k neutral
 cmdNeutralRequest: '&aYou requested to be neutral with &2{0}&a!'
 cmdNeutralRequestAlready: '&cYou already requested to be neutral with &4{0}&c!'
 cmdNeutralRequestTarget: '&2{0} &ahas requested to be neutral with your kingdom!'
-cmdNeutralAccepted: '&aYou are now neutral with &2{0}&a!'
+cmdNeutral: '&aYour kingdom is now neutral with &2{0}&a!'
 cmdNeutralAlready: '&4{0} &cis already a neutral kingdom!'
+
+cmdNeutralOtherAlready: '&4{0} &cis already neutral with &4{1}&c!'
+cdmNeutralOther: '&2{0} &ais now neutral with &2{1}&a!'
 
 # /k kick
 cmdKickTarget: '&aYou have been kicked out of &2{0}&a!'

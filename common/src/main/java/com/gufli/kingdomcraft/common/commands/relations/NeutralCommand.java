@@ -101,13 +101,15 @@ public class NeutralCommand extends CommandBase {
             }
         }
 
-        kdc.removeRelationRequest(target, kingdom);
         kdc.setRelation(target, kingdom, RelationType.NEUTRAL);
-        kdc.getMessages().send(sender, "cmdNeutralAccepted", target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
-            if ( kdc.getUser(member).getKingdom() != target ) continue;
-            kdc.getMessages().send(member, "cmdNeutralAccepted", kingdom.getName());
+            Kingdom kd = member.getUser().getKingdom();
+            if ( kd == kingdom ) {
+                kdc.getMessages().send(member, "cmdNeutral", target.getName());
+            } else if ( kd == target ) {
+                kdc.getMessages().send(member, "cmdNeutral", kingdom.getName());
+            }
         }
     }
 }

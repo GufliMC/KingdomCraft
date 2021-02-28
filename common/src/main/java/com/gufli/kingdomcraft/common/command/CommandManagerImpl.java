@@ -36,10 +36,7 @@ import com.gufli.kingdomcraft.common.commands.member.InviteCommand;
 import com.gufli.kingdomcraft.common.commands.member.KickCommand;
 import com.gufli.kingdomcraft.common.commands.member.LeaveCommand;
 import com.gufli.kingdomcraft.common.commands.member.SetRankCommand;
-import com.gufli.kingdomcraft.common.commands.relations.AllyCommand;
-import com.gufli.kingdomcraft.common.commands.relations.EnemyCommand;
-import com.gufli.kingdomcraft.common.commands.relations.NeutralCommand;
-import com.gufli.kingdomcraft.common.commands.relations.TruceCommand;
+import com.gufli.kingdomcraft.common.commands.relations.*;
 import com.gufli.kingdomcraft.common.commands.spawn.*;
 import com.gufli.kingdomcraft.common.commands.tphere.TpHereCommand;
 import com.gufli.kingdomcraft.common.commands.tphere.TpHereOtherCommand;
@@ -96,9 +93,16 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new SetSpawnCommand(kdc));
 
         addCommand(new AllyCommand(kdc));
+        addCommand(new AllyOtherCommand(kdc));
+
         addCommand(new EnemyCommand(kdc));
+        addCommand(new EnemyOtherCommand(kdc));
+
         addCommand(new NeutralCommand(kdc));
+        addCommand(new NeutralOtherCommand(kdc));
+
         addCommand(new TruceCommand(kdc));
+        addCommand(new TruceOtherCommand(kdc));
 
         // admin
         addCommand(new SetRankCommand(kdc));

@@ -21,52 +21,48 @@ import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.Relation;
 import com.gufli.kingdomcraft.api.domain.RelationType;
 import com.gufli.kingdomcraft.api.domain.User;
-import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TruceCommand extends CommandBase {
+public class TruceOtherCommand extends CommandBase {
 
-    public TruceCommand(KingdomCraftImpl kdc) {
-        super(kdc, "truce", 1, true);
-        setArgumentsHint("<kingdom>");
-        setExplanationMessage("cmdTruceExplanation");
-        setPermissions("kingdom.truce");
+    public TruceOtherCommand(KingdomCraftImpl kdc) {
+        super(kdc, "truce", 2, false);
+        setArgumentsHint("<kingdom1> <kingdom2>");
+        setExplanationMessage("cmdTruceOtherExplanation");
+        setPermissions("kingdom.truce.other");
     }
 
     @Override
     public List<String> autocomplete(PlatformPlayer player, String[] args) {
         if ( args.length == 1 ) {
-            User user = kdc.getUser(player);
-            Kingdom kingdom = user.getKingdom();
-            if ( kingdom != null ) {
-                return kdc.getKingdoms().stream().filter(k -> k != kingdom)
-                        .filter(k -> {
-                            Relation rel = kdc.getRelation(kingdom, k);
-                            return rel != null && rel.getType() == RelationType.ENEMY;
-                        })
-                        .map(Kingdom::getName).collect(Collectors.toList());
-            }
+            return kdc.getKingdoms().stream().map(Kingdom::getName)
+                    .collect(Collectors.toList());
+        }
+        if ( args.length == 2 ) {
+            Kingdom kingdom = kdc.getKingdom(args[0]);
+            return kdc.getKingdoms().stream().filter(k -> k != kingdom)
+                    .map(Kingdom::getName).collect(Collectors.toList());
         }
         return null;
     }
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        User user = kdc.getUser((PlatformPlayer) sender);
-        Kingdom kingdom = user.getKingdom();
+        Kingdom kingdom = kdc.getKingdom(args[0]);
         if ( kingdom == null ) {
-            kdc.getMessages().send(sender, "cmdErrorSenderNoKingdom");
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
             return;
         }
 
-        Kingdom target = kdc.getKingdom(args[0]);
+        Kingdom target = kdc.getKingdom(args[1]);
         if ( target == null ) {
-            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[1]);
             return;
         }
 
@@ -77,35 +73,12 @@ public class TruceCommand extends CommandBase {
 
         Relation existing = kdc.getRelation(kingdom, target);
         if ( existing != null && existing.getType() == RelationType.TRUCE ) {
-            kdc.getMessages().send(sender, "cmdTruceAlready", target.getName());
-            return;
-        }
-
-        if ( existing == null || existing.getType() != RelationType.ENEMY ) {
-            kdc.getMessages().send(sender, "cmdTruceNotEnemies", target.getName());
-            return;
-        }
-
-        Relation request = kdc.getRelationRequest(target, kingdom);
-        if ( request == null || request.getType() != RelationType.TRUCE ) {
-
-            request = kdc.getRelationRequest(kingdom, target);
-            if ( request != null && request.getType() == RelationType.TRUCE ) {
-                kdc.getMessages().send(sender, "cmdTruceRequestAlready", target.getName());
-                return;
-            }
-
-            kdc.addRelationRequest(kingdom, target, RelationType.TRUCE);
-            kdc.getMessages().send(sender, "cmdTruceRequest", target.getName());
-
-            for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
-                if ( kdc.getUser(member).getKingdom() != target || !member.has("kingdom.truce")) continue;
-                kdc.getMessages().send(member, "cmdTruceRequestTarget", kingdom.getName());
-            }
+            kdc.getMessages().send(sender, "cmdTruceOtherAlready", kingdom.getName(), target.getName());
             return;
         }
 
         kdc.setRelation(target, kingdom, RelationType.TRUCE);
+        kdc.getMessages().send(sender, "cmdTruceOther", kingdom.getName(), target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             Kingdom kd = member.getUser().getKingdom();
