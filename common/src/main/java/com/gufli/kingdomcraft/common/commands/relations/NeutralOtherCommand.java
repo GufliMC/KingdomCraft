@@ -78,7 +78,7 @@ public class NeutralOtherCommand extends CommandBase {
         }
 
         kdc.setRelation(target, kingdom, RelationType.NEUTRAL);
-        kdc.getMessages().send(sender, "cmdAllyTruceOther", kingdom.getName(), target.getName());
+        kdc.getMessages().send(sender, "cmdNeutralOther", kingdom.getName(), target.getName());
 
         for ( PlatformPlayer member : kdc.getOnlinePlayers() ) {
             Kingdom kd = member.getUser().getKingdom();
