@@ -1,0 +1,477 @@
+# Message file
+# Single quotes have to be doubled: ''
+#
+# Created by: iGufGuf
+# Spanish translation: ElBort
+#
+
+# Common messages
+
+noPermission: '&cNo tienes permiso para hacer eso!'
+
+friendlyFire: '&cFuego amigo desactivado!'
+
+teleport: '&aTeletransportando en &2{0} &asegundos, no te muevas!'
+teleportCancel: '&cTeletransporte cancelado!'
+
+chatNoChannel: '&cNo existe el canal para enviar tu mensaje!'
+chatChannelDisabled: '&cDesactivaste el &canal &4{0}!'
+chatChannelCooldown: '&cTienes que esperar &4{0} &csegundos para hablar en este canal!'
+
+socialSpyPrefix: '&b[SS] '
+
+adminModeJoin: '&aEl modo admin está activado!'
+socialSpyJoin: '&aSocial spy está activado!'
+
+# Command error messages
+
+cmdDefaultHelp: '&aPara más ayuda escribe &2/k help'
+
+cmdErrorNoPermission: '&cNo tienes permiso para usar este comando!'
+
+cmdErrorInvalid: '&cComando incorrecto, prueba &4/k help'
+cmdErrorInvalidHint: '&cComando incorrecto, tal vez quisiste decir: &4{0}'
+cmdErrorInvalidUsage: '&cArgumentos incorrectos, intenta: &4{0}'
+
+cmdErrorSenderNoKingdom: '&cNo estás en ningún reino!'
+cmdErrorTargetNoKingdom: '&4{0} &cno es un reino!'
+cmdErrorKingdomNotExist: '&cEl reino &4{0} &cno existe!'
+cmdErrorRankNotExist: '&cEl rango &4{0} &cno existe!'
+cmdErrorPlayerNotExist: '&cEl jugador &4{0} &cno existe!'
+cmdErrorNotOnline: '&cEl jugador &4{0} &cno está conectado!'
+cmdErrorSameKingdom: '&cNo puedes ingresar tu reino!'
+cmdErrorPermissionGroupNotExist: '&cLos permisos del grupo &4{0} &cno existen.'
+cmdErrorKingdomNoDefaultRank: '&cEl reino &4{0} &cno tiene rango por defecto!'
+cmdErrorKingdomAlreadyExists: '&cEl reino &4{0} &cya existe!'
+cmdErrorRankAlreadyExists: '&cEl rango &4{0} &cya existe!'
+
+cmdErrorInvalidName: '&cEl nombre solo puede tener letras y números!'
+cmdErrorInvalidString: '&4{0} &cno es válido!'
+cmdErrorInvalidNumber: '&4{0} &cno es un número!'
+cmdErrorInvalidBoolean: '&4{0} &cno es válido, debe ser &4true &co &4false&c!'
+
+# Help messages
+
+cmdHelpHeader: '&e+----<->----+ &6KingdomCraft &e+----<->----+'
+cmdHelpFooter: '&ePágina &a{0}&f/&a{1}'
+cmdHelpFormat: '&f{0} &a{1}'
+cmdHelpPageLimit: '&cHay solo &4{0} &cpáginas.'
+
+cmdJoinExplanation: 'Unirse a un reino'
+cmdListExplanation: 'Ver la lista de reinos'
+cmdSpawnExplanation: 'Teletransportarse al spawn del reino'
+cmdInfoExplanation: 'Obtener información de un reino o un jugador'
+cmdMenuExplanation: 'Abrir menú de reinos'
+cmdLeaveExplanation: 'Abandonar tu reino'
+cmdChatChannelExplanation: 'Activar/desactivar un canal para hablar'
+cmdDefaultChatChannelExplanation: 'Activar/desactivar el canal para hablar sin prefijo'
+cmdSetRankExplanation: 'Cambiar el rango de un jugador'
+cmdEnemyExplanation: 'Iniciar una enemistad con un reino'
+cmdEnemyOtherExplanation: 'Iniciar una enemistad entre reinos'
+cmdTruceExplanation: 'Solicitar o aceptar una tregua'
+cmdTruceOtherExplanation: 'Iniciar una tregua entre reinos'
+cmdAllyExplanation: 'Solicitar o aceptar una alianza'
+cmdAllyOtherExplanation: 'Iniciar una alianza entre reinos'
+cmdNeutralExplanation: 'Finalizar una alianza o enemistad'
+cmdNeutralOtherExplanation: 'Eliminar cualquier relación entre reinos'
+cmdSetSpawnExplanation: 'Configurar el spawn de tu reino'
+cmdSetSpawnOtherExplanation: 'Configurar el spawn de un reino'
+cmdKickExplanation: 'Echar un jugador de tu reino'
+cmdSetKingdomExplanation: 'Colocar un jugador en un reino'
+cmdInviteExplanation: 'Invitar un jugador a tu reino'
+cmdReloadExplanation: 'Volver a cargar KingdomCraft'
+cmdTpHereExplanation: 'Teletransportar a todos de tu reino hacia ti'
+cmdTpHereOtherExplanation: 'Teletransportar a todos de un reino a ti'
+cmdChatExplanation: 'Enviar mensaje a un canal de chat específico'
+cmdAdminExplanation: 'Activar/desactivar el modo admin'
+cmdEditorExplanation: 'Iniciar una sesión del editor web'
+cmdTpSpawnExplanation: 'Teletransportar un jugador al spawn del reino'
+cmdTpSpawnOtherExplanation: 'Teletransportar un jugador al spawn de un reino'
+cmdSocialSpyExplanation: 'Activar/desactivar social spy'
+
+
+cmdGroupsExplanation: 'Ver la lista de todos los grupos existentes'
+cmdGroupsAddExplanation: 'Agregar un grupo de permisos a un rango'
+cmdGroupsAddOtherExplanation: 'Agregar un grupo de permisos a un rango'
+cmdGroupsListExplanation: 'Ver una lista de todos los grupos que pertenecen a un rango'
+cmdGroupsListOtherExplanation: 'Ver una lista de todos los grupos que pertenecen a un rango'
+cmdGroupsRemoveExplanation: 'Eliminar un grupo de permisos de un rango'
+cmdGroupsRemoveOtherExplanation: 'Eliminar un grupo de permisos de un rango'
+
+cmdCreateExplanation: 'Crear un reino'
+cmdRenameExplanation: 'Renombrar tu reino'
+cmdRenameOtherExplanation: 'Renombrar un reino'
+cmdDeleteExplanation: 'Eliminar tu reino'
+cmdEditDefaultRankExplanation: 'Cambiar el rango por defecto de tu reino'
+cmdEditDefaultRankOtherExplanation: 'Cambiar el rango por defecto de un reino'
+cmdEditDisplayExplanation: 'Cambiar el nombre para mostrar de tu reino'
+cmdEditDisplayOtherExplanation: 'Cambiar el nombre para mostrar de un reino'
+cmdEditInviteOnlyExplanation: 'Cambiar el estado de solo invitación de tu reino'
+cmdEditInviteOnlyOtherExplanation: 'Cambiar el estado de solo invitación de un reino'
+cmdEditMaxMembersExplanation: 'Cambiar el máximo de miembros de tu reino'
+cmdEditMaxMembersOtherExplanation: 'Cambiar el máximo de miembros de un reino'
+cmdEditPrefixExplanation: 'Cambiar el prefijo de tu reino'
+cmdEditPrefixOtherExplanation: 'Cambiar el prefijo de un reino'
+cmdEditSuffixExplanation: 'Cambiar el sufijo de tu reino'
+cmdEditSuffixOtherExplanation: 'Cambiar el sufijo de un reino'
+mdEditItemExplanation: 'Cambiar el item de tu reino'
+cmdEditItemOtherExplanation: 'Cambiar el item de otro reino'
+
+cmdRanksCloneExplanation: 'Clonar un rango de un reino a otro'
+cmdRanksCreateExplanation: 'Crear un rango en tu reino'
+cmdRanksCreateOtherExplanation: 'Crear un rango en un reino'
+cmdRanksRenameExplanation: 'Renombrar un rango de tu reino'
+cmdRanksRenameOtherExplanation: 'Renombrar un rango de un reino'
+cmdRanksDeleteExplanation: 'Eliminar un rango de tu reino'
+cmdRanksDeleteOtherExplanation: 'Eliminar un rango de un reino'
+cmdRanksEditDisplayExplanation: 'Cambiar el nombre para mostrar de un rango en tu reino'
+cmdRanksEditDisplayOtherExplanation: 'Cambiar el nombre para mostrar de un rango en un reino'
+cmdRanksEditLevelExplanation: 'Cambiar el nivel de un rango en tu reino'
+cmdRanksEditLevelOtherExplanation: 'Cambiar el nivel de un rango en un reino'
+cmdRanksEditMaxMembersExplanation: 'Cambiar el máximo de miembros de un rango en tu reino'
+cmdRanksEditMaxMembersOtherExplanation: 'Cambiar el máximo de miembros de un rango en un reino'
+cmdRanksEditPrefixExplanation: 'Cambiar el prefijo de un rango en tu reino'
+cmdRanksEditPrefixOtherExplanation: 'Cambiar el prefijo de un rango en un reino'
+cmdRanksEditSuffixExplanation: 'Cambiar el sufijo de un rango en tu reino'
+cmdRanksEditSuffixOtherExplanation: 'Cambiar el sufijo de un rango en un reino'
+cmdRanksListExplanation: 'Ver la lista de todos los rangos de tu reino'
+cmdRanksListOtherExplanation: 'Ver la lista de todos los rangos de un reino'
+
+# Command messages
+
+# /k join
+cmdJoinAlready: '&aYa perteneces a un reino!'
+cmdJoin: '&aTe uniste a &2{0}&a!'
+cmdJoinMembers: '&2{0} &ase unió a tu reino!'
+cmdJoinNoInvite: '&aNecesitas una invitación para ingresar en &2{0}&a!'
+cmdJoinNoInviteMembers: '&2{0} &aintentó unirse a tu reino pero no fue invitado!'
+cmdJoinFull: '&aEl reino &2{0} &aestá completo!'
+
+# /k leave
+cmdLeave: '&aAbandonaste &2{0}&a!'
+cmdLeaveMembers: '&2{0} &aabandonó tu reino!'
+
+# /k list
+cmdListDelimiter: '&a, &2'
+cmdList: '&aLista de reinos: &2{0}'
+
+# /k chatchannel
+cmdChatChannelEnable: '&aActivaste el canal &2{0}&a!'
+cmdChatChannelDisable: '&aDesactivaste el canal &2{0}&a!'
+cmdChatChannelNoToggle: '&aNo puedes desactivar &2{0}&a!'
+cmdChatChannelNotExist: '&cEl canal &4{0} &cno existe!'
+
+# /k defaultchatchannel
+cmdDefaultChatChannel: '&aCambiaste &2{0} &aa tu canal por defecto!'
+cmdDefaultChatChannelDisable: '&aDesactivaste un canal por defecto!'
+
+# /k invite
+cmdInviteAlreadyKingdom: '&cEl jugador &4{0} &cya pertenece a tu reino!'
+cmdInviteAlready: '&cEl jugador &4{0} &cya fue invitado a tu reino!'
+cmdInviteTarget: '&aHas sido invitado por &2{0} &apara unirte a &2{1}&a!'
+cmdInviteSender: '&aInvitaste a &2{0} &apara unirse a &2{1}&a!'
+
+# /k spawn
+cmdSpawnNotExists: '&aEl spawn del reino todavía no está configurado!'
+cmdSpawnOtherNotExists: '&aEl spawn del reino &2{0} &atodavía no está configurado!'
+cmdSpawn: '&aYou have been teleported to &2{0}&a!'
+
+# /k tpspawn
+cmdTpSpawn: '&aTeletransportado &2{0} &aa &2{1}'
+cmdTpSpawnTarget: '&aHas sido teletransportado a &2{0}'
+
+# /k setspawn
+cmdSetSpawn: '&aCambiaste el spawn de tu reino &aa &2{0}&a!'
+cmdSetSpawnOther: '&aCambiaste el spawn del reino &2{0} &aa &2{1}&a!'
+
+# /k enemy
+cmdEnemy: '&aAhora son enemigos de &2{0}&a!'
+cmdEnemyAlready: '&cYa son enemigos de &4{0}&c!'
+
+cmdEnemyOtherAlready: '&4{0} &cya son enemigos de &4{1}&c!'
+cmdEnemyOther: '&2{0} &aahora son enemigos de &2{1}&a!'
+
+# /k ally
+cmdAllyRequest: '&aSolicitaste una alianza con &2{0}&a!'
+cmdAllyRequestAlready: '&cYa solicitaste una alianza con &4{0}&c!'
+cmdAllyRequestTarget: '&2{0} &aha solicidato una alianza con tu reino!'
+cmdAlly: '&aAhora tu reino es aliado de &2{0}&a!'
+cmdAllyAlready: '&4{0} &cya es un reino aliado!'
+
+cmdAllyOtherAlready: '&4{0} &cya son aliados con &4{1}&c!'
+cdmAllyOther: '&2{0} &aahora son aliados con &2{1}&a!'
+
+# /k truce
+cmdTruceRequest: '&aSolicitaste una tregua a &2{0}&a!'
+cmdTruceRequestAlready: '&cYa solicitaste una tregua a &4{0}&c!'
+cmdTruceRequestTarget: '&2{0} &aha solicitado una tregua con tu reino!'
+cmdTruce: '&aAhora tu reino está en tregua con &2{0}&a!'
+cmdTruceAlready: '&4{0} &cya están en tregua con tu reino!'
+cmdTruceNotEnemies: '&cTu reino no es enemigo de &4{0}&c!'
+
+cmdTruceOtherAlready: '&4{0} &cya están en tregua con &4{1}&c!'
+cdmTruceOther: '&2{0} &aahora están en tregua con &2{1}&a!'
+
+# /k neutral
+cmdNeutralRequest: '&aSolicitaste ser neutral con &2{0}&a!'
+cmdNeutralRequestAlready: '&cYa solicitaste ser neutral con &4{0}&c!'
+cmdNeutralRequestTarget: '&2{0} &aha solicitado ser neutral con tu reino!'
+cmdNeutral: '&aAhora tu reino es neutral con &2{0}&a!'
+cmdNeutralAlready: '&4{0} &cya es un reino neutral!'
+
+cmdNeutralOtherAlready: '&4{0} &cya son neutrales con &4{1}&c!'
+cdmNeutralOther: '&2{0} &aahora son neutrales con &2{1}&a!'
+
+# /k kick
+cmdKickTarget: '&aHas sido expulsado de &2{0}&a!'
+cmdKickSender: '&aExpulsaste a &2{0} &ade &2{1}&a!'
+cmdKickLowLevel: '&cTu nivel de rango es inferior que el rango &4{0}&c!'
+
+# /k setrank
+cmdSetRankLowLevelTarget: '&cTu nivel de rango debe ser mayor que el rango &4{0}&c!'
+cmdSetRankLowLevelCurrent: '&cTu nivel de rango debe ser mayor que el de &4{0}&c!'
+cmdSetRankNotExist: '&aEl rango &2{0} &ano existe!'
+cmdSetRankAlready: '&c{0} &4ya es rango &4{1}&c!'
+cmdSetRankSender: '&aCambiaste el rango de &2{0} &aa &2{1}&a!'
+cmdSetRankTarget: '&aTu rango cambió a &2{0}&a!'
+cmdSetRankFull: '&cEl rango &4{0} &cestá completo!'
+
+# /k setkingdom
+cmdSetKingdomAlready: '&c{0} &4ya pertenece &4{1}&c!'
+cmdSetKingdomTarget: '&aHas sido cambiado al reino &2{0}&a!'
+cmdSetKingdomSender: '&aUbicaste a &2{0} &aen &2{1}&a!'
+
+# /k create
+cmdCreate: '&aCreaste el reino &2{0}&a!'
+
+# /k rename
+cmdRename: '&aRenombraste tu reino a &2{0}&a!'
+cmdRenameOther: '&aRenombraste el reino &2{0} &aa &2{1}&a!'
+
+# /k delete
+cmdDelete: '&aEliminaste el reino &2{0}&a!'
+cmdDeleteMembers: '&aTu reino fue eliminado!'
+cmdDeleteConfirm: '&aEscribe &2/k delete confirm &apara eliminar &2{0}&a!'
+
+# /k edit
+cmdEdit: '&aCambiaste {0} de tu reino a &2{1}&a!'
+cmdEditOther: '&aCambiaste {0} de &2{1} &aa &2{2}&a!'
+
+cmdEditItemInvalid: '&cDebes sostener un item válido en tu mano!'
+
+# /k ranks create
+cmdRanksCreate: '&aCreaste el rango &2{0}&a!'
+cmdRanksCreateOther: '&aCreaste el rango &2{0} &apara el reino &2{1}&a!'
+
+# /k rank rename
+cmdRanksRename: '&aRenombraste el rango &2{0} &aa &2{1}&a!'
+cmdRanksRenameOther: '&aRenombraste el rango &2{0} &aa &2{1} &apara el reino &2{2}&a!'
+
+# /k ranks delete
+cmdRanksDelete: '&aEliminaste el rango &2{0}&a!'
+cmdRanksDeleteOther: '&aEliminaste el rango &2{0} &ade &2{1}&a!'
+cmdRanksDeleteDefault: '&cEliminaste el rango por defecto!'
+cmdRanksDeleteOtherDefault: '&cEliminaste el rango por defecto del reino &4{0}&c!'
+
+# /k ranks list
+cmdRanksList: '&aLista de rangos: &2{0}'
+cmdRanksListOther: '&aLista de rangos del reino &2{0}&a: &2{1}'
+
+# /k ranks edit
+cmdRanksEdit: '&aCambiaste {0} de &2{1} &aa &2{2}&a!'
+cmdRanksEditOther: '&aCambiaste {0} de rango &2{1} &aen el reino &2{2} &aa &2{3}&a!'
+
+# /k groups
+cmdGroupsDelimiter: '&7, &2'
+cmdGroups: '&aLista de grupos disponibles: &2{0}'
+
+# /k groups add
+cmdGroupsAddAlreadyExists: '&cEl grupo &4{0} &cya pertenece al rango &4{1}&c!'
+cmdGroupsAdd: '&aSe agregó el grupo &2{0} &aal rango &2{1}&a!'
+cmdGroupsAddOther: '&aSe agregó el grupo &2{0} &aal rango &2{1} &adel reino &2{2}&a!'
+
+# /k groups remove
+cmdGroupsRemoveNotExist: '&cEl grupo &4{0} &cno pertenece al rango &4{1}&c!'
+cmdGroupsRemove: '&aEl grupo &2{0} &afue eliminado del rango &2{1}&a!'
+cmdGroupsRemoveOther: '&aEl grupo &2{0} &afue eliminado del rango &2{1} &adel reino &2{2}!'
+
+# /k groups list
+cmdGroupsList: '&aGrupos de permisos que pertenecen al rango &2{0}&a: &2{1}'
+cmdGroupsListOther: '&aGrupos de permisos que pertenecen al rango &2{0} &adel reino &2{1}&a: &2{2}'
+
+# /k ranks clone
+cmdRanksClone: '&aSe clonó el rango &2{0} &ade &2{1} &aa &2{2}&a!'
+
+# /k tphere
+cmdTpHere: '&aHas teletransportado a todo tu reino hacia ti!'
+cmdTpHereTarget: '&aHas sido teletransportado hacia &2{0}&a!'
+cmdTpHereOther: '&aHas teletrasportado a todo el reino &2{0} &ahacia ti!'
+
+# /k chat
+cmdChatNoChannel: '&cEl canal de chat &4{0} &cno existe!'
+cmdChatEmptyMessage: '&cNo puedes enviar un mensaje vacío!'
+
+# /k admin
+cmdAdminEnable: '&aActivaste el modo admin!'
+cmdAdminDisable: '&aDesactivaste el modo admin!'
+
+cmdAdminEnableSender: '&aActivaste el modo admin para &2{0}&a!'
+cmdAdminDisableSender: '&aDesactivaste el modo admin para &2{0}&a!'
+
+cmdAdminEnableTarget: '&aEl modo admin fue activado para ti!'
+cmdAdminDisableTarget: '&aEl modo admin fue desactivado para ti!'
+
+# /k socialspy
+cmdSocialSpyEnable: '&aActivaste social spy!'
+cmdSocialSpyDisable: '&aDesactivaste social spy!'
+
+# /k reload
+cmdReload: '&aKingdomcraft recargado!'
+
+# /k editor
+cmdEditorStarting: '&aCreando sesión...'
+cmdEditorStarted: '&aSesión del editor inicializado! Ve a &2{0}'
+cmdEditorSaving: '&aGuardando cambios...'
+cmdEditorSaved: '&aLos cambios fueron guardados!'
+cmdEditorErrorUpload: '&cNo se pudo inicializar la sesión! Intenta más tarde.'
+cmdEditorErrorDownload: '&cLos cambios no pudieron ser recuperados! ¿Tienes la clave correcta?'
+cmdEditorErrorFormat: '&cLos cambios tienen un formato no válido. Contacta al desarrollador!'
+cmdEditorErrorSave: '&cLos cambios no pudieron ser guardados. Contacta al desarrollador!'
+
+# /k sqldump
+cmdSqlDump: '&aSQL dump ha sido escrito en &2{0}&a!'
+
+# MENU
+menuConfirmAccept: '&aAceptar'
+menuConfirmCancel: '&cCancelar'
+
+menuBack: '&cAtrás'
+
+menuQueryCancel: '&7Escribe &8cancel &7para cancelar.'
+
+menuTitle: '&8Menú del reino'
+
+menuItemKingdomsList: '&6Reinos'
+menuItemPlayersList: '&6Jugadores'
+
+menuKingdomsListTitle: '&8Reinos'
+menuPlayersListTitle: '&8Jugadores'
+
+menuInfoKingdom: '&7Reino: {0}'
+menuInfoRank: '&7Rango: {0}'
+menuInfoLastSeen: '&7Última conexión: &6{0}'
+menuInfoFirstLogin: '&7Primer ingreso: &6{0}'
+menuInfoCreatedAt: '&7Creado el: &6{0}'
+menuInfoOnlineMembers: '&7Miembros en línea: &a{0} &7/ &f{1}'
+menuInfoMaxMembers: '&7Máximo de miembros: &f{0}'
+
+menuPlayerInfoItemKick: '&cExpulsar jugador'
+menuPlayerInfoItemLoreKick: '&7Click para expulsar del reino a este jugador'
+menuPlayerKickConfirmTitle: '&8Expulsar {0}'
+
+menuPlayerInfoItemChangeRank: '&aCambiar rango'
+menuPlayerInfoItemLoreChangeRank: '&7Click para cambiar el rango de este jugador'
+
+menuPlayerInfoItemInvite: '&bInvitar jugador'
+menuPlayerInfoItemLoreInvite: '&7Click para invitar a tu reino a este jugador'
+
+menuKingdomInfoItemLore: '&7Click para editar este reino'
+
+menuKingdomInfoItemRanks: '&6Rangos &7(&a{0}&7)'
+menuKingdomInfoItemLoreRanks: '&7Click para ver todos los rangos de este reino'
+
+menuKingdomInfoItemRelations: '&6Relaciones'
+menuKingdomInfoItemLoreRelations: '&7Click para ver todas las relaciones con este reino'
+
+menuKingdomInfoItemMembers: '&6Miembros &7(&a{0}&a)'
+menuKingdomInfoItemLoreMembers: '&7Click para ver todos los miembros de este reino'
+
+menuKingdomInfoItemSpawn: '&6Spawn del reino'
+menuKingdomInfoItemLoreSpawnTeleport: '&7Click para teletransportarse'
+menuKingdomInfoItemLoreSpawnChange: '&7Click derecho para cambiar a tu ubicación actual'
+menuKingdomInfoItemLoreSpawnNotSet: '&7Spawn no configurado'
+
+menuChangeKingdomSpawnConfirmTitle: '&8Cambiar spawn del reino'
+menuChangeKingdomSpawnOtherConfirmTitle: '&8Cambiar spawn de {0}'
+
+menuKingdomEditTitle: '&8Editar reino'
+
+menuKingdomEditItemChangeItem: '&eCambiar item'
+menuKingdomEditItemLoreChangeItem: '&7Click para cambiar el item de este reino'
+menuKingdomChangeItemTitle: '&8Seleccionar item del reino'
+
+menuKingdomEditItemRename: '&eRenombrar reino'
+menuKingdomEditItemLoreRename: '&7Nombre actual: &f{0}\n\n&7Click para cambiar el nombre'
+menuKingdomEditRenameQuery: '&aIngrese el nuevo nombre.'
+
+menuKingdomEditItemChangeDisplay: '&eCambiar nombre para mostrar'
+menuKingdomEditItemLoreChangeDisplay: '&7Nombre para mostrar actual: &f{0}\n\n&7Click para cambiar el nombre para mostrar'
+menuKingdomEditChangeDisplayQuery: '&aIngrese el nombre para mostrar.'
+
+menuKingdomEditItemChangePrefix: '&eCambiar prefijo del chat'
+menuKingdomEditItemLoreChangePrefix: '&7Prefijo actual: &f{0}\n\n&7Click para cambiar el prefijo del chat'
+menuKingdomEditChangePrefixQuery: '&aIngrese un prefijo para el chat.'
+
+menuKingdomEditItemChangeSuffix: '&eCambiar el sufijo del chat'
+menuKingdomEditItemLoreChangeSuffix: '&7Sufijo actual: &f{0}\n\n&7Click para cambiar el sufijo'
+menuKingdomEditChangeSuffixQuery: '&aIngrese un sufijo.'
+
+menuKingdomEditItemChangeMaxMembers: '&eCambiar el máximo de miembros'
+menuKingdomEditItemLoreChangeMaxMembers: '&7Cantidad: &f{0}\n\n&7Left-Click for +1\n&7Click derecho para -1'
+menuKingdomEditItemLoreChangeMaxMembersUnlimited: '&7Cantidad: &fIlimitada\n\n&7Click izquierdo para +1\n&7Ckick derecho para -1'
+
+menuKingdomEditItemToggleInviteOnly: '&eActivar/desactivar por invitación'
+menuKingdomEditItemLoreToggleInviteOnly: '&7Solo por invitación: &f{0}\n\n&7Click para activar o desactivar'
+
+menuKingdomMembersListTitle: '&8Miembros del reino {0}'
+
+menuKingdomRanksListTitle: '&8Rangos del reino {0}'
+menuKingdomRanksListItemLore: '&7Click para editar este rango'
+
+menuRankEditTitle: '&8Editar rango'
+
+menuRankEditItemRename: '&eRenombrar rango'
+menuRankEditItemLoreRename: '&7Nombre actual: &f{0}\n\n&7Click para cambiar el nombre del rango'
+menuRankEditRenameQuery: '&aIngrese un nuevo nombre.'
+
+menuRankEditItemChangeDisplay: '&eCambiar nombre para mostrar'
+menuRankEditItemLoreChangeDisplay: '&7Nombre para mostrar actual: &f{0}\n\n&7Click para cambiar el nombre para mostrar actual'
+menuRankEditChangeDisplayQuery: '&aIngrese un nuevo nombre para mostrar.'
+
+menuRankEditItemChangePrefix: '&eCambiar prefijo del chat'
+menuRankEditItemLoreChangePrefix: '&7Prefijo actual: &f{0}\n\n&7Click para cambiar el prefijo'
+menuRankEditChangePrefixQuery: '&aIngrese un nuevo prefijo.'
+
+menuRankEditItemChangeSuffix: '&eCambiar sufijo del chat'
+menuRankEditItemLoreChangeSuffix: '&7Sufijo actual: &f{0}\n\n&7Click para cambiar el sufijo'
+menuRankEditChangeSuffixQuery: '&aIngrese un nuevo sufijo.'
+
+menuRankEditItemChangeMaxMembers: '&eCambiar el máximo de miembros'
+menuRankEditItemLoreChangeMaxMembers: '&7Cantidad: &f{0}\n\n&7Click izquierdo para +1\n&7Click derecho para -1'
+menuRankEditItemLoreChangeMaxMembersUnlimited: '&7Cantidad: &fIlimitada\n\n&7Click izquierdo para +1\n&7Click derecho para -1'
+
+menuRankEditItemChangeLevel: '&eCambiar nivel'
+menuRankEditItemLoreChangeLevel: '&7Nivel actual: &f{0}\n\n&7Click izquierdo para +1\n&7Click derecho para -1'
+
+menuChangePlayerRankTitle: '&8Cambiar rango de {0}'
+menuChangePlayerRankConfirmTitle: '&8Cambiar rango de {0} a {1}'
+
+menuRelationsTitle: '&8Relaciones con el reino {0}'
+
+menuChangeRelationTitle: '&8Cambiar relación con {0}'
+
+menuChangeRelationItemLoreAllyRequested: '&7Solicitud de alianza enviada'
+menuChangeRelationItemLoreAllyAccept: '&7Click para aceptar su solicitud de alianza'
+menuChangeRelationItemLoreAllyRequest: '&7Click para solicitar una alianza'
+
+menuChangeRelationItemLoreEnemy: '&7Click para declarar como enemigos'
+
+menuChangeRelationItemLoreTruceRequested: '&7Solicitud de tregua enviada'
+menuChangeRelationItemLoreTruceAccept: '&7Click para aceptar su solicitud de tregua'
+menuChangeRelationItemLoreTruceRequest: '&7Click para solicitar una tregua'
+
+menuChangeRelationItemLoreNeutralRequested: '&7Solicitud de neutralidad enviada'
+menuChangeRelationItemLoreNeutralAccept: '&7Click para aceptar su solicitud de neutralidad'
+menuChangeRelationItemLoreNeutralRequest: '&7Click para solicitar neutralidad'
+menuChangeRelationItemLoreNeutralEndAlliance: '&7Click para terminar la alianza'
+
