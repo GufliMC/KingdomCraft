@@ -237,7 +237,7 @@ public class ChatManagerImpl implements ChatManager {
         // Chat cooldown check
         String cooldownKey = "CHAT_COOLDOWN_" + channel.getName();
         if ( channel.getCooldown() > 0 && player.has(cooldownKey)
-                && !player.isAdmin() && !player.hasPermission("kingdom.chat.bypass.cooldown")) {
+                && !player.hasPermission("kingdom.chat.bypass.cooldown")) {
 
             long lastMessage = player.get(cooldownKey, Long.class);
             long diff = System.currentTimeMillis() - lastMessage;
@@ -284,7 +284,7 @@ public class ChatManagerImpl implements ChatManager {
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
                 .collect(Collectors.toList());
 
-        if ( channel.getCooldown() > 0 && !player.isAdmin() && !player.hasPermission("kingdom.chat.bypass.cooldown") ) {
+        if ( channel.getCooldown() > 0 && !player.hasPermission("kingdom.chat.bypass.cooldown") ) {
             player.set("CHAT_COOLDOWN_" + channel.getName(), System.currentTimeMillis());
         }
 

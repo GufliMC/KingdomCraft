@@ -99,7 +99,7 @@ public class FriendlyFireListener implements Listener {
         }
 
         // admin bypasses
-        if ( d.isAdmin() ) {
+        if ( d.isAdmin() && d.hasPermission("kingdom.admin.friendlyfire") ) {
             return;
         }
 

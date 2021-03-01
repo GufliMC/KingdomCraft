@@ -39,7 +39,7 @@ public class Teleporter {
 
     public static CompletableFuture<Void> teleport(PlatformPlayer player, PlatformLocation target) {
         int delay = 0;
-        if ( !player.isAdmin() ) {
+        if ( !player.isAdmin() || !player.hasPermission("kingdom.admin.teleportdelay") ) {
             delay = KingdomCraftProvider.get().getConfig().getTeleportDelay();
         }
 
