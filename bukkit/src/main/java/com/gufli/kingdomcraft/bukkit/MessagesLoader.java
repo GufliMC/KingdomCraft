@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class MessagesLoader {
 
-    private final static String[] defaultLanguages = new String[] { "en", "nl" };
+    private final static String[] defaultLanguages = new String[] { "en", "nl", "es" };
 
     public static void load(MessagesImpl messages, ClassLoader classLoader, File directory, String language) {
         for ( String lang : defaultLanguages ) {
