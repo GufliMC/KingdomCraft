@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class EditSuffixOtherCommand extends CommandBase {
 
     public EditSuffixOtherCommand(KingdomCraftImpl kdc) {
-        super(kdc, "edit suffix", 1);
+        super(kdc, "edit suffix", 2);
         setArgumentsHint("<kingdom> <suffix>");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdExitSuffixOtherExplanation"));
         setPermissions("kingdom.edit.suffix.other");

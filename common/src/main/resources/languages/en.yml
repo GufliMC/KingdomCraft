@@ -304,7 +304,7 @@ cmdRanksClone: '&aCloned rank &2{0} &afrom &2{1} &ato &2{2}&a!'
 
 # /k tphere
 cmdTpHere: '&aTeleported everyone of your kingdom to you!'
-cmdTphereTarget: '&aYou''ve been teleported to &2{0}&a!'
+cmdTpHereTarget: '&aYou''ve been teleported to &2{0}&a!'
 cmdTpHereOther: '&aTeleported everyone of kingdom &2{0} &ato you!'
 
 # /k chat
@@ -344,6 +344,8 @@ cmdSqlDump: '&aSQL dump has been written to &2{0}&a!'
 # MENU
 menuConfirmAccept: '&aAccept'
 menuConfirmCancel: '&cCancel'
+
+menuBack: '&cBack'
 
 menuQueryCancel: '&7Type &8cancel &7to cancel.'
 

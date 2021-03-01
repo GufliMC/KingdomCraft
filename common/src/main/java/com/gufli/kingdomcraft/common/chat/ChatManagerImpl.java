@@ -249,6 +249,10 @@ public class ChatManagerImpl implements ChatManager {
             }
         }
 
+        if ( kdc.getPlugin().decolorify(message).equals("") ) {
+            return;
+        }
+
         PlayerChatEvent event = new PlayerChatEvent(player, channel, message);
         kdc.getEventManager().dispatch(event);
 

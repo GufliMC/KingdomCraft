@@ -44,7 +44,7 @@ public class KingdomMenu {
     static void withBack(InventoryBuilder builder, Runnable back) {
         if (back != null) {
             builder.withHotbarItem(4, ItemStackBuilder.of(Material.BARRIER)
-                            .withName(ChatColor.RED + "Back")
+                            .withName(text("menuBack"))
                             .build(),
                     (p, ct) -> {
                         back.run();
@@ -57,7 +57,7 @@ public class KingdomMenu {
     static void withBack(PaginationBuilder builder, Runnable back) {
         if (back != null) {
             builder.withHotbarItem(4, ItemStackBuilder.of(Material.BARRIER)
-                            .withName(ChatColor.RED + "Back")
+                            .withName(text("menuBack"))
                             .build(),
                     (p, ct) -> {
                         back.run();
@@ -250,7 +250,7 @@ public class KingdomMenu {
                                     .withLore(text("menuPlayerInfoItemLoreInvite"))
                                     .build(),
                             (p, ct) -> {
-                                ((BukkitPlayer) player).getPlayer().chat("/k invite " + user.getName());
+                                ((BukkitPlayer) player).getPlayer().chat("/k invite " + target.getName());
                             }
                     );
                 }
@@ -523,7 +523,7 @@ public class KingdomMenu {
                 || (player.hasPermission("kingdom.edit.invite-only") && player.getUser().getKingdom() == target)) {
             hasItem = true;
             builder.withItem(ItemStackBuilder.of("ENDER_EYE", "EYE_OF_ENDER")
-                            .withName(ChatColor.YELLOW + "Toggle Invite Only")
+                            .withName(text("menuKingdomEditItemToggleInviteOnly"))
                             .withLore(text("menuKingdomEditItemLoreToggleInviteOnly", target.isInviteOnly() + ""))
                             .build(),
                     (p, ct) -> {

@@ -304,7 +304,7 @@ cmdRanksClone: '&aJe hebt de rang &2{0} &afvan &2{1} &anaar &2{2} &agekopieerd!'
 
 # /k tphere
 cmdTpHere: '&aJe hebt iedereen van je koninkrijk naar jouw geteleporteerd!'
-cmdTphereTarget: '&aJe bent geteleporteerd naar &2{0}&a!'
+cmdTpHereTarget: '&aJe bent geteleporteerd naar &2{0}&a!'
 cmdTpHereOther: '&aJe hebt iedereen van &2{0} &anaar jouw geteleporteerd!'
 
 # /k chat
@@ -344,6 +344,8 @@ cmdSqlDump: '&aDe SQL dump werd opgeslagen naar &2{0}&a!'
 # MENU
 menuConfirmAccept: '&aAccepteer'
 menuConfirmCancel: '&cAnnuleer'
+
+menuBack: '&cTerug'
 
 menuQueryCancel: '&7Type &8cancel &7om te annuleren.'
 
