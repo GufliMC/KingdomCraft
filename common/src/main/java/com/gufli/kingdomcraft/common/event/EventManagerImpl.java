@@ -20,9 +20,13 @@ package com.gufli.kingdomcraft.common.event;
 import com.gufli.kingdomcraft.api.event.EventManager;
 import com.gufli.kingdomcraft.api.events.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class EventManagerImpl implements EventManager {
 
@@ -34,11 +38,27 @@ public class EventManagerImpl implements EventManager {
         return executor;
     }
 
+    public <T extends Event> EventExecutor<T> addListener(Class<T> type, BiConsumer<com.gufli.kingdomcraft.api.event.EventExecutor<T>, T> consumer) {
+        EventExecutor<T> executor = new EventExecutor<>(type, consumer);
+        executors.add(executor);
+        return executor;
+    }
+
     public <T extends Event> void dispatch(T event) {
-        for ( EventExecutor exe : executors ) {
+        for ( EventExecutor exe : new ArrayList<>(executors) ) {
+            if ( !exe.type.isAssignableFrom(event.getClass())) {
+                continue;
+            }
+
             try {
-                if (exe.type.isAssignableFrom(event.getClass())) {
-                    exe.consumer.accept(event);
+                exe.consumer.accept(exe, event);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            try {
+                if ( executors.contains(exe) && exe.shouldUnregister(event) ) {
+                    executors.remove(exe);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -46,20 +66,45 @@ public class EventManagerImpl implements EventManager {
         }
     }
 
-    private class EventExecutor<T extends Event> implements com.gufli.kingdomcraft.api.event.EventExecutor {
+    public class EventExecutor<T extends Event> implements com.gufli.kingdomcraft.api.event.EventExecutor<T> {
 
         private final Class<T> type;
-        private final Consumer<T> consumer;
+        private final BiConsumer<com.gufli.kingdomcraft.api.event.EventExecutor<T>, T> consumer;
 
-        private EventExecutor(Class<T> type, Consumer<T> consumer) {
+        private Function<T, Boolean> unregisterTest;
+
+        private EventExecutor(Class<T> type, BiConsumer<com.gufli.kingdomcraft.api.event.EventExecutor<T>, T> consumer) {
             this.type = type;
             this.consumer = consumer;
         }
 
+        private EventExecutor(Class<T> type, Consumer<T> consumer) {
+            this(type, (ignored, event) -> consumer.accept(event));
+        }
+
+        @Override
         public void unregister() {
             executors.remove(this);
         }
 
+        @Override
+        public EventExecutor<T> unregisterIf(Supplier<Boolean> test) {
+            unregisterIf((ignored) -> test.get());
+            return this;
+        }
+
+        @Override
+        public EventExecutor<T> unregisterIf(Function<T, Boolean> test) {
+            this.unregisterTest = test;
+            return this;
+        }
+
+        private boolean shouldUnregister(T event) {
+            if ( unregisterTest != null ) {
+                return unregisterTest.apply(event);
+            }
+            return false;
+        }
     }
 
 }

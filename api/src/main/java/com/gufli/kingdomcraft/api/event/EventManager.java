@@ -19,11 +19,14 @@ package com.gufli.kingdomcraft.api.event;
 
 import com.gufli.kingdomcraft.api.events.Event;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface EventManager {
 
-    <T extends Event> EventExecutor addListener(Class<T> type, Consumer<T> consumer);
+    <T extends Event> EventExecutor<T> addListener(Class<T> type, Consumer<T> consumer);
+
+    <T extends Event> EventExecutor<T> addListener(Class<T> type, BiConsumer<EventExecutor<T>, T> consumer);
 
     <T extends Event> void dispatch(T event);
 
