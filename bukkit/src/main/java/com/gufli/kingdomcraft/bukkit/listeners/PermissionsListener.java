@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public class PermissionsListener implements Listener {
 
@@ -139,6 +140,12 @@ public class PermissionsListener implements Listener {
         Player p = ((BukkitPlayer) player).getPlayer();
 
         PermissionAttachment pa = p.addAttachment(plugin);
+        if ( pa == null ) {
+            plugin.log("Unable to set permissions for " + player.getName() + ".", Level.SEVERE);
+            plugin.log("Plugin status: " + (plugin.isEnabled() ? "enabled" : "disabled"), Level.SEVERE);
+            return;
+        }
+
         for ( String perm : permissions.keySet() ) {
             pa.setPermission(perm, permissions.get(perm));
         }
