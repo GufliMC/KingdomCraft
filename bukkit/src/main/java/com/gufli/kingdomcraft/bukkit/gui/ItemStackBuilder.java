@@ -272,8 +272,6 @@ public class ItemStackBuilder {
             CraftMetaSkull_profile = CraftMetaSkull.getDeclaredField("profile");
             CraftMetaSkull_profile.setAccessible(true);
 
-            CraftMetaSkull_setOwningPlayer = CraftMetaSkull.getMethod("setOwningPlayer", OfflinePlayer.class);
-
             // Optional
             try {
                 CraftMetaSkull_setOwningPlayer = CraftMetaSkull.getMethod("setOwningPlayer", OfflinePlayer.class);
