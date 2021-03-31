@@ -296,12 +296,11 @@ public class ChatManagerImpl implements ChatManager {
             p.sendMessage(finalResult);
         }
 
+        String ss = kdc.getMessages().getMessage("socialSpyPrefix", channel.getName()) + finalResult;
         kdc.getOnlinePlayers().stream()
                 .filter(PlatformPlayer::isSocialSpyEnabled)
                 .filter(p -> !receivers.contains(p))
-                .forEach(p -> {
-                    p.sendMessage(kdc.getMessages().getMessage("socialSpyPrefix") + finalResult);
-                });
+                .forEach(p -> p.sendMessage(ss));
 
         System.out.println("[" + channel.getName() + "] " + player.getName() + ": " + message);
     }

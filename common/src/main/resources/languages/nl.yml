@@ -18,7 +18,7 @@ chatNoChannel: '&cEr is geen beschikbaar chat kanaal om je bericht te versturen!
 chatChannelDisabled: '&cJe hebt het &4{0} &ckanaal uitgezet!'
 chatChannelCooldown: '&cJe moet nog &4{0} &cseconden wachten voordat je kan praten in dit kanaal!'
 
-socialSpyPrefix: '&b[SS] '
+socialSpyPrefix: '&b[SS][&f{0}] '
 
 adminModeJoin: '&aAdmin modus staat aan!'
 socialSpyJoin: '&aSocial spy staat aan!'
