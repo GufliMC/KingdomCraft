@@ -143,6 +143,7 @@ public class PermissionsListener implements Listener {
         if ( pa == null ) {
             plugin.log("Unable to set permissions for " + player.getName() + ".", Level.SEVERE);
             plugin.log("Plugin status: " + (plugin.isEnabled() ? "enabled" : "disabled"), Level.SEVERE);
+            plugin.log("Player online: " + (p.isOnline() ? "yes" : "no"), Level.SEVERE);
             return;
         }
 
