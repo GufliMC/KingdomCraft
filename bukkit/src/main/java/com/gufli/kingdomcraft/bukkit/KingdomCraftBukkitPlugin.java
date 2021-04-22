@@ -18,6 +18,7 @@
 package com.gufli.kingdomcraft.bukkit;
 
 import com.gufli.kingdomcraft.api.events.PluginReloadEvent;
+import com.gufli.kingdomcraft.bukkit.chat.DiscordSRVHook;
 import com.gufli.kingdomcraft.bukkit.command.CommandHandler;
 import com.gufli.kingdomcraft.bukkit.config.BukkitConfiguration;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
@@ -181,6 +182,11 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// admin mode join
 		new AdminJoinListener(this);
+
+		// discord srv hook
+		if ( pm.isPluginEnabled("DiscordSRV") ) {
+			new DiscordSRVHook(this);
+		}
 
 		// bStats
 		Metrics metrics = new Metrics(this, 10101);

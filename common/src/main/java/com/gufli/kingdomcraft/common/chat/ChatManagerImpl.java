@@ -199,6 +199,23 @@ public class ChatManagerImpl implements ChatManager {
                     .findFirst().orElse(null);
         }
 
+        // unset default chat channel by just typing the prefix
+        if ( channel != null && channel.getPrefix() != null && channel.getPrefix().equals(strippedMessage) ) {
+            player.remove("DEFAULT_CHATCHANNEL");
+            kdc.getMessages().send(player, "cmdDefaultChatChannelDisable");
+            return;
+        }
+        // set default chat channel by just typing the prefix
+        else {
+            for ( ChatChannel ch : channels ) {
+                if ( ch.getPrefix() != null && !ch.getPrefix().equals("") && ch.getPrefix().equals(strippedMessage)) {
+                    player.set("DEFAULT_CHATCHANNEL", ch.getName());
+                    kdc.getMessages().send(player, "cmdDefaultChatChannel", ch.getName());
+                    return;
+                }
+            }
+        }
+
         for ( ChatChannel ch : channels ) {
             if ( ch == channel ) {
                 continue;

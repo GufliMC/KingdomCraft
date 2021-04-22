@@ -82,15 +82,11 @@ public class CreateCommand extends CommandBase {
             user.setKingdom(kingdom);
 
             future.thenRun(() -> {
-                if ( kingdom.getDefaultRank() != null ) {
-                    user.setRank(kingdom.getDefaultRank());
-                } else if ( !kingdom.getRanks().isEmpty() ) {
-                    user.setRank(kingdom.getRanks().stream().min(Comparator.comparing(Rank::getLevel)).orElse(null));
+                if ( !kingdom.getRanks().isEmpty() ) {
+                    user.setRank(kingdom.getRanks().stream().max(Comparator.comparingInt(Rank::getLevel)).orElse(null));
                 }
                 kdc.saveAsync(user);
             });
         }
-
-
     }
 }
