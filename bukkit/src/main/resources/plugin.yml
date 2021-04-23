@@ -2,7 +2,7 @@ name: 'KingdomCraft'
 author: 'Joris Guffens'
 version: ${pluginVersion}
 description: 'The Ultimate Kingdom Plugin'
-softdepend: [Vault]
+softdepend: [Vault, DiscordSRV]
 website: 'kingdomcraft.be'
 main: com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin
 api-version: 1.13

@@ -11,14 +11,21 @@ repositories {
 
     // Vault
     maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+
+    // DiscordSRV
+    maven { url 'https://nexus.scarsz.me/content/repositories/releases/' }
 }
 
 dependencies {
-    compile project(':api')
-    compile project(':common')
+    implementation project(':api')
+    implementation project(':common')
 
     compileOnly 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
+
     compileOnly 'net.milkbowl.vault:VaultAPI:1.7'
+    compileOnly ('com.discordsrv:discordsrv:1.22.0') {
+        transitive = false
+    }
 }
 
 processResources {
