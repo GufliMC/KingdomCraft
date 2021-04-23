@@ -54,6 +54,8 @@ public class Config implements KingdomCraftConfig {
     private boolean isChatEnabledInDisabledWorlds = false;
     private boolean showJoinAndLeaveMessagesKingdomOnly = false;
 
+    private boolean updateDisplayNames = true;
+
     public void load(Configuration config) {
         if ( config.contains("teleport-delay") ) {
             teleportDelay = config.getInt("teleport-delay");
@@ -159,6 +161,10 @@ public class Config implements KingdomCraftConfig {
 
         if ( config.contains("join-and-leave-kingdom-only") ) {
             showJoinAndLeaveMessagesKingdomOnly = config.getBoolean("join-and-leave-kingdom-only");
+        }
+
+        if ( config.contains("update-display-names") ) {
+            updateDisplayNames = config.getBoolean("update-display-names");
         }
     }
 
@@ -276,5 +282,10 @@ public class Config implements KingdomCraftConfig {
     @Override
     public boolean showJoinAndLeaveKingdomOnly() {
         return showJoinAndLeaveMessagesKingdomOnly;
+    }
+
+    @Override
+    public boolean updateDisplayNames() {
+        return updateDisplayNames;
     }
 }

@@ -183,6 +183,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// admin mode join
 		new AdminJoinListener(this);
 
+		// dislay names
+		new DisplayNameListener(this);
+
 		// discord srv hook
 		if ( pm.isPluginEnabled("DiscordSRV") ) {
 			new DiscordSRVHook(this);

@@ -9,19 +9,19 @@ default-channel: 'public'
 channels:
 
   public:
-    format: '&7[&6P&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{player}&a: &f{message}'
+    format: '&7[&6P&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
     prefix: '!'
     cooldown: 5 # Cooldown in seconds
     toggleable: false
 
   kingdom:
     prefix: ''
-    format: '&7[{kingdom}&7]&f{rank_prefix}{prefix} &f{player}&a: &f{message}'
+    format: '&7[{kingdom}&7]&f{rank_prefix}{prefix} &f{username}&a: &f{message}'
     kingdoms: '*' # every kingdom gets it's own channel
     toggleable: false
 
   admin:
     prefix: '%'
-    format: '&6[ADMIN]&f{kingdom_prefix}{rank_prefix}{prefix} &f{player}&a: &f{message}'
+    format: '&6[ADMIN]&f{kingdom_prefix}{rank_prefix}{prefix} &f{username}&a: &f{message}'
     restrict: 'read'
     toggleable: true

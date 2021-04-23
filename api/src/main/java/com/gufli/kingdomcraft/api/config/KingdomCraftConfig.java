@@ -53,5 +53,6 @@ public interface KingdomCraftConfig {
     boolean isChatEnabledInDisabledWorlds();
 
     boolean showJoinAndLeaveKingdomOnly();
-    
+
+    boolean updateDisplayNames();
 }

@@ -60,9 +60,13 @@ settings:
         kill: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_player}&e.'
         kill-weapon: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_player} &ewith weapon {weapon}&e.'
 
+    # For times or dates that are displayed in the plugin
     timezone: 'Europe/Brussels'
     date-format: 'yyyy-MM-dd'
     time-format: 'HH:mm'
+
+    # Update display names with the kingdom prefix and suffix
+    update-display-names: true
 
 # DO NOT CHANGE THIS SECTION IF YOU DO NOT KNOW WHAT YOU ARE DOING!
 database:
