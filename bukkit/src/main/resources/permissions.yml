@@ -1,5 +1,5 @@
 
-# players without a kingdom will have this group by default
+# players without a kingdom will have these permissions by default
 default:
   permissions:
   - kingdom.join
@@ -10,7 +10,7 @@ default:
   - kingdom.chat
 
 # these groups must be linked to ranks
-king:
+kingdom-lead-group:
   permissions:
   - kingdom.kick
   - kingdom.setspawn
@@ -21,20 +21,23 @@ king:
   inheritances:
   - duke
   ranks:
-    - king
+  - king
 
-duke:
+kingdom-moderator-group:
   permissions:
   - kingdom.setrank
   - kingdom.invite
   inheritances:
   - member
+  ranks:
+  - duke
 
-member:
+kingdom-default-group:
   permissions:
     - kingdom.spawn
     - kingdom.menu
     - kingdom.info
-    - kingdom.defaultchatchannel
     - kingdom.list
     - kingdom.chat
+  ranks:
+  - member
