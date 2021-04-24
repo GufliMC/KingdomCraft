@@ -54,7 +54,7 @@ public class Config implements KingdomCraftConfig {
     private boolean isChatEnabledInDisabledWorlds = false;
     private boolean showJoinAndLeaveMessagesKingdomOnly = false;
 
-    private boolean updateDisplayNames = true;
+    private boolean updateDisplayNames = false;
 
     public void load(Configuration config) {
         if ( config.contains("teleport-delay") ) {
