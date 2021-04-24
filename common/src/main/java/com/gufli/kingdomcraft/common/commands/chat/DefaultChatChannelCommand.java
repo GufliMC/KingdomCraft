@@ -31,12 +31,9 @@ public class DefaultChatChannelCommand extends CommandBase {
     public DefaultChatChannelCommand(KingdomCraftImpl kdc) {
         super(kdc, "defaultchatchannel", -1, true);
         setArgumentsHint("<chatchannel>");
-        addCommand("defaultcc");
-        addCommand("dcc");
         addCommand("defaultchannel");
         addCommand("dc");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdDefaultChatChannelExplanation"));
-        setPermissions("kingdom.defaultchatchannel");
     }
 
     @Override
