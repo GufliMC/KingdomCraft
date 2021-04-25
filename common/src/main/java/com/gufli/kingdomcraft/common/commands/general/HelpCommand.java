@@ -92,11 +92,16 @@ public class HelpCommand extends CommandBase {
 
         if ( sender instanceof PlatformPlayer ) {
             commands = commands.stream().filter(cmd -> hasAnyPermission(sender, cmd)).collect(Collectors.toList());
+        } else {
+            commands = commands.stream().filter(cmd -> !cmd.isPlayerOnly()).collect(Collectors.toList());
         }
         return commands;
     }
 
     private boolean hasAnyPermission(PlatformSender sender, Command command) {
+        if ( command.getPermissions() == null || command.getPermissions().length == 0 ) {
+            return true;
+        }
         return Arrays.stream(command.getPermissions()).anyMatch(sender::hasPermission);
     }
 }
