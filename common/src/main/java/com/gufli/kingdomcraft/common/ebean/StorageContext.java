@@ -357,21 +357,22 @@ public class StorageContext {
         return user;
     }
 
-    public void updateName(User user, PlatformPlayer player) {
+    public void updateName(User user, String name) {
         BUser buser = (BUser) user;
-        buser.setName(player.getName());
+        buser.setName(name);
         saveAsync(buser);
     }
 
-    public void updateUUID(User user, PlatformPlayer player) {
+    public void updateUUID(User user, UUID id) {
         BUser buser = (BUser) user;
-        new QBUser().id.eq(buser.id).asUpdate().set("id", player.getUniqueId().toString()).update();
-        buser.setUUID(player.getUniqueId());
+        new QBUser().id.eq(buser.id).asUpdate().set("id", id.toString()).update();
+        buser.setUUID(id);
+        saveAsync(buser);
     }
 
     public void login(User user) {
         BUser buser = (BUser) user;
-        buser.setLastJoin(Instant.now());
+        buser.setLastOnlineAt(Instant.now());
         saveAsync(buser);
     }
 

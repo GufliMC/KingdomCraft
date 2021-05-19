@@ -49,6 +49,10 @@ public class BUser extends BaseModel implements User {
     @DbForeignKey(onDelete = ConstraintMode.SET_NULL)
     public BKingdom kingdom;
 
+    public Instant joinedKingdomAt;
+
+    public Instant lastOnlineAt;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     public List<BKingdomInvite> kingdomInvites;
 
@@ -75,13 +79,11 @@ public class BUser extends BaseModel implements User {
 
     @Override
     public boolean delete() {
-
         return super.delete();
     }
 
     @Override
     public void save() {
-
         super.save();
     }
 
@@ -91,10 +93,6 @@ public class BUser extends BaseModel implements User {
 
     public void setUUID(UUID uuid) {
         this.id = uuid.toString();
-    }
-
-    public void setLastJoin(Instant Instant) {
-        this.updatedAt = Instant;
     }
 
     // interface
@@ -143,6 +141,7 @@ public class BUser extends BaseModel implements User {
 
         this.kingdom = (BKingdom) kingdom;
         this.kingdom.memberCount++;
+        this.joinedKingdomAt = Instant.now();
 
         if (kingdom.getDefaultRank() != null) {
             this.rank = (BRank) kingdom.getDefaultRank();
@@ -253,6 +252,18 @@ public class BUser extends BaseModel implements User {
     @Override
     public void setSocialSpyEnabled(boolean socialSpy) {
         this.socialSpyEnabled = socialSpy;
+    }
+
+    public Instant getJoinedKingdomAt() {
+        return joinedKingdomAt;
+    }
+
+    public Instant getLastOnlineAt() {
+        return lastOnlineAt;
+    }
+
+    public void setLastOnlineAt(Instant lastOnlineAt) {
+        this.lastOnlineAt = lastOnlineAt;
     }
 
     @Override

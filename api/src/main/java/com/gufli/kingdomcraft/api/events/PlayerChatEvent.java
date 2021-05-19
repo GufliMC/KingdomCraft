@@ -20,18 +20,22 @@ package com.gufli.kingdomcraft.api.events;
 import com.gufli.kingdomcraft.api.chat.ChatChannel;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
+import java.util.List;
+
 public class PlayerChatEvent extends PlayerEvent {
 
     private final ChatChannel chatChannel;
 
-    private String message;
-
     private boolean cancelled = false;
+    private String message;
+    private List<PlatformPlayer> receivers;
 
-    public PlayerChatEvent(PlatformPlayer player, ChatChannel channel, String message) {
+
+    public PlayerChatEvent(PlatformPlayer player, ChatChannel channel, String message, List<PlatformPlayer> receivers) {
         super(player);
         this.chatChannel = channel;
         this.message = message;
+        this.receivers = receivers;
     }
 
     public ChatChannel getChatChannel() {
@@ -52,5 +56,13 @@ public class PlayerChatEvent extends PlayerEvent {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public List<PlatformPlayer> getReceivers() {
+        return receivers;
+    }
+
+    public void setReceivers(List<PlatformPlayer> receivers) {
+        this.receivers = receivers;
     }
 }

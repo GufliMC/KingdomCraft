@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 public class KingdomCraftImpl implements KingdomCraft {
 
@@ -309,6 +310,37 @@ public class KingdomCraftImpl implements KingdomCraft {
 
     //
 
+    public Consumer<PlatformPlayer> onLogin(UUID id, String name) {
+        return onLoad(id, name);
+    }
+
+    private Consumer<PlatformPlayer> onLoad(UUID id, String name) {
+        try {
+            User user = getUser(id).get();
+            if ( user == null ) {
+                user = getUser(name).get();
+            }
+
+            if ( user == null ) {
+                user = context.createUser(id, name);
+                saveAsync(user);
+            } else if ( !user.getName().equals(name) ) {
+                context.updateName(user, name);
+            }  else if ( !user.getUniqueId().equals(id) ) {
+                context.updateUUID(user, id);
+            }else {
+                context.login(user);
+            }
+
+            User finalUser = user;
+            return player -> context.addPlayer(player, finalUser);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
     public boolean onLoad(PlatformPlayer player) {
         try {
             User user = getUser(player.getUniqueId()).get();
@@ -342,6 +374,7 @@ public class KingdomCraftImpl implements KingdomCraft {
         }
         return false;
     }
+     */
 
     public void onQuit(PlatformPlayer player) {
         eventManager.dispatch(new PlayerLeaveEvent(player));

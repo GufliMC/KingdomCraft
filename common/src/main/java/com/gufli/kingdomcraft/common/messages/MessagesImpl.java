@@ -23,6 +23,9 @@ import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
 import com.gufli.kingdomcraft.common.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.apache.commons.text.StringEscapeUtils.unescapeJava;
 
 
@@ -32,19 +35,18 @@ public class MessagesImpl implements Messages {
 
 	private String prefix = "&6KingdomCraft &2> &a";
 
-	private Configuration fallback;
-	private Configuration messages;
+	private final Map<String, String> messages = new HashMap<>();
 
 	public MessagesImpl(KingdomCraftPlugin plugin) {
 		this.plugin = plugin;
 	}
 
-	public void setFallback(Configuration fallbackMessages) {
-		this.fallback = fallbackMessages;
-	}
-
-	public void setMessages(Configuration messages) {
-		this.messages = messages;
+	public void setMessages(Configuration... configs) {
+		for ( Configuration config : configs ) {
+			for ( String key : config.getKeys(false) ) {
+				messages.put(key, config.getString(key));
+			}
+		}
 	}
 
 	@Override
@@ -61,10 +63,7 @@ public class MessagesImpl implements Messages {
 		if ( name == null ) {
 			return null;
 		}
-		String msg = messages.getString(name);
-		if ( msg == null ) {
-			msg = fallback.getString(name);
-		}
+		String msg = messages.get(name);
 		if ( msg == null ) {
 			return null;
 		}
@@ -95,7 +94,7 @@ public class MessagesImpl implements Messages {
 	}
 
 	private boolean isEmpty(String name) {
-		return messages.contains(name) && messages.getString(name).replace(" ", "").equals("");
+		return messages.containsKey(name) && messages.get(name).trim().equals("");
 	}
 
 	@Override

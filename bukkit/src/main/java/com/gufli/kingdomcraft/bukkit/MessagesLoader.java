@@ -1,18 +1,23 @@
 package com.gufli.kingdomcraft.bukkit;
 
 import com.gufli.kingdomcraft.bukkit.config.BukkitConfiguration;
+import com.gufli.kingdomcraft.common.config.Configuration;
 import com.gufli.kingdomcraft.common.messages.MessagesImpl;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessagesLoader {
 
     private final static String[] defaultLanguages = new String[] { "en", "nl", "es" };
 
     public static void load(MessagesImpl messages, ClassLoader classLoader, File directory, String language) {
+
+        // save default files
         for ( String lang : defaultLanguages ) {
             File outFile = new File(directory, lang + ".yml");
             if ( !outFile.exists() ) {
@@ -34,34 +39,48 @@ public class MessagesLoader {
             }
         }
 
+        List<Configuration> configs = new ArrayList<>();
+
+        // english
+        URL defaultFallback = classLoader.getResource("languages/en.yml");
+        Configuration defaultFallbackConfig = loadResource(defaultFallback);
+        configs.add(defaultFallbackConfig);
+
+        // custom language default
+        URL fallback = classLoader.getResource("languages/" + language + ".yml");
+        if ( fallback != null ) {
+            Configuration fallbackConfig = loadResource(fallback);
+            if ( fallbackConfig != null ) {
+                configs.add(fallbackConfig);
+            }
+        } else {
+            System.out.println("No fallback exists for language '" + language + "'!");
+        }
+
+        // load main config file
         try {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(directory, language + ".yml"));
-            messages.setMessages(new BukkitConfiguration(config));
+            configs.add(new BukkitConfiguration(config));
         } catch (Exception ex) {
             System.out.println("Unable load custom language file.");
         }
 
-        URL resource;
-        resource = classLoader.getResource("languages/" + language + ".yml");
-        if ( resource == null ) {
-            resource = classLoader.getResource("languages/en.yml");
-        }
+        // load configs into messages
+        messages.setMessages(configs.toArray(new Configuration[0]));
+    }
 
-        if ( resource == null ) {
-            System.out.println("Cannot find fallback language file!");
-            return;
-        }
-
+    private static Configuration loadResource(URL resource) {
         try (
                 InputStream fallback = resource.openStream();
                 InputStreamReader isr = new InputStreamReader(fallback, StandardCharsets.UTF_8)
         ){
             YamlConfiguration config = YamlConfiguration.loadConfiguration(isr);
-            messages.setFallback(new BukkitConfiguration(config));
+            return new BukkitConfiguration(config);
         } catch (Exception ex) {
             System.out.println("Unable to load fallback language file!");
             ex.printStackTrace();
         }
+        return null;
     }
 
 }

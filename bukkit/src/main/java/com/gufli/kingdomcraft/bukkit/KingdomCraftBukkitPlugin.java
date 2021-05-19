@@ -43,6 +43,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -53,6 +54,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.impl.SimpleLogger;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -148,14 +150,26 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 		// Load online players
 		for ( Player p : Bukkit.getOnlinePlayers() ) {
-			this.kdc.onLoad(new BukkitPlayer(p));
+			this.kdc.onLogin(p.getUniqueId(), p.getName()).accept(new BukkitPlayer(p));
 		}
 
 		// commands
 		CommandHandler commandHandler = new CommandHandler(this);
+		/*
 		PluginCommand command = getCommand("kingdomcraft");
 		command.setExecutor(commandHandler);
 		command.setTabCompleter(commandHandler);
+		 */
+		try {
+			Field f = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			f.setAccessible(true);
+			CommandMap commandMap = (CommandMap) f.get(Bukkit.getServer());
+			commandMap.register("kingdomcraft", new KingdomCraftCommand<>(this, commandHandler, kdc.getConfig().getCommandAliases()));
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			log("Cannot register default command. Shutting down plugin.", Level.SEVERE);
+			disable();
+			return;
+		}
 
 		// listeners
 		PluginManager pm = getServer().getPluginManager();

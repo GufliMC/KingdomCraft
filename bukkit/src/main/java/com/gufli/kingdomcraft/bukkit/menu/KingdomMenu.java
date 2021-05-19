@@ -163,6 +163,11 @@ public class KingdomMenu {
                             if (target.getRank() != null) {
                                 b.withLore(text("menuInfoRank", colorify(target.getRank().getDisplay())));
                             }
+
+                            if ( target.getJoinedKingdomAt() != null ) {
+                                ZonedDateTime zdt = target.getJoinedKingdomAt().atZone(timeZone);
+                                b.withLore(text("menuInfoKingdomJoined", zdt.format(kdc.getConfig().getDateFormat())));
+                            }
                         }
                     })
                     .apply(b -> {
@@ -172,7 +177,12 @@ public class KingdomMenu {
                             return;
                         }
 
-                        ZonedDateTime zdt = target.getUpdatedAt().atZone(timeZone);
+                        ZonedDateTime zdt;
+                        if ( target.getLastOnlineAt() != null ) {
+                            zdt = target.getLastOnlineAt().atZone(timeZone);
+                        } else {
+                            zdt = target.getUpdatedAt().atZone(timeZone);
+                        }
 
                         if (zdt.toLocalDate().equals(LocalDate.now(timeZone))) {
                             b.withLore(text("menuInfoLastSeen", zdt.format(kdc.getConfig().getTimeFormat())));

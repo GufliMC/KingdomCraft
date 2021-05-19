@@ -6,10 +6,6 @@ softdepend: [Vault, DiscordSRV]
 website: 'kingdomcraft.be'
 main: com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin
 api-version: 1.13
-commands:
-    kingdomcraft:
-      aliases: [k, kd, kdc, kingdoms, kingdom]
-      description: 'Root command for kingdomcraft sub commands'
 permissions:
     kingdom.create:
         description: 'Create a kingdom'
@@ -133,6 +129,10 @@ permissions:
         description: 'Change your kingdom''s spawn'
     kingdom.setrank:
         description: 'Change the rank of a player in your kingdom'
+    kingdom.promote:
+        description: 'Promote a player'
+    kingdom.demote:
+        description: 'Demote a player'
     kingdom.kick:
         description: 'Kick a player out of your kingdom'
     kingdom.tphere:

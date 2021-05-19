@@ -18,70 +18,61 @@
 package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.events.PlayerLoadedEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class ConnectionListener implements Listener {
 
     private final KingdomCraftBukkitPlugin plugin;
+    private final Map<UUID, Consumer<PlatformPlayer>> unregisterdPlayers = new ConcurrentHashMap<>();
 
     public ConnectionListener(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
-        plugin.getKdc().getEventManager().addListener(com.gufli.kingdomcraft.api.events.PlayerLoginEvent.class, this::onLogin);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onLogin(PlayerLoginEvent e) {
-        if ( e.getResult() != PlayerLoginEvent.Result.ALLOWED ) {
+    public void onLogin(AsyncPlayerPreLoginEvent e) {
+        Consumer<PlatformPlayer> register = plugin.getKdc().onLogin(e.getUniqueId(), e.getName());
+        if ( register == null ) {
+            e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
+            e.setKickMessage(ChatColor.GOLD + "[KingdomCraft]\n\n" + ChatColor.RED
+                    + "The server was unable to load your user data.\nPlease contact an administrator!");
             return;
         }
-        plugin.getScheduler().executeAsync(() -> {
-            if ( !plugin.getKdc().onLogin(new BukkitPlayer(e.getPlayer())) ) {
-                e.getPlayer().kickPlayer(plugin.getKdc().getMessages().getPrefix() +
-                        ChatColor.RED + "An error occured! Could not load your user data.");
-            }
-        });
+        unregisterdPlayers.put(e.getUniqueId(), register);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
+        unregisterdPlayers.remove(e.getPlayer().getUniqueId());
+
         PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
-        plugin.getKdc().onQuit(player);
+        if ( player != null ) {
+            plugin.getKdc().onQuit(player);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
-        PlatformPlayer player = plugin.getKdc().getPlayer(e.getPlayer().getUniqueId());
-        if ( player == null ) {
-            return; // player is still loading
-        }
-        if ( player.has("LOADED") ) {
+        UUID id = e.getPlayer().getUniqueId();
+        if ( !unregisterdPlayers.containsKey(id) ) {
             return;
         }
-        player.set("LOADED", true);
-        plugin.getKdc().getEventManager().dispatch(new PlayerLoadedEvent(player));
+
+        unregisterdPlayers.get(id).accept(new BukkitPlayer(e.getPlayer()));
+        unregisterdPlayers.remove(id);
     }
 
-    public void onLogin(com.gufli.kingdomcraft.api.events.PlayerLoginEvent e) {
-        PlatformPlayer player = e.getPlayer();
-        plugin.getScheduler().sync().execute(() -> {
-            if ( Bukkit.getPlayer(player.getUniqueId()) == null ) {
-                return; // player is still joining
-            }
-            if ( player.has("LOADED") ) {
-                return;
-            }
-            player.set("LOADED", true);
-            plugin.getKdc().getEventManager().dispatch(new PlayerLoadedEvent(player));
-        });
-    }
 }

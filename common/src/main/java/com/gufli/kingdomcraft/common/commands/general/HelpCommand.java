@@ -71,11 +71,16 @@ public class HelpCommand extends CommandBase {
         sb.append(kdc.getMessages().getMessage("cmdHelpHeader"));
         sb.append("\n");
 
+        String root = "kingdomcraft";
+        if ( kdc.getConfig().getCommandAliases().size() > 0 ) {
+            root = kdc.getConfig().getCommandAliases().get(0);
+        }
+
         int startindex = (page - 1) * pagesize;
         for ( int i = startindex; i < Math.min(commands.size(), startindex + pagesize); i++ ) {
             Command cmd = commands.get(i);
 
-            String command = "/k " + cmd.getCommands().get(0) + (cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint());
+            String command = "/" + root + " " + cmd.getCommands().get(0) + (cmd.getArgumentsHint() == null ? "" : " " + cmd.getArgumentsHint());
             String explanation = cmd.getExplanationMessage();
 
             sb.append(kdc.getMessages().getMessage("cmdHelpFormat", command, explanation));

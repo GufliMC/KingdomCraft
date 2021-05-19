@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface KingdomCraftConfig {
 
+    List<String> getCommandAliases();
+
     int getTeleportDelay();
 
     List<String> getWorlds();

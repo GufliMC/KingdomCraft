@@ -43,6 +43,7 @@ public class VersionCommand extends CommandBase {
         String prefix = kdc.getMessages().colorify(kdc.getMessages().getPrefix());
         sender.sendMessage(prefix + plugin.getDescription().getName() + " v" + plugin.getDescription().getVersion());
         sender.sendMessage(prefix + "Created by " + String.join(", ", plugin.getDescription().getAuthors()));
+        sender.sendMessage(prefix + "https://kingdomcraft.be");
     }
 
 }

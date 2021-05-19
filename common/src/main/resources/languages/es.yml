@@ -66,6 +66,8 @@ cmdLeaveExplanation: 'Abandonar tu reino'
 cmdChatChannelExplanation: 'Activar/desactivar un canal para hablar'
 cmdDefaultChatChannelExplanation: 'Activar/desactivar el canal para hablar sin prefijo'
 cmdSetRankExplanation: 'Cambiar el rango de un jugador'
+cmdPromoteExplanation: 'Promover un jugador'
+cmdDemoteExplanation: 'Degradar un jugador'
 cmdEnemyExplanation: 'Iniciar una enemistad con un reino'
 cmdEnemyOtherExplanation: 'Iniciar una enemistad entre reinos'
 cmdTruceExplanation: 'Solicitar o aceptar una tregua'
@@ -236,6 +238,12 @@ cmdSetRankSender: '&aCambiaste el rango de &2{0} &aa &2{1}&a!'
 cmdSetRankTarget: '&aTu rango cambió a &2{0}&a!'
 cmdSetRankFull: '&cEl rango &4{0} &cestá completo!'
 
+# /k promote
+cmdPromoteHighest: '&cEste jugador ya tiene el rango más alto!'
+
+# /k demote
+cmdDemoteLowest: '&cEste jugador ya tiene el rango más bajo!'
+
 # /k setkingdom
 cmdSetKingdomAlready: '&c{0} &4ya pertenece &4{1}&c!'
 cmdSetKingdomTarget: '&aHas sido cambiado al reino &2{0}&a!'
@@ -359,6 +367,7 @@ menuPlayersListTitle: '&8Jugadores'
 
 menuInfoKingdom: '&7Reino: {0}'
 menuInfoRank: '&7Rango: {0}'
+menuInfoKingdomJoined: '&7Desde: &6{0}'
 menuInfoLastSeen: '&7Última conexión: &6{0}'
 menuInfoFirstLogin: '&7Primer ingreso: &6{0}'
 menuInfoCreatedAt: '&7Creado el: &6{0}'

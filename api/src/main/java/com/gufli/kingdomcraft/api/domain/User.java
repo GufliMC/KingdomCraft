@@ -59,4 +59,10 @@ public interface User extends Model {
 
     Instant getUpdatedAt();
 
+    Instant getJoinedKingdomAt();
+
+    Instant getLastOnlineAt();
+
+    void setLastOnlineAt(Instant lastOnlineAt);
+
 }

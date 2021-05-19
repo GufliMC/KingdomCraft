@@ -32,10 +32,7 @@ import com.gufli.kingdomcraft.common.commands.edit.ranks.*;
 import com.gufli.kingdomcraft.common.commands.general.HelpCommand;
 import com.gufli.kingdomcraft.common.commands.general.JoinCommand;
 import com.gufli.kingdomcraft.common.commands.general.ListCommand;
-import com.gufli.kingdomcraft.common.commands.member.InviteCommand;
-import com.gufli.kingdomcraft.common.commands.member.KickCommand;
-import com.gufli.kingdomcraft.common.commands.member.LeaveCommand;
-import com.gufli.kingdomcraft.common.commands.member.SetRankCommand;
+import com.gufli.kingdomcraft.common.commands.member.*;
 import com.gufli.kingdomcraft.common.commands.relations.*;
 import com.gufli.kingdomcraft.common.commands.spawn.*;
 import com.gufli.kingdomcraft.common.commands.tphere.TpHereCommand;
@@ -106,6 +103,9 @@ public class CommandManagerImpl implements CommandManager {
 
         // admin
         addCommand(new SetRankCommand(kdc));
+        addCommand(new PromoteCommand(kdc));
+        addCommand(new DemoteCommand(kdc));
+
         addCommand(new SetKingdomCommand(kdc));
         addCommand(new KickCommand(kdc));
 
@@ -242,9 +242,14 @@ public class CommandManagerImpl implements CommandManager {
             }
         }
 
+        String root = "kingdomcraft";
+        if ( kdc.getConfig().getCommandAliases().size() > 0 ) {
+            root = kdc.getConfig().getCommandAliases().get(0);
+        }
+
         if ( invalidBase != null ) {
             kdc.getMessages().send(sender, "cmdErrorInvalidUsage",
-                    "/k " + invalidBase + " " + invalidArguments);
+                    "/" + root + " " + invalidBase + " " + invalidArguments);
             return;
         }
 

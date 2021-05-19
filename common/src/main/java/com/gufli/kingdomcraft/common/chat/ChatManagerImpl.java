@@ -270,18 +270,28 @@ public class ChatManagerImpl implements ChatManager {
             return;
         }
 
-        PlayerChatEvent event = new PlayerChatEvent(player, channel, message);
+        dispatch(player, channel, message);
+    }
+
+    @Override
+    public void dispatch(PlatformPlayer player, ChatChannel channel, String message) {
+        List<PlatformPlayer> receivers = kdc.getOnlinePlayers().stream()
+                .filter(p -> canRead(p, channel))
+                .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
+                .collect(Collectors.toList());
+
+        PlayerChatEvent event = new PlayerChatEvent(player, channel, message, receivers);
         kdc.getEventManager().dispatch(event);
 
         if ( event.isCancelled() ) {
             return;
         }
 
-        dispatch(player, channel, event.getMessage());
-    }
+        message = event.getMessage();
+        if ( message == null ) {
+            return;
+        }
 
-    @Override
-    public void dispatch(PlatformPlayer player, ChatChannel channel, String message) {
         String result = channel.getFormat();
         result = StringEscapeUtils.unescapeJava(result);
         result = kdc.getPlaceholderManager().handle(player, result);
@@ -295,11 +305,10 @@ public class ChatManagerImpl implements ChatManager {
         result = result.replace("{message}", message);
         result = result.replace("{player}", player.getName());
 
-        String finalResult = result;
-        List<PlatformPlayer> receivers = kdc.getOnlinePlayers().stream()
-                .filter(p -> canRead(p, channel))
-                .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
-                .collect(Collectors.toList());
+        List<PlatformPlayer> finalReceivers = event.getReceivers();
+        if ( finalReceivers == null || finalReceivers.isEmpty() ) {
+            return;
+        }
 
         if ( channel.getCooldown() > 0 && !player.hasPermission("kingdom.chat.bypass.cooldown") ) {
             player.set("CHAT_COOLDOWN_" + channel.getName(), System.currentTimeMillis());
@@ -309,6 +318,7 @@ public class ChatManagerImpl implements ChatManager {
             receivers.add(player);
         }
 
+        String finalResult = result;
         for ( PlatformPlayer p : receivers ) {
             p.sendMessage(finalResult);
         }

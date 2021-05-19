@@ -66,6 +66,8 @@ cmdLeaveExplanation: 'Leave your kingdom'
 cmdChatChannelExplanation: 'Enable/disable a channel to talk in'
 cmdDefaultChatChannelExplanation: 'Toggle channel to talk in without prefix'
 cmdSetRankExplanation: 'Change a players rank'
+cmdPromoteExplanation: 'Promote a player'
+cmdDemoteExplanation: 'Demote a player'
 cmdEnemyExplanation: 'Start a rivalry'
 cmdEnemyOtherExplanation: 'Start a rivalry between kingdoms'
 cmdTruceExplanation: 'Request or accept a truce'
@@ -236,6 +238,12 @@ cmdSetRankSender: '&aYou changed the rank of &2{0} &ato &2{1}&a!'
 cmdSetRankTarget: '&aYour rank has been changed to &2{0}&a!'
 cmdSetRankFull: '&cThat rank &4{0} &cis full!'
 
+# /k promote
+cmdPromoteHighest: '&cThis player already has the highest rank!'
+
+# /k demote
+cmdDemoteLowest: '&cThis player already has the lowest rank!'
+
 # /k setkingdom
 cmdSetKingdomAlready: '&c{0} &4is already in &4{1}&c!'
 cmdSetKingdomTarget: '&aYou have been placed in &2{0}&a!'
@@ -359,6 +367,7 @@ menuPlayersListTitle: '&8Players'
 
 menuInfoKingdom: '&7Kingdom: {0}'
 menuInfoRank: '&7Rank: {0}'
+menuInfoKingdomJoined: '&7Since: &6{0}'
 menuInfoLastSeen: '&7Last seen: &6{0}'
 menuInfoFirstLogin: '&7First login: &6{0}'
 menuInfoCreatedAt: '&7Created at: &6{0}'
