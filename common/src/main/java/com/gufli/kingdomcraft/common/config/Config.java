@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Config implements KingdomCraftConfig {
@@ -102,7 +103,10 @@ public class Config implements KingdomCraftConfig {
 
         if ( config.contains("friendly-fire-relationships") ) {
             friendlyFireRelations = config.getStringList("friendly-fire-relationships").stream()
-                    .map(s -> RelationType.valueOf(s.toUpperCase()))
+                    .map(s -> Arrays.stream(RelationType.values())
+                            .filter(rel -> rel.name().equalsIgnoreCase(s))
+                            .findFirst().orElse(null))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
         }
 
