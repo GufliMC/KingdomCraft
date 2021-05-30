@@ -18,6 +18,7 @@
 package com.gufli.kingdomcraft.bukkit.listeners;
 
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.events.PlayerLoadedEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import org.bukkit.ChatColor;
@@ -71,8 +72,9 @@ public class ConnectionListener implements Listener {
             return;
         }
 
-        unregisterdPlayers.get(id).accept(new BukkitPlayer(e.getPlayer()));
-        unregisterdPlayers.remove(id);
+        PlatformPlayer pp = new BukkitPlayer(e.getPlayer());
+        unregisterdPlayers.remove(id).accept(pp);
+        plugin.getKdc().getEventManager().dispatch(new PlayerLoadedEvent(pp));
     }
 
 }
