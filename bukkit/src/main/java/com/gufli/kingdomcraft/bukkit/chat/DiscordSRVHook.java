@@ -1,15 +1,41 @@
 package com.gufli.kingdomcraft.bukkit.chat;
 
+import com.gufli.kingdomcraft.api.event.EventExecutor;
 import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import github.scarsz.discordsrv.DiscordSRV;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 
-public class DiscordSRVHook {
+public class DiscordSRVHook implements Listener {
+
+    private final KingdomCraftBukkitPlugin plugin;
+    private EventExecutor<?> eventExecutor;
 
     public DiscordSRVHook(KingdomCraftBukkitPlugin plugin) {
-        plugin.getKdc().getEventManager().addListener(PlayerChatEvent.class, this::onChat);
+        this.plugin = plugin;
+
+        if ( plugin.getServer().getPluginManager().isPluginEnabled("DiscordSRV") ) {
+            eventExecutor = plugin.getKdc().getEventManager().addListener(PlayerChatEvent.class, this::onChat);
+        }
+    }
+
+    @EventHandler
+    public void onPluginDisable(PluginDisableEvent event) {
+        if ( event.getPlugin().getName().equals("DiscordSRV") ) {
+            eventExecutor.unregister();
+        }
+    }
+
+    @EventHandler
+    public void onPluginDisable(PluginEnableEvent event) {
+        if ( event.getPlugin().getName().equals("DiscordSRV") ) {
+            eventExecutor = plugin.getKdc().getEventManager().addListener(PlayerChatEvent.class, this::onChat);
+        }
     }
 
     private void onChat(PlayerChatEvent event) {

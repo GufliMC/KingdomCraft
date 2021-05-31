@@ -201,9 +201,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		new DisplayNameListener(this);
 
 		// discord srv hook
-		if ( pm.isPluginEnabled("DiscordSRV") ) {
-			new DiscordSRVHook(this);
-		}
+		pm.registerEvents(new DiscordSRVHook(this), this);
 
 		// bStats
 		Metrics metrics = new Metrics(this, 10101);
