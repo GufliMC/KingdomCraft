@@ -280,7 +280,7 @@ public class ChatManagerImpl implements ChatManager {
                 .filter(p -> channel.getRange() <= 0 || p.getLocation().distanceTo(player.getLocation()) <= channel.getRange())
                 .collect(Collectors.toList());
 
-        PlayerChatEvent event = new PlayerChatEvent(player, channel, message, receivers);
+        PlayerChatEvent event = new PlayerChatEvent(player, channel, message, channel.getFormat(), receivers);
         kdc.getEventManager().dispatch(event);
 
         if ( event.isCancelled() ) {
@@ -292,7 +292,7 @@ public class ChatManagerImpl implements ChatManager {
             return;
         }
 
-        String result = channel.getFormat();
+        String result = event.getFormat();
         result = StringEscapeUtils.unescapeJava(result);
         result = kdc.getPlaceholderManager().handle(player, result);
         result = kdc.getMessages().colorify(result);

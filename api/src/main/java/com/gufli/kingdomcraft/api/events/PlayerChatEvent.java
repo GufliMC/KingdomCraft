@@ -25,16 +25,18 @@ import java.util.List;
 public class PlayerChatEvent extends PlayerEvent {
 
     private final ChatChannel chatChannel;
+    private final String message;
 
-    private boolean cancelled = false;
-    private String message;
+    private String format;
     private List<PlatformPlayer> receivers;
 
+    private boolean cancelled = false;
 
-    public PlayerChatEvent(PlatformPlayer player, ChatChannel channel, String message, List<PlatformPlayer> receivers) {
+    public PlayerChatEvent(PlatformPlayer player, ChatChannel channel, String message, String format, List<PlatformPlayer> receivers) {
         super(player);
         this.chatChannel = channel;
         this.message = message;
+        this.format = format;
         this.receivers = receivers;
     }
 
@@ -44,10 +46,6 @@ public class PlayerChatEvent extends PlayerEvent {
 
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public boolean isCancelled() {
@@ -64,5 +62,13 @@ public class PlayerChatEvent extends PlayerEvent {
 
     public void setReceivers(List<PlatformPlayer> receivers) {
         this.receivers = receivers;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 }
