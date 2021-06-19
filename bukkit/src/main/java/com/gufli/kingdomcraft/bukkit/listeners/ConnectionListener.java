@@ -21,7 +21,9 @@ import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.PlayerLoadedEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -33,6 +35,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 public class ConnectionListener implements Listener {
 
@@ -43,19 +46,33 @@ public class ConnectionListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onLogin(AsyncPlayerPreLoginEvent e) {
         Consumer<PlatformPlayer> register = plugin.getKdc().onLogin(e.getUniqueId(), e.getName());
         if ( register == null ) {
-            e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
-            e.setKickMessage(ChatColor.GOLD + "[KingdomCraft]\n\n" + ChatColor.RED
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    ChatColor.GOLD + "[KingdomCraft]\n\n" + ChatColor.RED
                     + "The server was unable to load your user data.\nPlease contact an administrator!");
             return;
         }
+
+        Player player = Bukkit.getPlayer(e.getUniqueId());
+        if ( player != null ) {
+            plugin.log("Player " + e.getName() + " joined before their data was loaded, this is very very bad! Please contact the developer!", Level.SEVERE);
+        }
+
         unregisterdPlayers.put(e.getUniqueId(), register);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    public void onLogin2(AsyncPlayerPreLoginEvent e) {
+        if ( e.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED ) {
+            return;
+        }
+        unregisterdPlayers.remove(e.getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent e) {
         unregisterdPlayers.remove(e.getPlayer().getUniqueId());
 
@@ -65,7 +82,7 @@ public class ConnectionListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent e) {
         UUID id = e.getPlayer().getUniqueId();
         if ( !unregisterdPlayers.containsKey(id) ) {

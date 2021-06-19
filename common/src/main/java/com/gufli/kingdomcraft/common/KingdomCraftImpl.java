@@ -328,7 +328,7 @@ public class KingdomCraftImpl implements KingdomCraft {
                 context.updateName(user, name);
             }  else if ( !user.getUniqueId().equals(id) ) {
                 context.updateUUID(user, id);
-            }else {
+            } else {
                 context.login(user);
             }
 
