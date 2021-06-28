@@ -39,6 +39,9 @@ import java.util.logging.Level;
 
 public class ConnectionListener implements Listener {
 
+    private final String kickMessage = ChatColor.GOLD + "[KingdomCraft]\n\n" + ChatColor.RED
+            + "The server was unable to load your user data.\nPlease contact an administrator!";
+
     private final KingdomCraftBukkitPlugin plugin;
     private final Map<UUID, Consumer<PlatformPlayer>> unregisterdPlayers = new ConcurrentHashMap<>();
 
@@ -50,9 +53,7 @@ public class ConnectionListener implements Listener {
     public void onLogin(AsyncPlayerPreLoginEvent e) {
         Consumer<PlatformPlayer> register = plugin.getKdc().onLogin(e.getUniqueId(), e.getName());
         if ( register == null ) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    ChatColor.GOLD + "[KingdomCraft]\n\n" + ChatColor.RED
-                    + "The server was unable to load your user data.\nPlease contact an administrator!");
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, kickMessage);
             return;
         }
 
@@ -86,6 +87,8 @@ public class ConnectionListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         UUID id = e.getPlayer().getUniqueId();
         if ( !unregisterdPlayers.containsKey(id) ) {
+            plugin.log("Player " + e.getPlayer().getName() + " joined before their data was loaded, this is very very bad! Please contact the developer!", Level.SEVERE);
+            e.getPlayer().kickPlayer(kickMessage);
             return;
         }
 
