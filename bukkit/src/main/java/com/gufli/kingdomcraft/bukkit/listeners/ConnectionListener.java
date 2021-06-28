@@ -40,7 +40,7 @@ import java.util.logging.Level;
 public class ConnectionListener implements Listener {
 
     private final String kickMessage = ChatColor.GOLD + "[KingdomCraft]\n\n" + ChatColor.RED
-            + "The server was unable to load your user data.\nPlease contact an administrator!";
+            + "The server was unable to load your user data.\nTry joining again or contact an administrator!";
 
     private final KingdomCraftBukkitPlugin plugin;
     private final Map<UUID, Consumer<PlatformPlayer>> unregisterdPlayers = new ConcurrentHashMap<>();
@@ -49,28 +49,23 @@ public class ConnectionListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onLogin(AsyncPlayerPreLoginEvent e) {
+        plugin.log("Loading " + e.getName());
         Consumer<PlatformPlayer> register = plugin.getKdc().onLogin(e.getUniqueId(), e.getName());
         if ( register == null ) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, kickMessage);
             return;
         }
 
-        Player player = Bukkit.getPlayer(e.getUniqueId());
-        if ( player != null ) {
-            plugin.log("Player " + e.getName() + " joined before their data was loaded, this is very very bad! Please contact the developer!", Level.SEVERE);
-        }
-
         unregisterdPlayers.put(e.getUniqueId(), register);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onLogin2(AsyncPlayerPreLoginEvent e) {
-        if ( e.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED ) {
-            return;
+    public void onLoginMonitor(AsyncPlayerPreLoginEvent e) {
+        if ( e.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED ) {
+            unregisterdPlayers.remove(e.getUniqueId());
         }
-        unregisterdPlayers.remove(e.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -86,14 +81,22 @@ public class ConnectionListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent e) {
         UUID id = e.getPlayer().getUniqueId();
-        if ( !unregisterdPlayers.containsKey(id) ) {
-            plugin.log("Player " + e.getPlayer().getName() + " joined before their data was loaded, this is very very bad! Please contact the developer!", Level.SEVERE);
-            e.getPlayer().kickPlayer(kickMessage);
-            return;
+
+        Consumer<PlatformPlayer> register = unregisterdPlayers.get(id);
+        if ( register == null ) {
+
+            register = plugin.getKdc().onLogin(id, e.getPlayer().getName());
+            if ( register == null ) {
+                plugin.log("The data for " + e.getPlayer().getName() + " was not pre-loaded, this is very very bad! Please contact the developer!", Level.SEVERE);
+                e.getPlayer().kickPlayer(kickMessage);
+                return;
+            }
         }
 
+
         PlatformPlayer pp = new BukkitPlayer(e.getPlayer());
-        unregisterdPlayers.remove(id).accept(pp);
+        register.accept(pp);
+        unregisterdPlayers.remove(id);
         plugin.getKdc().getEventManager().dispatch(new PlayerLoadedEvent(pp));
     }
 

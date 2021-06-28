@@ -19,6 +19,7 @@ package com.gufli.kingdomcraft.bukkit.gui;
 
 import com.gufli.kingdomcraft.api.KingdomCraft;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
+import com.gufli.kingdomcraft.api.events.PlayerLeaveEvent;
 import com.gufli.kingdomcraft.api.gui.Inventory;
 import com.gufli.kingdomcraft.api.gui.InventoryClickType;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
@@ -36,14 +37,11 @@ public class InventoryListener implements Listener {
     
     public InventoryListener(KingdomCraftBukkitPlugin plugin) {
         this.kdc = plugin.getKdc();
+        this.kdc.getEventManager().addListener(PlayerLeaveEvent.class, e -> {
+            handleClose(e.getPlayer());
+        });
     }
     
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        PlatformPlayer player = kdc.getPlayer(e.getPlayer().getUniqueId());
-        handleClose(player);
-    }
-
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if ( !(e.getPlayer() instanceof Player) ) {
