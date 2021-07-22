@@ -190,6 +190,7 @@ public class Config implements KingdomCraftConfig {
     }
 
     @Override
+    @Deprecated
     public List<String> getWorlds() {
         return worlds;
     }
