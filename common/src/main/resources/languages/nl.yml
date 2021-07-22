@@ -174,17 +174,21 @@ cmdInviteTarget: '&aJe bent door ²2{0} uitgenodigd om je aan te sluiten bij het
 cmdInviteSender: '&aJe hebt &2{0} &auitgenodigd om zich aan te sluiten bij &2{1}&a!'
 
 # /k spawn
-cmdSpawnNotExists: '&aDe spawn van het kingdom is niet ingesteld!'
-cmdSpawnOtherNotExists: '&aDe spawn van het &2{0} &ais niet ingesteld!'
+cmdSpawnNotExists: '&cDe spawn van het kingdom is niet ingesteld!'
+cmdSpawnOtherNotExists: '&cDe spawn van het &4{0} &cis niet ingesteld!'
 cmdSpawn: '&aJe bent geteleporteerd naar &2{0}&a!'
 
 # /k tpspawn
-cmdTpSpawn: '&aJe hebt &2{0} &ageteleporteerd naar &2{1}'
-cmdTpSpawnTarget: '&aJe bent geteleporteerd naar &2{0}'
+cmdTpSpawn: '&aJe hebt &2{0} &anaar hun kingdom spawn geteleporteerd!'
+cmdTpSpawnTarget: '&aJe bent geteleporteerd naar je kingdom spawn!'
 
 # /k setspawn
 cmdSetSpawn: '&aJe hebt de spawn van je kingdom veranderd naar &2{0}&a!'
 cmdSetSpawnOther: '&aJe hebt de spawn van &2{0} &averanderd naar &2{1}&a!'
+
+# /k tpallspawn
+cmdTpAllSpawn: '&aJe hebt iedereen van &2{0} &anaar hun kingdom spawn geteleporteerd!'
+cmdTpAllSpawnTarget: '&aJe bent geteleporteerd naar je kingdom spawn!'
 
 # /k enemy
 cmdEnemy: '&aJouw kingdom is nu vijanden met &2{0}&a!'

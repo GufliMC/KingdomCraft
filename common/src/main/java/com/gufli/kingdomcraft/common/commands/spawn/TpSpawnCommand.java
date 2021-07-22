@@ -67,10 +67,7 @@ public class TpSpawnCommand extends CommandBase {
 
         target.teleport(loc);
 
-        DecimalFormat df = new DecimalFormat("#");
-        String str = df.format(loc.getX()) + ", " + df.format(loc.getY()) + ", " + df.format(loc.getZ());
-
-        kdc.getMessages().send(sender, "cmdTpSpawn", str);
-        kdc.getMessages().send(target, "cmdTpSpawnTarget", str);
+        kdc.getMessages().send(sender, "cmdTpSpawn", target.getName());
+        kdc.getMessages().send(target, "cmdTpSpawnTarget");
     }
 }

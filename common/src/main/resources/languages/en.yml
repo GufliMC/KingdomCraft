@@ -89,6 +89,8 @@ cmdAdminExplanation: 'Toggle admin mode'
 cmdEditorExplanation: 'Start a webeditor session'
 cmdTpSpawnExplanation: 'Teleport a player to their kingdom spawn'
 cmdTpSpawnOtherExplanation: 'Teleport a player to a kingdom spawn'
+cmdTpAllSpawnExplanation: 'Teleport everyone from your kingdom to their kingdom spawn'
+cmdTpAllSpawnOtherExplanation: 'Teleport everyone from a kingdom to their kingdom spawn'
 cmdSocialSpyExplanation: 'Toggle social spy'
 
 
@@ -174,13 +176,17 @@ cmdInviteTarget: '&aYou have been invited by &2{0} &ato join &2{1}&a!'
 cmdInviteSender: '&aYou invited &2{0} &ato join &2{1}&a!'
 
 # /k spawn
-cmdSpawnNotExists: '&aThe kingdom spawn has not been setup yet!'
-cmdSpawnOtherNotExists: '&aThe spawn of kingdom &2{0} &ahas not been setup yet!'
+cmdSpawnNotExists: '&cThe kingdom spawn has not been setup yet!'
+cmdSpawnOtherNotExists: '&cThe spawn of kingdom &4{0} &chas not been setup yet!'
 cmdSpawn: '&aYou have been teleported to &2{0}&a!'
 
 # /k tpspawn
-cmdTpSpawn: '&aTeleported &2{0} &ato &2{1}'
-cmdTpSpawnTarget: '&aYou''ve been teleported to &2{0}'
+cmdTpSpawn: '&aTeleported &2{0} &ato &2{1}&a!'
+cmdTpSpawnTarget: '&aYou''ve been teleported to &2{0}&a!'
+
+# /k tpallspawn
+cmdTpAllSpawn: '&aTeleported everyone from &2{0} &ato their kingdom spawn!'
+cmdTpAllSpawnTarget: '&aYou''ve been teleported to your kingdom spawn!'
 
 # /k setspawn
 cmdSetSpawn: '&aYou changed the spawn of your kingdom &ato &2{0}&a!'

@@ -118,6 +118,9 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new TpHereCommand(kdc));
         addCommand(new TpHereOtherCommand(kdc));
 
+        addCommand(new TpAllSpawnCommand(kdc));
+        addCommand(new TpAllSpawnOtherCommand(kdc));
+
         addCommand(new ChatCommand(kdc));
 
         addCommand(new AdminCommand(kdc));

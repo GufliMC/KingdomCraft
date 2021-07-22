@@ -174,8 +174,8 @@ cmdInviteTarget: '&aHas sido invitado por &2{0} &apara unirte a &2{1}&a!'
 cmdInviteSender: '&aInvitaste a &2{0} &apara unirse a &2{1}&a!'
 
 # /k spawn
-cmdSpawnNotExists: '&aEl spawn del reino todavía no está configurado!'
-cmdSpawnOtherNotExists: '&aEl spawn del reino &2{0} &atodavía no está configurado!'
+cmdSpawnNotExists: '&cEl spawn del reino todavía no está configurado!'
+cmdSpawnOtherNotExists: '&cEl spawn del reino &4{0} &ctodavía no está configurado!'
 cmdSpawn: '&aYou have been teleported to &2{0}&a!'
 
 # /k tpspawn
