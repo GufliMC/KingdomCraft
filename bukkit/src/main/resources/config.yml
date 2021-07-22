@@ -21,12 +21,6 @@ settings:
         prefix: '&7[&eHobo&7]'
         suffix: ''
 
-    # a list of worlds this plugin is enabled in, remove to allow all worlds
-    # worlds:
-    # - world
-    # - world_nether
-    # - world_the_end
-
     # Enable the chat even if the world is not enabled
     enable-chat-in-disabled-worlds: false
 
@@ -57,11 +51,11 @@ settings:
     join-and-leave-kingdom-only: false
 
     messages:
-        join: '&e{kingdom_prefix}{rank_prefix}{player} &ejoined the server.'
-        leave: '&e{kingdom_prefix}{rank_prefix}{player} &equit the server.'
-        death: '&e{kingdom_prefix}{rank_prefix}{player} &edied.'
-        kill: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_player}&e.'
-        kill-weapon: '&e{kingdom_prefix}{rank_prefix}{player} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_player} &ewith weapon {weapon}&e.'
+        join: '&e{kingdom_prefix}{rank_prefix}{username} &ejoined the server.'
+        leave: '&e{kingdom_prefix}{rank_prefix}{username} &equit the server.'
+        death: '&e{kingdom_prefix}{rank_prefix}{username} &edied.'
+        kill: '&e{kingdom_prefix}{rank_prefix}{username} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_username}&e.'
+        kill-weapon: '&e{kingdom_prefix}{rank_prefix}{username} &ewas killed by {killer_kingdom_prefix}{killer_rank_prefix}{killer_username} &ewith weapon {weapon}&e.'
 
     # For times or dates that are displayed in the plugin
     timezone: 'Europe/Brussels'
