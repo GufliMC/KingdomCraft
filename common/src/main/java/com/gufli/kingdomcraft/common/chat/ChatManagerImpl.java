@@ -362,15 +362,12 @@ public class ChatManagerImpl implements ChatManager {
             if ( cs.contains("kingdoms") ) {
                 ChatChannelFactory factory = createFactory(name, cs);
                 addFactory(factory);
-            } else {
-                ChatChannel ch = new BasicChatChannel(name);
-                setup(ch, cs);
-                addChatChannel(ch);
-
-                if ( cs.contains("default") && cs.getBoolean("default") ) {
-                    setDefaultChatChannel(ch);
-                }
+                continue;
             }
+
+            ChatChannel ch = new BasicChatChannel(name);
+            setup(ch, cs);
+            addChatChannel(ch);
         }
 
         if ( defaultchannel != null ) {

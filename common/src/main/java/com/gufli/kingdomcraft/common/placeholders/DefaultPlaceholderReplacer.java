@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.common.placeholders;
 
+import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 
@@ -27,16 +28,19 @@ public class DefaultPlaceholderReplacer {
         pm.addPlaceholderReplacer((user, placeholder) -> user.getName(), "user", "username");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            String display;
-            if ( user.getKingdom() == null ) {
-                display = kdc.getConfig().getNoKingdomDisplay();
-            } else {
-                display = user.getKingdom() != null ? user.getKingdom().getDisplay() : "";
+            if (user.getKingdom() != null) {
+                return kdc.getMessages().colorify(user.getKingdom().getDisplay());
             }
-            return kdc.getMessages().colorify(display);
+
+            PlatformPlayer pp = kdc.getPlayer(user);
+            if (pp != null && pp.hasPermission("kingdom.placeholders.empty-no-kingdom")) {
+                return null;
+            }
+
+            return kdc.getMessages().colorify(kdc.getConfig().getNoKingdomDisplay());
         }, "kingdom");
         pm.addPlaceholderReplacer((user, placeholder) -> {
-           return user.getKingdom() != null ? user.getKingdom().getName() : "";
+            return user.getKingdom() != null ? user.getKingdom().getName() : "";
         }, "kingdom_name");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
@@ -47,22 +51,28 @@ public class DefaultPlaceholderReplacer {
         }, "rank_name");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            String prefix;
-            if ( user.getKingdom() == null ) {
-                prefix = kdc.getConfig().getNoKingdomPrefix();
-            } else {
-                prefix = user.getKingdom().getPrefix();
+            if (user.getKingdom() != null) {
+                return kdc.getMessages().colorify(user.getKingdom().getPrefix());
             }
-            return kdc.getMessages().colorify(prefix);
+
+            PlatformPlayer pp = kdc.getPlayer(user);
+            if (pp != null && pp.hasPermission("kingdom.placeholders.empty-no-kingdom")) {
+                return null;
+            }
+
+            return kdc.getMessages().colorify(kdc.getConfig().getNoKingdomPrefix());
         }, "kingdom_prefix");
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            String suffix;
-            if ( user.getKingdom() == null ) {
-                suffix = kdc.getConfig().getNoKingdomSuffix();
-            } else {
-                suffix = user.getKingdom().getSuffix();
+            if (user.getKingdom() != null) {
+                return kdc.getMessages().colorify(user.getKingdom().getSuffix());
             }
-            return kdc.getMessages().colorify(suffix);
+
+            PlatformPlayer pp = kdc.getPlayer(user);
+            if (pp != null && pp.hasPermission("kingdom.placeholders.empty-no-kingdom")) {
+                return null;
+            }
+
+            return kdc.getMessages().colorify(kdc.getConfig().getNoKingdomSuffix());
         }, "kingdom_suffix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
@@ -73,26 +83,26 @@ public class DefaultPlaceholderReplacer {
         }, "rank_suffix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            if ( user.getKingdom() == null ) {
+            if (user.getKingdom() == null) {
                 return "";
             }
             return user.getKingdom().getMemberCount() + "";
         }, "kingdom_member_count");
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            if ( user.getKingdom() == null ) {
+            if (user.getKingdom() == null) {
                 return "";
             }
             return kdc.getOnlineUsers().stream().filter(u -> u.getKingdom() == user.getKingdom()).count() + "";
         }, "kingdom_online_member_count");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            if ( user.getKingdom() == null || user.getRank() == null ) {
+            if (user.getKingdom() == null || user.getRank() == null) {
                 return "";
             }
             return user.getRank().getMemberCount() + "";
         }, "rank_member_count");
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            if ( user.getKingdom() == null || user.getRank() == null ) {
+            if (user.getKingdom() == null || user.getRank() == null) {
                 return "";
             }
             return kdc.getOnlineUsers().stream().filter(u -> u.getRank() == user.getRank()).count() + "";
