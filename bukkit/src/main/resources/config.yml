@@ -21,9 +21,6 @@ settings:
         prefix: '&7[&eHobo&7]'
         suffix: ''
 
-    # Enable the chat even if the world is not enabled
-    enable-chat-in-disabled-worlds: false
-
     friendly-fire: false
 
     # include these relationships in the friendly fire check
