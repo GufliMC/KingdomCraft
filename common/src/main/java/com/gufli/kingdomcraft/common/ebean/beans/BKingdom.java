@@ -17,16 +17,17 @@
 
 package com.gufli.kingdomcraft.common.ebean.beans;
 
-import com.gufli.kingdomcraft.api.domain.*;
+import com.gufli.kingdomcraft.api.domain.Kingdom;
+import com.gufli.kingdomcraft.api.domain.KingdomAttribute;
+import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
 import com.gufli.kingdomcraft.api.item.Item;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
-import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class BKingdom extends BaseModel implements Kingdom {
     public int maxMembers;
 
     @Convert(converter = ItemConverter.class, attributeName = "item")
-    @Size(max = 1023)
+    @Column(length = 1023)
     public Item item;
 
     @OneToOne
