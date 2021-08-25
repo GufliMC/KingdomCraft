@@ -39,54 +39,67 @@ public class CreateCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if ( !args[0].matches("[a-zA-Z0-9]+") ) {
+        if (!args[0].matches("[a-zA-Z0-9]+")) {
             kdc.getMessages().send(sender, "cmdErrorInvalidName");
             return;
         }
 
-        if ( kdc.getKingdom(args[0]) != null ) {
+        if (kdc.getKingdom(args[0]) != null) {
             kdc.getMessages().send(sender, "cmdErrorKingdomAlreadyExists", args[0]);
             return;
         }
 
-        if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() != null
-                && !sender.hasPermission("kingdom.create.other") ) {
+        if (sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() != null
+                && !sender.hasPermission("kingdom.create.other")) {
             kdc.getMessages().send(sender, "cmdErrorNoPermission");
             return;
         }
 
         Kingdom template = kdc.getTemplateKingdom();
 
-        Kingdom kingdom = kdc.createKingdom(args[0]);
-        template.copyTo(kingdom, true);
-        CompletableFuture<Void> future = kdc.saveAsync(kingdom);
+        CompletableFuture<Kingdom> kdf = kdc.createKingdom(args[0]);
 
-        future = future.thenCompose(unused -> {
-            // Add template ranks
-            for ( Rank rank : template.getRanks() ) {
-                rank.clone(kingdom, true);
-            }
-            return kdc.saveAsync(kingdom.getRanks());
-        }).thenCompose(unused -> {
-            // Add default rank
-            if ( template.getDefaultRank() != null ) {
-                kingdom.setDefaultRank(kingdom.getRank(template.getDefaultRank().getName()));
-            }
-            return kdc.saveAsync(kingdom);
+        kdf.thenAccept((kingdom) -> {
+            kdc.getMessages().send(sender, "cmdCreate", kingdom.getName());
         });
 
-        kdc.getMessages().send(sender, "cmdCreate", kingdom.getName());
+        CompletableFuture<Kingdom> tf = kdf.thenCompose((kingdom) -> {
+            // copy attributes from template
+            template.copyTo(kingdom, true);
+            return kdc.saveAsync(kingdom).thenApply(unused -> kingdom);
+        }).thenCompose(kingdom -> {
+            // copy ranks from template
+            for (Rank rank : template.getRanks()) {
+                rank.clone(kingdom, true);
+            }
+            return kdc.saveAsync(kingdom.getRanks()).thenApply(unused -> kingdom);
+        }).thenCompose(kingdom -> {
+            // set default rank from template
+            if (template.getDefaultRank() != null) {
+                kingdom.setDefaultRank(kingdom.getRank(template.getDefaultRank().getName()));
+            }
+            return kdc.saveAsync(kingdom).thenApply(unused -> kingdom);
+        });
 
-        if ( sender instanceof PlatformPlayer && kdc.getUser((PlatformPlayer) sender).getKingdom() == null ) {
-            User user = kdc.getUser((PlatformPlayer) sender);
+        if ( !(sender instanceof PlatformPlayer) ) {
+            return;
+        }
+
+        User user = kdc.getUser((PlatformPlayer) sender);
+        if ( user.getKingdom() != null ) {
+            return;
+        }
+
+        // set kingdom of user
+        tf.thenAccept((kingdom) -> {
             user.setKingdom(kingdom);
 
-            future.thenRun(() -> {
-                if ( !kingdom.getRanks().isEmpty() ) {
-                    user.setRank(kingdom.getRanks().stream().max(Comparator.comparingInt(Rank::getLevel)).orElse(null));
-                }
-                kdc.saveAsync(user);
-            });
-        }
+            if ( kingdom.getRanks().isEmpty() ) {
+                return;
+            }
+
+            user.setRank(kingdom.getRanks().stream().max(Comparator.comparingInt(Rank::getLevel)).orElse(null));
+            kdc.saveAsync(user);
+        });
     }
 }

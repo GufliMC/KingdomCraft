@@ -154,7 +154,7 @@ public class EditorImpl implements Editor {
                 key = key.replace(" ", "");
                 Kingdom kingdom = kdc.getKingdom(key);
                 if ( kingdom == null ) {
-                    kingdom = kdc.createKingdom(key);
+                    kingdom = kdc.createKingdom(key).get();
                 }
                 deserializer.deserialize(kingdom, kingdoms.get(key));
             }

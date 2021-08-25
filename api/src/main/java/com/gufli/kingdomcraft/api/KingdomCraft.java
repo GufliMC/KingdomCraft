@@ -75,7 +75,7 @@ public interface KingdomCraft {
 
     Kingdom getKingdom(long id);
 
-    Kingdom createKingdom(String name);
+    CompletableFuture<Kingdom> createKingdom(String name);
 
     Kingdom getTemplateKingdom();
 

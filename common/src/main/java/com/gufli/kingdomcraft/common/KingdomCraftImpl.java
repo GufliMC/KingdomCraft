@@ -194,6 +194,7 @@ public class KingdomCraftImpl implements KingdomCraft {
         return context.getKingdom(id);
     }
 
+    /*
     @Override
     public Kingdom createKingdom(String name) {
         if ( getKingdom(name) != null ) {
@@ -202,6 +203,20 @@ public class KingdomCraftImpl implements KingdomCraft {
         Kingdom kingdom = context.createKingdom(name);
         eventManager.dispatch(new KingdomCreateEvent(kingdom));
         return kingdom;
+    }
+     */
+
+    @Override
+    public CompletableFuture<Kingdom> createKingdom(String name) {
+        if ( getKingdom(name) != null ) {
+            throw new IllegalArgumentException("A kingdom with that name already exists.");
+        }
+
+        Kingdom kingdom = context.createKingdom(name);
+        return saveAsync(kingdom).thenApply(unused -> {
+            eventManager.dispatch(new KingdomCreateEvent(kingdom));
+            return kingdom;
+        });
     }
 
     @Override

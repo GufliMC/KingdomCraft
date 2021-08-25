@@ -77,7 +77,9 @@ kingdom = kdc.getKingdom("gufnation");
 System.out.printf("The defaultrank of kingdom %s is %s%n", kingdom.getName(), kingdom.getDefaultRank().getName());
 
 // Create a kingdom
-kingdom = kdc.createKingdom("gufland");
+kdc.createKingdom("gufland").thenAccept((kingdom) -> {
+    System.out.printf("Created kingdom: %s", kingdom.getName());
+});
 
 // Add a rank
 Rank rank = kingdom.createRank("King");
