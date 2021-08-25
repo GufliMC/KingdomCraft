@@ -313,6 +313,7 @@ cmdGroupsListOther: '&aPermissie groepen van de rang &2{0} &avin &2{1}&a: &2{2}'
 
 # /k ranks clone
 cmdRanksClone: '&aJe hebt de rang &2{0} &afvan &2{1} &anaar &2{2} &agekopieerd!'
+cmdRanksCloneMany: '&aJe hebt alle rangen van &2{0} &anaar &2{1} &agekopieerd!'
 
 # /k tphere
 cmdTpHere: '&aJe hebt iedereen van je kingdom naar jouw geteleporteerd!'

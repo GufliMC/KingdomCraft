@@ -32,7 +32,8 @@ import java.util.stream.Collectors;
 public class RanksCloneCommand extends CommandBase {
 
     public RanksCloneCommand(KingdomCraftImpl kdc) {
-        super(kdc, "ranks clone", 3, true);
+        super(kdc, "ranks clone", -1, true);
+        addCommand("ranks copy");
         setArgumentsHint("<from-kingdom> <to-kingdom> <rank>");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdRanksCloneExplanation"));
         setPermissions("kingdom.ranks.clone");
@@ -62,6 +63,11 @@ public class RanksCloneCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
+        if ( args.length < 2 ) {
+            kdc.getMessages().send(sender, "cmdErrorInvalidUsage", "/k ranks clone " + getArgumentsHint());
+            return;
+        }
+
         Kingdom from = kdc.getKingdom(args[0]);
         if ( from == null ) {
             kdc.getMessages().send(sender, "cmdErrorKingdomNotExist", args[0]);
@@ -74,20 +80,34 @@ public class RanksCloneCommand extends CommandBase {
             return;
         }
 
-        Rank rank = from.getRank(args[2]);
-        if ( rank == null ) {
-            kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[2]);
-            return;
+        List<Rank> ranks = new ArrayList<>();
+
+        if ( args.length == 3) {
+            Rank rank = from.getRank(args[2]);
+            if ( rank == null ) {
+                kdc.getMessages().send(sender, "cmdErrorRankNotExist", args[2]);
+                return;
+            }
+
+            ranks.add(rank);
+        } else {
+            ranks.addAll(from.getRanks());
         }
 
-        Rank clone = rank.clone(to, true);
-
         List<Model> models = new ArrayList<>();
-        models.add(clone);
-        models.addAll(rank.getPermissionGroups());
-        models.addAll(rank.getAttributes());
+        for ( Rank rank : ranks ) {
+            Rank clone = rank.clone(to, true);
+            models.add(clone);
+            models.addAll(clone.getPermissionGroups());
+            models.addAll(clone.getAttributes());
+        }
+
         kdc.saveAsync(models);
 
-        kdc.getMessages().send(sender, "cmdRanksClone", rank.getName(), from.getName(), to.getName());
+        if ( ranks.size() == 1 ) {
+            kdc.getMessages().send(sender, "cmdRanksClone", ranks.get(0).getName(), from.getName(), to.getName());
+        } else {
+            kdc.getMessages().send(sender, "cmdRanksCloneMany", from.getName(), to.getName());
+        }
     }
 }

@@ -315,6 +315,7 @@ cmdGroupsListOther: '&aPermission groups belonging to rank &2{0} &aof kingdom &2
 
 # /k ranks clone
 cmdRanksClone: '&aCloned rank &2{0} &afrom &2{1} &ato &2{2}&a!'
+cmdRanksCloneMany: '&aCloned all ranks from &2{0} &ato &2{1}&a!'
 
 # /k tphere
 cmdTpHere: '&aTeleported everyone of your kingdom to you!'
