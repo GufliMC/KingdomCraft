@@ -30,6 +30,9 @@ public class BukkitItem implements Item {
 
     @Override
     public Object getHandle() {
+        if ( handle == null ) {
+            return null;
+        }
         return handle.clone();
     }
 }

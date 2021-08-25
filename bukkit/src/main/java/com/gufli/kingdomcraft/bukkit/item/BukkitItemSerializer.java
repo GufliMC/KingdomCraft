@@ -30,7 +30,11 @@ public class BukkitItemSerializer implements Item.Serializer {
 
     @Override
     public Item deserialize(String value) {
-        return new BukkitItem(stringToItem(value));
+        ItemStack is = stringToItem(value);
+        if ( is == null ) {
+            return null;
+        }
+        return new BukkitItem(is);
     }
 
     @Override
