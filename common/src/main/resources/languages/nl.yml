@@ -174,8 +174,8 @@ cmdInviteTarget: '&aJe bent door ²2{0} uitgenodigd om je aan te sluiten bij het
 cmdInviteSender: '&aJe hebt &2{0} &auitgenodigd om zich aan te sluiten bij &2{1}&a!'
 
 # /k spawn
-cmdSpawnNotExists: '&cDe spawn van het kingdom is niet ingesteld!'
-cmdSpawnOtherNotExists: '&cDe spawn van het &4{0} &cis niet ingesteld!'
+cmdSpawnNotExists: '&cDe spawn van je kingdom is niet ingesteld!'
+cmdSpawnOtherNotExists: '&cDe spawn van &4{0} &cis niet ingesteld!'
 cmdSpawn: '&aJe bent geteleporteerd naar &2{0}&a!'
 
 # /k tpspawn
