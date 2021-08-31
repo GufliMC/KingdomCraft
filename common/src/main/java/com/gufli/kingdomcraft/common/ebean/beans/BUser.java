@@ -38,7 +38,7 @@ public class BUser extends BaseModel implements User {
     @Id
     public String id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     public String name;
 
     @ManyToOne
@@ -64,6 +64,9 @@ public class BUser extends BaseModel implements User {
 
     @DbDefault(value = "false")
     public boolean socialSpyEnabled;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    public List<BUserAttribute> attributes;
 
     @WhenCreated
     public Instant createdAt;
@@ -119,20 +122,20 @@ public class BUser extends BaseModel implements User {
 
     @Override
     public void setKingdom(Kingdom kingdom) {
-        if ( kingdom == this.kingdom ) {
+        if (kingdom == this.kingdom) {
             return;
         }
 
-        if ( this.kingdom != null ) {
+        if (this.kingdom != null) {
             this.kingdom.memberCount--;
         }
-        if ( this.rank != null ) {
+        if (this.rank != null) {
             this.rank.memberCount--;
         }
 
         Kingdom oldKingdom = this.kingdom;
 
-        if ( kingdom == null ) {
+        if (kingdom == null) {
             this.kingdom = null;
             this.rank = null;
             KingdomCraftProvider.get().getEventManager().dispatch(new UserLeaveKingdomEvent(this, oldKingdom));
@@ -150,7 +153,7 @@ public class BUser extends BaseModel implements User {
             this.rank = null;
         }
 
-        if ( oldKingdom != null ) {
+        if (oldKingdom != null) {
             KingdomCraftProvider.get().getEventManager().dispatch(new UserLeaveKingdomEvent(this, oldKingdom));
         }
 
@@ -159,21 +162,21 @@ public class BUser extends BaseModel implements User {
 
     @Override
     public void setRank(Rank rank) {
-        if ( rank == this.rank ) {
+        if (rank == this.rank) {
             return;
         }
 
-        if ( rank != null && !rank.getKingdom().equals(kingdom) ) {
+        if (rank != null && !rank.getKingdom().equals(kingdom)) {
             throw new IllegalArgumentException("The given rank does not belong to the user their kingdom.");
         }
 
-        if ( this.rank != null ) {
+        if (this.rank != null) {
             this.rank.memberCount--;
         }
 
         Rank oldRank = this.rank;
 
-        if ( rank == null ) {
+        if (rank == null) {
             this.rank = null;
         } else {
             this.rank = (BRank) rank;
@@ -195,7 +198,7 @@ public class BUser extends BaseModel implements User {
 
     @Override
     public KingdomInvite addInvite(User sender) {
-        if ( sender.getKingdom() == null ) {
+        if (sender.getKingdom() == null) {
             throw new IllegalArgumentException("Cannot add an invite from a player without a kingdom.");
         }
 
@@ -217,7 +220,7 @@ public class BUser extends BaseModel implements User {
     @Override
     public UserChatChannel addChatChannel(String channel) {
         BUserChatChannel ucc = (BUserChatChannel) getChatChannel(channel);
-        if ( ucc != null ) {
+        if (ucc != null) {
             return ucc;
         }
 
@@ -274,5 +277,22 @@ public class BUser extends BaseModel implements User {
     @Override
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    @Override
+    public Attribute getAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Attribute createAttribute(String name) {
+        return attributes.stream().filter(p -> p.getName().equals(name)).findFirst().orElseGet(() -> {
+            BUserAttribute attribute = new BUserAttribute();
+            attribute.user = this;
+            attribute.name = name;
+
+            attributes.add(attribute);
+            return attribute;
+        });
     }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="user_attributes" pkName="pk_user_attributes">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="user_id" type="varchar" references="users.id" foreignKeyName="fk_user_attributes_user_id" foreignKeyIndex="ix_user_attributes_user_id" foreignKeyOnDelete="CASCADE" foreignKeyOnUpdate="RESTRICT"/>
+            <column name="name" type="varchar"/>
+            <column name="value" type="varchar"/>
+            <uniqueConstraint name="uq_user_attributes_user_id_name" columnNames="user_id,name" oneToOne="false" nullableColumns="user_id,name"/>
+        </createTable>
+    </changeSet>
+</migration>

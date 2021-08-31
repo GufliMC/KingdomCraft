@@ -167,6 +167,7 @@ public class StorageContext {
         config.addClass(BRelation.class);
         config.addClass(BUser.class);
         config.addClass(BUserChatChannel.class);
+        config.addClass(BUserAttribute.class);
         config.addClass(PlatformLocationConverter.class);
         config.addClass(ItemConverter.class);
 

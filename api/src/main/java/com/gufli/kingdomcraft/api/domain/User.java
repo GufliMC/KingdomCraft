@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public interface User extends Model {
+public interface User extends Model, AttributeHolder {
 
     UUID getUniqueId();
 
