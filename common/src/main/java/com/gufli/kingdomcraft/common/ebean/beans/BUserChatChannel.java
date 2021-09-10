@@ -37,7 +37,7 @@ public class BUserChatChannel extends BaseModel implements UserChatChannel {
     public int id;
 
     @ManyToOne
-    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE, onUpdate = ConstraintMode.CASCADE)
     public BUser user;
 
     public String channel;

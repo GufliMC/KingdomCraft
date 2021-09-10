@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <alterColumn columnName="user_id" tableName="user_attributes" references="users.id" foreignKeyName="fk_user_attributes_user_id" foreignKeyIndex="ix_user_attributes_user_id" foreignKeyOnDelete="CASCADE" foreignKeyOnUpdate="CASCADE" dropForeignKey="fk_user_attributes_user_id" dropForeignKeyIndex="ix_user_attributes_user_id"/>
+        <alterColumn columnName="user_id" tableName="user_chatchannels" references="users.id" foreignKeyName="fk_user_chatchannels_user_id" foreignKeyIndex="ix_user_chatchannels_user_id" foreignKeyOnDelete="CASCADE" foreignKeyOnUpdate="CASCADE" dropForeignKey="fk_user_chatchannels_user_id" dropForeignKeyIndex="ix_user_chatchannels_user_id"/>
+    </changeSet>
+</migration>
