@@ -10,7 +10,7 @@ default:
   - kingdom.chat
 
 # these groups must be linked to ranks
-kingdom-lead-group:
+kingdom-lead:
   permissions:
   - kingdom.kick
   - kingdom.setspawn
@@ -19,25 +19,28 @@ kingdom-lead-group:
   - kingdom.enemy
   - kingdom.truce
   inheritances:
-  - duke
+  - kingdom-moderator
   ranks:
   - king
+  - queen
 
-kingdom-moderator-group:
+kingdom-moderator:
   permissions:
   - kingdom.setrank
   - kingdom.invite
   inheritances:
-  - member
+  - kingdom-member
   ranks:
   - duke
+  - duchess
 
-kingdom-default-group:
+kingdom-member:
   permissions:
     - kingdom.spawn
     - kingdom.menu
     - kingdom.info
     - kingdom.list
     - kingdom.chat
+    - kingdom.defaultchatchannel
   ranks:
   - member
