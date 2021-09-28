@@ -15,7 +15,6 @@ teleport: '&aJe wordt geteleporteerd in &2{0} &aseconden, niet bewegen!'
 teleportCancel: '&cTeleportatie geannuleerd!'
 
 chatNoChannel: '&cEr is geen beschikbaar chat kanaal om je bericht te versturen!'
-chatChannelDisabled: '&cJe hebt het &4{0} &ckanaal uitgezet!'
 chatChannelCooldown: '&cJe moet nog &4{0} &cseconden wachten voordat je kan praten in dit kanaal!'
 
 socialSpyPrefix: '&b[SS][&f{0}] '
@@ -63,8 +62,6 @@ cmdSpawnExplanation: 'Teleporteer naar de spawn van je kingdom'
 cmdInfoExplanation: 'Bekijk info van een speler of kingdom'
 cmdMenuExplanation: 'Open het menu'
 cmdLeaveExplanation: 'Verlaat een kingdom'
-cmdChatChannelExplanation: 'Zet een chat kanaal aan of uit'
-cmdDefaultChatChannelExplanation: 'Kies een kanaal om standaard in te praten'
 cmdSetRankExplanation: 'Verander de rang van een speler'
 cmdPromoteExplanation: 'Promoveer een speler'
 cmdDemoteExplanation: 'Demoveer een speler'
@@ -89,8 +86,15 @@ cmdAdminExplanation: 'Zet admin modus aan of uit'
 cmdEditorExplanation: 'Start een webbewerker sessie'
 cmdTpSpawnExplanation: 'Teleporteer een speler naar de spawn van zijn kingdom'
 cmdTpSpawnOtherExplanation: 'Teleporteer een speler naar de spawn van een kingdom'
-cmdSocialSpyExplanation: 'Zet social spy aan of uit'
+cmdTpAllSpawnExplanation: 'Teleporteer iedereen van je kingdom naar de kingdom spawn'
+cmdTpAllSpawnOtherExplanation: 'Teleporteer iedereen van een kingdom naar hun kingdom spawn'
 
+cmdSocialSpyExplanation: 'Zet social spy aan of uit'
+cmdDefaultChatChannelExplanation: 'Kies een kanaal om standaard in te praten'
+cmdChatChannelJoinExplanation: 'Betreed een chat kanaal'
+cmdChatChannelLeaveExplanation: 'Verlaat een chat kanaal'
+cmdChatChannelEnableExplanation: 'Zet een chat kanaal aan'
+cmdChatChannelDisableExplanation: 'Zet een chat kanaal uit'
 
 cmdGroupsExplanation: 'Bekijk een lijst van alle permissie groepen'
 cmdGroupsAddExplanation: 'Voeg een permissie groep toe aan een rang'
@@ -158,10 +162,16 @@ cmdListDelimiter: '&a, &2'
 cmdList: '&aLijst van kingdoms: &2{0}'
 
 # /k chatchannel
-cmdChatChannelEnable: '&aJe hebt het chat kanaal &2{0} &aaangezet!'
-cmdChatChannelDisable: '&aJe hebt het chat kanaal &2{0} &auitgezet!'
 cmdChatChannelNoToggle: '&aJe kan het chat kanaal &2{0} &aniet uitzetten!'
 cmdChatChannelNotExist: '&cHet chat kanaal &4{0} &cbestaat niet!'
+
+# join & leave
+cmdChatChannelJoin: '&aJe hebt het chat kanaal &2{0} &aaangezet!'
+cmdChatChannelLeave: '&aJe hebt het chat kanaal &2{0} &auitgezet!'
+
+# enable & disable
+cmdChatChannelEnable: '&aJe hebt het chat kanaal &2{0} &aaangezet!'
+cmdChatChannelDisable: '&aJe hebt het chat kanaal &2{0} &auitgezet!'
 
 # /k defaultchatchannel
 cmdDefaultChatChannel: '&aJe hebt van &2{0} &ajouw standaard kanaal gemaakt!'

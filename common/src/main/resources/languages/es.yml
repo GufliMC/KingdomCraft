@@ -15,7 +15,6 @@ teleport: '&aTeletransportando en &2{0} &asegundos, no te muevas!'
 teleportCancel: '&cTeletransporte cancelado!'
 
 chatNoChannel: '&cNo existe el canal para enviar tu mensaje!'
-chatChannelDisabled: '&cDesactivaste el &canal &4{0}!'
 chatChannelCooldown: '&cTienes que esperar &4{0} &csegundos para hablar en este canal!'
 
 socialSpyPrefix: '&b[SS][&f{0}] '

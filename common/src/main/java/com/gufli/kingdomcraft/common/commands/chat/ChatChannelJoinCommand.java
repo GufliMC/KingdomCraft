@@ -28,14 +28,13 @@ import com.gufli.kingdomcraft.common.command.CommandBase;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChatChannelCommand extends CommandBase {
+public class ChatChannelJoinCommand extends CommandBase {
 
-    public ChatChannelCommand(KingdomCraftImpl kdc) {
-        super(kdc, "chatchannel", 1, true);
-        setArgumentsHint("<chatchannel>");
-        addCommand("channel");
-        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdChatChannelExplanation"));
-        setPermissions("kingdom.chatchannel");
+    public ChatChannelJoinCommand(KingdomCraftImpl kdc) {
+        super(kdc, "chatchannel join", 1, true);
+        addCommand("channel join");
+        setExplanationMessage(() -> kdc.getMessages().getMessage("cmdChatChannelJoinExplanation"));
+        setPermissions("kingdom.chatchannel.join");
     }
 
     @Override
@@ -49,7 +48,7 @@ public class ChatChannelCommand extends CommandBase {
     public void execute(PlatformSender sender, String[] args) {
         PlatformPlayer player = (PlatformPlayer) sender;
         ChatChannel cc = kdc.getChatManager().getChatChannel(args[0]);
-        if ( cc == null || !kdc.getChatManager().canTalk(player, cc)) {
+        if ( cc == null || !kdc.getChatManager().canTalk(player, cc) || !cc.isEnabled()) {
             kdc.getMessages().send(sender, "cmdChatChannelNotExist", args[0]);
             return;
         }
@@ -62,19 +61,8 @@ public class ChatChannelCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         UserChatChannel ucc = user.getChatChannel(cc.getName());
 
-        boolean isEnabled = ucc == null || ucc.isEnabled();
-
-        if ( isEnabled ) {
-            if ( ucc == null ) {
-                ucc = user.addChatChannel(cc.getName());
-            }
-            ucc.setEnabled(false);
-            kdc.saveAsync(ucc);
-            kdc.getMessages().send(sender, "cmdChatChannelDisable", cc.getName());
-        } else {
-            ucc.setEnabled(true);
-            kdc.saveAsync(ucc);
-            kdc.getMessages().send(sender, "cmdChatChannelEnable", cc.getName());
-        }
+        ucc.setEnabled(true);
+        kdc.saveAsync(ucc);
+        kdc.getMessages().send(sender, "cmdChatChannelJoin", cc.getName());
     }
 }

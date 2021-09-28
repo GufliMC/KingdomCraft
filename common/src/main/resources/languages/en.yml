@@ -15,7 +15,6 @@ teleport: '&aTeleporting in &2{0} &aseconds, don''t move!'
 teleportCancel: '&cTeleportation cancelled!'
 
 chatNoChannel: '&cThere is no available chat channel to send your message!'
-chatChannelDisabled: '&cYou disabled the &4{0} &cchannel!'
 chatChannelCooldown: '&cYou have to wait &4{0} &cmore seconds to talk in this channel!'
 
 socialSpyPrefix: '&b[SS][&f{0}] '
@@ -63,8 +62,6 @@ cmdSpawnExplanation: 'Teleport to the kingdom spawn'
 cmdInfoExplanation: 'Get info of a kingdom or player'
 cmdMenuExplanation: 'Open the kingdom menu'
 cmdLeaveExplanation: 'Leave your kingdom'
-cmdChatChannelExplanation: 'Enable/disable a channel to talk in'
-cmdDefaultChatChannelExplanation: 'Toggle channel to talk in without prefix'
 cmdSetRankExplanation: 'Change a players rank'
 cmdPromoteExplanation: 'Promote a player'
 cmdDemoteExplanation: 'Demote a player'
@@ -91,8 +88,13 @@ cmdTpSpawnExplanation: 'Teleport a player to their kingdom spawn'
 cmdTpSpawnOtherExplanation: 'Teleport a player to a kingdom spawn'
 cmdTpAllSpawnExplanation: 'Teleport everyone from your kingdom to their kingdom spawn'
 cmdTpAllSpawnOtherExplanation: 'Teleport everyone from a kingdom to their kingdom spawn'
-cmdSocialSpyExplanation: 'Toggle social spy'
 
+cmdSocialSpyExplanation: 'Toggle social spy'
+cmdDefaultChatChannelExplanation: 'Toggle channel to talk in without prefix'
+cmdChatChannelJoinExplanation: 'Join a chat channel'
+cmdChatChannelLeaveExplanation: 'Leave a chat channel'
+cmdChatChannelEnableExplanation: 'Enable a chat channel'
+cmdChatChannelDisableExplanation: 'Disable a chat channel'
 
 cmdGroupsExplanation: 'Get a list of all existing groups'
 cmdGroupsAddExplanation: 'Add a permission group to a rank'
@@ -160,10 +162,16 @@ cmdListDelimiter: '&a, &2'
 cmdList: '&aList of kingdoms: &2{0}'
 
 # /k chatchannel
-cmdChatChannelEnable: '&aYou enabled the channel &2{0}&a!'
-cmdChatChannelDisable: '&aYou disabled the channel &2{0}&a!'
-cmdChatChannelNoToggle: '&aYou can''t disable &2{0}&a!'
+cmdChatChannelNoToggle: '&aYou can''t leave &2{0}&a!'
 cmdChatChannelNotExist: '&cThe channel &4{0} &cdoes not exist!'
+
+# join & leave
+cmdChatChannelJoin: '&aYou joined the chat channel &2{0}&a!'
+cmdChatChannelLeave: '&aYou left the chat channel &2{0}&a!'
+
+# enable & disable
+cmdChatChannelEnable: '&aYou enabled the chat channel &2{0}&a!'
+cmdChatChannelDisable: '&aYou disabled the chat channel &2{0}&a!'
 
 # /k defaultchatchannel
 cmdDefaultChatChannel: '&aYou changed &2{0} &ato your default chat channel!'

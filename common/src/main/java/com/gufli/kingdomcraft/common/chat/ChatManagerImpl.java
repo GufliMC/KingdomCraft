@@ -35,9 +35,7 @@ import com.gufli.kingdomcraft.common.config.Configuration;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -187,6 +185,7 @@ public class ChatManagerImpl implements ChatManager {
     @Override
     public void dispatch(PlatformPlayer player, String message) {
         List<ChatChannel> channels = getChatChannels().stream()
+                .filter(ChatChannel::isEnabled)
                 .filter(c -> canTalk(player, c))
                 .sorted(Comparator.comparingInt(ch -> ch.getPrefix() == null ? 0 : -ch.getPrefix().length()))
                 .collect(Collectors.toList());
@@ -199,19 +198,21 @@ public class ChatManagerImpl implements ChatManager {
                     .findFirst().orElse(null);
         }
 
-        // unset default chat channel by just typing the prefix
-        if ( channel != null && channel.getPrefix() != null && channel.getPrefix().equals(strippedMessage) ) {
-            player.remove("DEFAULT_CHATCHANNEL");
-            kdc.getMessages().send(player, "cmdDefaultChatChannelDisable");
-            return;
-        }
-        // set default chat channel by just typing the prefix
-        else {
-            for ( ChatChannel ch : channels ) {
-                if ( ch.getPrefix() != null && !ch.getPrefix().equals("") && ch.getPrefix().equals(strippedMessage)) {
-                    player.set("DEFAULT_CHATCHANNEL", ch.getName());
-                    kdc.getMessages().send(player, "cmdDefaultChatChannel", ch.getName());
-                    return;
+        if ( player.hasPermission("kingdom.defaultchatchannel") ) {
+            // unset default chat channel by just typing the prefix
+            if (channel != null && channel.getPrefix() != null && channel.getPrefix().equals(strippedMessage)) {
+                player.remove("DEFAULT_CHATCHANNEL");
+                kdc.getMessages().send(player, "cmdDefaultChatChannelDisable");
+                return;
+            }
+            // set default chat channel by just typing the prefix
+            else {
+                for (ChatChannel ch : channels) {
+                    if (ch.getPrefix() != null && !ch.getPrefix().equals("") && ch.getPrefix().equals(strippedMessage)) {
+                        player.set("DEFAULT_CHATCHANNEL", ch.getName());
+                        kdc.getMessages().send(player, "cmdDefaultChatChannel", ch.getName());
+                        return;
+                    }
                 }
             }
         }
