@@ -57,8 +57,13 @@ public class ChatCommand extends CommandBase {
         }
 
         ChatChannel channel = kdc.getChatManager().getChatChannel(args[0]);
-        if ( channel == null || !channel.isEnabled() ) {
+        if ( channel == null ) {
             kdc.getMessages().send(sender, "cmdChatNoChannel", args[0]);
+            return;
+        }
+
+        if ( !channel.isEnabled() ) {
+            kdc.getMessages().send(sender, "cmdChatDisabled", args[0]);
             return;
         }
 

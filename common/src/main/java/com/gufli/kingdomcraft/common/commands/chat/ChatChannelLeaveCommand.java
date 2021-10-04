@@ -61,8 +61,18 @@ public class ChatChannelLeaveCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         UserChatChannel ucc = user.getChatChannel(cc.getName());
 
+        if ( ucc != null && !ucc.isEnabled() ) {
+            kdc.getMessages().send(sender, "cmdChatChannelLeaveAlready", cc.getName());
+            return;
+        }
+
+        if ( ucc == null ) {
+            ucc = user.addChatChannel(cc.getName());
+        }
+
         ucc.setEnabled(false);
         kdc.saveAsync(ucc);
+
         kdc.getMessages().send(sender, "cmdChatChannelLeave", cc.getName());
     }
 }

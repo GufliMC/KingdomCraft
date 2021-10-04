@@ -49,7 +49,23 @@ public class ChatChannelDisableCommand extends CommandBase {
             return;
         }
 
+        if ( !cc.isEnabled() ) {
+            kdc.getMessages().send(sender, "cmdChatChannelDisableAlready", cc.getName());
+            return;
+        }
+
         cc.setEnabled(false);
-        kdc.getMessages().send(sender, "cmdChatChannelDisable", cc.getName());
+
+        List<PlatformSender> players = kdc.getOnlinePlayers().stream()
+                .filter(p -> kdc.getChatManager().canRead(p, cc))
+                .collect(Collectors.toList());
+
+        if ( !players.contains(sender) ) {
+            players.add(sender);
+        }
+
+        for ( PlatformSender p : players ) {
+            kdc.getMessages().send(p, "cmdChatChannelDisable", cc.getName());
+        }
     }
 }

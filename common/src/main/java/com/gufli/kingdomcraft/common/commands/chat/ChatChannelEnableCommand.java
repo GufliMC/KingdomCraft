@@ -51,7 +51,23 @@ public class ChatChannelEnableCommand extends CommandBase {
             return;
         }
 
+        if ( cc.isEnabled() ) {
+            kdc.getMessages().send(sender, "cmdChatChannelEnableAlready", cc.getName());
+            return;
+        }
+
         cc.setEnabled(true);
-        kdc.getMessages().send(sender, "cmdChatChannelEnable", cc.getName());
+
+        List<PlatformSender> players = kdc.getOnlinePlayers().stream()
+                .filter(p -> kdc.getChatManager().canRead(p, cc))
+                .collect(Collectors.toList());
+
+        if ( !players.contains(sender) ) {
+            players.add(sender);
+        }
+
+        for ( PlatformSender p : players ) {
+            kdc.getMessages().send(p, "cmdChatChannelEnable", cc.getName());
+        }
     }
 }

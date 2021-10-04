@@ -166,12 +166,16 @@ cmdChatChannelNoToggle: '&aJe kan het chat kanaal &2{0} &aniet uitzetten!'
 cmdChatChannelNotExist: '&cHet chat kanaal &4{0} &cbestaat niet!'
 
 # join & leave
-cmdChatChannelJoin: '&aJe hebt het chat kanaal &2{0} &aaangezet!'
-cmdChatChannelLeave: '&aJe hebt het chat kanaal &2{0} &auitgezet!'
+cmdChatChannelJoin: '&aJe zit nu in het chat kanaal &2{0}&a!'
+cmdChatChannelJoinAlready: '&cJe zit al in het chat kanaal &4{0}&c!'
+cmdChatChannelLeave: '&aJe hebt het chat kanaal &2{0} &averlaten!'
+cmdChatChannelLeaveAlready: '&cJe hebt het chat kanaal &4{0} &cal verlaten!'
 
 # enable & disable
-cmdChatChannelEnable: '&aJe hebt het chat kanaal &2{0} &aaangezet!'
-cmdChatChannelDisable: '&aJe hebt het chat kanaal &2{0} &auitgezet!'
+cmdChatChannelEnable: '&aHet chat kanaal &2{0} &ais aangezet!'
+cmdChatChannelEnableAlready: '&cHet chat kanaal &4{0} &cstaat al aan!'
+cmdChatChannelDisable: '&aHet chat kanaal &2{0} &ais uitgezet!'
+cmdChatChannelDisableAlready: '&cHet chat kanaal &4{0} &cstaat al uit!'
 
 # /k defaultchatchannel
 cmdDefaultChatChannel: '&aJe hebt van &2{0} &ajouw standaard kanaal gemaakt!'
@@ -332,6 +336,7 @@ cmdTpHereOther: '&aJe hebt iedereen van &2{0} &anaar jouw geteleporteerd!'
 
 # /k chat
 cmdChatNoChannel: '&cHet chat kanaal &4{0} &cbestaat niet!'
+cmdChatDisabled: '&cHEt chat kanaal &4{0} &cstaat uit!'
 cmdChatEmptyMessage: '&cJe kan geen leeg bericht sturen!'
 
 # /k admin

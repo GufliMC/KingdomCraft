@@ -61,8 +61,14 @@ public class ChatChannelJoinCommand extends CommandBase {
         User user = kdc.getUser((PlatformPlayer) sender);
         UserChatChannel ucc = user.getChatChannel(cc.getName());
 
+        if ( ucc == null || ucc.isEnabled() ) {
+            kdc.getMessages().send(sender, "cmdChatChannelJoinAlready", cc.getName());
+            return;
+        }
+
         ucc.setEnabled(true);
         kdc.saveAsync(ucc);
+
         kdc.getMessages().send(sender, "cmdChatChannelJoin", cc.getName());
     }
 }

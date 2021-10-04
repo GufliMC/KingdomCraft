@@ -167,11 +167,15 @@ cmdChatChannelNotExist: '&cThe channel &4{0} &cdoes not exist!'
 
 # join & leave
 cmdChatChannelJoin: '&aYou joined the chat channel &2{0}&a!'
+cmdChatChannelJoinAlready: '&cYou already joined the chat channel &4{0}&c!'
 cmdChatChannelLeave: '&aYou left the chat channel &2{0}&a!'
+cmdChatChannelLeaveAlready: '&cYou already left the chat channel &4{0}&c!'
 
 # enable & disable
-cmdChatChannelEnable: '&aYou enabled the chat channel &2{0}&a!'
-cmdChatChannelDisable: '&aYou disabled the chat channel &2{0}&a!'
+cmdChatChannelEnable: '&aThe chat channel &2{0} &ahas been enabled!'
+cmdChatChannelEnableAlready: '&cThe chat channel &4{0} &cis already enabled!'
+cmdChatChannelDisable: '&aThe chat channel &2{0} &ahas been disabled!'
+cmdChatChannelDisableAlready: '&cThe chat channel &4{0} &cis already disabled!'
 
 # /k defaultchatchannel
 cmdDefaultChatChannel: '&aYou changed &2{0} &ato your default chat channel!'
@@ -332,6 +336,7 @@ cmdTpHereOther: '&aTeleported everyone of kingdom &2{0} &ato you!'
 
 # /k chat
 cmdChatNoChannel: '&cThe chat channel &4{0} &cdoes not exist!'
+cmdChatDisabled: '&cThe chat channel &4{0} &cis disabled!'
 cmdChatEmptyMessage: '&cYou can''t send an empty message!'
 
 # /k admin
