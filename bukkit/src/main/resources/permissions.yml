@@ -7,7 +7,8 @@ default:
   - kingdom.info
   - kingdom.defaultchatchannel
   - kingdom.list
-  - kingdom.channel
+  - kingdom.chatchannel.join
+  - kingdom.chatchannel.leave
 
 # these groups must be linked to ranks
 kingdom-lead:
@@ -42,5 +43,7 @@ kingdom-member:
     - kingdom.list
     - kingdom.channel
     - kingdom.defaultchatchannel
+    - kingdom.chatchannel.join
+    - kingdom.chatchannel.leave
   ranks:
   - member
