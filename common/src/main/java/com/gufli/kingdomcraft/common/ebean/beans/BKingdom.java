@@ -17,10 +17,12 @@
 
 package com.gufli.kingdomcraft.common.ebean.beans;
 
+import com.gufli.kingdomcraft.api.KingdomCraftProvider;
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.KingdomAttribute;
 import com.gufli.kingdomcraft.api.domain.Rank;
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
+import com.gufli.kingdomcraft.api.events.KingdomDeleteEvent;
 import com.gufli.kingdomcraft.api.item.Item;
 import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
@@ -89,6 +91,8 @@ public class BKingdom extends BaseModel implements Kingdom {
         StorageContext.kingdoms.remove(this);
         StorageContext.players.values().stream().filter(user -> user.getKingdom() == this)
                 .forEach(user -> user.setKingdom(null));
+
+        KingdomCraftProvider.get().getEventManager().dispatch(new KingdomDeleteEvent(this));
         return super.delete();
     }
 
