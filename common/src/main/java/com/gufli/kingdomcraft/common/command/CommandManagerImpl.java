@@ -208,6 +208,20 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new GroupsRemoveOtherCommand(kdc));
     }
 
+    public void sendInvalidUsage(PlatformSender sender, CommandBase cmd) {
+        sendInvalidUsage(sender, cmd, cmd.getCommands().get(0));
+    }
+
+    public void sendInvalidUsage(PlatformSender sender, CommandBase cmd, String path) {
+        String root = "kingdomcraft";
+        if ( kdc.getConfig().getCommandAliases().size() > 0 ) {
+            root = kdc.getConfig().getCommandAliases().get(0);
+        }
+
+        kdc.getMessages().send(sender, "cmdErrorInvalidUsage", "/" + root + " "
+                + path + " " + (cmd.getArgumentsHint() != null ? cmd.getArgumentsHint() : ""));
+    }
+
     public void dispatch(PlatformSender sender, String[] args) {
         if ( args.length == 0 ) {
             return;
