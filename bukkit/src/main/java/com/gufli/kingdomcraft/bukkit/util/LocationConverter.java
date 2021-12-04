@@ -25,7 +25,7 @@ public class LocationConverter {
 
     public static Location convert(PlatformLocation loc) {
         if ( Bukkit.getWorld(loc.getWorldName()) == null ) {
-            return null;
+            throw new IllegalArgumentException("The world of the given location does not exist.");
         }
 
         return new Location(Bukkit.getWorld(loc.getWorldName()),
