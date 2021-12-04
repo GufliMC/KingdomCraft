@@ -20,60 +20,56 @@ package com.gufli.kingdomcraft.bukkit.config;
 import com.gufli.kingdomcraft.common.config.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class BukkitConfiguration implements Configuration {
+public class EmptyConfiguration implements Configuration {
 
-    private final ConfigurationSection configurationSection;
+    static final EmptyConfiguration EMPTY = new EmptyConfiguration();
 
-    public BukkitConfiguration(ConfigurationSection configurationSection) {
-        this.configurationSection = configurationSection;
-    }
+    private EmptyConfiguration() {}
 
     @Override
     public Object get(String path) {
-        return configurationSection.get(path);
+        return null;
     }
 
     @Override
     public boolean contains(String path) {
-        return configurationSection.contains(path);
+        return false;
     }
 
     @Override
     public String getString(String path) {
-        return configurationSection.getString(path);
+        return null;
     }
 
     @Override
     public boolean getBoolean(String path) {
-        return configurationSection.getBoolean(path);
+        return false;
     }
 
     @Override
     public int getInt(String path) {
-        return configurationSection.getInt(path);
+        return 0;
     }
 
     @Override
     public double getDouble(String path) {
-        return configurationSection.getDouble(path);
+        return 0;
     }
 
     @Override
     public List<String> getStringList(String path) {
-        return configurationSection.getStringList(path);
+        return Collections.emptyList();
     }
 
     @Override
     public Configuration getConfigurationSection(String path) {
-        ConfigurationSection cs = configurationSection.getConfigurationSection(path);
-        return cs == null ? EmptyConfiguration.EMPTY : new BukkitConfiguration(cs);
+        return EMPTY;
     }
 
     @Override
     public Set<String> getKeys(boolean deep) {
-        return configurationSection.getKeys(deep);
+        return Collections.emptySet();
     }
 }
