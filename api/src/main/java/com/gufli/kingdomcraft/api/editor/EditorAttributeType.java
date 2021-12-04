@@ -18,5 +18,22 @@
 package com.gufli.kingdomcraft.api.editor;
 
 public enum EditorAttributeType {
-    STRING, INTEGER, FLOAT;
+    STRING,
+    INTEGER(value -> value.matches("^[-]?[0-9]+$")),
+    FLOAT(value -> value.matches("^[+-]?([0-9]*[.])?[0-9]+$")),
+    COLOR(value -> value.matches("^#[a-fA-F0-9]{6}$"));
+
+    private final EditorAttributeValidator validator;
+
+    EditorAttributeType(EditorAttributeValidator validator) {
+        this.validator = validator;
+    }
+
+    EditorAttributeType() {
+        this.validator = null;
+    }
+
+    public EditorAttributeValidator validator() {
+        return validator;
+    }
 }

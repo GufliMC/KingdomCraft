@@ -41,11 +41,11 @@ public class ModelDeserializer {
 
     private void deserialize(AttributeHolder holder, List<EditorAttribute> attributes, JsonNode node) {
         for (EditorAttribute attribute : attributes) {
-            if (!node.has(attribute.getName()) ) {
+            if (!node.has(attribute.key()) ) {
                 continue;
             }
 
-            String value = node.get(attribute.getName()).asText();
+            String value = node.get(attribute.key()).asText();
             if (value == null) {
                 continue;
             }
@@ -55,9 +55,9 @@ public class ModelDeserializer {
                 continue;
             }
 
-            Attribute a = holder.getAttribute(attribute.getName());
+            Attribute a = holder.getAttribute(attribute.key());
             if (a == null) {
-                a = holder.createAttribute(attribute.getName());
+                a = holder.createAttribute(attribute.key());
             } else if (a.getValue().equals(value)) {
                 continue;
             }

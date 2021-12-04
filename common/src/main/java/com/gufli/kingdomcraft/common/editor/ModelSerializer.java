@@ -33,10 +33,12 @@ public class ModelSerializer {
         this.editor = editor;
     }
 
-    private Map<String, String> serialize(EditorAttribute attribute) {
+    public Map<String, String> serialize(EditorAttribute attribute) {
         Map<String, String> map = new HashMap<>();
-        map.put("name", attribute.getName());
-        map.put("description", attribute.getDescription());
+        map.put("name", attribute.key());
+        map.put("display", attribute.display());
+        map.put("helpLink", attribute.helpLink());
+        map.put("type", attribute.type().name());
         return map;
     }
 
@@ -56,11 +58,11 @@ public class ModelSerializer {
         if ( !editor.kingdomAttributes.isEmpty() ) {
             Map<String, String> attributes = new HashMap<>();
             for (EditorAttribute attribute : editor.kingdomAttributes) {
-                KingdomAttribute ka = kingdom.getAttribute(attribute.getName());
+                KingdomAttribute ka = kingdom.getAttribute(attribute.key());
                 if (ka != null) {
-                    attributes.put(attribute.getName(), ka.getValue());
+                    attributes.put(attribute.key(), ka.getValue());
                 } else {
-                    attributes.put(attribute.getName(), "");
+                    attributes.put(attribute.key(), "");
                 }
             }
             map.put("attributes", attributes);
@@ -90,11 +92,11 @@ public class ModelSerializer {
         if ( !editor.rankAttributes.isEmpty() ) {
             Map<String, String> attributes = new HashMap<>();
             for (EditorAttribute attribute : editor.rankAttributes) {
-                RankAttribute ra = rank.getAttribute(attribute.getName());
+                RankAttribute ra = rank.getAttribute(attribute.key());
                 if (ra != null) {
-                    attributes.put(attribute.getName(), ra.getValue());
+                    attributes.put(attribute.key(), ra.getValue());
                 } else {
-                    attributes.put(attribute.getName(), "");
+                    attributes.put(attribute.key(), "");
                 }
             }
             map.put("attributes", attributes);

@@ -100,12 +100,12 @@ public class EditorImpl implements Editor {
         kdc.getKingdoms(true).forEach(kingdom -> kingdoms.put(kingdom.getName(), serializer.serialize(kingdom)));
         node.set("kingdoms", mapper.valueToTree(kingdoms));
 
-        Map<String, String> kingdomAttributes = new HashMap<>();
-        this.kingdomAttributes.forEach(attribute -> kingdomAttributes.put(attribute.getName(), attribute.getDescription()));
+        Map<String, Map<String, String>> kingdomAttributes = new HashMap<>();
+        this.kingdomAttributes.forEach(attribute -> kingdomAttributes.put(attribute.key(), serializer.serialize(attribute)));
         node.set("kingdomAttributes", mapper.valueToTree(kingdomAttributes));
 
-        Map<String, String> rankAttributes = new HashMap<>();
-        this.rankAttributes.forEach(attribute -> rankAttributes.put(attribute.getName(), attribute.getDescription()));
+        Map<String, Map<String, String>> rankAttributes = new HashMap<>();
+        this.rankAttributes.forEach(attribute -> rankAttributes.put(attribute.key(), serializer.serialize(attribute)));
         node.set("rankAttributes", mapper.valueToTree(rankAttributes));
         
         try {
