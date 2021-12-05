@@ -35,8 +35,9 @@ public class ModelSerializer {
 
     public Map<String, String> serialize(EditorAttribute attribute) {
         Map<String, String> map = new HashMap<>();
-        map.put("name", attribute.key());
+        map.put("key", attribute.key());
         map.put("display", attribute.display());
+        map.put("group", attribute.group());
         map.put("helpLink", attribute.helpLink());
         map.put("type", attribute.type().name());
         return map;
