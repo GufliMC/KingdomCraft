@@ -51,7 +51,7 @@ public class ModelDeserializer {
             }
 
             if (!attribute.validate(value)) {
-                editor.kdc.getPlugin().log("Editor tried to set an invalid attribute value.", Level.WARNING);
+                //editor.kdc.getPlugin().log("Editor tried to set an invalid attribute value.", Level.WARNING);
                 continue;
             }
 
