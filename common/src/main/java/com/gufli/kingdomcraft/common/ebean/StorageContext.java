@@ -37,15 +37,12 @@ import io.ebean.datasource.DataSourceFactory;
 import io.ebean.datasource.DataSourcePool;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
+import org.slf4j.impl.SimpleLogger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,8 +61,9 @@ public class StorageContext {
     private boolean initialized = false;
     private final KingdomCraftPlugin plugin;
 
-    public StorageContext(KingdomCraftPlugin plugin) {
+    public StorageContext(KingdomCraftPlugin plugin, boolean debug) {
         this.plugin = plugin;
+        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, debug ? "TRACE" : "WARN");
     }
 
     public void init(String url, String driver, String username, String password) {

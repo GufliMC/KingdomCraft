@@ -18,12 +18,7 @@
 package com.gufli.kingdomcraft.common.command;
 
 import com.gufli.kingdomcraft.api.commands.Command;
-import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
-import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class CommandBase extends Command {
 

@@ -208,11 +208,11 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new GroupsRemoveOtherCommand(kdc));
     }
 
-    public void sendInvalidUsage(PlatformSender sender, CommandBase cmd) {
+    public void sendInvalidUsage(PlatformSender sender, Command cmd) {
         sendInvalidUsage(sender, cmd, cmd.getCommands().get(0));
     }
 
-    public void sendInvalidUsage(PlatformSender sender, CommandBase cmd, String path) {
+    public void sendInvalidUsage(PlatformSender sender, Command cmd, String path) {
         String root = "kingdomcraft";
         if ( kdc.getConfig().getCommandAliases().size() > 0 ) {
             root = kdc.getConfig().getCommandAliases().get(0);

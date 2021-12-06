@@ -42,8 +42,14 @@ shadowJar {
     dependencies {
         exclude(dependency(':junit'))
         exclude(dependency(':snakeyaml'))
-        exclude(dependency(':sqlite-jdbc'))
         exclude(dependency(':gson'))
+    }
+
+    doLast {
+        copy {
+            from "build/libs/" + archiveFileName.get()
+            into "D:/Documents/testservers/1.18/plugins"
+        }
     }
 }
 

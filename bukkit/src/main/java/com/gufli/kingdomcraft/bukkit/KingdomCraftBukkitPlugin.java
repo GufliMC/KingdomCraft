@@ -45,7 +45,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.slf4j.impl.SimpleLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,8 +116,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
 		// load database
-		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, config.getBoolean("debug") ? "TRACE" : "WARN");
-		StorageContext context = new StorageContext(this);
+		StorageContext context = new StorageContext(this, config.getBoolean("debug"));
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
 		context.init(
 			dbConfig.getString("url"),
