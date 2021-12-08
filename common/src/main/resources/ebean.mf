@@ -1,2 +1,0 @@
-entity-packages: com.guflan.kingdomcraft.common.ebean.beans
-transactional-packages: com.guflan.kingdomcraft

@@ -220,7 +220,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
 	@Override
 	public void onDisable() {
-		kdc.stop();
+		if ( kdc != null ) {
+			kdc.stop();
+		}
 	}
 
 	private void disable() {
