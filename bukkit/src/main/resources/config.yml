@@ -44,6 +44,12 @@ settings:
         kingdom-leave:
         - CONSOLE k tpspawn {username}
 
+        kingdom-create:
+        - CONSOLE say {kingdom_name} has been created
+
+        kingdom-delete:
+        - CONSOLE say {kingdom_name} has been deleted
+
     # Show the custom join and leave messages (defined below) only for your own kingdom members
     join-and-leave-kingdom-only: false
 

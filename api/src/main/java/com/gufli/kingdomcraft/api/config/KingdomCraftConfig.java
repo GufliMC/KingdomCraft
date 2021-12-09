@@ -34,6 +34,10 @@ public interface KingdomCraftConfig {
 
     List<String> getOnKingdomLeaveCommands();
 
+    List<String> getOnKingdomCreateCommands();
+
+    List<String> getOnKingdomDeleteCommands();
+
     boolean respawnAtKingdom();
 
     String getOnJoinMessage();

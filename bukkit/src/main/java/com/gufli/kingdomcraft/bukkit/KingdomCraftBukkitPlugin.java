@@ -178,8 +178,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		// vault permissions hook
 		new VaultPermissionHandler(this);
 
-		// kingdom join & quit messages
+		// event commands
 		new KingdomJoinQuitListener(this);
+		new KingdomCreateDeleteListener(this);
 
 		// internal placeholders system
 		new PlaceholderReplacer(this);

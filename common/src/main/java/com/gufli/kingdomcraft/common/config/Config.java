@@ -43,6 +43,8 @@ public class Config implements KingdomCraftConfig {
     private boolean friendlyFire = false;
     private List<String> kingdomJoinCommands = new ArrayList<>();
     private List<String> kingdomLeaveCommands = new ArrayList<>();
+    private List<String> kingdomCreateCommands = new ArrayList<>();
+    private List<String> kingdomDeleteCommands = new ArrayList<>();
     private boolean respawnAtKingdom = true;
 
     private String joinMessage;
@@ -117,17 +119,17 @@ public class Config implements KingdomCraftConfig {
         if ( config.contains("events.kingdom-join") ) {
             kingdomJoinCommands = config.getStringList("events.kingdom-join");
         }
-        // TODO remove old key
-        else if ( config.contains("events.kingdom_join") ) {
-            kingdomJoinCommands = config.getStringList("events.kingdom_join");
-        }
 
         if ( config.contains("events.kingdom-leave") ) {
             kingdomLeaveCommands = config.getStringList("events.kingdom-leave");
         }
-        // TODO remove old key
-        else if ( config.contains("events.kingdom_leave") ) {
-            kingdomLeaveCommands = config.getStringList("events.kingdom_leave");
+
+        if ( config.contains("events.kingdom-create") ) {
+            kingdomCreateCommands = config.getStringList("events.kingdom-create");
+        }
+
+        if ( config.contains("events.kingdom-delete") ) {
+            kingdomDeleteCommands = config.getStringList("events.kingdom-delete");
         }
 
         if ( config.contains("respawn-at-kingdom") ) {
@@ -244,6 +246,16 @@ public class Config implements KingdomCraftConfig {
     @Override
     public List<String> getOnKingdomLeaveCommands() {
         return kingdomLeaveCommands;
+    }
+
+    @Override
+    public List<String> getOnKingdomCreateCommands() {
+        return kingdomCreateCommands;
+    }
+
+    @Override
+    public List<String> getOnKingdomDeleteCommands() {
+        return kingdomDeleteCommands;
     }
 
     @Override
