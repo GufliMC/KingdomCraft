@@ -116,7 +116,7 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
 		// load database
-		StorageContext context = new StorageContext(this, config.getBoolean("debug"));
+		StorageContext context = new StorageContext(this);
 		ConfigurationSection dbConfig = config.getConfigurationSection("database");
 		context.init(
 			dbConfig.getString("url"),

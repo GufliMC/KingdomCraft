@@ -37,7 +37,6 @@ import io.ebean.datasource.DataSourceFactory;
 import io.ebean.datasource.DataSourcePool;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
-import org.slf4j.impl.SimpleLogger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -61,9 +60,8 @@ public class StorageContext {
     private boolean initialized = false;
     private final KingdomCraftPlugin plugin;
 
-    public StorageContext(KingdomCraftPlugin plugin, boolean debug) {
+    public StorageContext(KingdomCraftPlugin plugin) {
         this.plugin = plugin;
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, debug ? "TRACE" : "WARN");
     }
 
     public void init(String url, String driver, String username, String password) {

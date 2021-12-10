@@ -32,7 +32,6 @@ public class GenerateDbMigration {
     DbMigration dbMigration = DbMigration.create();
     dbMigration.addPlatform(Platform.H2, "h2");
     dbMigration.addPlatform(Platform.MYSQL, "mysql");
-    dbMigration.addPlatform(Platform.SQLITE, "sqlite");
     dbMigration.addPlatform(Platform.POSTGRES, "postgres");
     dbMigration.setPathToResources("common/src/main/resources");
 

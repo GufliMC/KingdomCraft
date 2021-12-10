@@ -24,8 +24,6 @@ dependencies {
     implementation 'io.ebean:ebean-ddl-generator:12.11.1'
     annotationProcessor 'io.ebean:querybean-generator:12.11.1'
 
-    implementation 'org.slf4j:slf4j-simple:1.7.32'
-
     implementation 'com.google.guava:guava:17.0'
 
     implementation 'javax.validation:validation-api:2.0.1.Final'
