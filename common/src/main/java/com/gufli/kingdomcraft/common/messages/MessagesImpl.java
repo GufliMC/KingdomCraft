@@ -21,7 +21,6 @@ import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.api.language.Messages;
 import com.gufli.kingdomcraft.common.KingdomCraftPlugin;
 import com.gufli.kingdomcraft.common.config.Configuration;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
