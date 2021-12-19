@@ -76,7 +76,8 @@ public class KickCommand extends CommandBase {
                             kdc.getMessages().send(sender, "cmdErrorNoPermission");
                             return;
                         }
-                        if (user.getRank() == null || user.getRank().getLevel() <= target.getRank().getLevel()) {
+                        if (user.getRank() == null || (target.getRank() != null
+                                && user.getRank().getLevel() <= target.getRank().getLevel())) {
                             kdc.getMessages().send(sender, "cmdKickLowLevel", target.getName());
                             return;
                         }
