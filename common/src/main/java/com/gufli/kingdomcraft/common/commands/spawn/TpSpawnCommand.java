@@ -68,6 +68,6 @@ public class TpSpawnCommand extends CommandBase {
         target.teleport(loc);
 
         kdc.getMessages().send(sender, "cmdTpSpawn", target.getName());
-        kdc.getMessages().send(target, "cmdTpSpawnTarget");
+        kdc.getMessages().send(target, "cmdTpSpawnTarget", kingdom.getName());
     }
 }

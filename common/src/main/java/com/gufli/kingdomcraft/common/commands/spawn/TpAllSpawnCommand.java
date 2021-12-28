@@ -63,7 +63,7 @@ public class TpAllSpawnCommand extends CommandBase {
             }
 
             pp.teleport(loc);
-            kdc.getMessages().send(pp, "cmdTpAllSpawnTarget");
+            kdc.getMessages().send(pp, "cmdTpAllSpawnTarget", kingdom.getName());
         }
     }
 }
