@@ -131,6 +131,11 @@ public class ChatManagerImpl implements ChatManager {
 
     private boolean canAccess(PlatformPlayer player, ChatChannel channel) {
         User user = kdc.getUser(player);
+
+        if (user == null ) {
+            return false; // player is not fully loaded because chat thread is async
+        }
+
         if ( channel instanceof KingdomChatChannel) {
             KingdomChatChannel ch = (KingdomChatChannel) channel;
             if ( !ch.getKingdoms().contains(user.getKingdom()) ) {
