@@ -10,7 +10,7 @@ repositories {
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 
     // Vault
-    maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+    maven { url 'https://nexus.hc.to/content/repositories/pub_releases' }
 
     // DiscordSRV
     maven { url 'https://nexus.scarsz.me/content/repositories/releases/' }
@@ -29,6 +29,7 @@ dependencies {
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from(sourceSets.main.resources.srcDirs) {
         expand 'pluginVersion': project.ext.fullVersion
         include 'plugin.yml'

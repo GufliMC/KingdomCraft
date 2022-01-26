@@ -24,11 +24,11 @@ Check our [discord](https://discord.gg/UFEcurxWsV) for support and updates!
 
 ```
 repositories {
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.jorisg.com/releases' }
 }
 
 dependencies {
-    implementation 'com.github.jorisguffens:KingdomCraft:-SNAPSHOT'
+    implementation 'com.gufli.kingdomcraft:api:6.10.1'
 }
 ```
 
@@ -37,15 +37,15 @@ dependencies {
 ```
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <id>JorisG</id>
+        <url>https://repo.jorisg.com/releases</url>
     </repository>
 </repositories>
 
 <dependency>
-    <groupId>com.github.jorisguffens</groupId>
-    <artifactId>KingdomCraft</artifactId>
-    <version>-SNAPSHOT</version>
+    <groupId>com.gufli.kingdomcraft</groupId>
+    <artifactId>api</artifactId>
+    <version>6.10.1</version>
 </dependency>
 ```
 
