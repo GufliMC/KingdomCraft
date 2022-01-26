@@ -1,0 +1,15 @@
+com.gufli.kingdomcraft.premium.api
+com.gufli.kingdomcraft.premium.api.domain
+com.gufli.kingdomcraft.premium.api.modules.channelmutes
+com.gufli.kingdomcraft.premium.api.modules.events
+com.gufli.kingdomcraft.premium.api.modules.events.config
+com.gufli.kingdomcraft.premium.api.modules.events.traits
+com.gufli.kingdomcraft.premium.api.modules.placeholders
+com.gufli.kingdomcraft.premium.api.modules.power
+com.gufli.kingdomcraft.premium.api.modules.regionmodifiers
+com.gufli.kingdomcraft.premium.api.modules.regionprotection
+com.gufli.kingdomcraft.premium.api.modules.regions
+com.gufli.kingdomcraft.premium.api.modules.regions.events
+com.gufli.kingdomcraft.premium.api.modules.scoreboard
+com.gufli.kingdomcraft.premium.api.modules.visitor
+com.gufli.kingdomcraft.premium.api.modules.warps

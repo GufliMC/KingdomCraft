@@ -1,0 +1,13 @@
+com.gufli.kingdomcraft.api
+com.gufli.kingdomcraft.api.chat
+com.gufli.kingdomcraft.api.commands
+com.gufli.kingdomcraft.api.config
+com.gufli.kingdomcraft.api.domain
+com.gufli.kingdomcraft.api.editor
+com.gufli.kingdomcraft.api.entity
+com.gufli.kingdomcraft.api.event
+com.gufli.kingdomcraft.api.events
+com.gufli.kingdomcraft.api.gui
+com.gufli.kingdomcraft.api.item
+com.gufli.kingdomcraft.api.language
+com.gufli.kingdomcraft.api.placeholders
