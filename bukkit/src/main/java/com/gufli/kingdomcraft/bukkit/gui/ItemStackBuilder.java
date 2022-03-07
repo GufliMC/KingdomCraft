@@ -17,6 +17,7 @@
 
 package com.gufli.kingdomcraft.bukkit.gui;
 
+import com.gufli.kingdomcraft.api.KingdomCraftProvider;
 import com.gufli.kingdomcraft.bukkit.reflection.Reflection;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
@@ -194,7 +195,7 @@ public class ItemStackBuilder {
             for (String line : lines) {
                 String[] split = line.split("\n");
                 for ( String s : split ) {
-                    lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                    lore.add(KingdomCraftProvider.get().colorify(s));
                 }
             }
             meta.setLore(lore);

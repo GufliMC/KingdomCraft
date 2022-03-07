@@ -58,8 +58,7 @@ public class DeathListener implements Listener {
                 ItemMeta meta = weapon.getItemMeta();
                 if ( meta.getDisplayName() != null && !meta.getDisplayName().equals("") ) {
                     msg = plugin.getKdc().getConfig().getOnKillWeaponMessage();
-                    msg = msg.replace("{weapon}",
-                            ChatColor.translateAlternateColorCodes('&', meta.getDisplayName()));
+                    msg = msg.replace("{weapon}", plugin.colorify(meta.getDisplayName()));
                 }
             }
 

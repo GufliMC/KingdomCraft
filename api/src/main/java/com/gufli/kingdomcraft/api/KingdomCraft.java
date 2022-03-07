@@ -117,4 +117,8 @@ public interface KingdomCraft {
 
     <T extends Model> CompletableFuture<Void> deleteAsync(Collection<T> models);
 
+    //
+
+    String colorify(String str);
+
 }

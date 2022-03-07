@@ -323,6 +323,11 @@ public class KingdomCraftImpl implements KingdomCraft {
         return context.deleteAsync(models);
     }
 
+    @Override
+    public String colorify(String str) {
+        return plugin.colorify(str);
+    }
+
     //
 
     public Consumer<PlatformPlayer> onLogin(UUID id, String name) {
