@@ -43,14 +43,14 @@ public class VaultPlaceholderReplacer {
             OfflinePlayer p = Bukkit.getOfflinePlayer(user.getUniqueId());
             if ( p == null ) return null;
 
-            return plugin.getKdc().getMessages().colorify(chat.getPlayerPrefix(null, p));
+            return chat.getPlayerPrefix(null, p);
         }, "prefix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
             OfflinePlayer p = Bukkit.getOfflinePlayer(user.getUniqueId());
             if ( p == null ) return null;
 
-            return plugin.getKdc().getMessages().colorify(chat.getPlayerSuffix(null, p));
+            return chat.getPlayerSuffix(null, p);
         }, "suffix");
 
     }

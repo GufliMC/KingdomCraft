@@ -29,7 +29,7 @@ public class DefaultPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
             if (user.getKingdom() != null) {
-                return kdc.getMessages().colorify(user.getKingdom().getDisplay());
+                return user.getKingdom().getDisplay();
             }
 
             PlatformPlayer pp = kdc.getPlayer(user);
@@ -37,14 +37,14 @@ public class DefaultPlaceholderReplacer {
                 return null;
             }
 
-            return kdc.getMessages().colorify(kdc.getConfig().getNoKingdomDisplay());
+            return kdc.getConfig().getNoKingdomDisplay();
         }, "kingdom");
         pm.addPlaceholderReplacer((user, placeholder) -> {
             return user.getKingdom() != null ? user.getKingdom().getName() : "";
         }, "kingdom_name");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            return user.getRank() != null ? kdc.getMessages().colorify(user.getRank().getDisplay()) : "";
+            return user.getRank() != null ? user.getRank().getDisplay() : "";
         }, "rank");
         pm.addPlaceholderReplacer((user, placeholder) -> {
             return user.getRank() != null ? user.getRank().getName() : "";
@@ -52,7 +52,7 @@ public class DefaultPlaceholderReplacer {
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
             if (user.getKingdom() != null) {
-                return kdc.getMessages().colorify(user.getKingdom().getPrefix());
+                return user.getKingdom().getPrefix();
             }
 
             PlatformPlayer pp = kdc.getPlayer(user);
@@ -60,11 +60,11 @@ public class DefaultPlaceholderReplacer {
                 return null;
             }
 
-            return kdc.getMessages().colorify(kdc.getConfig().getNoKingdomPrefix());
+            return kdc.getConfig().getNoKingdomPrefix();
         }, "kingdom_prefix");
         pm.addPlaceholderReplacer((user, placeholder) -> {
             if (user.getKingdom() != null) {
-                return kdc.getMessages().colorify(user.getKingdom().getSuffix());
+                return user.getKingdom().getSuffix();
             }
 
             PlatformPlayer pp = kdc.getPlayer(user);
@@ -72,14 +72,14 @@ public class DefaultPlaceholderReplacer {
                 return null;
             }
 
-            return kdc.getMessages().colorify(kdc.getConfig().getNoKingdomSuffix());
+            return kdc.getConfig().getNoKingdomSuffix();
         }, "kingdom_suffix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            return user.getRank() != null ? kdc.getMessages().colorify(user.getRank().getPrefix()) : "";
+            return user.getRank() != null ? user.getRank().getPrefix() : "";
         }, "rank_prefix");
         pm.addPlaceholderReplacer((user, placeholder) -> {
-            return user.getRank() != null ? kdc.getMessages().colorify(user.getRank().getSuffix()) : "";
+            return user.getRank() != null ? user.getRank().getSuffix() : "";
         }, "rank_suffix");
 
         pm.addPlaceholderReplacer((user, placeholder) -> {

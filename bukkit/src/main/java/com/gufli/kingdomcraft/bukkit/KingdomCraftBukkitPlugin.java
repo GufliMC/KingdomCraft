@@ -86,11 +86,11 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		getLogger().log(level, msg);
 	}
 
-	private final static Pattern hexColorPattern = Pattern.compile("&#([A-Fa-f0-9]){6}");
+	private final static Pattern hexColorPattern = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
 	@Override
 	public String colorify(String msg) {
-		// RGB support: &#rrggbb
+		// RGB support: <#rrggbb>
 		Matcher matcher = hexColorPattern.matcher(msg);
 		while (matcher.find()) {
 			String rgb = matcher.group().substring(2).toLowerCase();
