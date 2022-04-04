@@ -51,6 +51,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,20 +88,22 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 		getLogger().log(level, msg);
 	}
 
-	private final static Pattern hexColorPattern = Pattern.compile("<#([A-Fa-f0-9]){6}>");
+	private final static Pattern hexColorPattern = Pattern.compile("<#([A-Fa-f0-9]{6})>");
 
 	@Override
 	public String colorify(String msg) {
 		// RGB support: <#rrggbb>
 		Matcher matcher = hexColorPattern.matcher(msg);
 		while (matcher.find()) {
-			String rgb = matcher.group().substring(2).toLowerCase();
+			String rgb = matcher.group(1).toLowerCase();
 			StringBuilder result = new StringBuilder();
 			result.append("&x");
 			for ( char s : rgb.toCharArray() ) {
 				result.append("&").append(s);
 			}
+
 			msg = msg.substring(0, matcher.start()) + result + msg.substring(matcher.end());
+			matcher = hexColorPattern.matcher(msg);
 		}
 
 		msg = StringEscapeUtils.unescapeJava(msg);
