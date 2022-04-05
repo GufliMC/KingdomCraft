@@ -70,7 +70,7 @@ public class DisplayNameListener {
 
         String suffix = plugin.getKdc().getPlaceholderManager().handle(pp, "{kingdom_suffix}");
         if ( !suffix.equals("") && !plugin.decolorify(suffix).startsWith(" ")) {
-            suffix = " "+ suffix;
+            suffix = " " + suffix;
         }
 
         Player player = ((BukkitPlayer) pp).getPlayer();
@@ -79,6 +79,9 @@ public class DisplayNameListener {
             player.setDisplayName(player.getName());
             return;
         }
+
+        prefix = plugin.colorify(prefix);
+        suffix = plugin.colorify(suffix);
 
         player.setDisplayName(prefix + player.getName() + suffix);
     }
