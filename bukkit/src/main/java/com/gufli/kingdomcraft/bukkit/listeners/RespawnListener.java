@@ -38,10 +38,6 @@ public class RespawnListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
-        if ( !plugin.getKdc().getConfig().isWorldEnabled(event.getRespawnLocation().getWorld().getName()) ) {
-            return;
-        }
-
         if ( !plugin.getKdc().getConfig().respawnAtKingdom() ) {
             return;
         }
@@ -52,10 +48,6 @@ public class RespawnListener implements Listener {
         }
 
         Location loc = LocationConverter.convert(user.getKingdom().getSpawn());
-        if ( loc == null ) {
-            return;
-        }
-
         event.setRespawnLocation(loc);
     }
 }

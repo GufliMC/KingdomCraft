@@ -39,11 +39,6 @@ public class ChatListener implements Listener {
             return;
         }
 
-        World world = event.getPlayer().getWorld();
-        if ( !plugin.getKdc().getConfig().isWorldEnabled(world.getName()) && !plugin.getKdc().getConfig().isChatEnabledInDisabledWorlds() ) {
-            return;
-        }
-
         PlatformPlayer player = plugin.getKdc().getPlayer(event.getPlayer().getUniqueId());
         plugin.getKdc().getChatManager().dispatch(player, event.getMessage());
         event.setCancelled(true);

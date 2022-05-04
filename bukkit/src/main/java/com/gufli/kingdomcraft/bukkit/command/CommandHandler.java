@@ -58,13 +58,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if ( sender instanceof Player ) {
-            World world = ((Player) sender).getWorld();
-            if ( !kdc.getConfig().isWorldEnabled(world.getName()) ) {
-                return false;
-            }
-        }
-
         if ( args.length == 0 ) {
             String prefix = kdc.getMessages().colorify(kdc.getMessages().getPrefix());
             sender.sendMessage(prefix + kdc.getMessages().getMessage("cmdDefaultHelp"));

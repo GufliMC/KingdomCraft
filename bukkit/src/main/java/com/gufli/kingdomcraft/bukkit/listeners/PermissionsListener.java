@@ -75,21 +75,7 @@ public class PermissionsListener implements Listener {
             return;
         }
 
-        boolean fromEnabled = plugin.getKdc().getConfig().isWorldEnabled(e.getFrom().getWorld().getName());
-        boolean toEnabled = plugin.getKdc().getConfig().isWorldEnabled(e.getTo().getWorld().getName());
-
-        if ( fromEnabled && toEnabled ) {
-            return;
-        }
-
-        if ( fromEnabled ) {
-            clear(plugin.getKdc().getPlayer(e.getPlayer().getUniqueId()));
-            return;
-        }
-
-        if ( toEnabled ) {
-            update(plugin.getKdc().getPlayer(e.getPlayer().getUniqueId()));
-        }
+        update(plugin.getKdc().getPlayer(e.getPlayer().getUniqueId()));
     }
 
     public void onJoin(PlayerLoadedEvent e) {

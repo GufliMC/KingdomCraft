@@ -34,11 +34,10 @@ public class Config implements KingdomCraftConfig {
 
     private int teleportDelay = 0;
     private String language = "en";
-    private List<String> worlds = new ArrayList<>();
     private ZoneId timezone = ZoneId.systemDefault();
-    private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");;
-    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");;
-    private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
+    private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+    private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private List<RelationType> friendlyFireRelations = new ArrayList<>();
     private boolean friendlyFire = false;
     private List<String> kingdomJoinCommands = new ArrayList<>();
@@ -69,10 +68,6 @@ public class Config implements KingdomCraftConfig {
 
         if ( config.contains("teleport-delay") ) {
             teleportDelay = config.getInt("teleport-delay");
-        }
-
-        if ( config.contains("worlds") ) {
-            worlds = config.getStringList("worlds");
         }
 
         if ( config.contains("language") ) {
@@ -192,12 +187,6 @@ public class Config implements KingdomCraftConfig {
     }
 
     @Override
-    @Deprecated
-    public List<String> getWorlds() {
-        return worlds;
-    }
-
-    @Override
     public String getLanguage() {
         return language;
     }
@@ -220,12 +209,6 @@ public class Config implements KingdomCraftConfig {
     @Override
     public DateTimeFormatter getDateTimeFormat() {
         return dateTimeFormat;
-    }
-
-    @Override
-    public boolean isWorldEnabled(String world) {
-        List<String> worlds = getWorlds();
-        return worlds.isEmpty() || worlds.stream().anyMatch(s -> s.equalsIgnoreCase(world));
     }
 
     @Override

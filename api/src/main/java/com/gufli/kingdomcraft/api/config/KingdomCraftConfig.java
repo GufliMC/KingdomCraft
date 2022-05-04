@@ -12,8 +12,6 @@ public interface KingdomCraftConfig {
 
     int getTeleportDelay();
 
-    List<String> getWorlds();
-
     String getLanguage();
 
     ZoneId getTimeZone();
@@ -23,8 +21,6 @@ public interface KingdomCraftConfig {
     DateTimeFormatter getTimeFormat();
 
     DateTimeFormatter getDateTimeFormat();
-
-    boolean isWorldEnabled(String world);
 
     List<RelationType> getFriendlyFireRelationTypes();
 

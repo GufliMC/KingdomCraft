@@ -40,10 +40,6 @@ public class DeathListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
-        if ( !plugin.getKdc().getConfig().isWorldEnabled(event.getEntity().getWorld().getName()) ) {
-            return;
-        }
-
         if ( event.getEntity().getKiller() != null && event.getEntity().getKiller() != event.getEntity() ) {
             PlatformPlayer p = plugin.getKdc().getPlayer(event.getEntity().getUniqueId());
             PlatformPlayer k = plugin.getKdc().getPlayer(event.getEntity().getKiller().getUniqueId());
@@ -95,13 +91,13 @@ public class DeathListener implements Listener {
         event.setDeathMessage(msg);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onDeath2(PlayerDeathEvent event) {
-        if ( event.getDeathMessage() == null || event.getDeathMessage().equals("") ) {
-            return;
-        }
-
-        plugin.getKdc().getOnlinePlayers().forEach(p -> p.sendMessage(event.getDeathMessage()));
-        event.setDeathMessage(null);
-    }
+//    @EventHandler(priority = EventPriority.MONITOR)
+//    public void onDeath2(PlayerDeathEvent event) {
+//        if ( event.getDeathMessage() == null || event.getDeathMessage().equals("") ) {
+//            return;
+//        }
+//
+//        plugin.getKdc().getOnlinePlayers().forEach(p -> p.sendMessage(event.getDeathMessage()));
+//        event.setDeathMessage(null);
+//    }
 }

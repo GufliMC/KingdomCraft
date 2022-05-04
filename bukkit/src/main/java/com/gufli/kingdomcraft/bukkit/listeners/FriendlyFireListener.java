@@ -62,10 +62,6 @@ public class FriendlyFireListener implements Listener {
     }
 
     private <T extends Cancellable> void handleEvent(T e, Entity entity, Entity damager) {
-        if ( !plugin.getKdc().getConfig().isWorldEnabled(entity.getWorld().getName()) ) {
-            return;
-        }
-
         // friendly fire is enabled, do nothing
         if ( plugin.getKdc().getConfig().isFriendlyFireEnabled() ) {
             return;
