@@ -49,7 +49,7 @@ public class DiscordSRVHook implements Listener {
     }
 
     @EventHandler
-    public void onPluginDisable(PluginEnableEvent event) {
+    public void onPluginEnable(PluginEnableEvent event) {
         if ( event.getPlugin().getName().equals("DiscordSRV") ) {
             eventExecutor = plugin.getKdc().getEventManager().addListener(PlayerChatEvent.class, this::onChat);
         }
