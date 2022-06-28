@@ -91,6 +91,7 @@ public class PlatformLocation {
     }
 
     public double distanceTo(PlatformLocation l) {
+        if ( !worldName.equals(l.worldName) ) return Double.POSITIVE_INFINITY;
         return Math.sqrt(Math.pow(x - l.x, 2) + Math.pow(y - l.y, 2) + Math.pow(z - l.z, 2));
 
     }

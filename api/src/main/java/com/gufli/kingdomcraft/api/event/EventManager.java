@@ -24,9 +24,9 @@ import java.util.function.Consumer;
 
 public interface EventManager {
 
-    <T extends Event> EventExecutor<T> addListener(Class<T> type, Consumer<T> consumer);
+    <T extends Event> EventSubscription<T> addListener(Class<T> type, Consumer<T> consumer);
 
-    <T extends Event> EventExecutor<T> addListener(Class<T> type, BiConsumer<EventExecutor<T>, T> consumer);
+    <T extends Event> EventSubscription<T> addListener(Class<T> type, BiConsumer<EventSubscription<T>, T> consumer);
 
     <T extends Event> void dispatch(T event);
 
