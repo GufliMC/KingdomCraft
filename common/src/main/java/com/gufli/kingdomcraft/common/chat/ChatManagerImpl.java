@@ -335,7 +335,7 @@ public class ChatManagerImpl implements ChatManager {
                 .filter(p -> !receivers.contains(p))
                 .forEach(p -> p.sendMessage(ss));
 
-        System.out.println("[" + channel.getName() + "] " + player.getName() + ": " + message);
+        kdc.getPlugin().log("[" + channel.getName() + "] " + player.getName() + ": " + message);
     }
 
     // SETUP

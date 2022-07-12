@@ -1,20 +1,3 @@
-/*
- * This file is part of KingdomCraft.
- *
- * KingdomCraft is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * KingdomCraft is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
- */
-
 package com.gufli.kingdomcraft.bukkit.chat;
 
 import com.gufli.kingdomcraft.api.chat.ChatChannel;
@@ -22,7 +5,6 @@ import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.event.EventSubscription;
 import com.gufli.kingdomcraft.api.events.PlayerChatEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
-import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
 import com.gufli.kingdomcraft.bukkit.entity.OfflineBukkitPlayer;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.api.Subscribe;
@@ -30,48 +12,30 @@ import github.scarsz.discordsrv.api.events.DiscordGuildMessagePreProcessEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
 
 import java.util.UUID;
 
-public class DiscordSRVHook implements Listener {
+public class DiscordSRVHandler {
 
     private final KingdomCraftBukkitPlugin plugin;
-    private EventSubscription<?> subscription;
+    private final EventSubscription<?> subscription;
 
-    public DiscordSRVHook(KingdomCraftBukkitPlugin plugin) {
+    public DiscordSRVHandler(KingdomCraftBukkitPlugin plugin) {
         this.plugin = plugin;
+        plugin.getLogger().info("Enabling DiscordSRV integration...");
 
-        if (!plugin.getServer().getPluginManager().isPluginEnabled("DiscordSRV")) {
-            return;
-        }
-
-        enable();
-    }
-
-    @EventHandler
-    public void onPluginDisable(PluginDisableEvent event) {
-        if (event.getPlugin().getName().equals("DiscordSRV")) {
-            disable();
-        }
-    }
-
-    //
-
-    private void enable() {
         subscription = plugin.getKdc().getEventManager().addListener(PlayerChatEvent.class, this::onChat);
         DiscordSRV.api.subscribe(this);
     }
 
-    private void disable() {
+    public void disable() {
         subscription.unregister();
         DiscordSRV.api.unsubscribe(this);
     }
 
-    //
+    // EVENTS
 
+    // called by kingdomcraft
     // PlayerChatEvent from kdc should be async following the PlayerAsyncChatEvent from bukkit
     private void onChat(PlayerChatEvent event) {
         if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(event.getChatChannel().getName()) == null) {
@@ -92,6 +56,8 @@ public class DiscordSRVHook implements Listener {
         DiscordSRV.getPlugin().processChatMessage(player, event.getMessage(), event.getChatChannel().getName(), event.isCancelled());
     }
 
+
+    // called by discordsrv
     @Subscribe
     public void onDiscordChat(DiscordGuildMessagePreProcessEvent event) {
         if (event.isCancelled()) {
@@ -108,6 +74,8 @@ public class DiscordSRVHook implements Listener {
         if (cc == null) {
             return;
         }
+
+
 
         plugin.getScheduler().makeAsyncFuture(() -> {
             User discordUser = event.getAuthor();

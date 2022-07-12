@@ -71,7 +71,7 @@ public class MessagesLoader {
                 configs.add(fallbackConfig);
             }
         } else {
-            System.out.println("No fallback exists for language '" + language + "'!");
+            System.err.println("No fallback exists for language '" + language + "'!");
         }
 
         // load main config file
@@ -79,7 +79,7 @@ public class MessagesLoader {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(directory, language + ".yml"));
             configs.add(new BukkitConfiguration(config));
         } catch (Exception ex) {
-            System.out.println("Unable load custom language file.");
+            System.err.println("Unable load custom language file.");
         }
 
         // load configs into messages
@@ -94,7 +94,7 @@ public class MessagesLoader {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(isr);
             return new BukkitConfiguration(config);
         } catch (Exception ex) {
-            System.out.println("Unable to load fallback language file!");
+            System.err.println("Unable to load fallback language file!");
             ex.printStackTrace();
         }
         return null;
