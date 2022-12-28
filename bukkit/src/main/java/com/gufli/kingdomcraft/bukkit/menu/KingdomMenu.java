@@ -140,7 +140,11 @@ public class KingdomMenu {
     static void openPlayerList(PlatformPlayer player, Runnable back) {
         PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuPlayersListTitle"));
 
-        List<User> users = new ArrayList<>(kdc.getOnlineUsers());
+        List<User> users = kdc.getOnlinePlayers().stream()
+                .filter(op -> ((BukkitPlayer) player).getPlayer().canSee(((BukkitPlayer) op).getPlayer()))
+                .map(PlatformPlayer::getUser)
+                .collect(Collectors.toList());
+
         builder.withItems(users.size(), index -> {
             User user = users.get(index);
             return new BukkitInventoryItem(ItemStackBuilder.skull()
@@ -181,7 +185,7 @@ public class KingdomMenu {
                                 b.withLore(text("menuInfoRank", colorify(target.getRank().getDisplay())));
                             }
 
-                            if ( target.getJoinedKingdomAt() != null ) {
+                            if (target.getJoinedKingdomAt() != null) {
                                 ZonedDateTime zdt = target.getJoinedKingdomAt().atZone(timeZone);
                                 b.withLore(text("menuInfoKingdomJoined", zdt.format(kdc.getConfig().getDateFormat())));
                             }
@@ -195,7 +199,7 @@ public class KingdomMenu {
                         }
 
                         ZonedDateTime zdt;
-                        if ( target.getLastOnlineAt() != null ) {
+                        if (target.getLastOnlineAt() != null) {
                             zdt = target.getLastOnlineAt().atZone(timeZone);
                         } else {
                             zdt = target.getUpdatedAt().atZone(timeZone);
