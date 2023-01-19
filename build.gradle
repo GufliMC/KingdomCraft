@@ -5,7 +5,7 @@ buildscript {
 }
 
 group = 'com.gufli.kingdomcraft.starter'
-version = '6.12.0'
+version = '6.12.2'
 
 subprojects {
     apply plugin: 'java'
