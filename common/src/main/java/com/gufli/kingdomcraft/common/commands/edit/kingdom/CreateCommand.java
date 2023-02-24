@@ -39,7 +39,7 @@ public class CreateCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        if (!args[0].matches("[a-zA-Z0-9]+")) {
+        if (!args[0].matches("[a-zA-Z0-9]+") || args[0].length() > 24) {
             kdc.getMessages().send(sender, "cmdErrorInvalidName");
             return;
         }
