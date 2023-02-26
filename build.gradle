@@ -4,8 +4,12 @@ buildscript {
     }
 }
 
+plugins {
+    id 'pl.allegro.tech.build.axion-release' version '1.13.6'
+}
+
 group = 'com.gufli.kingdomcraft.starter'
-version = '6.12.2'
+version = scmVersion.version
 
 subprojects {
     apply plugin: 'java'

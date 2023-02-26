@@ -276,7 +276,7 @@ public class KingdomMenu {
             } else {
                 if (player.getUser().getKingdom() != null && player.getUser().getKingdom().isInviteOnly()
                         && player.hasPermission("kingdom.invite")) {
-                    builder.withItem(ItemStackBuilder.of(Material.BOAT)
+                    builder.withItem(ItemStackBuilder.of(Material.COOKIE)
                                     .withName(text("menuPlayerInfoItemInvite"))
                                     .withLore(text("menuPlayerInfoItemLoreInvite"))
                                     .build(),
