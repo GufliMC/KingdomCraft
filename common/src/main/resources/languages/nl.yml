@@ -88,6 +88,7 @@ cmdTpSpawnExplanation: 'Teleporteer een speler naar de spawn van zijn kingdom'
 cmdTpSpawnOtherExplanation: 'Teleporteer een speler naar de spawn van een kingdom'
 cmdTpAllSpawnExplanation: 'Teleporteer iedereen van je kingdom naar de kingdom spawn'
 cmdTpAllSpawnOtherExplanation: 'Teleporteer iedereen van een kingdom naar hun kingdom spawn'
+cmdBroadcastExplanation: 'Stuur een bericht naar iedereen in je kingdom'
 
 cmdSocialSpyExplanation: 'Zet social spy aan of uit'
 cmdDefaultChatChannelExplanation: 'Kies een kanaal om standaard in te praten'
@@ -261,6 +262,9 @@ cmdPromoteHighest: '&cDeze speler heeft al de hoogste rank!'
 
 # /k demote
 cmdDemoteLowest: '&cDeze speler heeft al de laagste rank!'
+
+# /k broadcast
+cmdBroadcast: '&aKingdom Melding &6> &f{0}'
 
 # /k setkingdom
 cmdSetKingdomAlready: '&c{0} &4hoort al bij &4{1}&c!'

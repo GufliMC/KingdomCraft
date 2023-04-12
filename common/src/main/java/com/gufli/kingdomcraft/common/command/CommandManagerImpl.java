@@ -104,6 +104,9 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new TruceCommand(kdc));
         addCommand(new TruceOtherCommand(kdc));
 
+        addCommand(new BroadcastCommand(kdc));
+        addCommand(new BroadcastOtherCommand(kdc));
+
         // admin
         addCommand(new SetRankCommand(kdc));
         addCommand(new PromoteCommand(kdc));

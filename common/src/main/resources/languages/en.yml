@@ -88,6 +88,7 @@ cmdTpSpawnExplanation: 'Teleport a player to their kingdom spawn'
 cmdTpSpawnOtherExplanation: 'Teleport a player to a kingdom spawn'
 cmdTpAllSpawnExplanation: 'Teleport everyone from your kingdom to their kingdom spawn'
 cmdTpAllSpawnOtherExplanation: 'Teleport everyone from a kingdom to their kingdom spawn'
+cmdBroadcastExplanation: 'Send a message to everyone in your kingdom'
 
 cmdSocialSpyExplanation: 'Toggle social spy'
 cmdDefaultChatChannelExplanation: 'Toggle channel to talk in without prefix'
@@ -261,6 +262,9 @@ cmdPromoteHighest: '&cThis player already has the highest rank!'
 
 # /k demote
 cmdDemoteLowest: '&cThis player already has the lowest rank!'
+
+# /k broadcast
+cmdBroadcast: '&aKingdom Broadcast &6> &f{0}'
 
 # /k setkingdom
 cmdSetKingdomAlready: '&c{0} &4is already in &4{1}&c!'
