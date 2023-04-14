@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class BroadcastOtherCommand extends CommandBase {
 
     public BroadcastOtherCommand(KingdomCraftImpl kdc) {
-        super(kdc, "broadcast", 2, true);
+        super(kdc, "broadcast", 2);
         setArgumentsHint("<kingdom> <message>");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdBroadcastExplanation"));
         setPermissions("kingdom.broadcast.other");
