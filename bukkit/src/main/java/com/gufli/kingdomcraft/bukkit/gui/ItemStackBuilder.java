@@ -18,7 +18,10 @@
 package com.gufli.kingdomcraft.bukkit.gui;
 
 import com.gufli.kingdomcraft.api.KingdomCraftProvider;
-import com.gufli.kingdomcraft.bukkit.reflection.Reflection;
+import com.gufli.kingdomcraft.bukkit.gui.skull.LegacySkullBuilder;
+import com.gufli.kingdomcraft.bukkit.gui.skull.ModernSkullBuilder;
+import com.gufli.kingdomcraft.bukkit.gui.skull.SkullBuilder;
+import com.gufli.kingdomcraft.bukkit.reflection.VersionUtils;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -29,10 +32,10 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -266,90 +269,23 @@ public class ItemStackBuilder {
 
     // SKULLS
 
-    private static Class<?> GameProfile;
-    private static Method GameProfile_getProperties;
-    private static Class<?> Property;
-    private static Method Property_getName;
-    private static Method PropertyMap_put;
-    private static Field CraftMetaSkull_profile;
-    private static Method CraftMetaSkull_setOwningPlayer;
+    private static final SkullBuilder skullBuilder;
 
     static {
-
-        try {
-            GameProfile = Class.forName("com.mojang.authlib.GameProfile");
-            GameProfile_getProperties = GameProfile.getDeclaredMethod("getProperties");
-
-            Property = Class.forName("com.mojang.authlib.properties.Property");
-            Property_getName = Property.getMethod("getName");
-
-            Class<?> PropertyMap = Class.forName("com.mojang.authlib.properties.PropertyMap");
-            PropertyMap_put = PropertyMap.getMethod("put", Object.class, Object.class);
-
-            Class<?> CraftMetaSkull = Reflection.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftMetaSkull");
-            CraftMetaSkull_profile = CraftMetaSkull.getDeclaredField("profile");
-            CraftMetaSkull_profile.setAccessible(true);
-
-            // Optional
-            try {
-                CraftMetaSkull_setOwningPlayer = CraftMetaSkull.getMethod("setOwningPlayer", OfflinePlayer.class);
-            } catch (NoSuchMethodException ignored) {}
-
-        } catch (NoSuchMethodException | ClassNotFoundException | NoSuchFieldException e) {
-            e.printStackTrace();
+        if (VersionUtils.isMcGreaterOrEqualTo("1.17") ) {
+            skullBuilder = new ModernSkullBuilder();
+        } else {
+            skullBuilder = new LegacySkullBuilder();
         }
     }
 
     public ItemStackBuilder withSkullOwner(OfflinePlayer owner) {
-        if ( owner == null ) {
-            return this;
-        }
-        return transformMeta(SkullMeta.class, meta -> {
-            if ( CraftMetaSkull_setOwningPlayer != null ) {
-                try {
-                    CraftMetaSkull_setOwningPlayer.invoke(meta, owner);
-                    return;
-                } catch (IllegalAccessException | InvocationTargetException ignored) {}
-            }
-
-            // Fallback to deprecated method
-            meta.setOwner(owner.getName());
-        });
+        skullBuilder.withSkullOwner(itemStack, owner);
+        return this;
     }
 
     public ItemStackBuilder withSkullTexture(String texture) {
-        try {
-            UUID uuid = UUID.randomUUID();
-
-            Object profile = GameProfile.getDeclaredConstructor(UUID.class, String.class).newInstance(uuid, uuid.toString().substring(0, 15));
-            Object property = Property.getDeclaredConstructor(String.class, String.class).newInstance("textures", texture);
-            Object properties = GameProfile_getProperties.invoke(profile);
-            PropertyMap_put.invoke(properties, Property_getName.invoke(property), property);
-            return withSkullProfile(profile);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-        return this;
-    }
-
-    public ItemStackBuilder withSkullTexture(UUID uuid) {
-        try {
-            Object profile = GameProfile.getDeclaredConstructor(UUID.class, String.class).newInstance(uuid, uuid.toString().substring(0, 15));
-            return withSkullProfile(profile);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-        return this;
-    }
-
-    private ItemStackBuilder withSkullProfile(Object profile) {
-        try {
-            SkullMeta meta = (SkullMeta) this.itemStack.getItemMeta();
-            CraftMetaSkull_profile.set(meta, profile);
-            this.itemStack.setItemMeta(meta);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        skullBuilder.withSkullTexture(itemStack, texture);
         return this;
     }
 
