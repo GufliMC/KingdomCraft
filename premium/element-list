@@ -3,6 +3,7 @@ com.gufli.kingdomcraft.premium.api.domain
 com.gufli.kingdomcraft.premium.api.modules.channelmutes
 com.gufli.kingdomcraft.premium.api.modules.events
 com.gufli.kingdomcraft.premium.api.modules.events.config
+com.gufli.kingdomcraft.premium.api.modules.events.events
 com.gufli.kingdomcraft.premium.api.modules.events.traits
 com.gufli.kingdomcraft.premium.api.modules.placeholders
 com.gufli.kingdomcraft.premium.api.modules.power
