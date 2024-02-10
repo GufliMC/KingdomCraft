@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'maven-publish'
 }
 
 repositories {
@@ -13,15 +12,6 @@ publishing {
             name = "Jorisg"
             url = uri("https://repo.jorisg.com/releases")
             credentials(org.gradle.api.credentials.PasswordCredentials)
-        }
-    }
-
-    publications {
-        release(MavenPublication) {
-            from components.java
-            groupId = rootProject.group
-            artifactId = 'api'
-            version = rootProject.version
         }
     }
 }

@@ -13,6 +13,7 @@ version = scmVersion.version
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -32,7 +33,23 @@ subprojects {
     project.ext.fullVersion = version
 
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+
+    publishing {
+        repositories {
+            mavenLocal()
+        }
+
+        publications {
+            release(MavenPublication) {
+                from components.java
+                groupId = project.group
+                artifactId = project.name
+                version = project.version
+            }
+        }
     }
 }
