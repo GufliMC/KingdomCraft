@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class VersionUtils {
 
     public static String getVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1).replace("_", ".");
+        return Bukkit.getBukkitVersion().split("-")[0];
     }
 
     /**
