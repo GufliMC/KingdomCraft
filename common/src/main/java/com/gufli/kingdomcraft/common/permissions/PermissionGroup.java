@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 public class PermissionGroup {
 
@@ -30,14 +31,18 @@ public class PermissionGroup {
     private final List<String> ranks;
     private final List<String> worlds;
     private final List<String> externals;
+    private final Map<String, Boolean> permissionsMap;
 
     public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks, List<String> worlds, List<String> externals) {
         this.name = name;
-        this.worlds = worlds;
-        this.permissions = permissions;
-        this.inheritances = inheritances;
-        this.ranks = ranks;
-        this.externals = externals;
+        this.worlds = Collections.unmodifiableList(worlds);
+        this.permissions = Collections.unmodifiableList(permissions);
+        this.inheritances = Collections.unmodifiableList(inheritances);
+        this.ranks = Collections.unmodifiableList(ranks);
+        this.externals = Collections.unmodifiableList(externals);
+        var permissionsMap = new HashMap<String, Boolean>();
+        permissions.forEach(s -> permissionsMap.put(s, !s.startsWith("-")));
+        this.permissionsMap = Collections.unmodifiableMap(permissionsMap);
     }
 
     public PermissionGroup(String name, List<String> permissions, List<String> inheritances, List<String> ranks, List<String> worlds) {
@@ -69,9 +74,7 @@ public class PermissionGroup {
     }
 
     public Map<String, Boolean> getPermissionsAsMap() {
-        Map<String, Boolean> map = new HashMap<>();
-        permissions.forEach(s -> map.put(s, !s.startsWith("-")));
-        return map;
+        return permissionsMap;
     }
 
     public List<String> getInheritances() {
