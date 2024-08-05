@@ -25,7 +25,7 @@ import com.gufli.kingdomcraft.api.events.UserRankChangeEvent;
 import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;

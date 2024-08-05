@@ -3,8 +3,8 @@ package com.gufli.kingdomcraft.common.ebean.beans;
 import com.gufli.kingdomcraft.api.item.Item;
 import com.gufli.kingdomcraft.api.item.ItemSerializer;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
 public class ItemConverter implements AttributeConverter<Item, String> {

@@ -24,7 +24,7 @@ import com.gufli.kingdomcraft.common.ebean.StorageContext;
 import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity

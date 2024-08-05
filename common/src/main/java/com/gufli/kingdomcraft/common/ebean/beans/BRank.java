@@ -23,7 +23,7 @@ import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.annotation.*;
 import io.ebean.annotation.ConstraintMode;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id('io.ebean') version '12.1.8'
+    id('io.ebean') version '14.5.0'
 }
 
 apply plugin: 'io.ebean'
@@ -19,23 +19,23 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
-    implementation 'io.ebean:ebean:12.11.1'
-    implementation 'io.ebean:ebean-querybean:12.11.1'
-    implementation 'io.ebean:ebean-ddl-generator:12.11.1'
-    annotationProcessor 'io.ebean:querybean-generator:12.11.1'
+    implementation 'io.ebean:ebean:14.5.0'
+    implementation 'io.ebean:ebean-querybean:14.5.0'
+    implementation 'io.ebean:ebean-ddl-generator:14.5.0'
+    annotationProcessor 'io.ebean:querybean-generator:14.5.0'
 
     implementation 'com.google.guava:guava:17.0'
 
-    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
 
-    implementation 'mysql:mysql-connector-java:8.0.25'
-    implementation 'com.h2database:h2:1.4.200'
+    implementation 'com.mysql:mysql-connector-j:9.0.0'
+    implementation 'com.h2database:h2:2.3.230'
     implementation 'org.postgresql:postgresql:42.3.1'
 }
 
 ebean {
-    debugLevel = 0
+    debugLevel = 1
     queryBeans = true
 }
