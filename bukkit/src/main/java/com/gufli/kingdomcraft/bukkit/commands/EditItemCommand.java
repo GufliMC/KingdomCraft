@@ -25,6 +25,7 @@ import com.gufli.kingdomcraft.bukkit.item.BukkitItem;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -44,7 +45,8 @@ public class EditItemCommand extends CommandBase {
 
     @Override
     public void execute(PlatformSender sender, String[] args) {
-        PlatformPlayer player = (PlatformPlayer) sender;
+        BukkitPlayer player = (BukkitPlayer) sender;
+        Player gamePlayer = player.getPlayer();
 
         Kingdom kingdom = player.getUser().getKingdom();
         if ( kingdom == null ) {
@@ -52,7 +54,7 @@ public class EditItemCommand extends CommandBase {
             return;
         }
 
-        ItemStack item = ((BukkitPlayer) player).getPlayer().getItemInHand();
+        ItemStack item = gamePlayer.getInventory().getItemInMainHand();
         if ( item == null || item.getType() == Material.AIR ) {
             kdc.getMessages().send(sender, "cmdEditItemInvalid");
             return;
