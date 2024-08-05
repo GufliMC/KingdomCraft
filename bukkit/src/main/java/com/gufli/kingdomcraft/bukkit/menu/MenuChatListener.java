@@ -38,14 +38,14 @@ public class MenuChatListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         PlatformPlayer player = plugin.getKdc().getPlayer(event.getPlayer().getUniqueId());
+        Consumer<String> c = (Consumer<String>)player.get("MENU_CHAT_CALLBACK", Consumer.class);
 
-        if ( !player.has("MENU_CHAT_CALLBACK") ) {
+        if ( c == null ) {
             return;
         }
 
         event.setCancelled(true);
 
-        Consumer c = player.get("MENU_CHAT_CALLBACK", Consumer.class);
         player.remove("MENU_CHAT_CALLBACK");
 
         if ( !event.getMessage().equalsIgnoreCase("cancel") ) {
@@ -59,11 +59,12 @@ public class MenuChatListener implements Listener {
 
         player.sendMessage(ChatColor.GREEN + "Cancelled!");
 
-        if ( !player.has("MENU_CHAT_CANCEL") ) {
+        Runnable r =  player.get("MENU_CHAT_CANCEL", Runnable.class);
+
+        if ( r == null ) {
             return;
         }
         
-        Runnable r =  player.get("MENU_CHAT_CANCEL", Runnable.class);
         plugin.getScheduler().sync().execute(() -> r.run());
 
         player.remove("MENU_CHAT_CANCEL");

@@ -101,11 +101,11 @@ public class PermissionsListener implements Listener {
     //
 
     void clear(PlatformPlayer player) {
-        if ( !player.has(PERMISSIONS_KEY) ) {
+        PermissionAttachment pa = player.get(PERMISSIONS_KEY, PermissionAttachment.class);
+        if ( pa == null ) {
             return;
         }
 
-        PermissionAttachment pa = player.get(PERMISSIONS_KEY, PermissionAttachment.class);
         Player p = ((BukkitPlayer) player).getPlayer();
         p.removeAttachment(pa);
     }
