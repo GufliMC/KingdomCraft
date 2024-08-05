@@ -41,7 +41,16 @@ public class OfflineBukkitPlayer extends AbstractPlatformPlayer {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof OfflineBukkitPlayer && ((OfflineBukkitPlayer) obj).player == player;
+        if (!(obj instanceof OfflineBukkitPlayer bukkitPlayer)) {
+            return false;
+        }
+
+        return bukkitPlayer.player.getUniqueId().equals(player.getUniqueId());
+    }
+
+    @Override
+    public int hashCode() {
+        return player.getUniqueId().hashCode();
     }
 
     @Override
