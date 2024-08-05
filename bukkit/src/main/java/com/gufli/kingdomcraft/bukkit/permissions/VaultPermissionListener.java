@@ -75,9 +75,11 @@ public class VaultPermissionListener implements Listener {
     }
 
     private void loadExternals() {
-        allExternals.clear();
-        plugin.getKdc().getPermissionManager().getGroups().forEach(group -> {
-            allExternals.addAll(group.getExternals());
+        plugin.getScheduler().executeAsync(() -> {
+            allExternals.clear();
+            plugin.getKdc().getPermissionManager().getGroups().forEach(group -> {
+                allExternals.addAll(group.getExternals());
+            });
         });
     }
 
@@ -89,29 +91,30 @@ public class VaultPermissionListener implements Listener {
     }
 
     private void update(PlatformPlayer player) {
-        Player bplayer = Bukkit.getPlayer(player.getUniqueId());
+        plugin.getScheduler().executeAsync(() -> {
+            Player bplayer = Bukkit.getPlayer(player.getUniqueId());
 
-        List<String> externals = new ArrayList<>();
-        Rank rank = player.getUser().getRank();
-        if ( rank != null ) {
-            plugin.getKdc().getPermissionManager().getGroups(rank).forEach(group
-                    -> externals.addAll(group.getExternals()));
-        }
-
-        List<String> distinctExternals = new ArrayList<>(allExternals);
-        distinctExternals.removeIf(externals::contains);
-
-        for ( String group : distinctExternals ) {
-            if ( permissionProvider.playerInGroup(bplayer, group) ) {
-                permissionProvider.playerRemoveGroup(bplayer, group);
+            List<String> externals = new ArrayList<>();
+            Rank rank = player.getUser().getRank();
+            if ( rank != null ) {
+                plugin.getKdc().getPermissionManager().getGroups(rank).forEach(group
+                        -> externals.addAll(group.getExternals()));
             }
-        }
 
-        for ( String group : externals ) {
-            if ( !permissionProvider.playerInGroup(bplayer, group) ) {
-                permissionProvider.playerAddGroup(bplayer, group);
+            List<String> distinctExternals = new ArrayList<>(allExternals);
+            distinctExternals.removeIf(externals::contains);
+
+            for ( String group : distinctExternals ) {
+                if ( permissionProvider.playerInGroup(bplayer, group) ) {
+                    permissionProvider.playerRemoveGroup(bplayer, group);
+                }
             }
-        }
+
+            for ( String group : externals ) {
+                if ( !permissionProvider.playerInGroup(bplayer, group) ) {
+                    permissionProvider.playerAddGroup(bplayer, group);
+                }
+            }
+        });
     }
-
 }
