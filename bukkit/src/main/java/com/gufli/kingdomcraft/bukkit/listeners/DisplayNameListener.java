@@ -24,6 +24,8 @@ import com.gufli.kingdomcraft.api.events.UserJoinKingdomEvent;
 import com.gufli.kingdomcraft.api.events.UserLeaveKingdomEvent;
 import com.gufli.kingdomcraft.bukkit.KingdomCraftBukkitPlugin;
 import com.gufli.kingdomcraft.bukkit.entity.BukkitPlayer;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class DisplayNameListener {
@@ -63,27 +65,32 @@ public class DisplayNameListener {
             return;
         }
 
-        String prefix = plugin.getKdc().getPlaceholderManager().handle(pp, "{kingdom_prefix}");
-        if ( !prefix.equals("") && !plugin.decolorify(prefix).endsWith(" ")) {
-            prefix += " ";
-        }
+        plugin.getScheduler().executeAsync(() -> {
+            String prefix = plugin.getKdc().getPlaceholderManager().handle(pp, "{kingdom_prefix}");
+            if ( !prefix.equals("") && !plugin.decolorify(prefix).endsWith(" ")) {
+                prefix += " ";
+            }
+    
+            String suffix = plugin.getKdc().getPlaceholderManager().handle(pp, "{kingdom_suffix}");
+            if ( !suffix.equals("") && !plugin.decolorify(suffix).startsWith(" ")) {
+                suffix = " " + suffix;
+            }
 
-        String suffix = plugin.getKdc().getPlaceholderManager().handle(pp, "{kingdom_suffix}");
-        if ( !suffix.equals("") && !plugin.decolorify(suffix).startsWith(" ")) {
-            suffix = " " + suffix;
-        }
+            String prefixFinal = plugin.colorify(prefix);
+            String suffixFinal = plugin.colorify(suffix);
+    
+            plugin.getScheduler().executeSync(() -> {
+                Player player = ((BukkitPlayer) pp).getPlayer();
+    
+                if (prefixFinal.equals("") && suffixFinal.equals("")) {
+                    player.setDisplayName(player.getName());
+                    return;
+                }
+        
+                player.setDisplayName(prefixFinal + player.getName() + suffixFinal);
+            });
 
-        Player player = ((BukkitPlayer) pp).getPlayer();
-
-        if ( prefix.equals("") && suffix.equals("") ) {
-            player.setDisplayName(player.getName());
-            return;
-        }
-
-        prefix = plugin.colorify(prefix);
-        suffix = plugin.colorify(suffix);
-
-        player.setDisplayName(prefix + player.getName() + suffix);
+        });
     }
 
 }

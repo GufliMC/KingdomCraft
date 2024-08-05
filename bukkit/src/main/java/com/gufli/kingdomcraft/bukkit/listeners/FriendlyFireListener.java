@@ -137,9 +137,9 @@ public class FriendlyFireListener implements Listener {
             damager.remove();
         }
 
-        long lastNotification = 0;
-        if ( d.has("LAST_FRIENDLYFIRE_NOTIFICATION") ) {
-            lastNotification = d.get("LAST_FRIENDLYFIRE_NOTIFICATION", Long.class);
+        Long lastNotification = d.get("LAST_FRIENDLYFIRE_NOTIFICATION", Long.class);
+        if ( lastNotification == null ) {
+            lastNotification = 0L;
         }
 
         if ( System.currentTimeMillis() - lastNotification > 5000 ) {

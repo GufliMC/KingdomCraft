@@ -36,4 +36,6 @@ public interface KingdomCraftPlugin {
 
     File getDataFolder();
 
+    boolean isPrimaryThread();
+
 }

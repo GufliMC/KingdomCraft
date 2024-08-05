@@ -32,6 +32,8 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
 
     private final Map<String, PlaceholderReplacer> placeholderReplacers = new HashMap<>();
 
+    private static final Pattern p = Pattern.compile("(\\{[^}]+\\})");
+
     public PlaceholderManagerImpl(KingdomCraftImpl kdc) {
         new DefaultPlaceholderReplacer(kdc, this);
     }
@@ -75,7 +77,6 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
         }
 
         StringBuffer sb = new StringBuffer();
-        Pattern p = Pattern.compile("(\\{[^}]+\\})");
         Matcher m = p.matcher(str);
 
         while ( m.find() ) {
@@ -85,7 +86,10 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
             if ( !placeholder.startsWith(prefix) ) {
                 continue;
             }
-            placeholder = placeholder.replaceFirst(Pattern.quote(prefix),"");
+
+            if (prefix.length() > 0) {
+                placeholder = placeholder.replaceFirst(Pattern.quote(prefix),"");
+            }
 
             PlaceholderReplacer replacer = placeholderReplacers.get(placeholder);
             if ( replacer == null ) {
@@ -105,8 +109,7 @@ public class PlaceholderManagerImpl implements PlaceholderManager {
 
     @Override
     public String strip(String str, String... ignore) {
-        StringBuffer sb = new StringBuffer();
-        Pattern p = Pattern.compile("(\\{[^}]+\\})");
+        StringBuilder sb = new StringBuilder(str.length());
         Matcher m = p.matcher(str);
 
         outer: while ( m.find() ) {

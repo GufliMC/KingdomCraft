@@ -78,6 +78,11 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
     }
 
     @Override
+    public boolean isPrimaryThread() {
+        return Bukkit.isPrimaryThread();
+    }
+
+    @Override
     public void log(String msg) {
         getLogger().info(msg);
     }
@@ -91,6 +96,9 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
 
     @Override
     public String colorify(String msg) {
+        if (msg == "") {
+            return msg;
+        }
         // RGB support: <#rrggbb>
         Matcher matcher = hexColorPattern.matcher(msg);
         while (matcher.find()) {

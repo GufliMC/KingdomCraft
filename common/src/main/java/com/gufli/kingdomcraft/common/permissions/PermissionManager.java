@@ -93,7 +93,7 @@ public class PermissionManager {
     }
 
     public Map<String, Boolean> getTotalPermissions(PermissionGroup group) {
-        Map<String, Boolean> perms = group.getPermissionsAsMap();
+        Map<String, Boolean> perms = new HashMap<>();
         fillPermissionsMap(group, new ArrayList<>(), perms);
         return perms;
     }

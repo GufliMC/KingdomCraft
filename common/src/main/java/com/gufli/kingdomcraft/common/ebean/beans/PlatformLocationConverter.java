@@ -19,8 +19,8 @@ package com.gufli.kingdomcraft.common.ebean.beans;
 
 import com.gufli.kingdomcraft.api.entity.PlatformLocation;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
 public class PlatformLocationConverter implements AttributeConverter<PlatformLocation, String> {

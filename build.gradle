@@ -15,14 +15,20 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java.toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+        // Optional: vendor.set(JvmVendorSpec.[VENDOR])
+    }
+
+    sourceCompatibility = "17"
+    targetCompatibility = "17"
 
     group = parent.group;
     version = parent.version;
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
+        options.release = 17
     }
 
     jar {

@@ -29,11 +29,11 @@ import com.gufli.kingdomcraft.common.ebean.beans.query.QBUser;
 import io.ebean.DB;
 import io.ebean.Database;
 import io.ebean.DatabaseFactory;
-import io.ebean.Transaction;
+import io.ebean.annotation.PersistBatch;
 import io.ebean.annotation.Platform;
+import io.ebean.annotation.Transactional;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
-import io.ebean.datasource.DataSourceFactory;
 import io.ebean.datasource.DataSourcePool;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
@@ -48,6 +48,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 public class StorageContext {
 
@@ -65,15 +67,16 @@ public class StorageContext {
     }
 
     public void init(String url, String driver, String username, String password) {
-        DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setUrl(url);
-        dataSourceConfig.setDriver(driver);
-        dataSourceConfig.setUsername(username);
-        dataSourceConfig.setPassword(password);
+        DataSourceConfig dataSourceConfig = new DataSourceConfig()
+            .setName("kingdomcraft")
+            .setUrl(url)
+            .setDriver(driver)
+            .setUsername(username)
+            .setPassword(password);
 
         DataSourcePool pool;
         try {
-            pool = DataSourceFactory.create("kingdomcraft", dataSourceConfig);
+            pool = dataSourceConfig.build();
 
             // run migrations
             migrate(pool);
@@ -81,7 +84,10 @@ public class StorageContext {
             // create database
             connect(pool);
         } catch (Exception ex) {
-            plugin.log(ex.getMessage(), Level.SEVERE);
+            var stringWriter = new StringWriter();
+            var printWriter = new PrintWriter(stringWriter);
+            ex.printStackTrace(printWriter);
+            plugin.log(stringWriter.toString(), Level.SEVERE);
             return;
         }
 
@@ -151,7 +157,7 @@ public class StorageContext {
         DatabaseConfig config = new DatabaseConfig();
         config.setDataSource(pool);
         config.setRegister(true);
-        config.setDefaultServer(false);
+        config.setDefaultServer(true);
         config.setName("kingdomcraft");
 
         config.addClass(BKingdom.class);
@@ -167,7 +173,7 @@ public class StorageContext {
         config.addClass(PlatformLocationConverter.class);
         config.addClass(ItemConverter.class);
 
-        DatabaseFactory.create(config);
+        DatabaseFactory.createWithContextClassLoader(config, Thread.currentThread().getContextClassLoader());
     }
 
     public boolean isInitialized() {
@@ -180,7 +186,7 @@ public class StorageContext {
 
     public void registerDumpCommand(KingdomCraftImpl kdc) {
         Database db = DB.byName("kingdomcraft");
-        if ( db.getPlatform() == Platform.H2 ) {
+        if ( db.platform() == Platform.H2 ) {
             kdc.getCommandManager().addCommand(new SqlDumpCommand(kdc));
         }
     }
@@ -440,13 +446,13 @@ public class StorageContext {
         });
     }
 
+    @Transactional(batch = PersistBatch.ALL)
     private <T extends Model> void save(Collection<T> models) {
-        try (Transaction transaction = DB.byName("kingdomcraft").beginTransaction()) {
-            for (Model m : models) {
-                m.save();
-            }
-
-            transaction.commit();
+        if (plugin.isPrimaryThread()) {
+            throw new IllegalStateException("Cannot save models on main thread.");
+        }
+        for (Model m : models) {
+            m.save();
         }
     }
 
@@ -466,13 +472,13 @@ public class StorageContext {
         });
     }
 
+    @Transactional(batch = PersistBatch.ALL)
     private <T extends Model> void delete(Collection<T> models) {
-        try (Transaction transaction = DB.byName("kingdomcraft").beginTransaction()) {
-            for (Model m : models) {
-                m.delete();
-            }
-
-            transaction.commit();
+        if (plugin.isPrimaryThread()) {
+            throw new IllegalStateException("Cannot save models on main thread.");
+        }
+        for (Model m : models) {
+            m.delete();
         }
     }
 

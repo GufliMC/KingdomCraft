@@ -23,10 +23,10 @@ import io.ebean.annotation.ConstraintMode;
 import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.Index;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Index(unique = true, columnNames = {"user_id", "channel"})
