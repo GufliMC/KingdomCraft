@@ -36,6 +36,6 @@ dependencies {
 }
 
 ebean {
-    debugLevel = 1
+    debugLevel = 0
     queryBeans = true
 }
