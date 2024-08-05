@@ -45,7 +45,7 @@ public class EventManagerImpl implements EventManager {
     }
 
     public <T extends Event> void dispatch(T event) {
-        for ( EventSubscription exe : new ArrayList<>(executors) ) {
+        for ( EventSubscription exe : executors ) {
             if ( !exe.type.isAssignableFrom(event.getClass())) {
                 continue;
             }
