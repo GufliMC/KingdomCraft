@@ -66,7 +66,7 @@ public class RanksEditMaxMembersOtherCommand extends CommandBase {
         }
 
         if ( !args[2].matches("[0-9]+") ) {
-            kdc.getMessages().send(sender, "errorInvalidNumber", args[2]);
+            kdc.getMessages().send(sender, "cmdErrorInvalidNumber", args[2]);
             return;
         }
 

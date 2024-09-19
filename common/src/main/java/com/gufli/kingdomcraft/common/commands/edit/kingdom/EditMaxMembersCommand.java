@@ -43,7 +43,7 @@ public class EditMaxMembersCommand extends CommandBase {
         }
 
         if ( !args[0].matches("[0-9]+") ) {
-            kdc.getMessages().send(sender, "errorInvalidNumber", args[0]);
+            kdc.getMessages().send(sender, "cmdErrorInvalidNumber", args[0]);
             return;
         }
 
