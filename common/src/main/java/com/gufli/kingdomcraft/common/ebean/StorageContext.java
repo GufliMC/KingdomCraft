@@ -44,7 +44,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -55,7 +54,7 @@ public class StorageContext {
     public static final Set<BKingdom> kingdoms = new CopyOnWriteArraySet<>();
     public static final Set<BRelation> relations = new CopyOnWriteArraySet<>();
 
-    public static final Map<PlatformPlayer, User> players = new ConcurrentHashMap<>();
+    public static final PlayerStore players = new PlayerStore();
 
     private boolean initialized = false;
     private final KingdomCraftPlugin plugin;
@@ -293,10 +292,13 @@ public class StorageContext {
 
     public void clearUsers() {
         new QBUser().delete();
-        for ( User user : players.values() ) {
-            user.setKingdom(null);
-            ((BUser) user).insert();
+
+        for ( PlatformPlayer player : players.getPlayers() ) {
+            User user = createUser(player.getUniqueId(), player.getName());
+            players.add(user, player);
         }
+        saveAsync(players.getUsers());
+
         for ( BKingdom kingdom : kingdoms ) {
             kingdom.resetMemberCount();
         }
@@ -307,23 +309,23 @@ public class StorageContext {
         new QBUser().updatedAt.before(Instant.now().minus(2, ChronoUnit.WEEKS)).delete();
     }
 
-    public Set<User> getOnlineUsers() {
-        return new HashSet<>(players.values());
+    public Collection<User> getOnlineUsers() {
+        return Collections.unmodifiableCollection(players.getUsers());
     }
 
     public User getOnlineUser(String name) {
-        return players.values().stream().filter(u -> u.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return players.getUser(name);
     }
 
     public User getOnlineUser(UUID uuid) {
-        return players.values().stream().filter(u -> u.getUniqueId().equals(uuid)).findFirst().orElse(null);
+        return players.getUser(uuid);
     }
 
     public CompletableFuture<List<User>> getUsers() {
         return plugin.getScheduler().makeAsyncFuture(() -> {
             List<BUser> users = new QBUser().findList();
             users.forEach(this::reassign);
-            return users.stream().map((u) -> (User) u).collect(Collectors.toList());
+            return users.stream().map(User.class::cast).collect(Collectors.toList());
         });
     }
 
@@ -399,19 +401,19 @@ public class StorageContext {
     // players
 
     public void addPlayer(PlatformPlayer player, User user) {
-        players.put(player, user);
+        players.add(user, player);
     }
 
     public void removePlayer(PlatformPlayer player) {
-        players.remove(player);
+        players.remove(player.getUniqueId());
     }
 
-    public Set<PlatformPlayer> getPlayers() {
-        return new HashSet<>(players.keySet());
+    public Collection<PlatformPlayer> getPlayers() {
+        return Collections.unmodifiableCollection(players.getPlayers());
     }
 
     public PlatformPlayer getPlayer(UUID uuid) {
-        return players.keySet().stream().filter(p -> p.getUniqueId().equals(uuid)).findFirst().orElse(null);
+        return players.getPlayer(uuid);
     }
 
     public PlatformPlayer getPlayer(User user) {
@@ -419,7 +421,7 @@ public class StorageContext {
     }
 
     public PlatformPlayer getPlayer(String name) {
-        return players.keySet().stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return players.getPlayer(name);
     }
 
     //

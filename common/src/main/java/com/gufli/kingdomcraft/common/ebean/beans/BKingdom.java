@@ -89,7 +89,8 @@ public class BKingdom extends BaseModel implements Kingdom {
     @Override
     public boolean delete() {
         StorageContext.kingdoms.remove(this);
-        StorageContext.players.values().stream().filter(user -> user.getKingdom() == this)
+        StorageContext.players.getUsers().stream()
+                .filter(user -> user.getKingdom() == this)
                 .forEach(user -> user.setKingdom(null));
 
         KingdomCraftProvider.get().getEventManager().dispatch(new KingdomDeleteEvent(this));

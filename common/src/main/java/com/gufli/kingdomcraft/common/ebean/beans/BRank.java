@@ -76,7 +76,8 @@ public class BRank extends BaseModel implements Rank {
             kingdom.defaultRank = null;
         }
         Rank defaultRank = kingdom.defaultRank;
-        StorageContext.players.values().stream().filter(user -> user.getRank() == this)
+        StorageContext.players.getUsers().stream()
+                .filter(user -> user.getRank() == this)
                 .forEach(user -> user.setRank(defaultRank));
         return super.delete();
     }

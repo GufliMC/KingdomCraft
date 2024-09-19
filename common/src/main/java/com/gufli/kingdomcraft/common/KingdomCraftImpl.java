@@ -23,7 +23,6 @@ import com.gufli.kingdomcraft.api.domain.*;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 import com.gufli.kingdomcraft.api.events.KingdomCreateEvent;
 import com.gufli.kingdomcraft.api.events.PlayerLeaveEvent;
-import com.gufli.kingdomcraft.api.events.PlayerLoginEvent;
 import com.gufli.kingdomcraft.api.placeholders.PlaceholderManager;
 import com.gufli.kingdomcraft.common.chat.ChatManagerImpl;
 import com.gufli.kingdomcraft.common.command.CommandManagerImpl;
@@ -145,7 +144,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     // players
 
     @Override
-    public Set<PlatformPlayer> getOnlinePlayers() {
+    public Collection<PlatformPlayer> getOnlinePlayers() {
         return context.getPlayers();
     }
 
@@ -267,7 +266,7 @@ public class KingdomCraftImpl implements KingdomCraft {
     }
 
     @Override
-    public Set<User> getOnlineUsers() {
+    public Collection<User> getOnlineUsers() {
         return context.getOnlineUsers();
     }
 

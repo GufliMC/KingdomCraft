@@ -55,7 +55,7 @@ public interface KingdomCraft {
 
     // players
 
-    Set<PlatformPlayer> getOnlinePlayers();
+    Collection<PlatformPlayer> getOnlinePlayers();
 
     PlatformPlayer getPlayer(UUID uuid);
 
@@ -95,7 +95,7 @@ public interface KingdomCraft {
 
     // users
 
-    Set<User> getOnlineUsers();
+    Collection<User> getOnlineUsers();
 
     User getOnlineUser(String name);
 
