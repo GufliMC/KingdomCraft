@@ -346,7 +346,7 @@ public class CommandManagerImpl implements CommandManager {
                 })).orElse(null);
 
         kdc.getMessages().send(sender, "cmdErrorInvalidHint",
-                "/k " + bestCommand.getCommands().get(0) +
+                "/" + root + " " + bestCommand.getCommands().get(0) +
                         (bestCommand.getArgumentsHint() != null  ? " " + bestCommand.getArgumentsHint() : ""));
 
     }
