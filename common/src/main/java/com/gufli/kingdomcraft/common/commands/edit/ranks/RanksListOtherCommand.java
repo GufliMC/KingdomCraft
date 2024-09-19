@@ -24,6 +24,7 @@ import com.gufli.kingdomcraft.api.entity.PlatformSender;
 import com.gufli.kingdomcraft.common.KingdomCraftImpl;
 import com.gufli.kingdomcraft.common.command.CommandBase;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,7 @@ public class RanksListOtherCommand extends CommandBase {
         }
 
         String list = kingdom.getRanks().stream()
-                .sorted((o1, o2) -> o2.getLevel() - o1.getLevel())
+                .sorted(Comparator.comparingInt(Rank::getLevel).reversed())
                 .map(Rank::getName)
                 .collect(Collectors.joining(", "));
         kdc.getMessages().send(sender, "cmdRanksListOther", kingdom.getName(), list);

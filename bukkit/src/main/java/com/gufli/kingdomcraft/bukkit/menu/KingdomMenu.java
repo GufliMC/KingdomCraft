@@ -698,6 +698,8 @@ public class KingdomMenu {
         PaginationBuilder builder = PaginationBuilder.create().withTitle(text("menuKingdomRanksListTitle", target.getName()));
 
         List<Rank> ranks = new ArrayList<>(target.getRanks());
+        ranks.sort(Comparator.comparingInt(Rank::getLevel).reversed());
+
         builder.withItems(ranks.size(), index -> {
             Rank rank = ranks.get(index);
             return new BukkitInventoryItem(
