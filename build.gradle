@@ -5,7 +5,11 @@ buildscript {
 }
 
 plugins {
-    id 'pl.allegro.tech.build.axion-release' version '1.13.6'
+    id 'pl.allegro.tech.build.axion-release' version '1.18.2'
+}
+
+scmVersion {
+    ignoreUncommittedChanges.set(false)
 }
 
 group = 'com.gufli.kingdomcraft.starter'
