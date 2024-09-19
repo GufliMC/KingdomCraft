@@ -508,4 +508,13 @@ menuChangeRelationItemLoreNeutralAccept: '&7Klik om een neutrale status te accep
 menuChangeRelationItemLoreNeutralRequest: '&7Klik om een neutrale status aan te vragen'
 menuChangeRelationItemLoreNeutralEndAlliance: '&7Klik om de bondgenootschap te stoppen'
 
-
+cmdHelpArgumentKingdom: 'kingdom'
+cmdHelpArgumentPlayer: 'speler'
+cmdHelpArgumentRank: 'rank'
+cmdHelpArgumentChatchannel: 'chatkanaal'
+cmdHelpArgumentGroup: 'group'
+cmdHelpArgumentName: 'naam'
+cmdHelpArgumentMessage: 'bericht'
+cmdHelpArgumentDisplayname: 'weergavenaam'
+cmdHelpArgumentPrefix: 'prefix'
+cmdHelpArgumentSuffix: 'suffix'

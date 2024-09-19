@@ -28,7 +28,7 @@ public class EditDisplayCommand extends CommandBase {
 
     public EditDisplayCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit display", 1, true);
-        setArgumentsHint("<display>");
+        setArgumentsHint("<displayname>");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEditDisplayExplanation"));
         setPermissions("kingdom.edit.display");
     }

@@ -30,7 +30,7 @@ public class EditDisplayOtherCommand extends CommandBase {
 
     public EditDisplayOtherCommand(KingdomCraftImpl kdc) {
         super(kdc, "edit display", 2);
-        setArgumentsHint("<kingdom> <display>");
+        setArgumentsHint("<kingdom> <displayname>");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdEditDisplayOtherExplanation"));
         setPermissions("kingdom.edit.display.other");
     }

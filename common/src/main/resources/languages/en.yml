@@ -508,4 +508,15 @@ menuChangeRelationItemLoreNeutralAccept: '&7Click to accept their request'
 menuChangeRelationItemLoreNeutralRequest: '&7Click to request a neutral status'
 menuChangeRelationItemLoreNeutralEndAlliance: '&7Click to end the alliance with them'
 
+cmdHelpArgumentKingdom: 'kingdom'
+cmdHelpArgumentPlayer: 'player'
+cmdHelpArgumentRank: 'rank'
+cmdHelpArgumentChatchannel: 'channel'
+cmdHelpArgumentGroup: 'group'
+cmdHelpArgumentName: 'name'
+cmdHelpArgumentMessage: 'message'
+cmdHelpArgumentDisplayname: 'display'
+cmdHelpArgumentPrefix: 'prefix'
+cmdHelpArgumentSuffix: 'suffix'
+
 

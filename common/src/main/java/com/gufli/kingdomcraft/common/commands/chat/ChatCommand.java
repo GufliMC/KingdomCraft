@@ -32,7 +32,7 @@ public class ChatCommand extends CommandBase {
     public ChatCommand(KingdomCraftImpl kdc) {
         super(kdc, "chat", -1, true);
         addCommand("c");
-        setArgumentsHint("<channel> <message>");
+        setArgumentsHint("<chatchannel> <message>");
         setExplanationMessage(() -> kdc.getMessages().getMessage("cmdChatExplanation"));
         setPermissions("kingdom.chat", "kingdom.chat.other");
     }
@@ -52,7 +52,7 @@ public class ChatCommand extends CommandBase {
         PlatformPlayer player = (PlatformPlayer) sender;
 
         if ( args.length < 2 ) {
-            kdc.getMessages().send(sender, "cmdErrorInvalidUsage", "/k chat " + getArgumentsHint());
+            kdc.getCommandManager().sendInvalidUsage(sender, this);
             return;
         }
 

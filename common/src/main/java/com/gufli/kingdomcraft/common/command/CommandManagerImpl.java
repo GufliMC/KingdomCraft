@@ -38,6 +38,7 @@ import com.gufli.kingdomcraft.common.commands.tphere.TpHereOtherCommand;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -211,18 +212,34 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new GroupsRemoveOtherCommand(kdc));
     }
 
+    public String getRoot() {
+        String root = "kingdomcraft";
+        if (!kdc.getConfig().getCommandAliases().isEmpty()) {
+            root = kdc.getConfig().getCommandAliases().get(0);
+        }
+
+        return root;
+    }
+
+    public String getCommandString(Command cmd, String path) {
+        String arguments = "";
+        if ( cmd.getArgumentsHint() != null ) {
+            arguments = replaceArguments(cmd.getArgumentsHint());
+        }
+
+        return "/" + getRoot() + " " + path + " " + arguments;
+    }
+
+    public String getCommandString(Command cmd) {
+        return getCommandString(cmd, cmd.getCommands().get(0));
+    }
+
     public void sendInvalidUsage(PlatformSender sender, Command cmd) {
         sendInvalidUsage(sender, cmd, cmd.getCommands().get(0));
     }
 
     public void sendInvalidUsage(PlatformSender sender, Command cmd, String path) {
-        String root = "kingdomcraft";
-        if ( kdc.getConfig().getCommandAliases().size() > 0 ) {
-            root = kdc.getConfig().getCommandAliases().get(0);
-        }
-
-        kdc.getMessages().send(sender, "cmdErrorInvalidUsage", "/" + root + " "
-                + path + " " + (cmd.getArgumentsHint() != null ? cmd.getArgumentsHint() : ""));
+        kdc.getMessages().send(sender, "cmdErrorInvalidUsage", getCommandString(cmd, path));
     }
 
     public void dispatch(PlatformSender sender, String[] args) {
@@ -266,7 +283,7 @@ public class CommandManagerImpl implements CommandManager {
         }
 
         String root = "kingdomcraft";
-        if ( kdc.getConfig().getCommandAliases().size() > 0 ) {
+        if (!kdc.getConfig().getCommandAliases().isEmpty()) {
             root = kdc.getConfig().getCommandAliases().get(0);
         }
 
@@ -300,7 +317,7 @@ public class CommandManagerImpl implements CommandManager {
                 }
             });
 
-            if ( filter.size() == 0 ) {
+            if (filter.isEmpty()) {
                 break;
             }
 
@@ -345,9 +362,7 @@ public class CommandManagerImpl implements CommandManager {
                     return Math.abs((baseLength + argsLength) - args.length);
                 })).orElse(null);
 
-        kdc.getMessages().send(sender, "cmdErrorInvalidHint",
-                "/" + root + " " + bestCommand.getCommands().get(0) +
-                        (bestCommand.getArgumentsHint() != null  ? " " + bestCommand.getArgumentsHint() : ""));
+        kdc.getMessages().send(sender, "cmdErrorInvalidHint", getCommandString(bestCommand));
 
     }
 
@@ -419,6 +434,27 @@ public class CommandManagerImpl implements CommandManager {
         }
 
         return args;
+    }
+
+    private final static Pattern ARGUMENTS_PATTERN = Pattern.compile("\\<([^<]+)>");
+
+    private String replaceArguments(String str) {
+        Matcher m = ARGUMENTS_PATTERN.matcher(str);
+
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            String argument = m.group(1).toLowerCase();
+
+            String replacement = kdc.getMessages().getMessage("cmdHelpArgument" + argument.substring(0, 1).toUpperCase() + argument.substring(1));
+            if ( replacement == null ) {
+                replacement = argument;
+            }
+
+            m.appendReplacement(sb, "<" + replacement + ">");
+        }
+
+        m.appendTail(sb);
+        return sb.toString();
     }
 
 }

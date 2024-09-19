@@ -64,7 +64,7 @@ public class RanksCloneCommand extends CommandBase {
     @Override
     public void execute(PlatformSender sender, String[] args) {
         if ( args.length < 2 ) {
-            kdc.getMessages().send(sender, "cmdErrorInvalidUsage", "/k ranks clone " + getArgumentsHint());
+            kdc.getCommandManager().sendInvalidUsage(sender, this);
             return;
         }
 
