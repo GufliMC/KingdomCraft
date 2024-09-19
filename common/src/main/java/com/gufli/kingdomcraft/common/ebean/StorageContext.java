@@ -344,12 +344,12 @@ public class StorageContext {
         }
 
         return reassign(plugin.getScheduler().makeAsyncFuture(() ->
-                new QBUser().id.eq(uuid.toString()).findOne()));
+                new QBUser().id.eq(uuid).findOne()));
     }
 
     public User createUser(UUID uuid, String name) {
         BUser user = new BUser();
-        user.id = uuid.toString();
+        user.id = uuid;
         user.name = name;
         return user;
     }

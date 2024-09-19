@@ -36,7 +36,7 @@ import java.util.UUID;
 public class BUser extends BaseModel implements User {
 
     @Id
-    public String id;
+    public UUID id;
 
     @Column(unique = true)
     public String name;
@@ -95,14 +95,14 @@ public class BUser extends BaseModel implements User {
     }
 
     public void setUUID(UUID uuid) {
-        this.id = uuid.toString();
+        this.id = uuid;
     }
 
     // interface
 
     @Override
     public UUID getUniqueId() {
-        return UUID.fromString(id);
+        return id;
     }
 
     @Override
