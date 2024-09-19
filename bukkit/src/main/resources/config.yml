@@ -13,8 +13,13 @@ settings:
     # enter the filename (without .yml) for the messages
     language: 'en'
 
-    # command aliases
+    # command aliases for the root in this structure: /<root> <subcommand> <arguments>
     command-aliases: [k, kd, kdc, kingdom]
+
+    # remap sub-commands (e.g. for translation purposes)
+    # commands with spaces on the left side should be wrapped in quotes: e.g. 'edit prefix': 'changeprefix'
+    remap-commands:
+        setkingdom: 'setkingdom'
 
     nokingdom:
         display: '&eHobo'

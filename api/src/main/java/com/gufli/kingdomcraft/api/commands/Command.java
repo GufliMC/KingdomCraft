@@ -81,6 +81,10 @@ public abstract class Command {
         return commands;
     }
 
+    public String getMainCommand() {
+        return commands.get(0);
+    }
+
     public abstract void execute(PlatformSender sender, String[] args);
 
     public List<String> autocomplete(PlatformPlayer player, String[] args) {

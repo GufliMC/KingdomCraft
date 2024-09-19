@@ -212,7 +212,7 @@ public class CommandManagerImpl implements CommandManager {
         addCommand(new GroupsRemoveOtherCommand(kdc));
     }
 
-    public String getRoot() {
+    private String getRoot() {
         String root = "kingdomcraft";
         if (!kdc.getConfig().getCommandAliases().isEmpty()) {
             root = kdc.getConfig().getCommandAliases().get(0);
@@ -221,21 +221,34 @@ public class CommandManagerImpl implements CommandManager {
         return root;
     }
 
+    private List<String> getMappedCommands(Command cmd) {
+        return cmd.getCommands().stream()
+                .map(c -> kdc.getConfig().getRemappedCommands().getOrDefault(c, c))
+                .collect(Collectors.toList());
+    }
+
+    private String getMappedMainCommand(Command cmd) {
+        String str = cmd.getMainCommand();
+        return kdc.getConfig().getRemappedCommands().getOrDefault(str, str);
+    }
+
     public String getCommandString(Command cmd, String path) {
         String arguments = "";
         if ( cmd.getArgumentsHint() != null ) {
             arguments = replaceArguments(cmd.getArgumentsHint());
         }
 
+        path = kdc.getConfig().getRemappedCommands().getOrDefault(path, path);
+
         return "/" + getRoot() + " " + path + " " + arguments;
     }
 
     public String getCommandString(Command cmd) {
-        return getCommandString(cmd, cmd.getCommands().get(0));
+        return getCommandString(cmd, getMappedMainCommand(cmd));
     }
 
     public void sendInvalidUsage(PlatformSender sender, Command cmd) {
-        sendInvalidUsage(sender, cmd, cmd.getCommands().get(0));
+        sendInvalidUsage(sender, cmd, getMappedMainCommand(cmd));
     }
 
     public void sendInvalidUsage(PlatformSender sender, Command cmd, String path) {
@@ -247,11 +260,10 @@ public class CommandManagerImpl implements CommandManager {
             return;
         }
 
-        String invalidBase = null;
-        String invalidArguments = "";
+        String invalidHint = null;
 
         for ( Command cb : commands ) {
-            for ( String cmd : cb.getCommands() ) {
+            for ( String cmd : getMappedCommands(cb) ) {
                 if ( !(String.join(" ", args).toLowerCase() + " ").startsWith(cmd.toLowerCase() + " ") ) {
                     continue;
                 }
@@ -260,8 +272,7 @@ public class CommandManagerImpl implements CommandManager {
                 String[] cmdArgs = convertArgs(Arrays.copyOfRange(args, cmdLength, args.length), cb.getExpectedArguments());
 
                 if ( cb.getExpectedArguments() != -1 && cmdArgs.length != cb.getExpectedArguments() ) {
-                    invalidBase = cmd;
-                    invalidArguments = cb.getArgumentsHint() == null ? "" : cb.getArgumentsHint();
+                    invalidHint = getCommandString(cb, cmd);
                     continue;
                 }
 
@@ -282,14 +293,8 @@ public class CommandManagerImpl implements CommandManager {
             }
         }
 
-        String root = "kingdomcraft";
-        if (!kdc.getConfig().getCommandAliases().isEmpty()) {
-            root = kdc.getConfig().getCommandAliases().get(0);
-        }
-
-        if ( invalidBase != null ) {
-            kdc.getMessages().send(sender, "cmdErrorInvalidUsage",
-                    "/" + root + " " + invalidBase + " " + invalidArguments);
+        if ( invalidHint != null ) {
+            kdc.getMessages().send(sender, "cmdErrorInvalidUsage", invalidHint);
             return;
         }
 
@@ -304,7 +309,7 @@ public class CommandManagerImpl implements CommandManager {
                 continue;
             }
 
-            candidates.put(cb, cb.getCommands().get(0).split(Pattern.quote(" ")));
+            candidates.put(cb, getMappedMainCommand(cb).split(Pattern.quote(" ")));
         }
 
         for ( int i = 0; i < args.length; i++ ) {
@@ -375,7 +380,7 @@ public class CommandManagerImpl implements CommandManager {
             commands.stream()
                     .filter(cb -> cb.getPermissions() == null || cb.getPermissions().length == 0
                             || Arrays.stream(cb.getPermissions()).anyMatch(sender::hasPermission))
-                    .forEach(cb -> result.addAll(cb.getCommands().stream()
+                    .forEach(cb -> result.addAll(getMappedCommands(cb).stream()
                             .map(c -> c.split(Pattern.quote(" "))[0])
                             .filter(s -> s.toLowerCase().startsWith(arg0))
                             .collect(Collectors.toList()))
@@ -392,7 +397,7 @@ public class CommandManagerImpl implements CommandManager {
                 }
             }
 
-            for ( String cmd : cb.getCommands() ) {
+            for ( String cmd : getMappedCommands(cb) ) {
                 // check full command match
                 if ( (input + " ").startsWith(cmd.toLowerCase() + " ") ) {
                     String[] cmdArgs = Arrays.copyOfRange(args, cmd.split(Pattern.quote(" ")).length, args.length);

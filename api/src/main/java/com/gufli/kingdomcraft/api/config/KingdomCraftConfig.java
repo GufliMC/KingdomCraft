@@ -5,10 +5,13 @@ import com.gufli.kingdomcraft.api.domain.RelationType;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 public interface KingdomCraftConfig {
 
     List<String> getCommandAliases();
+
+    Map<String, String> getRemappedCommands();
 
     int getTeleportDelay();
 

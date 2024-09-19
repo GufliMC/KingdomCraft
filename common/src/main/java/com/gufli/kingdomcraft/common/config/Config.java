@@ -22,15 +22,13 @@ import com.gufli.kingdomcraft.api.domain.RelationType;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Config implements KingdomCraftConfig {
 
     private List<String> commandAliases = Arrays.asList("k", "kd", "kdc", "kingdom");
+    private Map<String, String> remappedCommands = new HashMap<>();
 
     private int teleportDelay = 0;
     private String language = "en";
@@ -64,6 +62,13 @@ public class Config implements KingdomCraftConfig {
     public void load(Configuration config) {
         if ( config.contains("command-aliases") ) {
             commandAliases = config.getStringList("command-aliases");
+        }
+
+        if ( config.contains("remap-commands") ) {
+            Configuration section = config.getConfigurationSection("remap-commands");
+            for ( String key : section.getKeys(false) ) {
+                remappedCommands.put(key, section.getString(key));
+            }
         }
 
         if ( config.contains("teleport-delay") ) {
@@ -179,6 +184,11 @@ public class Config implements KingdomCraftConfig {
     @Override
     public List<String> getCommandAliases() {
         return commandAliases;
+    }
+
+    @Override
+    public Map<String, String> getRemappedCommands() {
+        return remappedCommands;
     }
 
     @Override
