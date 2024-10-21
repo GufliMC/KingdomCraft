@@ -4,6 +4,7 @@ import com.gufli.kingdomcraft.api.domain.User;
 import com.gufli.kingdomcraft.api.entity.PlatformPlayer;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,11 +42,11 @@ public class PlayerStore {
     }
 
     public final Collection<PlatformPlayer> getPlayers() {
-        return playersByUuid.values();
+        return Collections.unmodifiableCollection(playersByUuid.values());
     }
 
     public final Collection<User> getUsers() {
-        return usersByUuid.values();
+        return Collections.unmodifiableCollection(usersByUuid.values());
     }
 
     public final void remove(UUID uuid) {
