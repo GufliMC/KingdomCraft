@@ -310,7 +310,7 @@ public class StorageContext {
     }
 
     public Collection<User> getOnlineUsers() {
-        return Collections.unmodifiableCollection(players.getUsers());
+        return players.getUsers();
     }
 
     public User getOnlineUser(String name) {
@@ -409,7 +409,7 @@ public class StorageContext {
     }
 
     public Collection<PlatformPlayer> getPlayers() {
-        return Collections.unmodifiableCollection(players.getPlayers());
+        return players.getPlayers();
     }
 
     public PlatformPlayer getPlayer(UUID uuid) {

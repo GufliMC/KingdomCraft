@@ -22,7 +22,7 @@ public class PlayerStore {
     }
 
     public final User getUser(String name) {
-        return usersByName.get(name);
+        return usersByName.get(name.toLowerCase());
     }
 
     public final User getUser(PlatformPlayer player) {
@@ -34,7 +34,7 @@ public class PlayerStore {
     }
 
     public final PlatformPlayer getPlayer(String name) {
-        return playersByName.get(name);
+        return playersByName.get(name.toLowerCase());
     }
 
     public final PlatformPlayer getPlayer(User user) {
@@ -52,21 +52,21 @@ public class PlayerStore {
     public final void remove(UUID uuid) {
         User user = usersByUuid.remove(uuid);
         if ( user != null ) {
-            usersByName.remove(user.getName());
+            usersByName.remove(user.getName().toLowerCase());
         }
 
         PlatformPlayer player = playersByUuid.remove(uuid);
         if ( player != null ) {
-            playersByName.remove(player.getName());
+            playersByName.remove(player.getName().toLowerCase());
         }
     }
 
     public final void add(User user, PlatformPlayer player) {
         usersByUuid.put(user.getUniqueId(), user);
-        usersByName.put(user.getName(), user);
+        usersByName.put(user.getName().toLowerCase(), user);
 
         playersByUuid.put(user.getUniqueId(), player);
-        playersByName.put(user.getName(), player);
+        playersByName.put(user.getName().toLowerCase(), player);
     }
 
 }
