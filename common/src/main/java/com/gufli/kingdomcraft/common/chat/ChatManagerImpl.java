@@ -18,7 +18,7 @@
 package com.gufli.kingdomcraft.common.chat;
 
 import com.gufli.kingdomcraft.api.chat.ChatChannel;
-import com.gufli.kingdomcraft.api.chat.ChatChannelFactory;
+import com.gufli.kingdomcraft.api.chat.ChatChannelManager;
 import com.gufli.kingdomcraft.api.chat.ChatManager;
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 import com.gufli.kingdomcraft.api.domain.User;
@@ -36,6 +36,7 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,8 +45,8 @@ public class ChatManagerImpl implements ChatManager {
 
     private final KingdomCraftImpl kdc;
 
-    private final List<ChatChannelFactory> factories = new ArrayList<>();
-    private final List<ChatChannel> chatChannels = new ArrayList<>();
+    private final List<ChatChannelManager> managers = new CopyOnWriteArrayList<>();
+    private final List<ChatChannel> chatChannels = new CopyOnWriteArrayList<>();
 
     private ChatChannel defaultChannel;
 
@@ -71,21 +72,12 @@ public class ChatManagerImpl implements ChatManager {
 
         // update channels on kingdom delete
         kdc.getEventManager().addListener(KingdomDeleteEvent.class, (e) -> {
-            getKingdomChannels(e.getKingdom()).forEach(ch -> {
-                KingdomChatChannel kch = ((KingdomChatChannel) ch);
-                kch.getKingdoms().remove(e.getKingdom());
-                if ( kch.getKingdoms().isEmpty() ) {
-                    removeChatChannel(kch);
-                }
-            });
+            managers.forEach(m -> m.onDelete(e.getKingdom()));
         });
 
         // update channels on kingdom create
         kdc.getEventManager().addListener(KingdomCreateEvent.class, (e) -> {
-            for (ChatChannelFactory f : factories ) {
-                if ( !f.shouldCreate(e.getKingdom()) ) continue;
-                addChatChannel(f.create(e.getKingdom()));
-            }
+            managers.forEach(m -> m.onCreate(e.getKingdom()));
         });
     }
 
@@ -182,9 +174,11 @@ public class ChatManagerImpl implements ChatManager {
         return true;
     }
 
-    List<ChatChannel> getKingdomChannels(Kingdom kingdom) {
-        return getChatChannels().stream().filter(ch -> ch instanceof KingdomChatChannel)
-                .filter(ch -> ((KingdomChatChannel) ch).getKingdoms().contains(kingdom)).collect(Collectors.toList());
+    List<KingdomChatChannel> getKingdomChannels(Kingdom kingdom) {
+        return getChatChannels().stream()
+                .filter(KingdomChatChannel.class::isInstance)
+                .map(KingdomChatChannel.class::cast)
+                .filter(ch -> ch.getKingdoms().contains(kingdom)).collect(Collectors.toList());
     }
 
     @Override
@@ -351,7 +345,7 @@ public class ChatManagerImpl implements ChatManager {
             return;
         }
 
-        factories.clear();
+        managers.clear();
         chatChannels.clear();
 
         String defaultchannel = config.getString("default-channel");
@@ -365,9 +359,14 @@ public class ChatManagerImpl implements ChatManager {
                 continue;
             }
 
+            if ( (cs.contains("kingdoms") && cs.contains("*"))
+                    || (cs.contains("clone-per-kingdom") && cs.getBoolean("clone-per-kingdom")) ) {
+                createPerKingdomChatChannel(name, cs);
+                continue;
+            }
+
             if ( cs.contains("kingdoms") ) {
-                ChatChannelFactory factory = createFactory(name, cs);
-                addFactory(factory);
+                createKingdomGroupChatChannel(name, cs);
                 continue;
             }
 
@@ -384,13 +383,57 @@ public class ChatManagerImpl implements ChatManager {
         }
     }
 
-    private void addFactory(ChatChannelFactory factory) {
-        factories.add(factory);
-        for (Kingdom kd : kdc.getKingdoms() ) {
-            if ( factory.shouldCreate(kd) ) {
-                addChatChannel(factory.create(kd));
+    private void createPerKingdomChatChannel(String name, Configuration section) {
+        managers.add(new ChatChannelManager() {
+            @Override
+            public void onCreate(Kingdom kingdom) {
+                ChatChannel ch = new KingdomChatChannel(name + "-" + kingdom.getName(), kingdom);
+                setup(ch, section);
+                addChatChannel(ch);
             }
+
+            @Override
+            public void onDelete(Kingdom kingdom) {
+                ChatChannel ch = getChatChannel(name + "-" + kingdom.getName());
+                if ( ch != null ) {
+                    removeChatChannel(ch);
+                }
+            }
+        });
+    }
+
+    private void createKingdomGroupChatChannel(String name, Configuration section) {
+        List<String> kingdoms = new ArrayList<>();
+        if ( section.get("kingdoms") instanceof String ) {
+            kingdoms.add(section.getString("kingdoms").toLowerCase());
+        } else {
+            section.getStringList("kingdoms").stream()
+                    .map(String::toLowerCase)
+                    .forEach(kingdoms::add);
         }
+
+        KingdomChatChannel ch = new KingdomChatChannel(name);
+        setup(ch, section);
+        addChatChannel(ch);
+
+        managers.add(new ChatChannelManager() {
+            @Override
+            public void onCreate(Kingdom kingdom) {
+                if ( !kingdoms.contains(kingdom.getName().toLowerCase()) ) {
+                    return;
+                }
+
+                ch.getKingdoms().add(kingdom);
+            }
+
+            @Override
+            public void onDelete(Kingdom kingdom) {
+                ch.getKingdoms().remove(kingdom);
+                if ( ch.getKingdoms().isEmpty() ) {
+                    removeChatChannel(ch);
+                }
+            }
+        });
     }
 
     private void setup(ChatChannel channel, Configuration section) {
@@ -429,51 +472,6 @@ public class ChatManagerImpl implements ChatManager {
         if ( section.contains("cooldown") ) {
             channel.setCooldown(section.getInt("cooldown"));
         }
-    }
-
-    private ChatChannelFactory createFactory(String name, Configuration section) {
-        boolean allKingdoms = false;
-        List<String> kingdoms = new ArrayList<>();
-        if ( section.get("kingdoms") instanceof String ) {
-            if ( section.getString("kingdoms").equals("*") ) {
-                allKingdoms = true;
-            } else {
-                kingdoms.add(section.getString("kingdoms"));
-            }
-        } else {
-            kingdoms.addAll(section.getStringList("kingdoms"));
-        }
-
-        final boolean finalAllKingdoms = allKingdoms;
-        return new ChatChannelFactory() {
-            @Override
-            public boolean shouldCreate(Kingdom kingdom) {
-                return finalAllKingdoms || kingdoms.contains(kingdom.getName().toLowerCase());
-            }
-
-            @Override
-            public String getName() {
-                return name;
-            }
-
-            @Override
-            public ChatChannel create(Kingdom kingdom) {
-                if ( !finalAllKingdoms && kingdoms.size() > 1 ) {
-                    KingdomChatChannel ch = (KingdomChatChannel) getChatChannel(getName());
-                    if ( ch == null ) {
-                        ch = new KingdomChatChannel(getName(), kingdom);
-                        setup(ch, section);
-                    } else {
-                        ch.getKingdoms().add(kingdom);
-                    }
-                    return ch;
-                }
-
-                ChatChannel ch = new KingdomChatChannel(getName() + "-" + kingdom.getName(), kingdom);
-                setup(ch, section);
-                return ch;
-            }
-        };
     }
 
 }

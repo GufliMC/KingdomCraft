@@ -17,7 +17,7 @@ channels:
   kingdom:
     prefix: ''
     format: '&7[{kingdom}&7]&f{rank_prefix}{prefix} &f{username}&a: &f{message}'
-    kingdoms: '*' # every kingdom gets it's own channel
+    clone-per-kingdom: true # every kingdom gets its own channel with these settings
     toggleable: false
 
   admin:

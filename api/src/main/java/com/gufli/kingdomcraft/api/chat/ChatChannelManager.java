@@ -19,12 +19,9 @@ package com.gufli.kingdomcraft.api.chat;
 
 import com.gufli.kingdomcraft.api.domain.Kingdom;
 
-public interface ChatChannelFactory {
+public interface ChatChannelManager {
 
-    boolean shouldCreate(Kingdom kingdom);
+    void onCreate(Kingdom kingdom);
 
-    String getName();
-
-    ChatChannel create(Kingdom kingdom);
-
+    void onDelete(Kingdom kingdom);
 }
