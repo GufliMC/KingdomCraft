@@ -9,19 +9,25 @@ default-channel: 'public'
 channels:
 
   public:
-    format: '&7[&6P&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
+    format: '&7[&aP&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
     prefix: '!'
     cooldown: 5 # Cooldown in seconds
     toggleable: false
 
   kingdom:
     prefix: ''
-    format: '&7[{kingdom}&7]&f{rank_prefix}{prefix} &f{username}&a: &f{message}'
+    format: '&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
     clone-per-kingdom: true # every kingdom gets its own channel with these settings
     toggleable: false
 
+  trade:
+    prefix: '$'
+    format: '&7[&6T&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
+    toggleable: true # players can toggle this channel on/off
+    range: 50 # only players within a range of 50 blocks from the sender can see their messages
+
   admin:
     prefix: '%'
-    format: '&6[ADMIN]&f{kingdom_prefix}{rank_prefix}{prefix} &f{username}&a: &f{message}'
-    restrict: 'read'
+    format: '&7[&6T&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
+    restrict: 'read' # you need the kingdom.chatchannel.admin permission to read & talk in this channel
     toggleable: true
