@@ -28,6 +28,6 @@ channels:
 
   admin:
     prefix: '%'
-    format: '&7[&6T&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
+    format: '&7[&cA&7]&f{kingdom_prefix}{rank_prefix} &f{prefix}{username}&a: &f{message}'
     restrict: 'read' # you need the kingdom.chatchannel.admin permission to read & talk in this channel
     toggleable: true
