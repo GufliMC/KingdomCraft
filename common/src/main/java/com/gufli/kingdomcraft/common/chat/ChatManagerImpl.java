@@ -359,7 +359,7 @@ public class ChatManagerImpl implements ChatManager {
                 continue;
             }
 
-            if ( (cs.contains("kingdoms") && cs.contains("*"))
+            if ( (cs.contains("kingdoms") && cs.get("kingdoms").equals("*"))
                     || (cs.contains("clone-per-kingdom") && cs.getBoolean("clone-per-kingdom")) ) {
                 createPerKingdomChatChannel(name, cs);
                 continue;
@@ -384,7 +384,7 @@ public class ChatManagerImpl implements ChatManager {
     }
 
     private void createPerKingdomChatChannel(String name, Configuration section) {
-        managers.add(new ChatChannelManager() {
+        ChatChannelManager ccm = new ChatChannelManager() {
             @Override
             public void onCreate(Kingdom kingdom) {
                 ChatChannel ch = new KingdomChatChannel(name + "-" + kingdom.getName(), kingdom);
@@ -399,7 +399,9 @@ public class ChatManagerImpl implements ChatManager {
                     removeChatChannel(ch);
                 }
             }
-        });
+        };
+        managers.add(ccm);
+        kdc.getKingdoms().forEach(ccm::onCreate);
     }
 
     private void createKingdomGroupChatChannel(String name, Configuration section) {
@@ -416,7 +418,7 @@ public class ChatManagerImpl implements ChatManager {
         setup(ch, section);
         addChatChannel(ch);
 
-        managers.add(new ChatChannelManager() {
+        ChatChannelManager ccm = new ChatChannelManager() {
             @Override
             public void onCreate(Kingdom kingdom) {
                 if ( !kingdoms.contains(kingdom.getName().toLowerCase()) ) {
@@ -433,7 +435,10 @@ public class ChatManagerImpl implements ChatManager {
                     removeChatChannel(ch);
                 }
             }
-        });
+        };
+
+        managers.add(ccm);
+        kdc.getKingdoms().forEach(ccm::onCreate);
     }
 
     private void setup(ChatChannel channel, Configuration section) {

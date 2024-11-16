@@ -263,23 +263,23 @@ public class KingdomCraftBukkitPlugin extends JavaPlugin implements KingdomCraft
             kdc.getConfig().load(new BukkitConfiguration(config));
             loadMessages(config.getString("language"));
         } else {
-            log("An error occured, cannot load config.yml", Level.WARNING);
-            kdc.getChatManager().load(getConfigResource("config.yml"));
+            log("An error occured, cannot load config.yml. Falling back to default values.", Level.WARNING);
+            kdc.getConfig().load(getConfigResource("config.yml"));
         }
 
         ConfigurationSection permissionsConfig = initConfig("permissions.yml");
         if (permissionsConfig != null) {
             kdc.getPermissionManager().load(new BukkitConfiguration(permissionsConfig));
         } else {
-            log("An error occured, cannot load permissions.yml", Level.WARNING);
-            kdc.getChatManager().load(getConfigResource("permissions.yml"));
+            log("An error occured, cannot load permissions.yml. Falling back to default values.", Level.WARNING);
+            kdc.getPermissionManager().load(getConfigResource("permissions.yml"));
         }
 
         ConfigurationSection chatConfig = initConfig("chat.yml");
         if (chatConfig != null) {
             kdc.getChatManager().load(new BukkitConfiguration(chatConfig));
         } else {
-            log("An error occured, cannot load chat.yml", Level.WARNING);
+            log("An error occured, cannot load chat.yml. Falling back to default values.", Level.WARNING);
             kdc.getChatManager().load(getConfigResource("chat.yml"));
         }
 
