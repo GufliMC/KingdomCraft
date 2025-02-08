@@ -364,7 +364,7 @@ public class StorageContext {
 
     public void updateUUID(User user, UUID id) {
         BUser buser = (BUser) user;
-        new QBUser().id.eq(buser.id).asUpdate().set("id", id.toString()).update();
+        new QBUser().id.eq(buser.id).asUpdate().set("id", id).update();
         buser.setUUID(id);
         saveAsync(buser);
     }
