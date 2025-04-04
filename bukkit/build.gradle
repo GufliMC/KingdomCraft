@@ -25,7 +25,7 @@ dependencies {
     compileOnly 'commons-lang:commons-lang:2.6'
 
     compileOnly 'net.milkbowl.vault:VaultAPI:1.7'
-    compileOnly ('com.discordsrv:discordsrv:1.22.0') {
+    compileOnly ('com.discordsrv:discordsrv:1.29.0') {
         transitive = false
     }
 }
