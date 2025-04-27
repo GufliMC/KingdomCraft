@@ -312,17 +312,14 @@ public class KingdomMenu {
                     return openKingdomEdit(player, target, () -> openKingdomInfo(player, target, back));
                 });
 
-        if (!target.getRanks().isEmpty()) {
+        if (!target.getRanks().isEmpty() && (player.hasPermission("kingdom.ranks.list.other")
+                || (player.getUser().getKingdom() == target && player.hasPermission("kingdom.ranks.list")))) {
             builder.withItem(ItemStackBuilder.of(Material.BOOK)
                             .withName(text("menuKingdomInfoItemRanks", target.getRanks().size() + ""))
                             .withLore(text("menuKingdomInfoItemLoreRanks"))
                             .build(), (p, cct) -> {
-                        if (player.hasPermission("kingdom.ranks.list.other")
-                                || (player.getUser().getKingdom() == target && player.hasPermission("kingdom.ranks.list"))) {
-                            openKingdomRanksList(player, target, () -> openKingdomInfo(player, target, back));
-                            return true;
-                        }
-                        return false;
+                        openKingdomRanksList(player, target, () -> openKingdomInfo(player, target, back));
+                        return true;
                     }
             );
         }
