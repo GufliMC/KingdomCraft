@@ -99,6 +99,11 @@ public class FriendlyFireListener implements Listener {
             return;
         }
 
+        // permission based bypass
+        if ( d.hasPermission("kingdom.bypass.friendlyfire") ) {
+            return;
+        }
+
         User u1 = plugin.getKdc().getUser(p);
         User u2 = plugin.getKdc().getUser(d);
 
