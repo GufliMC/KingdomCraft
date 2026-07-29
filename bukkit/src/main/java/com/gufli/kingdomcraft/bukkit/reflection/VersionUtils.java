@@ -33,15 +33,16 @@ public class VersionUtils {
 
     private static int[] parseVersion(String version) {
         String[] va = version.split(Pattern.quote("."));
-        String vl = va[va.length - 1];
-        for (int i = 0; i < vl.length(); i++) {
-            if ( !Character.isDigit(vl.charAt(i)) ) {
-                va[va.length - 1] = vl.substring(0, i);
-                break;
+        for (int i = 0; i < va.length; i++) {
+            for (int j = i + 1; j < va[i].length(); j++) {
+                if ( !Character.isDigit(va[i].charAt(i)) ) {
+                    va[i] = va[i].substring(0, i);
+                    break;
+                }
             }
         }
         return Arrays.stream(va)
-                .filter(s -> !s.equals(""))
+                .filter(s -> s.matches("[0-9]+"))
                 .mapToInt(Integer::parseInt)
                 .toArray();
     }
